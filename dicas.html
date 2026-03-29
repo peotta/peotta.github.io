@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guia para Escrita de TCC ou Artigo Científico</title>
+  <meta name="description" content="Guia para escrita de TCC ou artigo científico, com estrutura sugerida, resumo, introdução, referencial teórico, desenvolvimento, conclusão e referências." />
+  <style>
+    :root {
+      --bg: #030604;
+      --bg-soft: #06110a;
+      --card: rgba(6, 20, 10, 0.72);
+      --card-border: rgba(69, 255, 146, 0.18);
+      --text: #d8ffe7;
+      --muted: #96c6a8;
+      --primary: #48ff8b;
+      --secondary: #00d26a;
+      --accent: #8bffb3;
+      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+      --radius: 22px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(72,255,139,0.10), transparent 22%),
+        radial-gradient(circle at top right, rgba(0,210,106,0.08), transparent 22%),
+        linear-gradient(180deg, #010201 0%, #020704 50%, #031008 100%);
+      line-height: 1.65;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(72,255,139,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(72,255,139,0.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      opacity: 0.22;
+      z-index: -2;
+    }
+
+    body::after {
+      content: "010101 001101 101010 011010 110001 001011 101101 010110";
+      position: fixed;
+      inset: 0;
+      white-space: pre-wrap;
+      word-break: break-all;
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(72,255,139,0.05);
+      pointer-events: none;
+      z-index: -1;
+      padding: 2rem;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(2, 10, 5, 0.84);
+      border-bottom: 1px solid rgba(72,255,139,0.16);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.9rem 0;
+      gap: 1rem;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      text-transform: uppercase;
+      text-shadow: 0 0 12px rgba(72,255,139,0.35);
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: flex-end;
+    }
+
+    .menu a {
+      color: var(--muted);
+      font-size: 0.95rem;
+      transition: 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .menu a:hover { color: white; }
+
+    .hero {
+      padding: 4rem 0 2.2rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(72,255,139,0.10);
+      border: 1px solid rgba(72,255,139,0.18);
+      color: #e2ffee;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 4.5vw, 4.3rem);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      text-shadow: 0 0 18px rgba(72,255,139,0.14);
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.02rem;
+      max-width: 68ch;
+      margin: 1rem 0 0;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      margin-top: 1.5rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.95rem 1.2rem;
+      border-radius: 12px;
+      font-weight: 700;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .button:hover { transform: translateY(-2px); }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #041108;
+      box-shadow: var(--shadow);
+    }
+
+    .button-secondary {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(72,255,139,0.18);
+      color: var(--text);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.35rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.9rem;
+    }
+
+    .summary-item {
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(72,255,139,0.10);
+    }
+
+    .summary-item strong {
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .summary-item span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    section { padding: 1.1rem 0; }
+
+    .section-head {
+      margin-bottom: 1rem;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+    }
+
+    .grid-2, .grid-3, .roadmap-grid, .cards-grid {
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .roadmap-grid { grid-template-columns: repeat(2, 1fr); }
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .check-list,
+    .dash-list,
+    .number-list {
+      margin: 0;
+      padding-left: 1.2rem;
+      color: var(--muted);
+    }
+
+    .check-list li,
+    .dash-list li,
+    .number-list li { margin-bottom: 0.45rem; }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 1rem;
+    }
+
+    .tag {
+      padding: 0.62rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(72,255,139,0.08);
+      border: 1px solid rgba(72,255,139,0.16);
+      color: #ddffea;
+      font-size: 0.92rem;
+    }
+
+    .callout {
+      border-left: 3px solid var(--primary);
+      padding: 1rem 1rem 1rem 1.1rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: 14px;
+      color: var(--muted);
+    }
+
+    .example {
+      border: 1px solid rgba(72,255,139,0.14);
+      border-radius: 16px;
+      padding: 1rem;
+      background: rgba(255,255,255,0.025);
+      color: var(--muted);
+    }
+
+    .example strong,
+    .card h3,
+    .card h4 {
+      color: var(--text);
+      margin-top: 0;
+    }
+
+    .code-box {
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(72,255,139,0.12);
+      border-radius: 14px;
+      padding: 0.95rem;
+      color: #dffff0;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.9rem;
+      color: var(--muted);
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid rgba(72,255,139,0.12);
+    }
+
+    th, td {
+      padding: 0.85rem 0.9rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(72,255,139,0.10);
+    }
+
+    th {
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .mini-card {
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(72,255,139,0.12);
+    }
+
+    .muted { color: var(--muted); }
+
+    footer {
+      padding: 2.5rem 0 4rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .grid-2,
+      .grid-3,
+      .roadmap-grid,
+      .cards-grid,
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .menu { display: none; }
+      .hero { padding-top: 3rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">Guia TCC e Artigo</div>
+      <div class="menu">
+        <a href="#orientacoes">Orientações</a>
+        <a href="#estrutura">Estrutura</a>
+        <a href="#resumo">Resumo</a>
+        <a href="#introducao">Introdução</a>
+        <a href="#desenvolvimento">Desenvolvimento</a>
+        <a href="#conclusao">Conclusão</a>
+        <a href="#referencias">Referências</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">Escrita acadêmica - TCC - artigo científico</div>
+        <h1>Guia para Escrita de TCC ou Artigo Científico</h1>
+        <p>
+          Página organizada para consulta rápida sobre estrutura acadêmica, boas práticas de redação, resumo, introdução, referencial teórico, desenvolvimento, conclusão e referências.
+        </p>
+        <p>
+          O conteúdo abaixo sintetiza orientações úteis para a elaboração de trabalhos científicos com foco em clareza, padronização e coerência textual.
+        </p>
+        <div class="button-row">
+          <a class="button button-primary" href="#roteiro">Ver roteiro resumido</a>
+          <a class="button button-secondary" href="#estrutura">Explorar estrutura</a>
+        </div>
+      </div>
+      <aside class="card">
+        <div class="summary-grid">
+          <div class="summary-item">
+            <strong>Redação</strong>
+            <span>Terceira pessoa, voz ativa e linguagem impessoal.</span>
+          </div>
+          <div class="summary-item">
+            <strong>Organização</strong>
+            <span>Seções numeradas e introdução breve no início de cada capítulo.</span>
+          </div>
+          <div class="summary-item">
+            <strong>Resumo</strong>
+            <span>Texto informativo entre 150 e 500 palavras, com palavras-chave.</span>
+          </div>
+          <div class="summary-item">
+            <strong>Normas</strong>
+            <span>Referências alinhadas à ABNT, com destaque para NBR 6023 e NBR 6028.</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section id="orientacoes">
+      <div class="container">
+        <div class="section-head">
+          <h2>Orientações gerais</h2>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Diretrizes principais</h3>
+            <ul class="dash-list">
+              <li>Redação na terceira pessoa do singular e com verbos na voz ativa.</li>
+              <li>Todas as seções devem ser numeradas.</li>
+              <li>Recomenda-se um parágrafo introdutório no início de cada nova seção.</li>
+              <li>Links muito longos podem ser encurtados para melhorar estética e padronização.</li>
+            </ul>
+            <div class="callout" style="margin-top: 1rem;">
+              Também é possível incluir uma lista de abreviaturas como elemento opcional, organizada em ordem alfabética e alinhada à NBR 10522.
+            </div>
+          </article>
+          <article class="card">
+            <h3>Boas práticas e cuidados</h3>
+            <div class="grid-2">
+              <div class="mini-card">
+                <h4>Boas práticas</h4>
+                <ul class="check-list">
+                  <li>Escrever de forma clara, objetiva e impessoal.</li>
+                  <li>Manter coerência entre introdução, desenvolvimento e conclusão.</li>
+                  <li>Evitar parágrafos excessivamente longos.</li>
+                  <li>Revisar ortografia, concordância e padronização.</li>
+                </ul>
+              </div>
+              <div class="mini-card">
+                <h4>Evite</h4>
+                <ul class="check-list">
+                  <li>Escrever em primeira pessoa.</li>
+                  <li>Inserir citações sem relação com o texto.</li>
+                  <li>Apresentar conclusões não discutidas anteriormente.</li>
+                  <li>Usar expressões vagas como “conforme abaixo”.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="estrutura">
+      <div class="container">
+        <div class="section-head">
+          <h2>Estrutura sugerida do trabalho</h2>
+        </div>
+        <div class="card">
+          <ol class="number-list">
+            <li>Introdução</li>
+            <li>Objetivo</li>
+            <li>Objetivos Específicos</li>
+            <li>Justificativa</li>
+            <li>Organização do Trabalho</li>
+            <li>Fundamentos e Conceitos</li>
+            <li>Referencial Teórico</li>
+            <li>Desenvolvimento</li>
+            <li>Conclusão</li>
+            <li>Referências</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="resumo">
+      <div class="container">
+        <div class="section-head">
+          <h2>Resumo e resumo em língua estrangeira</h2>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Resumo</h3>
+            <p class="muted">
+              O resumo deve ser elaborado de forma concisa, informativa e objetiva, destacando os aspectos mais relevantes do conteúdo e das conclusões do trabalho.
+            </p>
+            <ul class="dash-list">
+              <li>Redação na terceira pessoa do singular.</li>
+              <li>Uso de voz ativa.</li>
+              <li>Texto do tipo informativo.</li>
+              <li>Extensão entre 150 e 500 palavras, conforme NBR 6028/2002.</li>
+              <li>No mínimo três palavras-chave representativas do conteúdo.</li>
+              <li>Deve vir precedido da referência do trabalho.</li>
+            </ul>
+            <div class="tag-list">
+              <span class="tag">Tema</span>
+              <span class="tag">Objetivo</span>
+              <span class="tag">Metodologia</span>
+              <span class="tag">Resultados</span>
+              <span class="tag">Conclusão</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>Resumo em língua estrangeira</h3>
+            <p class="muted">
+              Trata-se da versão do resumo em idioma de divulgação internacional, como Abstract, Résumé ou Resumen, mantendo objetividade, concisão e a mesma estrutura do texto em português.
+            </p>
+            <ul class="dash-list">
+              <li>Precedido da referência do trabalho, conforme NBR 6023.</li>
+              <li>Deve conter palavras-chave traduzidas.</li>
+              <li>Em inglês, usar a expressão Keyword: seguida de dois-pontos.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="cards-grid" style="margin-top: 1.2rem;">
+          <article class="card">
+            <h3>Exemplo de resumo</h3>
+            <div class="example">
+              <strong>Resumo: Análise de Resiliência contra Ataques de Exfiltração em Ambientes de Nuvem</strong>
+              <p>
+                [Contexto] A crescente sofisticação de ataques de movimentação lateral em infraestruturas híbridas tem contornado firewalls tradicionais, expondo dados sensíveis de forma crítica. [Objetivo] Este trabalho propõe um algoritmo de detecção de anomalias baseado em comportamento de rede para identificar exfiltração de dados em tempo real. [Metodologia] A metodologia envolveu a simulação de ataques de Command & Control (C2) em um ambiente controlado utilizando Kali Linux e monitoramento via logs do Zeek/Bro. [Resultados] Os testes demonstraram uma taxa de detecção de 94% para tráfego criptografado, com uma redução de 15% no overhead de processamento em relação a assinaturas estáticas. [Conclusão] Conclui-se que a abordagem fortalece a camada de detecção precoce, sendo essencial para a implementação de uma arquitetura Zero Trust.
+              </p>
+              <p><strong>Palavras-chave:</strong> Exfiltração de Dados, Segurança em Nuvem, Detecção de Anomalias, Command and Control (C2), Arquitetura Zero Trust.</p>
+            </div>
+          </article>
+          <article class="card">
+            <h3>Exemplo em língua estrangeira</h3>
+            <div class="example">
+              <p>
+                This study analyzes the main multi-factor authentication mechanisms applied to digital banking, focusing on security, usability, and fraud resistance. The research was conducted through a literature review and a comparative study of widely used methods in the financial sector. Results indicate that the combination of biometric factors and contextual elements increases authentication robustness, although challenges related to privacy and user experience remain. It is concluded that adaptive approaches represent a promising alternative for strengthening security in electronic transactions.
+              </p>
+              <p><strong>Keyword:</strong> multi-factor authentication; banking security; digital fraud.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="introducao">
+      <div class="container">
+        <div class="section-head">
+          <h2>Introdução, objetivo, justificativa e organização</h2>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Introdução</h3>
+            <p class="muted">
+              A introdução situa o leitor no tema e apresenta de maneira clara a proposta do trabalho.
+            </p>
+            <ul class="dash-list">
+              <li>Definição do tema em linhas gerais.</li>
+              <li>Delimitação do assunto estudado.</li>
+              <li>Problema de pesquisa.</li>
+              <li>Objetivo geral e objetivos específicos.</li>
+              <li>Questões de pesquisa e hipóteses, quando houver.</li>
+              <li>Justificativa, relevância e contribuições do estudo.</li>
+              <li>Metodologia adotada.</li>
+              <li>Organização do trabalho.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Aspectos essenciais</h3>
+            <ul class="dash-list">
+              <li>Qual é o tema estudado.</li>
+              <li>Qual problema será investigado.</li>
+              <li>Quais objetivos orientam a pesquisa.</li>
+              <li>Por que o tema é importante.</li>
+              <li>Como o estudo foi conduzido.</li>
+              <li>Como o trabalho está organizado.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="cards-grid" style="margin-top: 1.2rem;">
+          <article class="card">
+            <h3>Exemplo de abertura da introdução</h3>
+            <div class="example">
+              Segurança da informação tornou-se elemento central na proteção de ativos digitais em organizações públicas e privadas. Nesse contexto, o aumento de incidentes cibernéticos evidencia a necessidade de investigar mecanismos mais eficazes de prevenção e resposta. O presente trabalho delimita-se à análise de controles de segurança aplicados a ambientes corporativos, buscando compreender sua efetividade diante de ameaças contemporâneas.
+            </div>
+          </article>
+          <article class="card">
+            <h3>Objetivo</h3>
+            <p class="muted">Objetivo apresenta a finalidade geral do trabalho, isto é, o ponto a que a pesquisa pretende chegar.</p>
+            <div class="example">
+              O objetivo deste trabalho é apresentar um estudo de caso comparativo entre os três principais modelos de melhores práticas adotadas em desenvolvimento de software, analisando-os sob o aspecto de segurança da informação com base nas normas ISO 27001 e ISO 27002.
+            </div>
+            <div class="code-box" style="margin-top: 1rem;">O objetivo deste trabalho é analisar...
+O objetivo deste trabalho é comparar...
+O objetivo deste trabalho é propor...</div>
+          </article>
+        </div>
+
+        <div class="grid-2" style="margin-top: 1.2rem;">
+          <article class="card">
+            <h3>Objetivos específicos</h3>
+            <ul class="dash-list">
+              <li>Identificar os principais controles de segurança aplicados ao contexto estudado.</li>
+              <li>Comparar modelos ou abordagens existentes.</li>
+              <li>Avaliar vantagens, limitações e aplicabilidade.</li>
+              <li>Propor recomendações com base nos resultados obtidos.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Justificativa</h3>
+            <p class="muted">
+              A justificativa explica por que o tema foi escolhido, sua relevância acadêmica, científica, social ou profissional, as contribuições esperadas e a viabilidade da pesquisa.
+            </p>
+            <div class="example">
+              Justifica-se a escolha do tema pela crescente incidência de ataques cibernéticos em ambientes corporativos, bem como pela necessidade de compreender quais práticas de segurança se mostram mais eficazes na mitigação desses riscos. O estudo contribui para o campo acadêmico ao sistematizar conhecimentos relevantes e, no plano prático, auxilia profissionais na adoção de estratégias mais consistentes de proteção.
+            </div>
+          </article>
+        </div>
+
+        <div class="card" style="margin-top: 1.2rem;">
+          <h3>Organização do trabalho</h3>
+          <div class="example">
+            Este trabalho está organizado da seguinte forma: o Capítulo 2 apresenta os principais fundamentos e termos utilizados; o Capítulo 3 traz o referencial teórico com os principais trabalhos na área e suas contribuições; o Capítulo 4 apresenta o desenvolvimento da proposta, juntamente com um estudo de caso; por fim, o Capítulo 5 apresenta as conclusões, os desafios enfrentados e sugestões de trabalhos futuros.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <h2>Fundamentos e referencial teórico</h2>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Fundamentos e conceitos</h3>
+            <p class="muted">
+              Essa seção reúne conceitos básicos, definições e terminologias essenciais para a compreensão do trabalho, oferecendo uma base conceitual mínima antes do aprofundamento teórico e analítico.
+            </p>
+            <div class="example">
+              Em um trabalho sobre redes de computadores, esta seção pode apresentar conceitos como protocolo, roteamento, firewall, IDS/IPS, autenticação, confidencialidade, integridade e disponibilidade.
+            </div>
+          </article>
+          <article class="card">
+            <h3>Referencial teórico</h3>
+            <p class="muted">
+              O referencial teórico corresponde à análise dos trabalhos relevantes encontrados na pesquisa bibliográfica sobre o tema e deve construir uma discussão articulada, crítica e reflexiva.
+            </p>
+            <ul class="dash-list">
+              <li>Apresentar a fundamentação teórica da pesquisa.</li>
+              <li>Mostrar o estado atual do conhecimento.</li>
+              <li>Apoiar a interpretação dos dados e fatos levantados.</li>
+              <li>Permitir discussão dos resultados com base em autores e estudos anteriores.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="cards-grid" style="margin-top: 1.2rem;">
+          <article class="card">
+            <h3>Fontes para a pesquisa bibliográfica</h3>
+            <div class="tag-list">
+              <span class="tag">Bibliotecas</span>
+              <span class="tag">Bases de dados</span>
+              <span class="tag">Periódicos científicos</span>
+              <span class="tag">Livros</span>
+              <span class="tag">Serviços de informação</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>Exemplo de abordagem crítica</h3>
+            <div class="example">
+              Estudos recentes indicam diferentes abordagens para o problema investigado. Enquanto Autor A enfatiza o papel dos controles preventivos, Autor B destaca a importância do monitoramento contínuo. Já Autor C amplia a discussão ao defender uma integração entre governança, tecnologia e resposta a incidentes. Tais perspectivas revelam que o fenômeno não pode ser analisado de forma isolada.
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="desenvolvimento">
+      <div class="container">
+        <div class="section-head">
+          <h2>Desenvolvimento</h2>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Função da seção</h3>
+            <p class="muted">
+              O desenvolvimento é a parte central do trabalho. Nela são apresentados o problema de pesquisa, a análise realizada e os resultados encontrados.
+            </p>
+            <ul class="dash-list">
+              <li>Quadros, tabelas, gráficos, figuras e outras ilustrações podem ser utilizados.</li>
+              <li>As informações devem permitir que outro pesquisador reproduza a pesquisa ou confira os dados.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Informações que podem compor o desenvolvimento</h3>
+            <ul class="dash-list">
+              <li>Local e período de realização da pesquisa.</li>
+              <li>Universo, população e amostra.</li>
+              <li>Instrumentos ou equipamentos utilizados.</li>
+              <li>Consentimento dos participantes, quando houver.</li>
+              <li>Fontes utilizadas.</li>
+              <li>Normas, especificações técnicas e métodos empregados.</li>
+              <li>Equipamentos especiais, laboratórios, máquinas, configurações e topologias.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="grid-2" style="margin-top: 1.2rem;">
+          <article class="card">
+            <h3>Pesquisa documental</h3>
+            <ul class="dash-list">
+              <li>Indicar a natureza das fontes utilizadas.</li>
+              <li>Apresentar a justificativa para a escolha dessas fontes.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Exemplo</h3>
+            <div class="example">
+              A pesquisa foi realizada entre março e junho de 2025, em ambiente controlado de laboratório. Foram utilizados três servidores virtuais com sistemas Linux, configurados para simular tráfego legítimo e malicioso em rede corporativa. A coleta dos dados foi feita por meio de ferramentas de monitoramento e registros de eventos. Em seguida, aplicou-se análise comparativa dos resultados obtidos.
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="conclusao">
+      <div class="container">
+        <div class="section-head">
+          <h2>Conclusão</h2>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Diretrizes</h3>
+            <ul class="dash-list">
+              <li>Retomar os objetivos e, se houver, as hipóteses apresentadas na introdução.</li>
+              <li>Sintetizar os principais resultados discutidos ao longo do trabalho.</li>
+              <li>Indicar se os objetivos foram alcançados.</li>
+              <li>Apresentar deduções de forma clara, sintética e ordenada.</li>
+              <li>Apontar limitações e sugestões para pesquisas futuras.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Cuidados importantes</h3>
+            <ul class="dash-list">
+              <li>Não apresentar fatos, argumentos ou dados novos.</li>
+              <li>Não inserir citações.</li>
+              <li>Não trazer dados quantitativos inéditos.</li>
+              <li>Não apresentar resultados ainda sujeitos à discussão.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="card" style="margin-top: 1.2rem;">
+          <h3>Exemplo de conclusão</h3>
+          <div class="example">
+            Conclui-se que os mecanismos analisados apresentam níveis distintos de eficácia conforme o contexto de aplicação. Resultados evidenciaram que abordagens integradas tendem a oferecer maior robustez diante de ameaças complexas. Objetivo proposto foi alcançado, uma vez que se tornou possível comparar os modelos selecionados e identificar suas contribuições e limitações. Como desdobramento futuro, recomenda-se ampliar a investigação para cenários com maior diversidade tecnológica e amostras mais abrangentes.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <h2>Figuras, tabelas e gráficos</h2>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Regras gerais</h3>
+            <ul class="dash-list">
+              <li>Toda figura, tabela ou gráfico deve ser numerado.</li>
+              <li>Todo elemento deve ser acompanhado de legenda.</li>
+              <li>Todo elemento deve ser citado no texto.</li>
+            </ul>
+            <div class="callout" style="margin-top: 1rem;">
+              Evita-se a expressão “conforme abaixo”. Prefira referência direta, como “Conforme a Figura 1...”.
+            </div>
+          </article>
+          <article class="card">
+            <h3>Regras de legenda</h3>
+            <ul class="dash-list">
+              <li>Figuras: legenda abaixo.</li>
+              <li>Tabelas: legenda acima.</li>
+            </ul>
+            <div class="example">
+              <strong>Figura 1 - Arquitetura simplificada de rede segura</strong><br>
+              (imagem da arquitetura)<br>
+              <strong>Fonte:</strong> Elaborado pelo autor.
+            </div>
+          </article>
+        </div>
+
+        <div class="card" style="margin-top: 1.2rem;">
+          <h3>Exemplo de tabela</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Mecanismo</th>
+                <th>Vantagem</th>
+                <th>Limitação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Senha</td>
+                <td>Simplicidade</td>
+                <td>Baixa resistência a ataques</td>
+              </tr>
+              <tr>
+                <td>Token</td>
+                <td>Maior segurança</td>
+                <td>Dependência de dispositivo</td>
+              </tr>
+              <tr>
+                <td>Biometria</td>
+                <td>Facilidade de uso</td>
+                <td>Questões de privacidade</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="muted"><strong>Fonte:</strong> Elaborado pelo autor.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <h2>Nova seção e abreviaturas</h2>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Nova seção</h3>
+            <p class="muted">
+              Sempre que um novo capítulo ou seção for iniciado, recomenda-se inserir um pequeno texto introdutório explicando o que será tratado ali. Isso melhora a fluidez e orienta o leitor.
+            </p>
+            <div class="example">
+              Neste capítulo são apresentados os principais conceitos e fundamentos necessários para a compreensão do problema investigado, servindo como base para a discussão teórica desenvolvida nas seções seguintes.
+            </div>
+          </article>
+          <article class="card">
+            <h3>Abreviaturas</h3>
+            <p class="muted">Pode-se incluir uma lista de abreviaturas como elemento opcional, em ordem alfabética e com o significado por extenso.</p>
+            <ul class="dash-list">
+              <li><strong>ABNT</strong> - Associação Brasileira de Normas Técnicas</li>
+              <li><strong>ISO</strong> - International Organization for Standardization</li>
+              <li><strong>TCC</strong> - Trabalho de Conclusão de Curso</li>
+              <li><strong>IDS</strong> - Intrusion Detection System</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="referencias">
+      <div class="container">
+        <div class="section-head">
+          <h2>Referências</h2>
+        </div>
+        <div class="grid-3">
+          <article class="card">
+            <h3>Regra geral</h3>
+            <p class="muted">As referências devem ser elaboradas de acordo com a ABNT NBR 6023.</p>
+          </article>
+          <article class="card">
+            <h3>Livro</h3>
+            <div class="code-box">SOBRENOME, Prenome. Título do livro: subtítulo. Edição. Local: Editora, ano.</div>
+          </article>
+          <article class="card">
+            <h3>Artigo</h3>
+            <div class="code-box">SOBRENOME, Prenome. Título do artigo. Nome do Periódico, local, volume, número, páginas, ano.</div>
+          </article>
+        </div>
+        <div class="card" style="margin-top: 1.2rem;">
+          <h3>Site</h3>
+          <div class="code-box">AUTOR ou ENTIDADE. Título da página. Disponível em: endereço. Acesso em: dia mês ano.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="roteiro">
+      <div class="container">
+        <div class="section-head">
+          <h2>Roteiro resumido</h2>
+        </div>
+        <div class="roadmap-grid">
+          <article class="card"><h3>Resumo</h3><p class="muted">Texto conciso com tema, objetivo, método, resultados e conclusões. Deve ter de 150 a 500 palavras e conter pelo menos três palavras-chave.</p></article>
+          <article class="card"><h3>Resumo em língua estrangeira</h3><p class="muted">Versão do resumo em outro idioma, com palavras-chave traduzidas e mesma formatação do resumo em português.</p></article>
+          <article class="card"><h3>Introdução</h3><p class="muted">Apresenta tema, problema, objetivos, justificativa, metodologia e organização do trabalho.</p></article>
+          <article class="card"><h3>Fundamentos e Conceitos</h3><p class="muted">Reúne definições e conceitos essenciais para entendimento do tema.</p></article>
+          <article class="card"><h3>Referencial Teórico</h3><p class="muted">Analisa criticamente a literatura relevante e mostra o estado da arte do assunto.</p></article>
+          <article class="card"><h3>Desenvolvimento</h3><p class="muted">Descreve materiais, métodos, análise e resultados, com detalhamento suficiente para reprodução da pesquisa.</p></article>
+          <article class="card"><h3>Conclusão</h3><p class="muted">Retoma objetivos e resultados, sintetiza as conclusões e sugere trabalhos futuros, sem trazer informações novas.</p></article>
+          <article class="card"><h3>Referências</h3><p class="muted">Lista padronizada de todas as obras citadas, conforme ABNT.</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Prof. Dr. Laerte Peotta de Melo - guia de apoio à escrita acadêmica.</p>
+    </div>
+  </footer>
+</body>
+</html>
