@@ -7,17 +7,17 @@
   <meta name="description" content="Site acadêmico e profissional de Prof. Dr. Laerte Peotta de Melo, com atuação em cibersegurança, redes de computadores, crimes cibernéticos e forense digital." />
   <style>
     :root {
-      --bg: #081120;
-      --bg-soft: #0f172a;
-      --card: rgba(255,255,255,0.06);
-      --card-border: rgba(255,255,255,0.10);
-      --text: #e8eefc;
-      --muted: #b4c0d9;
-      --primary: #60a5fa;
-      --secondary: #22d3ee;
-      --accent: #38bdf8;
-      --shadow: 0 20px 60px rgba(0,0,0,0.35);
-      --radius: 24px;
+      --bg: #030604;
+      --bg-soft: #06110a;
+      --card: rgba(6, 20, 10, 0.72);
+      --card-border: rgba(69, 255, 146, 0.18);
+      --text: #d8ffe7;
+      --muted: #96c6a8;
+      --primary: #48ff8b;
+      --secondary: #00d26a;
+      --accent: #8bffb3;
+      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+      --radius: 22px;
       --max: 1180px;
     }
 
@@ -26,13 +26,42 @@
 
     body {
       margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: Inter, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 26%),
-        radial-gradient(circle at top right, rgba(96,165,250,0.16), transparent 22%),
-        linear-gradient(180deg, #081120 0%, #0b1324 44%, #0f172a 100%);
+        radial-gradient(circle at top left, rgba(72,255,139,0.10), transparent 22%),
+        radial-gradient(circle at top right, rgba(0,210,106,0.08), transparent 22%),
+        linear-gradient(180deg, #010201 0%, #020704 50%, #031008 100%);
       line-height: 1.65;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(72,255,139,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(72,255,139,0.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      opacity: 0.22;
+      z-index: -2;
+    }
+
+    body::after {
+      content: "010101 001101 101010 011010 110001 001011 101101 010110";
+      position: fixed;
+      inset: 0;
+      white-space: pre-wrap;
+      word-break: break-all;
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(72,255,139,0.05);
+      pointer-events: none;
+      z-index: -1;
+      padding: 2rem;
     }
 
     a { color: inherit; text-decoration: none; }
@@ -46,9 +75,9 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      backdrop-filter: blur(16px);
-      background: rgba(8, 17, 32, 0.72);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(14px);
+      background: rgba(2, 10, 5, 0.84);
+      border-bottom: 1px solid rgba(72,255,139,0.16);
     }
 
     .nav-inner {
@@ -60,9 +89,11 @@
     }
 
     .brand {
-      font-weight: 700;
-      letter-spacing: 0.2px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
       white-space: nowrap;
+      text-transform: uppercase;
+      text-shadow: 0 0 12px rgba(72,255,139,0.35);
     }
 
     .menu {
@@ -76,6 +107,8 @@
       color: var(--muted);
       font-size: 0.96rem;
       transition: 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .menu a:hover { color: white; }
@@ -100,9 +133,9 @@
       width: min(100%, 430px);
       aspect-ratio: 1 / 1;
       object-fit: cover;
-      border-radius: 32px;
-      border: 1px solid rgba(255,255,255,0.14);
-      box-shadow: var(--shadow);
+      border-radius: 28px;
+      border: 1px solid rgba(72,255,139,0.22);
+      box-shadow: var(--shadow), 0 0 30px rgba(72,255,139,0.18);
       background: rgba(255,255,255,0.04);
     }
 
@@ -112,11 +145,13 @@
       gap: 0.55rem;
       padding: 0.45rem 0.8rem;
       border-radius: 999px;
-      background: rgba(96,165,250,0.14);
-      border: 1px solid rgba(96,165,250,0.22);
-      color: #d7e6ff;
-      font-size: 0.92rem;
+      background: rgba(72,255,139,0.10);
+      border: 1px solid rgba(72,255,139,0.18);
+      color: #e2ffee;
+      font-size: 0.9rem;
       margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
 
     h1 {
@@ -124,11 +159,12 @@
       font-size: clamp(2.4rem, 5vw, 4.8rem);
       line-height: 1.02;
       letter-spacing: -0.03em;
+      text-shadow: 0 0 18px rgba(72,255,139,0.14);
     }
 
     .hero p {
       color: var(--muted);
-      font-size: 1.08rem;
+      font-size: 1.04rem;
       max-width: 62ch;
       margin: 1.1rem 0 0;
     }
@@ -144,23 +180,26 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 0.55rem;
       padding: 0.95rem 1.2rem;
-      border-radius: 14px;
-      font-weight: 600;
-      transition: transform 0.2s ease, background 0.2s ease;
+      border-radius: 12px;
+      font-weight: 700;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .button:hover { transform: translateY(-2px); }
 
     .button-primary {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #07101f;
+      color: #041108;
       box-shadow: var(--shadow);
     }
 
     .button-secondary {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(72,255,139,0.18);
       color: var(--text);
     }
 
@@ -170,6 +209,7 @@
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 1.35rem;
+      backdrop-filter: blur(8px);
     }
 
     .metric-grid {
@@ -182,8 +222,8 @@
     .metric {
       padding: 1rem;
       border-radius: 18px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(72,255,139,0.10);
     }
 
     .metric strong {
@@ -207,6 +247,7 @@
       font-size: clamp(1.6rem, 3vw, 2.35rem);
       margin: 0 0 0.4rem;
       letter-spacing: -0.03em;
+      text-transform: uppercase;
     }
 
     .section-head p {
@@ -240,9 +281,9 @@
     .tag {
       padding: 0.62rem 0.9rem;
       border-radius: 999px;
-      background: rgba(34,211,238,0.08);
-      border: 1px solid rgba(34,211,238,0.18);
-      color: #dbf8ff;
+      background: rgba(72,255,139,0.08);
+      border: 1px solid rgba(72,255,139,0.16);
+      color: #ddffea;
       font-size: 0.92rem;
     }
 
@@ -256,14 +297,14 @@
       height: 100%;
       padding: 1.2rem;
       border-radius: 20px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(72,255,139,0.12);
       transition: transform 0.2s ease, border-color 0.2s ease;
     }
 
     .link-card:hover {
       transform: translateY(-3px);
-      border-color: rgba(96,165,250,0.36);
+      border-color: rgba(72,255,139,0.32);
     }
 
     .link-card strong {
@@ -277,8 +318,8 @@
       gap: 0.9rem;
       padding: 1.3rem;
       border-radius: 22px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(72,255,139,0.12);
     }
 
     .repo-meta {
@@ -286,10 +327,10 @@
       color: var(--muted);
     }
 
-    .podcast-banner {
+    .podcast-banner, .ravens-banner {
       width: 100%;
       border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid rgba(72,255,139,0.16);
       display: block;
       box-shadow: var(--shadow);
     }
@@ -302,8 +343,34 @@
     .contact-item {
       padding: 0.95rem 1rem;
       border-radius: 16px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(72,255,139,0.10);
+    }
+
+    .contact-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-weight: 700;
+    }
+
+    .ene-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 0.1rem;
+    }
+
+    .unb-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #0c3e7c 0 36%, #00861a 36% 100%);
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.08);
+      flex: 0 0 20px;
     }
 
     .muted { color: var(--muted); }
@@ -358,7 +425,7 @@
         </p>
         <div class="hero-actions">
           <a class="button button-primary" href="#repositorios">Ver repositórios</a>
-          <a class="button button-secondary" href="https://github.com/peotta" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="button button-secondary" href="https://github.com/peotta" target="_blank" rel="noreferrer">↗ GitHub</a>
         </div>
         <div class="metric-grid">
           <div class="metric">
@@ -390,9 +457,7 @@
       <div class="container">
         <div class="section-head">
           <h2>Sobre</h2>
-          <p>
-            Estrutura mais sóbria e profissional, com foco em presença acadêmica, clareza institucional e melhor uso visual da sua foto e dos seus projetos.
-          </p>
+          
         </div>
         <div class="about-grid">
           <article class="card">
@@ -421,7 +486,7 @@
       <div class="container">
         <div class="section-head">
           <h2>Áreas de atuação</h2>
-          <p>Principais temas do perfil acadêmico e profissional.</p>
+          
         </div>
         <div class="card">
           <div class="tag-list">
@@ -456,7 +521,7 @@
       <div class="container">
         <div class="section-head">
           <h2>Perfis e links acadêmicos</h2>
-          <p>Acesso rápido aos seus canais institucionais e acadêmicos.</p>
+          
         </div>
         <div class="links-grid">
           <a class="link-card" href="mailto:peotta@gmail.com"><strong>E-mail</strong><span class="muted">peotta@gmail.com</span></a>
@@ -473,28 +538,32 @@
       <div class="container">
         <div class="section-head">
           <h2>Repositórios e materiais</h2>
-          <p>Disciplinas e materiais reorganizados em cards para leitura e navegação mais elegantes.</p>
+          
         </div>
         <div class="repo-grid">
           <article class="repo-card">
+            <div class="ene-badge"><span class="unb-icon"></span> Universidade de Brasília</div>
             <h3>ENE0011 — Laboratório de Redes</h3>
             <p class="muted">Laboratórios práticos com dispositivos de rede, análise de protocolos, VLANs e roteamento.</p>
             <div class="repo-meta">Graduação</div>
             <a class="button button-secondary" href="https://github.com/peotta/labredes" target="_blank" rel="noreferrer">Abrir repositório</a>
           </article>
           <article class="repo-card">
+            <div class="ene-badge"><span class="unb-icon"></span> Universidade de Brasília</div>
             <h3>ENE0025 — Protocolos de Transporte e Roteamento</h3>
             <p class="muted">Conteúdos teóricos e práticos sobre arquitetura TCP/IP, protocolos de transporte e roteamento.</p>
             <div class="repo-meta">Graduação</div>
             <a class="button button-secondary" href="https://github.com/peotta/PTR" target="_blank" rel="noreferrer">Abrir repositório</a>
           </article>
           <article class="repo-card">
+            <div class="ene-badge"><span class="unb-icon"></span> Universidade de Brasília</div>
             <h3>ENE0021 — Tópicos em Redes de Comunicação 3</h3>
             <p class="muted">Tópicos avançados em segurança de redes, criptografia, segurança de software, virtualização, resposta a incidentes, forense digital, DevSecOps e automação.</p>
             <div class="repo-meta">Graduação</div>
             <a class="button button-secondary" href="https://github.com/peotta/topicos" target="_blank" rel="noreferrer">Abrir repositório</a>
           </article>
           <article class="repo-card">
+            <div class="ene-badge"><span class="unb-icon"></span> Universidade de Brasília</div>
             <h3>ENE0274 — Fundamentos de Redes</h3>
             <p class="muted">Introdução aos protocolos e fundamentos de redes de computadores.</p>
             <div class="repo-meta">Graduação</div>
@@ -546,8 +615,7 @@
           <a class="button button-secondary" href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer">Acessar RAVENS</a>
         </article>
         <article class="card">
-          <h2>Contato institucional</h2>
-          <p class="muted">Presença digital voltada à apresentação acadêmica, divulgação de materiais e acesso rápido aos projetos e repositórios.</p>
+          <img class="ravens-banner" src="ravens-1.webp" alt="Imagem do grupo RAVENS" />
         </article>
       </div>
     </section>
@@ -556,15 +624,14 @@
       <div class="container">
         <div class="section-head">
           <h2>Contato</h2>
-          <p>Área final simples e objetiva para um site pessoal hospedado no GitHub Pages.</p>
         </div>
         <div class="card">
           <div class="contact-list">
-            <div class="contact-item"><strong>E-mail:</strong> peotta@gmail.com</div>
-            <div class="contact-item"><strong>GitHub:</strong> github.com/peotta</div>
-            <div class="contact-item"><strong>LinkedIn:</strong> linkedin.com/in/laertepeotta</div>
-            <div class="contact-item"><strong>ORCID:</strong> 0000-0002-2075-6601</div>
-            <div class="contact-item"><strong>Lattes:</strong> lattes.cnpq.br/0746844511320579</div>
+            <div class="contact-item"><span class="contact-label">✉ Gmail</span> peotta@gmail.com</div>
+            <div class="contact-item"><span class="contact-label">⌘ GitHub</span> github.com/peotta</div>
+            <div class="contact-item"><span class="contact-label">◉ LinkedIn</span> linkedin.com/in/laertepeotta</div>
+            <div class="contact-item"><span class="contact-label">◎ ORCID</span> 0000-0002-2075-6601</div>
+            <div class="contact-item"><span class="contact-label">▣ Lattes</span> lattes.cnpq.br/0746844511320579</div>
           </div>
         </div>
       </div>
