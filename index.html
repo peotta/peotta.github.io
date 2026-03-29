@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prof. Dr. Laerte Peotta de Melo</title>
+  <meta name="description" content="Prof. Dr. Laerte Peotta de Melo, com atuação em cibersegurança, redes de computadores, crimes cibernéticos e forense digital." />
+  <style>
+    :root {
+      --bg: #081120;
+      --bg-soft: #0e1a2f;
+      --card: rgba(255,255,255,0.06);
+      --card-border: rgba(255,255,255,0.12);
+      --text: #e8eefc;
+      --muted: #b4c0d9;
+      --primary: #60a5fa;
+      --secondary: #22d3ee;
+      --accent: #38bdf8;
+      --success: #34d399;
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+      --radius: 24px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 26%),
+        radial-gradient(circle at top right, rgba(96,165,250,0.16), transparent 22%),
+        linear-gradient(180deg, #081120 0%, #0b1324 44%, #0f172a 100%);
+      line-height: 1.65;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(16px);
+      background: rgba(8, 17, 32, 0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.9rem 0;
+      gap: 1rem;
+    }
+
+    .brand {
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: flex-end;
+    }
+
+    .menu a {
+      color: var(--muted);
+      font-size: 0.96rem;
+      transition: 0.2s ease;
+    }
+
+    .menu a:hover { color: white; }
+
+    .hero {
+      padding: 5.5rem 0 3.2rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(96,165,250,0.14);
+      border: 1px solid rgba(96,165,250,0.22);
+      color: #d7e6ff;
+      font-size: 0.92rem;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 5vw, 4.6rem);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.08rem;
+      max-width: 62ch;
+      margin: 1.1rem 0 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      margin-top: 1.6rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.95rem 1.2rem;
+      border-radius: 14px;
+      font-weight: 600;
+      transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+    }
+
+    .button:hover { transform: translateY(-2px); }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #07101f;
+      box-shadow: var(--shadow);
+    }
+
+    .button-secondary {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+    }
+
+    .hero-card, .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 1.4rem;
+    }
+
+    .hero-card h3 {
+      margin: 0 0 1rem;
+      font-size: 1rem;
+      color: #dce9ff;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.9rem;
+    }
+
+    .metric {
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    section {
+      padding: 1.4rem 0 1.1rem;
+    }
+
+    .section-head {
+      margin-bottom: 1.2rem;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.6rem, 3vw, 2.35rem);
+      margin: 0 0 0.4rem;
+      letter-spacing: -0.03em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 72ch;
+    }
+
+    .about-grid,
+    .highlight-grid,
+    .links-grid,
+    .repo-grid {
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    .about-grid { grid-template-columns: 1.15fr 0.85fr; }
+    .highlight-grid { grid-template-columns: repeat(3, 1fr); }
+    .links-grid { grid-template-columns: repeat(3, 1fr); }
+    .repo-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .card {
+      padding: 1.35rem;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 0.7rem;
+      font-size: 1.08rem;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 1rem;
+    }
+
+    .tag {
+      padding: 0.62rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(34,211,238,0.08);
+      border: 1px solid rgba(34,211,238,0.18);
+      color: #dbf8ff;
+      font-size: 0.92rem;
+    }
+
+    .feature-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.8rem;
+      align-items: start;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+
+    .link-card {
+      display: block;
+      height: 100%;
+      padding: 1.2rem;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .link-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(96,165,250,0.36);
+    }
+
+    .link-card strong {
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    .repo-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      padding: 1.3rem;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .repo-meta {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .contact-item {
+      padding: 0.95rem 1rem;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    footer {
+      padding: 2.5rem 0 4rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .about-grid,
+      .split,
+      .highlight-grid,
+      .links-grid,
+      .repo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .menu {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">Prof. Dr. Laerte Peotta de Melo</div>
+      <div class="menu">
+        <a href="#sobre">Sobre</a>
+        <a href="#atuacao">Atuação</a>
+        <a href="#repositorios">Repositórios</a>
+        <a href="#pesquisa">Pesquisa</a>
+        <a href="#contato">Contato</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">Cibersegurança • Redes • Pesquisa • Ensino</div>
+        <h1>Apresentação acadêmica e profissional com identidade mais moderna.</h1>
+        <p>
+          Sou <strong>Prof. Dr. Laerte Peotta de Melo</strong>, professor, pesquisador e profissional com atuação em
+          <strong>segurança cibernética</strong>, <strong>redes de computadores</strong>, <strong>crimes cibernéticos</strong>,
+          <strong>forense digital</strong> e <strong>segurança bancária</strong>.
+        </p>
+        <p>
+          Este site reúne minha trajetória acadêmica, áreas de atuação, materiais didáticos, iniciativas de pesquisa e principais repositórios publicados no GitHub.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#repositorios">Ver repositórios</a>
+          <a class="button button-secondary" href="https://github.com/peotta" target="_blank" rel="noreferrer">Acessar GitHub</a>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <h3>Resumo profissional</h3>
+        <div class="metric-grid">
+          <div class="metric">
+            <strong>Ensino</strong>
+            <span>Graduação e pós-graduação em computação e cybersegurança</span>
+          </div>
+          <div class="metric">
+            <strong>Pesquisa</strong>
+            <span>Segurança digital, vulnerabilidades, investigação e defesa</span>
+          </div>
+          <div class="metric">
+            <strong>Mercado</strong>
+            <span>Red Team, Blue Team, Threat Hunting e inteligência cibernética</span>
+          </div>
+          <div class="metric">
+            <strong>Inovação</strong>
+            <span>Criador do BBCode para autorização segura de transações</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section id="sobre">
+      <div class="container">
+        <div class="section-head">
+          <h2>Sobre</h2>
+          <p>
+            Apresentação construída a partir do seu conteúdo atual, reorganizando os elementos já existentes em um layout mais contemporâneo, claro e valorizando melhor sua autoridade acadêmica e técnica.
+          </p>
+        </div>
+        <div class="about-grid">
+          <article class="card">
+            <h3>Trajetória</h3>
+            <p>
+              Professor e pesquisador com atuação em segurança cibernética, redes de computadores, crimes cibernéticos, forense digital e segurança bancária.
+              Mestre e Doutor em Engenharia Elétrica, com experiência em ensino, pesquisa aplicada e produção de materiais acadêmicos voltados à formação de estudantes e profissionais da área de computação.
+            </p>
+            <p>
+              Em contexto corporativo, desenvolvo atividades ligadas à segurança digital, com experiência em iniciativas relacionadas a Red Team, Blue Team, Threat Hunting e inteligência cibernética.
+            </p>
+          </article>
+          <aside class="card">
+            <h3>Destaques</h3>
+            <ul class="list">
+              <li>Criador do BBCode para autorização segura de transações bancárias</li>
+              <li>Atuação em ensino, pesquisa e extensão</li>
+              <li>Foco em defesa cibernética, protocolos seguros e análise de ameaças</li>
+              <li>Produção de materiais didáticos para disciplinas de redes e segurança</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="atuacao">
+      <div class="container">
+        <div class="section-head">
+          <h2>Áreas de atuação</h2>
+          <p>
+            Os principais temas do seu perfil atual foram mantidos e transformados em uma seção visualmente mais forte e elegante.
+          </p>
+        </div>
+        <div class="card">
+          <div class="tag-list">
+            <span class="tag">Segurança Cibernética</span>
+            <span class="tag">Segurança de Redes</span>
+            <span class="tag">Crimes Cibernéticos</span>
+            <span class="tag">Forense Computacional</span>
+            <span class="tag">Gestão de Vulnerabilidades</span>
+            <span class="tag">Criptografia Aplicada</span>
+            <span class="tag">Cyber Threat Hunting</span>
+            <span class="tag">Segurança Bancária</span>
+          </div>
+        </div>
+        <div class="highlight-grid" style="margin-top: 1.2rem;">
+          <article class="card">
+            <h3>Ensino</h3>
+            <p>Disciplinas, laboratórios, roteiros experimentais e materiais de apoio para graduação e pós-graduação.</p>
+          </article>
+          <article class="card">
+            <h3>Pesquisa</h3>
+            <p>Projetos e investigações em redes, segurança, vulnerabilidades, defesa cibernética e tecnologias seguras.</p>
+          </article>
+          <article class="card">
+            <h3>Aplicação prática</h3>
+            <p>Integração entre teoria e prática com foco em ameaças reais, incidentes, protocolos e ambientes corporativos.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <h2>Perfis e links acadêmicos</h2>
+          <p>Seção centralizada para acesso rápido aos seus canais institucionais e acadêmicos.</p>
+        </div>
+        <div class="links-grid">
+          <a class="link-card" href="mailto:peotta@gmail.com">
+            <strong>E-mail</strong>
+            <span class="muted">peotta@gmail.com</span>
+          </a>
+          <a class="link-card" href="https://orcid.org/0000-0002-2075-6601" target="_blank" rel="noreferrer">
+            <strong>ORCID</strong>
+            <span class="muted">0000-0002-2075-6601</span>
+          </a>
+          <a class="link-card" href="https://lattes.cnpq.br/0746844511320579" target="_blank" rel="noreferrer">
+            <strong>Currículo Lattes</strong>
+            <span class="muted">Produção acadêmica e trajetória</span>
+          </a>
+          <a class="link-card" href="https://dblp.org/pid/235/0910.html" target="_blank" rel="noreferrer">
+            <strong>DBLP</strong>
+            <span class="muted">Publicações em computação</span>
+          </a>
+          <a class="link-card" href="https://linkedin.com/in/laertepeotta" target="_blank" rel="noreferrer">
+            <strong>LinkedIn</strong>
+            <span class="muted">Rede profissional</span>
+          </a>
+          <a class="link-card" href="https://github.com/peotta" target="_blank" rel="noreferrer">
+            <strong>GitHub</strong>
+            <span class="muted">Repositórios e materiais</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="repositorios">
+      <div class="container">
+        <div class="section-head">
+          <h2>Repositórios e materiais</h2>
+          <p>
+            Os repositórios citados no seu código atual foram reorganizados em cards para facilitar leitura, navegação e valorizar melhor cada disciplina ou iniciativa.
+          </p>
+        </div>
+        <div class="repo-grid">
+          <article class="repo-card">
+            <div class="feature-title">
+              <h3>ENE0011 — Laboratório de Redes</h3>
+            </div>
+            <p>Laboratórios práticos com dispositivos de rede, análise de protocolos, VLANs e roteamento.</p>
+            <div class="repo-meta">Graduação</div>
+            <a class="button button-secondary" href="https://github.com/peotta/labredes" target="_blank" rel="noreferrer">Abrir repositório</a>
+          </article>
+          <article class="repo-card">
+            <div class="feature-title">
+              <h3>ENE0025 — Protocolos de Transporte e Roteamento</h3>
+            </div>
+            <p>Conteúdos teóricos e práticos sobre arquitetura TCP/IP, protocolos de transporte e roteamento.</p>
+            <div class="repo-meta">Graduação</div>
+            <a class="button button-secondary" href="https://github.com/peotta/PTR" target="_blank" rel="noreferrer">Abrir repositório</a>
+          </article>
+          <article class="repo-card">
+            <div class="feature-title">
+              <h3>ENE0021 — Tópicos em Redes de Comunicação 3</h3>
+            </div>
+            <p>Tópicos avançados em segurança de redes, criptografia, segurança de software, virtualização, resposta a incidentes, forense digital, DevSecOps e automação.</p>
+            <div class="repo-meta">Graduação</div>
+            <a class="button button-secondary" href="https://github.com/peotta/topicos" target="_blank" rel="noreferrer">Abrir repositório</a>
+          </article>
+          <article class="repo-card">
+            <div class="feature-title">
+              <h3>ENE0274 — Fundamentos de Redes</h3>
+            </div>
+            <p>Introdução aos protocolos e fundamentos de redes de computadores.</p>
+            <div class="repo-meta">Graduação</div>
+            <a class="button button-secondary" href="https://github.com/peotta/topicos" target="_blank" rel="noreferrer">Abrir repositório</a>
+          </article>
+          <article class="repo-card">
+            <div class="feature-title">
+              <h3>Tópicos Avançados em Cyber Segurança</h3>
+            </div>
+            <p>Disciplina de pós-graduação com foco em cibercrimes, ataques cibernéticos, redes anônimas, vulnerabilidades e privacidade.</p>
+            <div class="repo-meta">Pós-graduação</div>
+            <a class="button button-secondary" href="https://github.com/peotta/topicos-avancados-cyber" target="_blank" rel="noreferrer">Abrir repositório</a>
+          </article>
+          <article class="repo-card">
+            <div class="feature-title">
+              <h3>Guia — Como escrever um artigo ou TCC</h3>
+            </div>
+            <p>Material de apoio com orientações práticas para organização, escrita e desenvolvimento de trabalhos acadêmicos.</p>
+            <div class="repo-meta">Material de apoio</div>
+            <a class="button button-secondary" href="https://github.com/peotta/peotta/blob/main/dicas.md" target="_blank" rel="noreferrer">Ler material</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="pesquisa">
+      <div class="container split">
+        <article class="card">
+          <h2>Pesquisa e extensão</h2>
+          <p>
+            O grupo <strong>RAVENS — Research Group on Advanced Vulnerabilities, Networks and Security</strong> reúne temas como cibersegurança, redes de computadores, vulnerabilidades, defesa cibernética e análise de ameaças.
+          </p>
+          <p>
+            A proposta desta seção é dar mais visibilidade institucional ao grupo, algo que no código atual já existe, mas ainda com menos destaque visual.
+          </p>
+          <a class="button button-primary" href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer">Acessar RAVENS</a>
+        </article>
+        <article class="card">
+          <h2>Podcast Latência Zero</h2>
+          <p>
+            Espaço dedicado a discussões sobre redes de computadores, latência, infraestrutura e comunicação em redes, em diálogo com conteúdos acadêmicos e de sala de aula.
+          </p>
+          <a class="button button-secondary" href="https://spotifycreators-web.app.link/e/4Wu544oVN1b" target="_blank" rel="noreferrer">Ouvir no Spotify</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="contato">
+      <div class="container">
+        <div class="section-head">
+          <h2>Contato</h2>
+          <p>Área final simples, objetiva e adequada para um site de apresentação pessoal hospedado no GitHub Pages.</p>
+        </div>
+        <div class="card">
+          <div class="contact-list">
+            <div class="contact-item"><strong>E-mail:</strong> peotta@gmail.com</div>
+            <div class="contact-item"><strong>GitHub:</strong> github.com/peotta</div>
+            <div class="contact-item"><strong>LinkedIn:</strong> linkedin.com/in/laertepeotta</div>
+            <div class="contact-item"><strong>ORCID:</strong> 0000-0002-2075-6601</div>
+            <div class="contact-item"><strong>Lattes:</strong> lattes.cnpq.br/0746844511320579</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Prof. Dr. Laerte Peotta de Melo — apresentação acadêmica e profissional.</p>
+    </div>
+  </footer>
+</body>
+</html>
