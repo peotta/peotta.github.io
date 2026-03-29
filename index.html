@@ -308,8 +308,24 @@
     }
 
     .link-card strong {
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
       margin-bottom: 0.4rem;
+    }
+
+    .link-icon {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      background: rgba(72,255,139,0.08);
+      border: 1px solid rgba(72,255,139,0.14);
+      color: var(--accent);
+      font-size: 0.92rem;
+      flex: 0 0 22px;
     }
 
     .repo-card {
@@ -417,11 +433,7 @@
         <div class="eyebrow">Professor • Pesquisador • Segurança Cibernética • Redes</div>
         <h1>Prof. Dr. Laerte Peotta de Melo</h1>
         <p>
-          Professor e pesquisador com atuação em <strong>segurança cibernética</strong>, <strong>redes de computadores</strong>,
-          <strong>crimes cibernéticos</strong>, <strong>forense digital</strong> e <strong>segurança bancária</strong>.
-        </p>
-        <p>
-          Mestre e Doutor em Engenharia Elétrica, com experiência em ensino, pesquisa aplicada e produção de materiais acadêmicos voltados à formação de estudantes e profissionais em Redes e Segurança Cibernética.
+          Professor, pesquisador e profissional com atuação em <strong>Cibersegurança</strong>, <strong>Engenharia de Redes</strong>, <strong>Ciência da Computação</strong>, <strong>crimes cibernéticos</strong>, <strong>forense digital</strong> e <strong>segurança bancária</strong>. Mestre e Doutor em Engenharia Elétrica, articula ensino, pesquisa aplicada e produção de materiais acadêmicos e técnicos voltados à formação e ao desenvolvimento profissional.
         </p>
         <div class="hero-actions">
           <a class="button button-primary" href="#repositorios">Ver repositórios</a>
@@ -463,19 +475,19 @@
           <article class="card">
             <h3>Trajetória</h3>
             <p>
-              Desenvolve atividades de ensino, pesquisa e produção de materiais técnicos e didáticos nas áreas de segurança digital, redes de comunicação, investigação de incidentes e tecnologias seguras.
+              Desenvolve atividades de formação, pesquisa e elaboração de projetos nas áreas de segurança digital, redes de comunicação, investigação de incidentes e tecnologias seguras, integrando fundamentos teóricos e aplicação prática.
             </p>
             <p>
-              Em contexto profissional, atua com segurança digital em ambiente corporativo, com experiência em iniciativas relacionadas a Red Team, Blue Team, Threat Hunting e inteligência cibernética.
+              No contexto profissional, possui experiência em iniciativas relacionadas a Red Team, Blue Team, Threat Hunting e inteligência cibernética.
             </p>
           </article>
           <aside class="card">
             <h3>Destaques</h3>
             <ul class="list">
-              <li>Professor universitário e pesquisador</li>
-              <li>Atuação em segurança bancária e protocolos seguros</li>
-              <li>Foco em defesa cibernética, ameaças e investigação</li>
-              <li>Materiais didáticos para redes e segurança</li>
+              <li>Segurança bancária e protocolos seguros</li>
+              <li>Defesa cibernética e análise de ameaças</li>
+              <li>Investigação de incidentes e forense digital</li>
+              <li>Formação em redes, segurança e computação</li>
             </ul>
           </aside>
         </div>
@@ -503,15 +515,15 @@
         <div class="highlight-grid" style="margin-top: 1.2rem;">
           <article class="card">
             <h3>Ensino</h3>
-            <p class="muted">Disciplinas, laboratórios, roteiros experimentais e materiais de apoio para graduação e pós-graduação.</p>
+            <p class="muted">Disciplinas, laboratórios e materiais voltados à formação em graduação e pós-graduação.</p>
           </article>
           <article class="card">
             <h3>Pesquisa</h3>
-            <p class="muted">Projetos e investigações em redes, segurança, vulnerabilidades, defesa cibernética e tecnologias seguras.</p>
+            <p class="muted">Estudos e projetos em segurança, vulnerabilidades, redes e defesa cibernética.</p>
           </article>
           <article class="card">
             <h3>Aplicação prática</h3>
-            <p class="muted">Integração entre teoria e prática com foco em ameaças reais, incidentes, protocolos e ambientes corporativos.</p>
+            <p class="muted">Integração entre fundamentos conceituais e cenários reais de segurança digital.</p>
           </article>
         </div>
       </div>
@@ -524,12 +536,12 @@
           
         </div>
         <div class="links-grid">
-          <a class="link-card" href="mailto:peotta@gmail.com"><strong>E-mail</strong><span class="muted">peotta@gmail.com</span></a>
-          <a class="link-card" href="https://orcid.org/0000-0002-2075-6601" target="_blank" rel="noreferrer"><strong>ORCID</strong><span class="muted">0000-0002-2075-6601</span></a>
-          <a class="link-card" href="https://lattes.cnpq.br/0746844511320579" target="_blank" rel="noreferrer"><strong>Currículo Lattes</strong><span class="muted">Produção acadêmica e trajetória</span></a>
-          <a class="link-card" href="https://dblp.org/pid/235/0910.html" target="_blank" rel="noreferrer"><strong>DBLP</strong><span class="muted">Publicações Acadêmicas</span></a>
-          <a class="link-card" href="https://linkedin.com/in/laertepeotta" target="_blank" rel="noreferrer"><strong>LinkedIn</strong><span class="muted">Rede profissional</span></a>
-          <a class="link-card" href="https://github.com/peotta" target="_blank" rel="noreferrer"><strong>GitHub</strong><span class="muted">Repositórios e materiais</span></a>
+          <a class="link-card" href="mailto:peotta@gmail.com"><strong><span class="link-icon">✉</span>E-mail</strong><span class="muted">peotta@gmail.com</span></a>
+          <a class="link-card" href="https://orcid.org/0000-0002-2075-6601" target="_blank" rel="noreferrer"><strong><span class="link-icon">◎</span>ORCID</strong><span class="muted">0000-0002-2075-6601</span></a>
+          <a class="link-card" href="https://lattes.cnpq.br/0746844511320579" target="_blank" rel="noreferrer"><strong><span class="link-icon">▣</span>Currículo Lattes</strong><span class="muted">Produção acadêmica e trajetória</span></a>
+          <a class="link-card" href="https://dblp.org/pid/235/0910.html" target="_blank" rel="noreferrer"><strong><span class="link-icon">◫</span>DBLP</strong><span class="muted">Publicações Acadêmicas</span></a>
+          <a class="link-card" href="https://linkedin.com/in/laertepeotta" target="_blank" rel="noreferrer"><strong><span class="link-icon">in</span>LinkedIn</strong><span class="muted">Rede profissional</span></a>
+          <a class="link-card" href="https://github.com/peotta" target="_blank" rel="noreferrer"><strong><span class="link-icon">⌘</span>GitHub</strong><span class="muted">Repositórios e materiais</span></a>
         </div>
       </div>
     </section>
@@ -544,40 +556,40 @@
           <article class="repo-card">
             <div class="ene-badge"><span class="unb-icon"></span> Universidade de Brasília</div>
             <h3>ENE0011 - Laboratório de Redes</h3>
-            <p class="muted">Laboratórios práticos com dispositivos de rede, análise de protocolos, VLANs e roteamento.</p>
+            <p class="muted">Atividades experimentais com dispositivos de rede, análise de protocolos, VLANs e roteamento.</p>
             <div class="repo-meta">Graduação em Engenharia de Redes de Comunicação</div>
             <a class="button button-secondary" href="https://github.com/peotta/labredes" target="_blank" rel="noreferrer">Abrir repositório</a>
           </article>
           <article class="repo-card">
             <div class="ene-badge"><span class="unb-icon"></span> Universidade de Brasília</div>
             <h3>ENE0025 - Protocolos de Transporte e Roteamento</h3>
-            <p class="muted">Conteúdos teóricos e práticos sobre arquitetura TCP/IP, protocolos de transporte e roteamento.</p>
+            <p class="muted">Estudo da arquitetura TCP/IP, dos protocolos de transporte e dos fundamentos de roteamento.</p>
             <div class="repo-meta">Graduação em Engenharia de Redes de Comunicação</div>
             <a class="button button-secondary" href="https://github.com/peotta/PTR" target="_blank" rel="noreferrer">Abrir repositório</a>
           </article>
           <article class="repo-card">
             <div class="ene-badge"><span class="unb-icon"></span> Universidade de Brasília</div>
             <h3>ENE0021 - Tópicos em Redes de Comunicação 3</h3>
-            <p class="muted">Tópicos avançados em segurança de redes, criptografia, segurança de software, virtualização, resposta a incidentes, forense digital, DevSecOps e automação.</p>
+            <p class="muted">Abordagem de temas avançados em segurança de redes, criptografia, resposta a incidentes, forense digital, DevSecOps e automação.</p>
             <div class="repo-meta">Graduação em Engenharia de Redes de Comunicação</div>
             <a class="button button-secondary" href="https://github.com/peotta/topicos" target="_blank" rel="noreferrer">Abrir repositório</a>
           </article>
           <article class="repo-card">
             <div class="ene-badge"><span class="unb-icon"></span> Universidade de Brasília</div>
             <h3>ENE0274 - Fundamentos de Redes</h3>
-            <p class="muted">Introdução aos protocolos e fundamentos de redes de computadores.</p>
+            <p class="muted">Fundamentos conceituais sobre protocolos, serviços e arquitetura de redes de computadores.</p>
             <div class="repo-meta">Graduação em Engenharia de Redes de Comunicação</div>
             <a class="button button-secondary" href="https://github.com/peotta/topicos" target="_blank" rel="noreferrer">Abrir repositório</a>
           </article>
           <article class="repo-card">
             <h3>Tópicos Avançados em Cyber Segurança</h3>
-            <p class="muted">Disciplina de pós-graduação com foco em cibercrimes, ataques cibernéticos, redes anônimas, vulnerabilidades e privacidade.</p>
+            <p class="muted">Discussão avançada sobre cibercrimes, ataques cibernéticos, vulnerabilidades, privacidade e redes anônimas.</p>
             <div class="repo-meta">Pós-graduação</div>
             <a class="button button-secondary" href="https://github.com/peotta/topicos-avancados-cyber" target="_blank" rel="noreferrer">Abrir repositório</a>
           </article>
           <article class="repo-card">
             <h3>Guia - Como escrever um artigo ou TCC</h3>
-            <p class="muted">Material de apoio com orientações práticas para organização, escrita e desenvolvimento de trabalhos acadêmicos.</p>
+            <p class="muted">Material de apoio para organização, escrita e desenvolvimento de trabalhos acadêmicos.</p>
             <div class="repo-meta">Material de apoio</div>
             <a class="button button-secondary" href="https://github.com/peotta/peotta/blob/main/dicas.md" target="_blank" rel="noreferrer">Ler material</a>
           </article>
@@ -590,14 +602,12 @@
         <article class="card">
           <h2>Podcast Latência Zero</h2>
           <p>
-            Espaço dedicado a discussões sobre redes de computadores, infraestrutura, latência e comunicação em redes, em diálogo com conteúdos acadêmicos e temas de sala de aula.
+            Podcast dedicado a redes de computadores, infraestrutura, desempenho e temas associados às atividades de ensino.
           </p>
-                   <a class="button button-primary" href="https://open.spotify.com/show/59S06LhFsKlyvfLFQCJ8fK?si=6f2dbb4065e641ec" target="_blank" rel="noreferrer">Ouvir no Spotify</a>
-
-          
+          <a class="button button-primary" href="https://open.spotify.com/show/59S06LhFsKlyvfLFQCJ8fK?si=64f2b8a5edcd4c8e" target="_blank" rel="noreferrer">Ouvir no Spotify</a>
         </article>
         <article class="card">
-          <a href="https://open.spotify.com/show/59S06LhFsKlyvfLFQCJ8fK?si=6f2dbb4065e641ec" target="_blank" rel="noreferrer">
+          <a href="https://open.spotify.com/show/59S06LhFsKlyvfLFQCJ8fK?si=64f2b8a5edcd4c8e" target="_blank" rel="noreferrer">
             <img class="podcast-banner" src="Latência Zero 2 - podcast.png" alt="Podcast Latência Zero" />
           </a>
         </article>
@@ -609,7 +619,7 @@
         <article class="card">
           <h2>Pesquisa e extensão</h2>
           <p>
-            O grupo <strong>RAVENS - Research Group on Advanced Vulnerabilities, Networks and Security</strong> reúne temas como cibersegurança, redes de computadores, vulnerabilidades, defesa cibernética e análise de ameaças.
+            Grupo voltado à pesquisa, à formação acadêmica e à produção técnica em cibersegurança, redes, vulnerabilidades e análise de ameaças.
           </p>
           <a class="button button-secondary" href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer">Acessar RAVENS</a>
         </article>
@@ -639,7 +649,7 @@
 
   <footer>
     <div class="container">
-      <p>Prof. Dr. Laerte Peotta de Melo -apresentação acadêmica e profissional.</p>
+      <p>Prof. Dr. Laerte Peotta de Melo - ensino, pesquisa e atuação em cibersegurança, redes e computação.</p>
     </div>
   </footer>
 </body>
