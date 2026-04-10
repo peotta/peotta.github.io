@@ -159,9 +159,52 @@
     }
 
     .flag {
-      font-size: 1rem;
-      line-height: 1;
+      width: 18px;
+      height: 18px;
       display: inline-block;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.28);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+      flex: 0 0 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flag-pt {
+      background:
+        linear-gradient(90deg, #0b8f3a 0 42%, #c51f2d 42% 100%);
+    }
+
+    .flag-pt::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 50%;
+      background: rgba(255, 215, 0, 0.85);
+      width: 6px;
+      height: 6px;
+      margin: auto;
+    }
+
+    .flag-en {
+      background:
+        linear-gradient(0deg,
+          #b22234 0 14%, #fff 14% 28%, #b22234 28% 42%, #fff 42% 56%,
+          #b22234 56% 70%, #fff 70% 84%, #b22234 84% 100%);
+    }
+
+    .flag-en::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 45%;
+      height: 54%;
+      background: #3c3b6e;
+    }
+
+    .flag-es {
+      background: linear-gradient(180deg, #aa151b 0 28%, #f1bf00 28% 72%, #aa151b 72% 100%);
     }
 
     .hero {
@@ -473,9 +516,9 @@
           <a href="#contato" data-i18n="nav.contact">Contato</a>
         </div>
         <div class="lang-switcher" aria-label="Seletor de idioma">
-          <button class="lang-btn active" data-lang="pt" aria-label="Português"><span class="flag">🇧🇷</span> PT</button>
-          <button class="lang-btn" data-lang="en" aria-label="English"><span class="flag">🇺🇸</span> EN</button>
-          <button class="lang-btn" data-lang="es" aria-label="Español"><span class="flag">🇪🇸</span> ES</button>
+          <button class="lang-btn active" data-lang="pt" aria-label="Português"><span class="flag flag-pt" aria-hidden="true"></span> PT</button>
+          <button class="lang-btn" data-lang="en" aria-label="English"><span class="flag flag-en" aria-hidden="true"></span> EN</button>
+          <button class="lang-btn" data-lang="es" aria-label="Español"><span class="flag flag-es" aria-hidden="true"></span> ES</button>
         </div>
       </div>
     </div>
