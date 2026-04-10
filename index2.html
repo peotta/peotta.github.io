@@ -1,0 +1,995 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prof. Dr. Laerte Peotta de Melo</title>
+  <meta name="description" content="Site acadêmico e profissional de Prof. Dr. Laerte Peotta de Melo, com atuação em cibersegurança, redes de computadores, crimes cibernéticos e forense digital." />
+  <style>
+    :root {
+      --bg: #030604;
+      --bg-soft: #06110a;
+      --card: rgba(6, 20, 10, 0.72);
+      --card-border: rgba(69, 255, 146, 0.18);
+      --text: #d8ffe7;
+      --muted: #96c6a8;
+      --primary: #48ff8b;
+      --secondary: #00d26a;
+      --accent: #8bffb3;
+      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+      --radius: 22px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(72,255,139,0.10), transparent 22%),
+        radial-gradient(circle at top right, rgba(0,210,106,0.08), transparent 22%),
+        linear-gradient(180deg, #010201 0%, #020704 50%, #031008 100%);
+      line-height: 1.65;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(72,255,139,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(72,255,139,0.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      opacity: 0.22;
+      z-index: -2;
+    }
+
+    body::after {
+      content: "010101 001101 101010 011010 110001 001011 101101 010110";
+      position: fixed;
+      inset: 0;
+      white-space: pre-wrap;
+      word-break: break-all;
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(72,255,139,0.05);
+      pointer-events: none;
+      z-index: -1;
+      padding: 2rem;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(2, 10, 5, 0.84);
+      border-bottom: 1px solid rgba(72,255,139,0.16);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.9rem 0;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      text-transform: uppercase;
+      text-shadow: 0 0 12px rgba(72,255,139,0.35);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: flex-end;
+    }
+
+    .menu a {
+      color: var(--muted);
+      font-size: 0.96rem;
+      transition: 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .menu a:hover { color: white; }
+
+    .lang-switcher {
+      display: inline-flex;
+      gap: 0.45rem;
+      padding: 0.3rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(72,255,139,0.16);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    }
+
+    .lang-btn {
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      padding: 0.55rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: 0.2s ease;
+      letter-spacing: 0.02em;
+    }
+
+    .lang-btn:hover {
+      background: rgba(72,255,139,0.08);
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, rgba(72,255,139,0.18), rgba(0,210,106,0.18));
+      border: 1px solid rgba(72,255,139,0.24);
+      color: #fff;
+    }
+
+    .flag {
+      font-size: 1rem;
+      line-height: 1;
+      display: inline-block;
+    }
+
+    .hero {
+      padding: 4.2rem 0 2.8rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .hero-photo-wrap {
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-photo {
+      width: min(100%, 430px);
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 28px;
+      border: 1px solid rgba(72,255,139,0.22);
+      box-shadow: var(--shadow), 0 0 30px rgba(72,255,139,0.18);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(72,255,139,0.10);
+      border: 1px solid rgba(72,255,139,0.18);
+      color: #e2ffee;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 5vw, 4.8rem);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      text-shadow: 0 0 18px rgba(72,255,139,0.14);
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.04rem;
+      max-width: 62ch;
+      margin: 1.1rem 0 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      margin-top: 1.6rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.95rem 1.2rem;
+      border-radius: 12px;
+      font-weight: 700;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .button:hover { transform: translateY(-2px); }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #041108;
+      box-shadow: var(--shadow);
+    }
+
+    .button-secondary {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(72,255,139,0.18);
+      color: var(--text);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.35rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.9rem;
+      margin-top: 1.3rem;
+    }
+
+    .metric {
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(72,255,139,0.10);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.05rem;
+      margin-bottom: 0.22rem;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    section { padding: 1.2rem 0; }
+
+    .section-head {
+      margin-bottom: 1.2rem;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.6rem, 3vw, 2.35rem);
+      margin: 0 0 0.4rem;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+
+    .about-grid,
+    .highlight-grid,
+    .links-grid,
+    .repo-grid,
+    .split {
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    .about-grid { grid-template-columns: 1.15fr 0.85fr; }
+    .highlight-grid { grid-template-columns: repeat(3, 1fr); }
+    .links-grid { grid-template-columns: repeat(3, 1fr); }
+    .repo-grid { grid-template-columns: repeat(2, 1fr); }
+    .split { grid-template-columns: 1fr 1fr; }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 1rem;
+    }
+
+    .tag {
+      padding: 0.62rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(72,255,139,0.08);
+      border: 1px solid rgba(72,255,139,0.16);
+      color: #ddffea;
+      font-size: 0.92rem;
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+
+    .link-card {
+      display: block;
+      height: 100%;
+      padding: 1.2rem;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(72,255,139,0.12);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .link-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(72,255,139,0.32);
+    }
+
+    .link-card strong {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .link-icon {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      background: rgba(72,255,139,0.08);
+      border: 1px solid rgba(72,255,139,0.14);
+      color: var(--accent);
+      font-size: 0.92rem;
+      flex: 0 0 22px;
+    }
+
+    .repo-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      padding: 1.3rem;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(72,255,139,0.12);
+    }
+
+    .repo-meta {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .podcast-banner, .ravens-banner {
+      width: 100%;
+      border-radius: 22px;
+      border: 1px solid rgba(72,255,139,0.16);
+      display: block;
+      box-shadow: var(--shadow);
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .contact-item {
+      padding: 0.95rem 1rem;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(72,255,139,0.10);
+    }
+
+    .contact-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-weight: 700;
+    }
+
+    .ene-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 0.1rem;
+    }
+
+    .unb-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #0c3e7c 0 36%, #00861a 36% 100%);
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.08);
+      flex: 0 0 20px;
+    }
+
+    .muted { color: var(--muted); }
+
+    footer {
+      padding: 2.5rem 0 4rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .about-grid,
+      .split,
+      .highlight-grid,
+      .links-grid,
+      .repo-grid,
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .menu { display: none; }
+      .hero { padding-top: 3rem; }
+      .hero-photo { max-width: 340px; }
+      .nav-right { width: 100%; justify-content: space-between; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand" data-i18n="brand">Prof. Dr. Laerte Peotta de Melo</div>
+      <div class="nav-right">
+        <div class="menu">
+          <a href="#sobre" data-i18n="nav.about">Sobre</a>
+          <a href="#atuacao" data-i18n="nav.work">Atuação</a>
+          <a href="#repositorios" data-i18n="nav.repos">Repositórios</a>
+          <a href="#podcast" data-i18n="nav.podcast">Podcast</a>
+          <a href="#contato" data-i18n="nav.contact">Contato</a>
+        </div>
+        <div class="lang-switcher" aria-label="Seletor de idioma">
+          <button class="lang-btn active" data-lang="pt" aria-label="Português"><span class="flag">🇧🇷</span> PT</button>
+          <button class="lang-btn" data-lang="en" aria-label="English"><span class="flag">🇺🇸</span> EN</button>
+          <button class="lang-btn" data-lang="es" aria-label="Español"><span class="flag">🇪🇸</span> ES</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow" data-i18n="hero.eyebrow">Professor • Pesquisador • Segurança Cibernética • Redes</div>
+        <h1 data-i18n="hero.title">Prof. Dr. Laerte Peotta de Melo</h1>
+        <p data-i18n="hero.text">
+          Professor, pesquisador e profissional com atuação em <strong>Cibersegurança</strong>, <strong>Engenharia de Redes</strong>, <strong>Ciência da Computação</strong>, <strong>crimes cibernéticos</strong>, <strong>forense digital</strong> e <strong>Segurança do Sistema Financeiro</strong>. Mestre e Doutor em Engenharia Elétrica, articula ensino, pesquisa aplicada e produção de materiais acadêmicos e técnicos voltados à formação e ao desenvolvimento profissional.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#repositorios" data-i18n="hero.btnRepos">Ver repositórios</a>
+          <a class="button button-secondary" href="https://github.com/peotta" target="_blank" rel="noreferrer">↗ GitHub</a>
+        </div>
+        <div class="metric-grid">
+          <div class="metric">
+            <strong data-i18n="metrics.teaching.title">Ensino</strong>
+            <span data-i18n="metrics.teaching.text">Graduação, especialização, mestrado e doutorado em Cibersegurança, Engenharia de Redes e Ciência da Computação</span>
+          </div>
+          <div class="metric">
+            <strong data-i18n="metrics.research.title">Pesquisa</strong>
+            <span data-i18n="metrics.research.text">Segurança digital, vulnerabilidades, investigação e defesa</span>
+          </div>
+          <div class="metric">
+            <strong data-i18n="metrics.market.title">Mercado</strong>
+            <span data-i18n="metrics.market.text">Red Team, Blue Team, Threat Hunting e inteligência cibernética</span>
+          </div>
+          <div class="metric">
+            <strong data-i18n="metrics.innovation.title">Inovação</strong>
+            <span data-i18n="metrics.innovation.text">Criador do BBCode para autorização segura de transações</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-photo-wrap">
+        <img class="hero-photo" src="Foto Perfil UnB.png" alt="Foto de perfil do Prof. Dr. Laerte Peotta de Melo" data-alt-key="hero.photoAlt" />
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="sobre">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i18n="about.title">Sobre</h2>
+        </div>
+        <div class="about-grid">
+          <article class="card">
+            <h3 data-i18n="about.pathTitle">Trajetória</h3>
+            <p data-i18n="about.p1">
+              Desenvolve atividades de formação, pesquisa e elaboração de projetos nas áreas de segurança digital, redes de comunicação, investigação de incidentes e tecnologias seguras, integrando fundamentos teóricos e aplicação prática.
+            </p>
+            <p data-i18n="about.p2">
+              No contexto profissional, possui experiência em iniciativas relacionadas a Red Team, Blue Team, Threat Hunting e inteligência cibernética.
+            </p>
+          </article>
+          <aside class="card">
+            <h3 data-i18n="about.highlightsTitle">Destaques</h3>
+            <ul class="list">
+              <li data-i18n="about.li1">Segurança do Sistema Financeiro e protocolos seguros</li>
+              <li data-i18n="about.li2">Defesa cibernética e análise de ameaças</li>
+              <li data-i18n="about.li3">Investigação de incidentes e forense digital</li>
+              <li data-i18n="about.li4">Formação em redes, segurança e computação</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="atuacao">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i18n="work.title">Áreas de atuação</h2>
+        </div>
+        <div class="card">
+          <div class="tag-list">
+            <span class="tag" data-i18n="tags.1">Segurança Cibernética</span>
+            <span class="tag" data-i18n="tags.2">Segurança de Redes</span>
+            <span class="tag" data-i18n="tags.3">Crimes Cibernéticos</span>
+            <span class="tag" data-i18n="tags.4">Forense Computacional</span>
+            <span class="tag" data-i18n="tags.5">Gestão de Vulnerabilidades</span>
+            <span class="tag" data-i18n="tags.6">Criptografia Aplicada</span>
+            <span class="tag" data-i18n="tags.7">Cyber Threat Hunting</span>
+            <span class="tag" data-i18n="tags.8">Segurança do Sistema Financeiro</span>
+          </div>
+        </div>
+        <div class="highlight-grid" style="margin-top: 1.2rem;">
+          <article class="card">
+            <h3 data-i18n="work.teachingTitle">Ensino</h3>
+            <p class="muted" data-i18n="work.teachingText">Disciplinas, laboratórios e materiais voltados à formação em graduação e pós-graduação.</p>
+          </article>
+          <article class="card">
+            <h3 data-i18n="work.researchTitle">Pesquisa</h3>
+            <p class="muted" data-i18n="work.researchText">Estudos e projetos em segurança, vulnerabilidades, redes e defesa cibernética.</p>
+          </article>
+          <article class="card">
+            <h3 data-i18n="work.practiceTitle">Aplicação prática</h3>
+            <p class="muted" data-i18n="work.practiceText">Integração entre fundamentos conceituais e cenários reais de segurança digital.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i18n="profiles.title">Perfis e links acadêmicos</h2>
+        </div>
+        <div class="links-grid">
+          <a class="link-card" href="mailto:peotta@gmail.com"><strong><span class="link-icon">✉</span><span data-i18n="profiles.email">E-mail</span></strong><span class="muted">peotta@gmail.com</span></a>
+          <a class="link-card" href="https://orcid.org/0000-0002-2075-6601" target="_blank" rel="noreferrer"><strong><span class="link-icon">◎</span>ORCID</strong><span class="muted">0000-0002-2075-6601</span></a>
+          <a class="link-card" href="https://lattes.cnpq.br/0746844511320579" target="_blank" rel="noreferrer"><strong><span class="link-icon">▣</span><span data-i18n="profiles.lattes">Currículo Lattes</span></strong><span class="muted" data-i18n="profiles.lattesText">Produção acadêmica e trajetória</span></a>
+          <a class="link-card" href="https://dblp.org/pid/235/0910.html" target="_blank" rel="noreferrer"><strong><span class="link-icon">◫</span>DBLP</strong><span class="muted" data-i18n="profiles.dblpText">Publicações acadêmicas</span></a>
+          <a class="link-card" href="https://linkedin.com/in/laertepeotta" target="_blank" rel="noreferrer"><strong><span class="link-icon">in</span>LinkedIn</strong><span class="muted" data-i18n="profiles.linkedinText">Rede profissional</span></a>
+          <a class="link-card" href="https://github.com/peotta" target="_blank" rel="noreferrer"><strong><span class="link-icon">⌘</span>GitHub</strong><span class="muted" data-i18n="profiles.githubText">Repositórios e materiais</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="repositorios">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i18n="repos.title">Repositórios e materiais</h2>
+        </div>
+        <div class="repo-grid">
+          <article class="repo-card">
+            <div class="ene-badge"><span class="unb-icon"></span> Universidade de Brasília</div>
+            <h3>ENE0011 - <span data-i18n="repos.labredes.title">Laboratório de Redes</span></h3>
+            <p class="muted" data-i18n="repos.labredes.text">Atividades experimentais com dispositivos de rede, análise de protocolos, VLANs e roteamento.</p>
+            <div class="repo-meta" data-i18n="repos.grad">Graduação em Engenharia de Redes de Comunicação</div>
+            <a class="button button-secondary" href="https://github.com/peotta/labredes" target="_blank" rel="noreferrer" data-i18n="repos.open">Abrir repositório</a>
+          </article>
+          <article class="repo-card">
+            <div class="ene-badge"><span class="unb-icon"></span> Universidade de Brasília</div>
+            <h3>ENE0025 - <span data-i18n="repos.ptr.title">Protocolos de Transporte e Roteamento</span></h3>
+            <p class="muted" data-i18n="repos.ptr.text">Estudo da arquitetura TCP/IP, dos protocolos de transporte e dos fundamentos de roteamento.</p>
+            <div class="repo-meta" data-i18n="repos.grad">Graduação em Engenharia de Redes de Comunicação</div>
+            <a class="button button-secondary" href="https://github.com/peotta/PTR" target="_blank" rel="noreferrer" data-i18n="repos.open">Abrir repositório</a>
+          </article>
+          <article class="repo-card">
+            <div class="ene-badge"><span class="unb-icon"></span> Universidade de Brasília</div>
+            <h3>ENE0021 - <span data-i18n="repos.topicos.title">Tópicos em Redes de Comunicação 3</span></h3>
+            <p class="muted" data-i18n="repos.topicos.text">Abordagem de temas avançados em segurança de redes, criptografia, resposta a incidentes, forense digital, DevSecOps e automação.</p>
+            <div class="repo-meta" data-i18n="repos.grad">Graduação em Engenharia de Redes de Comunicação</div>
+            <a class="button button-secondary" href="https://github.com/peotta/topicos" target="_blank" rel="noreferrer" data-i18n="repos.open">Abrir repositório</a>
+          </article>
+          <article class="repo-card">
+            <div class="ene-badge"><span class="unb-icon"></span> Universidade de Brasília</div>
+            <h3>ENE0274 - <span data-i18n="repos.fund.title">Fundamentos de Redes</span></h3>
+            <p class="muted" data-i18n="repos.fund.text">Fundamentos conceituais sobre protocolos, serviços e arquitetura de redes de computadores.</p>
+            <div class="repo-meta" data-i18n="repos.grad">Graduação em Engenharia de Redes de Comunicação</div>
+            <a class="button button-secondary" href="https://github.com/peotta/topicos" target="_blank" rel="noreferrer" data-i18n="repos.open">Abrir repositório</a>
+          </article>
+          <article class="repo-card">
+            <h3 data-i18n="repos.cyber.title">Tópicos Avançados em Cyber Segurança</h3>
+            <p class="muted" data-i18n="repos.cyber.text">Discussão avançada sobre cibercrimes, ataques cibernéticos, vulnerabilidades, privacidade e redes anônimas.</p>
+            <div class="repo-meta" data-i18n="repos.postgrad">Pós-graduação</div>
+            <a class="button button-secondary" href="https://github.com/peotta/topicos-avancados-cyber" target="_blank" rel="noreferrer" data-i18n="repos.open">Abrir repositório</a>
+          </article>
+          <article class="repo-card">
+            <h3 data-i18n="repos.guide.title">Guia - Como escrever um artigo ou TCC</h3>
+            <p class="muted" data-i18n="repos.guide.text">Material de apoio para organização, escrita e desenvolvimento de trabalhos acadêmicos.</p>
+            <div class="repo-meta" data-i18n="repos.support">Material de apoio</div>
+            <a class="button button-secondary" href="dicas.html" target="_blank" rel="noreferrer" data-i18n="repos.read">Ler material</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="podcast">
+      <div class="container split">
+        <article class="card">
+          <h2 data-i18n="podcast.title">Podcast Latência Zero</h2>
+          <p data-i18n="podcast.text">
+            Podcast dedicado a redes de computadores, infraestrutura, desempenho e temas associados às atividades de ensino.
+          </p>
+          <a class="button button-primary" href="https://open.spotify.com/show/59S06LhFsKlyvfLFQCJ8fK?si=64f2b8a5edcd4c8e" target="_blank" rel="noreferrer" data-i18n="podcast.listen">Ouvir no Spotify</a>
+        </article>
+        <article class="card">
+          <a href="https://open.spotify.com/show/59S06LhFsKlyvfLFQCJ8fK?si=64f2b8a5edcd4c8e" target="_blank" rel="noreferrer">
+            <img class="podcast-banner" src="Latência Zero 2 - podcast.png" alt="Podcast Latência Zero" data-alt-key="podcast.alt" />
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="container split">
+        <article class="card">
+          <h2 style="line-height: 1.22; font-weight: 700; letter-spacing: 0.035em; color: #d8ffe7;">
+            <span style="font-size: 1.4em; font-weight: 900; color: #39ff7a; text-shadow: 0 0 4px rgba(57,255,122,0.22);">RAVENS</span><br>
+            <span style="font-size: 1.16em; font-weight: 900; color: #39ff7a;">R</span>esearch Group on
+            <span style="font-size: 1.16em; font-weight: 900; color: #31da69;">A</span>dvanced
+            <span style="font-size: 1.16em; font-weight: 900; color: #28b95a;">V</span>ulnerabilities,
+            <span style="font-size: 1.16em; font-weight: 900; color: #72f0a3;">E</span>ngineering,
+            <span style="font-size: 1.16em; font-weight: 900; color: #4fd083;">N</span>etworks and
+            <span style="font-size: 1.16em; font-weight: 900; color: #9cf7c2;">S</span>ecurity
+          </h2>
+          <p data-i18n="ravens.text">
+            Grupo voltado à pesquisa, à formação acadêmica e à produção técnica em Cibersegurança, redes, vulnerabilidades e análise de ameaças.
+          </p>
+          <a class="button button-secondary" href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer" data-i18n="ravens.open">Acessar RAVENS</a>
+        </article>
+        <article class="card">
+          <img class="ravens-banner" src="ravens-1.webp" alt="Imagem do grupo RAVENS" data-alt-key="ravens.alt" />
+        </article>
+      </div>
+    </section>
+
+    <section id="contato">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i18n="contact.title">Contato</h2>
+        </div>
+        <div class="card">
+          <div class="contact-list">
+            <div class="contact-item"><span class="contact-label">✉ Gmail</span> peotta@gmail.com</div>
+            <div class="contact-item"><span class="contact-label">⌘ GitHub</span> github.com/peotta</div>
+            <div class="contact-item"><span class="contact-label">◉ LinkedIn</span> linkedin.com/in/laertepeotta</div>
+            <div class="contact-item"><span class="contact-label">◎ ORCID</span> 0000-0002-2075-6601</div>
+            <div class="contact-item"><span class="contact-label">▣ Lattes</span> lattes.cnpq.br/0746844511320579</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p data-i18n="footer.text">Prof. Dr. Laerte Peotta de Melo - ensino, pesquisa e atuação em cibersegurança, redes e computação.</p>
+    </div>
+  </footer>
+
+  <script>
+    const translations = {
+      pt: {
+        lang: 'pt-BR',
+        title: 'Prof. Dr. Laerte Peotta de Melo',
+        description: 'Site acadêmico e profissional de Prof. Dr. Laerte Peotta de Melo, com atuação em cibersegurança, redes de computadores, crimes cibernéticos e forense digital.',
+        brand: 'Prof. Dr. Laerte Peotta de Melo',
+        'nav.about': 'Sobre',
+        'nav.work': 'Atuação',
+        'nav.repos': 'Repositórios',
+        'nav.podcast': 'Podcast',
+        'nav.contact': 'Contato',
+        'hero.eyebrow': 'Professor • Pesquisador • Segurança Cibernética • Redes',
+        'hero.title': 'Prof. Dr. Laerte Peotta de Melo',
+        'hero.text': 'Professor, pesquisador e profissional com atuação em <strong>Cibersegurança</strong>, <strong>Engenharia de Redes</strong>, <strong>Ciência da Computação</strong>, <strong>crimes cibernéticos</strong>, <strong>forense digital</strong> e <strong>Segurança do Sistema Financeiro</strong>. Mestre e Doutor em Engenharia Elétrica, articula ensino, pesquisa aplicada e produção de materiais acadêmicos e técnicos voltados à formação e ao desenvolvimento profissional.',
+        'hero.btnRepos': 'Ver repositórios',
+        'hero.photoAlt': 'Foto de perfil do Prof. Dr. Laerte Peotta de Melo',
+        'metrics.teaching.title': 'Ensino',
+        'metrics.teaching.text': 'Graduação, especialização, mestrado e doutorado em Cibersegurança, Engenharia de Redes e Ciência da Computação',
+        'metrics.research.title': 'Pesquisa',
+        'metrics.research.text': 'Segurança digital, vulnerabilidades, investigação e defesa',
+        'metrics.market.title': 'Mercado',
+        'metrics.market.text': 'Red Team, Blue Team, Threat Hunting e inteligência cibernética',
+        'metrics.innovation.title': 'Inovação',
+        'metrics.innovation.text': 'Criador do BBCode para autorização segura de transações',
+        'about.title': 'Sobre',
+        'about.pathTitle': 'Trajetória',
+        'about.p1': 'Desenvolve atividades de formação, pesquisa e elaboração de projetos nas áreas de segurança digital, redes de comunicação, investigação de incidentes e tecnologias seguras, integrando fundamentos teóricos e aplicação prática.',
+        'about.p2': 'No contexto profissional, possui experiência em iniciativas relacionadas a Red Team, Blue Team, Threat Hunting e inteligência cibernética.',
+        'about.highlightsTitle': 'Destaques',
+        'about.li1': 'Segurança do Sistema Financeiro e protocolos seguros',
+        'about.li2': 'Defesa cibernética e análise de ameaças',
+        'about.li3': 'Investigação de incidentes e forense digital',
+        'about.li4': 'Formação em redes, segurança e computação',
+        'work.title': 'Áreas de atuação',
+        'tags.1': 'Segurança Cibernética',
+        'tags.2': 'Segurança de Redes',
+        'tags.3': 'Crimes Cibernéticos',
+        'tags.4': 'Forense Computacional',
+        'tags.5': 'Gestão de Vulnerabilidades',
+        'tags.6': 'Criptografia Aplicada',
+        'tags.7': 'Cyber Threat Hunting',
+        'tags.8': 'Segurança do Sistema Financeiro',
+        'work.teachingTitle': 'Ensino',
+        'work.teachingText': 'Disciplinas, laboratórios e materiais voltados à formação em graduação e pós-graduação.',
+        'work.researchTitle': 'Pesquisa',
+        'work.researchText': 'Estudos e projetos em segurança, vulnerabilidades, redes e defesa cibernética.',
+        'work.practiceTitle': 'Aplicação prática',
+        'work.practiceText': 'Integração entre fundamentos conceituais e cenários reais de segurança digital.',
+        'profiles.title': 'Perfis e links acadêmicos',
+        'profiles.email': 'E-mail',
+        'profiles.lattes': 'Currículo Lattes',
+        'profiles.lattesText': 'Produção acadêmica e trajetória',
+        'profiles.dblpText': 'Publicações acadêmicas',
+        'profiles.linkedinText': 'Rede profissional',
+        'profiles.githubText': 'Repositórios e materiais',
+        'repos.title': 'Repositórios e materiais',
+        'repos.labredes.title': 'Laboratório de Redes',
+        'repos.labredes.text': 'Atividades experimentais com dispositivos de rede, análise de protocolos, VLANs e roteamento.',
+        'repos.grad': 'Graduação em Engenharia de Redes de Comunicação',
+        'repos.open': 'Abrir repositório',
+        'repos.ptr.title': 'Protocolos de Transporte e Roteamento',
+        'repos.ptr.text': 'Estudo da arquitetura TCP/IP, dos protocolos de transporte e dos fundamentos de roteamento.',
+        'repos.topicos.title': 'Tópicos em Redes de Comunicação 3',
+        'repos.topicos.text': 'Abordagem de temas avançados em segurança de redes, criptografia, resposta a incidentes, forense digital, DevSecOps e automação.',
+        'repos.fund.title': 'Fundamentos de Redes',
+        'repos.fund.text': 'Fundamentos conceituais sobre protocolos, serviços e arquitetura de redes de computadores.',
+        'repos.cyber.title': 'Tópicos Avançados em Cyber Segurança',
+        'repos.cyber.text': 'Discussão avançada sobre cibercrimes, ataques cibernéticos, vulnerabilidades, privacidade e redes anônimas.',
+        'repos.postgrad': 'Pós-graduação',
+        'repos.guide.title': 'Guia - Como escrever um artigo ou TCC',
+        'repos.guide.text': 'Material de apoio para organização, escrita e desenvolvimento de trabalhos acadêmicos.',
+        'repos.support': 'Material de apoio',
+        'repos.read': 'Ler material',
+        'podcast.title': 'Podcast Latência Zero',
+        'podcast.text': 'Podcast dedicado a redes de computadores, infraestrutura, desempenho e temas associados às atividades de ensino.',
+        'podcast.listen': 'Ouvir no Spotify',
+        'podcast.alt': 'Podcast Latência Zero',
+        'ravens.text': 'Grupo voltado à pesquisa, à formação acadêmica e à produção técnica em Cibersegurança, redes, vulnerabilidades e análise de ameaças.',
+        'ravens.open': 'Acessar RAVENS',
+        'ravens.alt': 'Imagem do grupo RAVENS',
+        'contact.title': 'Contato',
+        'footer.text': 'Prof. Dr. Laerte Peotta de Melo - ensino, pesquisa e atuação em cibersegurança, redes e computação.'
+      },
+      en: {
+        lang: 'en',
+        title: 'Prof. Dr. Laerte Peotta de Melo',
+        description: 'Academic and professional website of Prof. Dr. Laerte Peotta de Melo, focused on cybersecurity, computer networks, cybercrime, and digital forensics.',
+        brand: 'Prof. Dr. Laerte Peotta de Melo',
+        'nav.about': 'About',
+        'nav.work': 'Expertise',
+        'nav.repos': 'Repositories',
+        'nav.podcast': 'Podcast',
+        'nav.contact': 'Contact',
+        'hero.eyebrow': 'Professor • Researcher • Cybersecurity • Networks',
+        'hero.title': 'Prof. Dr. Laerte Peotta de Melo',
+        'hero.text': 'Professor, researcher, and professional working in <strong>Cybersecurity</strong>, <strong>Network Engineering</strong>, <strong>Computer Science</strong>, <strong>cybercrime</strong>, <strong>digital forensics</strong>, and <strong>Financial System Security</strong>. Holding both M.Sc. and Ph.D. degrees in Electrical Engineering, he connects teaching, applied research, and the development of academic and technical materials aimed at education and professional growth.',
+        'hero.btnRepos': 'View repositories',
+        'hero.photoAlt': 'Profile photo of Prof. Dr. Laerte Peotta de Melo',
+        'metrics.teaching.title': 'Teaching',
+        'metrics.teaching.text': 'Undergraduate, specialization, master’s, and doctoral education in Cybersecurity, Network Engineering, and Computer Science',
+        'metrics.research.title': 'Research',
+        'metrics.research.text': 'Digital security, vulnerabilities, investigation, and defense',
+        'metrics.market.title': 'Professional practice',
+        'metrics.market.text': 'Red Team, Blue Team, Threat Hunting, and cyber intelligence',
+        'metrics.innovation.title': 'Innovation',
+        'metrics.innovation.text': 'Creator of BBCode for secure transaction authorization',
+        'about.title': 'About',
+        'about.pathTitle': 'Background',
+        'about.p1': 'He develops educational, research, and project activities in digital security, communication networks, incident investigation, and secure technologies, integrating theoretical foundations with practical application.',
+        'about.p2': 'In the professional field, he has experience in initiatives related to Red Team, Blue Team, Threat Hunting, and cyber intelligence.',
+        'about.highlightsTitle': 'Highlights',
+        'about.li1': 'Financial system security and secure protocols',
+        'about.li2': 'Cyber defense and threat analysis',
+        'about.li3': 'Incident investigation and digital forensics',
+        'about.li4': 'Education in networks, security, and computing',
+        'work.title': 'Areas of expertise',
+        'tags.1': 'Cybersecurity',
+        'tags.2': 'Network Security',
+        'tags.3': 'Cybercrime',
+        'tags.4': 'Digital Forensics',
+        'tags.5': 'Vulnerability Management',
+        'tags.6': 'Applied Cryptography',
+        'tags.7': 'Cyber Threat Hunting',
+        'tags.8': 'Financial System Security',
+        'work.teachingTitle': 'Teaching',
+        'work.teachingText': 'Courses, laboratories, and materials designed for undergraduate and graduate education.',
+        'work.researchTitle': 'Research',
+        'work.researchText': 'Studies and projects in security, vulnerabilities, networks, and cyber defense.',
+        'work.practiceTitle': 'Practical application',
+        'work.practiceText': 'Integration between conceptual foundations and real-world digital security scenarios.',
+        'profiles.title': 'Academic profiles and links',
+        'profiles.email': 'Email',
+        'profiles.lattes': 'Lattes CV',
+        'profiles.lattesText': 'Academic production and trajectory',
+        'profiles.dblpText': 'Academic publications',
+        'profiles.linkedinText': 'Professional network',
+        'profiles.githubText': 'Repositories and materials',
+        'repos.title': 'Repositories and materials',
+        'repos.labredes.title': 'Network Laboratory',
+        'repos.labredes.text': 'Experimental activities with network devices, protocol analysis, VLANs, and routing.',
+        'repos.grad': 'Undergraduate Program in Communication Network Engineering',
+        'repos.open': 'Open repository',
+        'repos.ptr.title': 'Transport and Routing Protocols',
+        'repos.ptr.text': 'Study of TCP/IP architecture, transport protocols, and routing fundamentals.',
+        'repos.topicos.title': 'Topics in Communication Networks 3',
+        'repos.topicos.text': 'Coverage of advanced topics in network security, cryptography, incident response, digital forensics, DevSecOps, and automation.',
+        'repos.fund.title': 'Network Fundamentals',
+        'repos.fund.text': 'Conceptual foundations of protocols, services, and computer network architecture.',
+        'repos.cyber.title': 'Advanced Topics in Cybersecurity',
+        'repos.cyber.text': 'Advanced discussion on cybercrime, cyberattacks, vulnerabilities, privacy, and anonymous networks.',
+        'repos.postgrad': 'Graduate studies',
+        'repos.guide.title': 'Guide – How to write a paper or thesis',
+        'repos.guide.text': 'Support material for organizing, writing, and developing academic work.',
+        'repos.support': 'Support material',
+        'repos.read': 'Read material',
+        'podcast.title': 'Latency Zero Podcast',
+        'podcast.text': 'Podcast dedicated to computer networks, infrastructure, performance, and topics related to teaching activities.',
+        'podcast.listen': 'Listen on Spotify',
+        'podcast.alt': 'Latency Zero Podcast',
+        'ravens.text': 'Research group focused on academic development and technical production in Cybersecurity, networks, vulnerabilities, and threat analysis.',
+        'ravens.open': 'Access RAVENS',
+        'ravens.alt': 'RAVENS group image',
+        'contact.title': 'Contact',
+        'footer.text': 'Prof. Dr. Laerte Peotta de Melo - teaching, research, and professional practice in cybersecurity, networks, and computing.'
+      },
+      es: {
+        lang: 'es',
+        title: 'Prof. Dr. Laerte Peotta de Melo',
+        description: 'Sitio académico y profesional del Prof. Dr. Laerte Peotta de Melo, con actuación en ciberseguridad, redes de computadoras, ciberdelitos y forense digital.',
+        brand: 'Prof. Dr. Laerte Peotta de Melo',
+        'nav.about': 'Sobre',
+        'nav.work': 'Actuación',
+        'nav.repos': 'Repositorios',
+        'nav.podcast': 'Podcast',
+        'nav.contact': 'Contacto',
+        'hero.eyebrow': 'Profesor • Investigador • Ciberseguridad • Redes',
+        'hero.title': 'Prof. Dr. Laerte Peotta de Melo',
+        'hero.text': 'Profesor, investigador y profesional con actuación en <strong>Ciberseguridad</strong>, <strong>Ingeniería de Redes</strong>, <strong>Ciencias de la Computación</strong>, <strong>ciberdelitos</strong>, <strong>forense digital</strong> y <strong>Seguridad del Sistema Financiero</strong>. Magíster y Doctor en Ingeniería Eléctrica, articula docencia, investigación aplicada y producción de materiales académicos y técnicos orientados a la formación y al desarrollo profesional.',
+        'hero.btnRepos': 'Ver repositorios',
+        'hero.photoAlt': 'Foto de perfil del Prof. Dr. Laerte Peotta de Melo',
+        'metrics.teaching.title': 'Docencia',
+        'metrics.teaching.text': 'Grado, especialización, maestría y doctorado en Ciberseguridad, Ingeniería de Redes y Ciencias de la Computación',
+        'metrics.research.title': 'Investigación',
+        'metrics.research.text': 'Seguridad digital, vulnerabilidades, investigación y defensa',
+        'metrics.market.title': 'Mercado',
+        'metrics.market.text': 'Red Team, Blue Team, Threat Hunting e inteligencia cibernética',
+        'metrics.innovation.title': 'Innovación',
+        'metrics.innovation.text': 'Creador de BBCode para autorización segura de transacciones',
+        'about.title': 'Sobre',
+        'about.pathTitle': 'Trayectoria',
+        'about.p1': 'Desarrolla actividades de formación, investigación y elaboración de proyectos en las áreas de seguridad digital, redes de comunicación, investigación de incidentes y tecnologías seguras, integrando fundamentos teóricos y aplicación práctica.',
+        'about.p2': 'En el contexto profesional, cuenta con experiencia en iniciativas relacionadas con Red Team, Blue Team, Threat Hunting e inteligencia cibernética.',
+        'about.highlightsTitle': 'Aspectos destacados',
+        'about.li1': 'Seguridad del sistema financiero y protocolos seguros',
+        'about.li2': 'Defensa cibernética y análisis de amenazas',
+        'about.li3': 'Investigación de incidentes y forense digital',
+        'about.li4': 'Formación en redes, seguridad y computación',
+        'work.title': 'Áreas de actuación',
+        'tags.1': 'Ciberseguridad',
+        'tags.2': 'Seguridad de Redes',
+        'tags.3': 'Ciberdelitos',
+        'tags.4': 'Forense Computacional',
+        'tags.5': 'Gestión de Vulnerabilidades',
+        'tags.6': 'Criptografía Aplicada',
+        'tags.7': 'Cyber Threat Hunting',
+        'tags.8': 'Seguridad del Sistema Financiero',
+        'work.teachingTitle': 'Docencia',
+        'work.teachingText': 'Asignaturas, laboratorios y materiales orientados a la formación de grado y posgrado.',
+        'work.researchTitle': 'Investigación',
+        'work.researchText': 'Estudios y proyectos en seguridad, vulnerabilidades, redes y defensa cibernética.',
+        'work.practiceTitle': 'Aplicación práctica',
+        'work.practiceText': 'Integración entre fundamentos conceptuales y escenarios reales de seguridad digital.',
+        'profiles.title': 'Perfiles y enlaces académicos',
+        'profiles.email': 'Correo electrónico',
+        'profiles.lattes': 'Currículum Lattes',
+        'profiles.lattesText': 'Producción académica y trayectoria',
+        'profiles.dblpText': 'Publicaciones académicas',
+        'profiles.linkedinText': 'Red profesional',
+        'profiles.githubText': 'Repositorios y materiales',
+        'repos.title': 'Repositorios y materiales',
+        'repos.labredes.title': 'Laboratorio de Redes',
+        'repos.labredes.text': 'Actividades experimentales con dispositivos de red, análisis de protocolos, VLAN y enrutamiento.',
+        'repos.grad': 'Carrera de Ingeniería de Redes de Comunicación',
+        'repos.open': 'Abrir repositorio',
+        'repos.ptr.title': 'Protocolos de Transporte y Enrutamiento',
+        'repos.ptr.text': 'Estudio de la arquitectura TCP/IP, los protocolos de transporte y los fundamentos del enrutamiento.',
+        'repos.topicos.title': 'Temas en Redes de Comunicación 3',
+        'repos.topicos.text': 'Abordaje de temas avanzados en seguridad de redes, criptografía, respuesta a incidentes, forense digital, DevSecOps y automatización.',
+        'repos.fund.title': 'Fundamentos de Redes',
+        'repos.fund.text': 'Fundamentos conceptuales sobre protocolos, servicios y arquitectura de redes de computadoras.',
+        'repos.cyber.title': 'Temas Avanzados en Ciberseguridad',
+        'repos.cyber.text': 'Discusión avanzada sobre ciberdelitos, ciberataques, vulnerabilidades, privacidad y redes anónimas.',
+        'repos.postgrad': 'Posgrado',
+        'repos.guide.title': 'Guía – Cómo escribir un artículo o TFG',
+        'repos.guide.text': 'Material de apoyo para la organización, redacción y desarrollo de trabajos académicos.',
+        'repos.support': 'Material de apoyo',
+        'repos.read': 'Leer material',
+        'podcast.title': 'Podcast Latência Zero',
+        'podcast.text': 'Podcast dedicado a redes de computadoras, infraestructura, rendimiento y temas asociados a las actividades docentes.',
+        'podcast.listen': 'Escuchar en Spotify',
+        'podcast.alt': 'Podcast Latência Zero',
+        'ravens.text': 'Grupo orientado a la investigación, la formación académica y la producción técnica en Ciberseguridad, redes, vulnerabilidades y análisis de amenazas.',
+        'ravens.open': 'Acceder a RAVENS',
+        'ravens.alt': 'Imagen del grupo RAVENS',
+        'contact.title': 'Contacto',
+        'footer.text': 'Prof. Dr. Laerte Peotta de Melo - docencia, investigación y actuación en ciberseguridad, redes y computación.'
+      }
+    };
+
+    function applyLanguage(lang) {
+      const selected = translations[lang] || translations.pt;
+      document.documentElement.lang = selected.lang;
+      document.title = selected.title;
+      document.querySelector('meta[name="description"]').setAttribute('content', selected.description);
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (selected[key]) el.innerHTML = selected[key];
+      });
+
+      document.querySelectorAll('[data-alt-key]').forEach(el => {
+        const key = el.getAttribute('data-alt-key');
+        if (selected[key]) el.setAttribute('alt', selected[key]);
+      });
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+
+      localStorage.setItem('site-lang', lang);
+    }
+
+    const savedLang = localStorage.getItem('site-lang') || 'pt';
+    applyLanguage(savedLang);
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+    });
+  </script>
+</body>
+</html>
