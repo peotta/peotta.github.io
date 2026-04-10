@@ -171,19 +171,32 @@
     }
 
     .flag-pt {
-      background:
-        linear-gradient(90deg, #0b8f3a 0 42%, #c51f2d 42% 100%);
+      background: #009b3a;
+    }
+
+    .flag-pt::before {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      left: 50%;
+      top: 50%;
+      background: #ffdf00;
+      transform: translate(-50%, -50%) rotate(45deg);
+      border-radius: 1px;
     }
 
     .flag-pt::after {
       content: "";
       position: absolute;
-      inset: 4px;
-      border-radius: 50%;
-      background: rgba(255, 215, 0, 0.85);
       width: 6px;
       height: 6px;
-      margin: auto;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: #002776;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
     }
 
     .flag-en {
@@ -516,7 +529,7 @@
           <a href="#contato" data-i18n="nav.contact">Contato</a>
         </div>
         <div class="lang-switcher" aria-label="Seletor de idioma">
-          <button class="lang-btn active" data-lang="pt" aria-label="Português"><span class="flag flag-pt" aria-hidden="true"></span> PT</button>
+          <button class="lang-btn active" data-lang="pt" aria-label="Português"><span class="flag flag-pt" aria-hidden="true"></span>BR</button>
           <button class="lang-btn" data-lang="en" aria-label="English"><span class="flag flag-en" aria-hidden="true"></span> EN</button>
           <button class="lang-btn" data-lang="es" aria-label="Español"><span class="flag flag-es" aria-hidden="true"></span> ES</button>
         </div>
