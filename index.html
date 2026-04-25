@@ -7,18 +7,23 @@
   <title>Prof. Dr. Laerte Peotta de Melo</title>
   <meta name="description" content="Site acadêmico e profissional de Prof. Dr. Laerte Peotta de Melo, com atuação em cibersegurança, redes de computadores, crimes cibernéticos e forense digital." />
   <style>
+
     :root {
-      --bg: #030604;
-      --bg-soft: #06110a;
-      --card: rgba(6, 20, 10, 0.72);
-      --card-border: rgba(69, 255, 146, 0.18);
+      --bg: #010301;
+      --bg-soft: #020b05;
+      --panel: rgba(3, 17, 8, 0.82);
+      --panel-strong: rgba(6, 28, 13, 0.92);
+      --card: rgba(4, 18, 9, 0.76);
+      --card-border: rgba(72, 255, 139, 0.22);
       --text: #d8ffe7;
-      --muted: #96c6a8;
+      --muted: #91caa4;
       --primary: #48ff8b;
       --secondary: #00d26a;
-      --accent: #8bffb3;
-      --shadow: 0 20px 60px rgba(0,0,0,0.45);
-      --radius: 22px;
+      --accent: #b8ffd0;
+      --terminal: #09160d;
+      --shadow: 0 20px 70px rgba(0,0,0,0.55);
+      --glow: 0 0 26px rgba(72,255,139,0.20), 0 0 60px rgba(0,210,106,0.08);
+      --radius: 24px;
       --max: 1180px;
     }
 
@@ -27,14 +32,14 @@
 
     body {
       margin: 0;
+      min-height: 100vh;
       font-family: Inter, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(72,255,139,0.10), transparent 22%),
-        radial-gradient(circle at top right, rgba(0,210,106,0.08), transparent 22%),
-        linear-gradient(180deg, #010201 0%, #020704 50%, #031008 100%);
+        radial-gradient(circle at 15% 0%, rgba(72,255,139,0.16), transparent 28%),
+        radial-gradient(circle at 85% 8%, rgba(0,210,106,0.12), transparent 24%),
+        linear-gradient(180deg, #010201 0%, #020704 42%, #031008 100%);
       line-height: 1.65;
-      position: relative;
       overflow-x: hidden;
     }
 
@@ -43,59 +48,108 @@
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(rgba(72,255,139,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(72,255,139,0.05) 1px, transparent 1px);
-      background-size: 32px 32px;
+        linear-gradient(rgba(72,255,139,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(72,255,139,0.08) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.20;
       pointer-events: none;
-      opacity: 0.22;
-      z-index: -2;
+      z-index: -4;
+      mask-image: linear-gradient(to bottom, black 0%, rgba(0,0,0,0.8) 42%, transparent 100%);
     }
 
     body::after {
-      content: "010101 001101 101010 011010 110001 001011 101101 010110";
+      content: "";
       position: fixed;
       inset: 0;
-      white-space: pre-wrap;
-      word-break: break-all;
-      font-size: 13px;
-      line-height: 1.8;
-      color: rgba(72,255,139,0.05);
+      background:
+        repeating-linear-gradient(180deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 4px),
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.28) 100%);
       pointer-events: none;
-      z-index: -1;
-      padding: 2rem;
+      z-index: 100;
+      mix-blend-mode: screen;
+      opacity: 0.35;
     }
 
     a { color: inherit; text-decoration: none; }
 
+    .matrix-rain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: -3;
+    }
+
+    #matrixRainCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      opacity: 0.50;
+      filter: contrast(1.02) saturate(0.95) drop-shadow(0 0 5px rgba(72,255,139,0.22));
+    }
+
+    .matrix-rain::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(1,3,1,0.22), transparent 18%, transparent 82%, rgba(1,3,1,0.22)),
+        radial-gradient(circle at 50% 22%, rgba(72,255,139,0.045), transparent 28%),
+        linear-gradient(180deg, rgba(0,0,0,0.32), transparent 36%, rgba(0,0,0,0.46));
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .matrix-rain::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(180deg, rgba(216,255,231,0.014) 0 1px, transparent 1px 3px),
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.46) 100%);
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.58;
+      mix-blend-mode: screen;
+    }
+
+    .matrix-column { display: none; }
+
     .container {
       width: min(calc(100% - 2rem), var(--max));
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
     .nav {
       position: sticky;
       top: 0;
-      z-index: 50;
-      backdrop-filter: blur(14px);
-      background: rgba(2, 10, 5, 0.84);
-      border-bottom: 1px solid rgba(72,255,139,0.16);
+      z-index: 60;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(180deg, rgba(1,6,3,0.96), rgba(1,9,4,0.82));
+      border-bottom: 1px solid rgba(72,255,139,0.20);
+      box-shadow: 0 12px 34px rgba(0,0,0,0.42);
     }
 
     .nav-inner {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.9rem 0;
+      padding: 0.85rem 0;
       gap: 1rem;
       flex-wrap: wrap;
     }
 
     .brand {
-      font-weight: 800;
-      letter-spacing: 0.06em;
+      font-weight: 900;
+      letter-spacing: 0.07em;
       white-space: nowrap;
       text-transform: uppercase;
-      text-shadow: 0 0 12px rgba(72,255,139,0.35);
+      color: #eafff0;
+      text-shadow: 0 0 14px rgba(72,255,139,0.40);
     }
 
     .nav-right {
@@ -109,52 +163,59 @@
     .menu {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.8rem;
+      gap: 0.55rem;
       justify-content: flex-end;
     }
 
     .menu a {
       color: var(--muted);
-      font-size: 0.96rem;
+      font-size: 0.82rem;
+      border: 1px solid rgba(72,255,139,0.14);
+      background: rgba(72,255,139,0.045);
+      padding: 0.52rem 0.72rem;
+      border-radius: 999px;
       transition: 0.2s ease;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
 
-    .menu a:hover { color: white; }
+    .menu a:hover {
+      color: #031008;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 0 22px rgba(72,255,139,0.26);
+      border-color: transparent;
+    }
 
     .lang-switcher {
       display: inline-flex;
       gap: 0.45rem;
-      padding: 0.3rem;
+      padding: 0.25rem;
       border-radius: 999px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(72,255,139,0.16);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+      background: rgba(4,18,9,0.78);
+      border: 1px solid rgba(72,255,139,0.18);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
     }
 
     .lang-btn {
       border: 0;
       background: transparent;
       color: var(--text);
-      padding: 0.55rem 0.85rem;
+      padding: 0.45rem 0.75rem;
       border-radius: 999px;
       cursor: pointer;
       font: inherit;
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.42rem;
       transition: 0.2s ease;
       letter-spacing: 0.02em;
     }
 
-    .lang-btn:hover {
-      background: rgba(72,255,139,0.08);
-    }
+    .lang-btn:hover { background: rgba(72,255,139,0.08); }
 
     .lang-btn.active {
-      background: linear-gradient(135deg, rgba(72,255,139,0.18), rgba(0,210,106,0.18));
-      border: 1px solid rgba(72,255,139,0.24);
+      background: linear-gradient(135deg, rgba(72,255,139,0.22), rgba(0,210,106,0.18));
+      border: 1px solid rgba(72,255,139,0.28);
       color: #fff;
     }
 
@@ -170,10 +231,7 @@
       overflow: hidden;
     }
 
-    .flag-pt {
-      background: #009b3a;
-    }
-
+    .flag-pt { background: #009b3a; }
     .flag-pt::before {
       content: "";
       position: absolute;
@@ -185,7 +243,6 @@
       transform: translate(-50%, -50%) rotate(45deg);
       border-radius: 1px;
     }
-
     .flag-pt::after {
       content: "";
       position: absolute;
@@ -198,14 +255,12 @@
       background: #002776;
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
     }
-
     .flag-en {
       background:
         linear-gradient(0deg,
           #b22234 0 14%, #fff 14% 28%, #b22234 28% 42%, #fff 42% 56%,
           #b22234 56% 70%, #fff 70% 84%, #b22234 84% 100%);
     }
-
     .flag-en::before {
       content: "";
       position: absolute;
@@ -215,35 +270,73 @@
       height: 54%;
       background: #3c3b6e;
     }
-
-    .flag-es {
-      background: linear-gradient(180deg, #aa151b 0 28%, #f1bf00 28% 72%, #aa151b 72% 100%);
-    }
+    .flag-es { background: linear-gradient(180deg, #aa151b 0 28%, #f1bf00 28% 72%, #aa151b 72% 100%); }
 
     .hero {
-      padding: 4.2rem 0 2.8rem;
+      padding: 3.4rem 0 2rem;
     }
 
     .hero-grid {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 2rem;
-      align-items: center;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: 1.6rem;
+      align-items: stretch;
+    }
+
+    .hero-grid > div:first-child,
+    .hero-photo-wrap {
+      background: linear-gradient(180deg, rgba(4,18,9,0.86), rgba(2,9,4,0.72));
+      border: 1px solid rgba(72,255,139,0.22);
+      border-radius: 28px;
+      box-shadow: var(--shadow), var(--glow);
+      position: relative;
+      overflow: hidden;
+      padding: 1.6rem;
+    }
+
+    .hero-grid > div:first-child::before,
+    .hero-photo-wrap::before,
+    .card::before,
+    .repo-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 32px;
+      width: 100%;
+      background:
+        radial-gradient(circle at 18px 16px, #48ff8b 0 4px, transparent 4.5px),
+        radial-gradient(circle at 38px 16px, #00d26a 0 4px, transparent 4.5px),
+        radial-gradient(circle at 58px 16px, #8bffb3 0 4px, transparent 4.5px),
+        linear-gradient(180deg, rgba(72,255,139,0.10), rgba(72,255,139,0.03));
+      border-bottom: 1px solid rgba(72,255,139,0.14);
+      opacity: 0.78;
+    }
+
+    .hero-grid > div:first-child > *,
+    .hero-photo-wrap > *,
+    .card > *,
+    .repo-card > * {
+      position: relative;
+      z-index: 1;
     }
 
     .hero-photo-wrap {
       display: flex;
       justify-content: center;
+      align-items: center;
+      padding-top: 3rem;
     }
 
     .hero-photo {
-      width: min(100%, 430px);
+      width: min(100%, 390px);
       aspect-ratio: 1 / 1;
       object-fit: cover;
-      border-radius: 28px;
-      border: 1px solid rgba(72,255,139,0.22);
-      box-shadow: var(--shadow), 0 0 30px rgba(72,255,139,0.18);
+      border-radius: 26px;
+      border: 1px solid rgba(72,255,139,0.28);
+      box-shadow: var(--shadow), 0 0 42px rgba(72,255,139,0.20);
       background: rgba(255,255,255,0.04);
+      filter: saturate(0.95) contrast(1.08);
     }
 
     .eyebrow {
@@ -253,26 +346,27 @@
       padding: 0.45rem 0.8rem;
       border-radius: 999px;
       background: rgba(72,255,139,0.10);
-      border: 1px solid rgba(72,255,139,0.18);
+      border: 1px solid rgba(72,255,139,0.22);
       color: #e2ffee;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
+      font-size: 0.88rem;
+      margin: 1.2rem 0 1rem;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.075em;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(2.4rem, 5vw, 4.8rem);
+      font-size: clamp(2.45rem, 5vw, 4.8rem);
       line-height: 1.02;
-      letter-spacing: -0.03em;
-      text-shadow: 0 0 18px rgba(72,255,139,0.14);
+      letter-spacing: -0.04em;
+      color: #f1fff5;
+      text-shadow: 0 0 22px rgba(72,255,139,0.22);
     }
 
     .hero p {
       color: var(--muted);
-      font-size: 1.04rem;
-      max-width: 62ch;
+      font-size: 1.03rem;
+      max-width: 66ch;
       margin: 1.1rem 0 0;
     }
 
@@ -280,7 +374,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 0.9rem;
-      margin-top: 1.6rem;
+      margin-top: 1.45rem;
     }
 
     .button {
@@ -288,25 +382,29 @@
       align-items: center;
       justify-content: center;
       gap: 0.55rem;
-      padding: 0.95rem 1.2rem;
-      border-radius: 12px;
-      font-weight: 700;
-      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      padding: 0.88rem 1.08rem;
+      border-radius: 14px;
+      font-weight: 800;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
+      font-size: 0.88rem;
     }
 
-    .button:hover { transform: translateY(-2px); }
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(72,255,139,0.18);
+    }
 
     .button-primary {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #041108;
+      color: #031008;
       box-shadow: var(--shadow);
     }
 
     .button-secondary {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(72,255,139,0.18);
+      background: rgba(72,255,139,0.055);
+      border: 1px solid rgba(72,255,139,0.22);
       color: var(--text);
     }
 
@@ -314,47 +412,72 @@
       background: var(--card);
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.35rem;
-      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow), var(--glow);
+      padding: 3rem 1.35rem 1.35rem;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
     }
 
     .metric-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 0.9rem;
+      gap: 0.85rem;
       margin-top: 1.3rem;
     }
 
     .metric {
       padding: 1rem;
       border-radius: 18px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(72,255,139,0.10);
+      background: rgba(72,255,139,0.055);
+      border: 1px solid rgba(72,255,139,0.13);
+      box-shadow: inset 0 0 20px rgba(72,255,139,0.04);
     }
 
     .metric strong {
       display: block;
-      font-size: 1.05rem;
-      margin-bottom: 0.22rem;
+      font-size: 1.03rem;
+      margin-bottom: 0.18rem;
+      color: #eafff0;
     }
 
     .metric span {
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.91rem;
     }
 
-    section { padding: 1.2rem 0; }
+    section {
+      padding: 1.05rem 0;
+      position: relative;
+      z-index: 1;
+    }
 
     .section-head {
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .section-head::before {
+      content: ">";
+      color: var(--primary);
+      text-shadow: 0 0 14px rgba(72,255,139,0.55);
+      font-size: 1.55rem;
+      font-weight: 900;
     }
 
     .section-head h2 {
-      font-size: clamp(1.6rem, 3vw, 2.35rem);
-      margin: 0 0 0.4rem;
+      font-size: clamp(1.45rem, 3vw, 2.25rem);
+      margin: 0;
       letter-spacing: -0.03em;
       text-transform: uppercase;
+      text-shadow: 0 0 16px rgba(72,255,139,0.16);
+    }
+
+    h3 {
+      margin-top: 0;
+      color: #f0fff5;
     }
 
     .about-grid,
@@ -363,49 +486,49 @@
     .repo-grid,
     .split {
       display: grid;
-      gap: 1.2rem;
+      gap: 1rem;
     }
 
     .about-grid { grid-template-columns: 1.15fr 0.85fr; }
     .highlight-grid { grid-template-columns: repeat(3, 1fr); }
     .links-grid { grid-template-columns: repeat(3, 1fr); }
-    .repo-grid { grid-template-columns: repeat(2, 1fr); }
+    .repo-grid { grid-template-columns: repeat(3, 1fr); }
     .split { grid-template-columns: 1fr 1fr; }
 
     .tag-list {
       display: flex;
       flex-wrap: wrap;
       gap: 0.7rem;
-      margin-top: 1rem;
+      margin-top: 0.4rem;
     }
 
     .tag {
       padding: 0.62rem 0.9rem;
       border-radius: 999px;
       background: rgba(72,255,139,0.08);
-      border: 1px solid rgba(72,255,139,0.16);
+      border: 1px solid rgba(72,255,139,0.18);
       color: #ddffea;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
+      box-shadow: inset 0 0 20px rgba(72,255,139,0.035);
     }
 
-    .list {
-      margin: 0;
-      padding-left: 1.1rem;
-    }
+    .list { margin: 0; padding-left: 1.1rem; }
 
     .link-card {
       display: block;
       height: 100%;
-      padding: 1.2rem;
+      padding: 1.1rem;
       border-radius: 20px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(72,255,139,0.12);
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      background: rgba(4,18,9,0.72);
+      border: 1px solid rgba(72,255,139,0.14);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 14px 38px rgba(0,0,0,0.25);
     }
 
     .link-card:hover {
       transform: translateY(-3px);
-      border-color: rgba(72,255,139,0.32);
+      border-color: rgba(72,255,139,0.42);
+      box-shadow: 0 0 28px rgba(72,255,139,0.14);
     }
 
     .link-card strong {
@@ -415,41 +538,93 @@
       margin-bottom: 0.4rem;
     }
 
-    .link-icon {
-      width: 22px;
-      height: 22px;
+    .link-icon,
+    .repo-icon {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border-radius: 6px;
-      background: rgba(72,255,139,0.08);
-      border: 1px solid rgba(72,255,139,0.14);
+      border-radius: 12px;
+      background: rgba(72,255,139,0.10);
+      border: 1px solid rgba(72,255,139,0.18);
       color: var(--accent);
-      font-size: 0.92rem;
-      flex: 0 0 22px;
+      flex: 0 0 auto;
+      box-shadow: 0 0 24px rgba(72,255,139,0.10);
+    }
+
+    .link-icon {
+      width: 24px;
+      height: 24px;
+      font-size: 0.9rem;
+    }
+
+    .repo-icon {
+      width: 42px;
+      height: 42px;
+      font-size: 1.35rem;
+      margin-right: 0.65rem;
+    }
+
+    .repo-title {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      line-height: 1.25;
     }
 
     .repo-card {
       display: flex;
       flex-direction: column;
-      gap: 0.9rem;
-      padding: 1.3rem;
-      border-radius: 22px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(72,255,139,0.12);
+      gap: 0.85rem;
+      padding: 3rem 1.15rem 1.15rem;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(4,18,9,0.86), rgba(2,10,5,0.70));
+      border: 1px solid rgba(72,255,139,0.16);
+      position: relative;
+      overflow: hidden;
+      min-height: 280px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.34);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .repo-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(72,255,139,0.42);
+      box-shadow: 0 22px 64px rgba(0,0,0,0.46), 0 0 38px rgba(72,255,139,0.12);
+    }
+
+    .repo-card.featured-resource {
+      background:
+        linear-gradient(135deg, rgba(72,255,139,0.10), rgba(0,210,106,0.04)),
+        linear-gradient(180deg, rgba(4,18,9,0.90), rgba(2,10,5,0.72));
+      border-color: rgba(72,255,139,0.26);
+    }
+
+    .repo-card.featured-resource::after {
+      content: "FEATURE";
+      position: absolute;
+      right: 1rem;
+      top: 0.46rem;
+      z-index: 2;
+      color: rgba(216,255,231,0.78);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      font-weight: 900;
     }
 
     .repo-meta {
-      font-size: 0.92rem;
-      color: var(--muted);
+      font-size: 0.87rem;
+      color: var(--primary);
+      border-top: 1px solid rgba(72,255,139,0.10);
+      padding-top: 0.7rem;
+      margin-top: auto;
     }
 
     .podcast-banner, .ravens-banner {
       width: 100%;
       border-radius: 22px;
-      border: 1px solid rgba(72,255,139,0.16);
+      border: 1px solid rgba(72,255,139,0.20);
       display: block;
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow), var(--glow);
     }
 
     .contact-list {
@@ -460,33 +635,35 @@
     .contact-item {
       padding: 0.95rem 1rem;
       border-radius: 16px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(72,255,139,0.10);
+      background: rgba(72,255,139,0.055);
+      border: 1px solid rgba(72,255,139,0.12);
     }
 
     .contact-label {
       display: inline-flex;
       align-items: center;
       gap: 0.55rem;
-      font-weight: 700;
+      font-weight: 800;
+      color: var(--primary);
     }
 
     .ene-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       color: var(--muted);
       margin-bottom: 0.1rem;
+      letter-spacing: 0.03em;
     }
 
     .unb-icon {
       width: 20px;
       height: 20px;
-      border-radius: 4px;
+      border-radius: 5px;
       background: linear-gradient(180deg, #0c3e7c 0 36%, #00861a 36% 100%);
       border: 1px solid rgba(255,255,255,0.15);
-      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.08);
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.08), 0 0 16px rgba(72,255,139,0.12);
       flex: 0 0 20px;
     }
 
@@ -496,6 +673,12 @@
       padding: 2.5rem 0 4rem;
       color: var(--muted);
       text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 1100px) {
+      .repo-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 980px) {
@@ -510,13 +693,24 @@
       }
 
       .menu { display: none; }
-      .hero { padding-top: 3rem; }
-      .hero-photo { max-width: 340px; }
+      .hero { padding-top: 2.4rem; }
+      .hero-photo { max-width: 330px; }
       .nav-right { width: 100%; justify-content: space-between; }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      #matrixRainCanvas { opacity: 0.12; }
+      html { scroll-behavior: auto; }
+    }
+
   </style>
 </head>
 <body>
+
+  <div class="matrix-rain" aria-hidden="true">
+    <canvas id="matrixRainCanvas"></canvas>
+  </div>
+
   <nav class="nav">
     <div class="container nav-inner">
       <div class="brand" data-i18n="brand">Prof. Dr. Laerte Peotta de Melo</div>
@@ -688,20 +882,20 @@
             <div class="repo-meta" data-i18n="repos.grad">Graduação em Engenharia de Redes de Comunicação</div>
             <a class="button button-secondary" href="https://github.com/peotta/topicos" target="_blank" rel="noreferrer" data-i18n="repos.open">Abrir repositório</a>
           </article>
-          <article class="repo-card">
-            <h3 data-i18n="repos.cyber.title">Tópicos Avançados em Cyber Segurança</h3>
+          <article class="repo-card featured-resource">
+            <h3 class="repo-title"><span class="repo-icon" aria-hidden="true">🛡️</span><span data-i18n="repos.cyber.title">Tópicos Avançados em Cyber Segurança</span></h3>
             <p class="muted" data-i18n="repos.cyber.text">Discussão avançada sobre cibercrimes, ataques cibernéticos, vulnerabilidades, privacidade e redes anônimas.</p>
-            <div class="repo-meta" data-i18n="repos.postgrad">Pós-graduação</div>
+            <div class="repo-meta" data-i18n="repos.cyber.meta">Mestrado em Cyber Segurança na UnB</div>
             <a class="button button-secondary" href="https://github.com/peotta/topicos-avancados-cyber" target="_blank" rel="noreferrer" data-i18n="repos.open">Abrir repositório</a>
           </article>
-          <article class="repo-card">
-            <h3 data-i18n="repos.ccna.title">Certificação CCNA Cisco 200-301</h3>
+          <article class="repo-card featured-resource">
+            <h3 class="repo-title"><span class="repo-icon" aria-hidden="true">🌐</span><span data-i18n="repos.ccna.title">Certificação CCNA Cisco 200-301</span></h3>
             <p class="muted" data-i18n="repos.ccna.text">Plano de estudos para preparação à certificação Cisco CCNA 200-301, com organização semanal, laboratórios, comandos e revisão.</p>
             <div class="repo-meta" data-i18n="repos.certification">Certificação profissional</div>
             <a class="button button-secondary" href="ccna.html" data-i18n="repos.accessPlan">Acessar plano</a>
           </article>
-          <article class="repo-card">
-            <h3 data-i18n="repos.guide.title">Guia - Como escrever um artigo ou TCC</h3>
+          <article class="repo-card featured-resource">
+            <h3 class="repo-title"><span class="repo-icon" aria-hidden="true">✍️</span><span data-i18n="repos.guide.title">Guia - Como escrever um artigo ou TCC</span></h3>
             <p class="muted" data-i18n="repos.guide.text">Material de apoio para organização, escrita e desenvolvimento de trabalhos acadêmicos.</p>
             <div class="repo-meta" data-i18n="repos.support">Material de apoio</div>
             <a class="button button-secondary" href="dicas.html" target="_blank" rel="noreferrer" data-i18n="repos.read">Ler material</a>
@@ -775,6 +969,57 @@
   </footer>
 
   <script>
+    const matrixCanvas = document.getElementById('matrixRainCanvas');
+    const matrixCtx = matrixCanvas.getContext('2d');
+    const matrixAlphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789CCNACISCOIOSOSPFVLANSTPACLNATSSHJSONTCPIP';
+    let matrixDrops = [];
+    let matrixFontSize = 15;
+    let matrixColumns = 0;
+
+    function resizeMatrixRain() {
+      const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
+      matrixCanvas.width = Math.floor(window.innerWidth * dpr);
+      matrixCanvas.height = Math.floor(window.innerHeight * dpr);
+      matrixCanvas.style.width = window.innerWidth + 'px';
+      matrixCanvas.style.height = window.innerHeight + 'px';
+      matrixCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      matrixFontSize = window.innerWidth < 700 ? 13 : 15;
+      matrixColumns = Math.ceil(window.innerWidth / matrixFontSize);
+      matrixDrops = Array.from({ length: matrixColumns }, () => Math.random() * -window.innerHeight / matrixFontSize);
+    }
+
+    function drawMatrixRain() {
+      matrixCtx.fillStyle = 'rgba(1, 3, 1, 0.155)';
+      matrixCtx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+      matrixCtx.font = matrixFontSize + 'px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace';
+      matrixCtx.textAlign = 'center';
+
+      for (let i = 0; i < matrixDrops.length; i++) {
+        const text = matrixAlphabet.charAt(Math.floor(Math.random() * matrixAlphabet.length));
+        const x = i * matrixFontSize + matrixFontSize / 2;
+        const y = matrixDrops[i] * matrixFontSize;
+
+        matrixCtx.shadowBlur = 7;
+        matrixCtx.shadowColor = 'rgba(72,255,139,0.55)';
+        matrixCtx.fillStyle = Math.random() > 0.985 ? '#d8ffe7' : (Math.random() > 0.80 ? '#58d684' : '#1fae58');
+        matrixCtx.fillText(text, x, y);
+
+        if (y > window.innerHeight && Math.random() > 0.972) {
+          matrixDrops[i] = Math.random() * -18;
+        }
+        matrixDrops[i] += 0.82 + Math.random() * 0.52;
+      }
+    }
+
+    resizeMatrixRain();
+    window.addEventListener('resize', resizeMatrixRain);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReducedMotion) {
+      setInterval(drawMatrixRain, 34);
+    } else {
+      drawMatrixRain();
+    }
+
     const translations = {
       pt: {
         lang: 'pt-BR',
@@ -844,6 +1089,7 @@
         'repos.fund.text': 'Fundamentos conceituais sobre protocolos, serviços e arquitetura de redes de computadores.',
         'repos.cyber.title': 'Tópicos Avançados em Cyber Segurança',
         'repos.cyber.text': 'Discussão avançada sobre cibercrimes, ataques cibernéticos, vulnerabilidades, privacidade e redes anônimas.',
+        'repos.cyber.meta': 'Mestrado em Cyber Segurança na UnB',
         'repos.postgrad': 'Pós-graduação',
         'repos.ccna.title': 'Certificação CCNA Cisco 200-301',
         'repos.ccna.text': 'Plano de estudos para preparação à certificação Cisco CCNA 200-301, com organização semanal, laboratórios, comandos e revisão.',
@@ -931,6 +1177,7 @@
         'repos.fund.text': 'Conceptual foundations of protocols, services, and computer network architecture.',
         'repos.cyber.title': 'Advanced Topics in Cybersecurity',
         'repos.cyber.text': 'Advanced discussion on cybercrime, cyberattacks, vulnerabilities, privacy, and anonymous networks.',
+        'repos.cyber.meta': 'Master’s Program in Cybersecurity at UnB',
         'repos.postgrad': 'Graduate studies',
         'repos.ccna.title': 'Cisco CCNA 200-301 Certification',
         'repos.ccna.text': 'Study plan for Cisco CCNA 200-301 certification preparation, including weekly organization, labs, commands, and review.',
@@ -1018,6 +1265,7 @@
         'repos.fund.text': 'Fundamentos conceptuales sobre protocolos, servicios y arquitectura de redes de computadoras.',
         'repos.cyber.title': 'Temas Avanzados en Ciberseguridad',
         'repos.cyber.text': 'Discusión avanzada sobre ciberdelitos, ciberataques, vulnerabilidades, privacidad y redes anónimas.',
+        'repos.cyber.meta': 'Maestría en Ciberseguridad en la UnB',
         'repos.postgrad': 'Posgrado',
         'repos.ccna.title': 'Certificación Cisco CCNA 200-301',
         'repos.ccna.text': 'Plan de estudios para la preparación de la certificación Cisco CCNA 200-301, con organización semanal, laboratorios, comandos y revisión.',
