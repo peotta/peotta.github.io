@@ -1,0 +1,1792 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plano de Estudos CCNA Cisco 200-301 | Prof. Dr. Laerte Peotta de Melo</title>
+  <meta name="description" content="Plano de estudos para a certificação Cisco CCNA 200-301, organizado em 16 semanas com 60 minutos por dia.">
+  <style>
+:root{
+  --bg:#020504;
+  --bg2:#03140a;
+  --panel:rgba(2, 20, 10, .78);
+  --panel2:rgba(0, 35, 17, .72);
+  --text:#d9ffe7;
+  --muted:#80d99b;
+  --line:rgba(0,255,102,.28);
+  --green:#00ff66;
+  --green2:#39ff14;
+  --green3:#00cc44;
+  --shadow:0 0 24px rgba(0,255,102,.18), 0 24px 70px rgba(0,0,0,.75);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:"Courier New", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color:var(--text);
+  line-height:1.7;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(0,255,102,.12), transparent 28%),
+    radial-gradient(circle at 78% 18%, rgba(57,255,20,.09), transparent 24%),
+    linear-gradient(180deg,#000 0%,#020504 42%,#000 100%);
+  overflow-x:hidden;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; pointer-events:none; z-index:-2;
+  background-image:
+    linear-gradient(rgba(0,255,102,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,102,.045) 1px, transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom, rgba(0,0,0,.9), rgba(0,0,0,.45));
+}
+body::after{
+  content:"";
+  position:fixed; inset:0; pointer-events:none; z-index:60;
+  background:repeating-linear-gradient(to bottom, rgba(255,255,255,.035), rgba(255,255,255,.035) 1px, transparent 1px, transparent 4px);
+  mix-blend-mode:overlay;
+  opacity:.34;
+}
+#matrixRain{position:fixed; inset:0; z-index:-1; opacity:.26; pointer-events:none;}
+a{color:var(--green);text-decoration:none;text-shadow:0 0 8px rgba(0,255,102,.35)}
+a:hover{text-decoration:none;color:#b8ffd0;text-shadow:0 0 12px rgba(0,255,102,.75)}
+.site-header{
+  position:sticky; top:0; z-index:30;
+  background:rgba(0,8,3,.86); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 0 22px rgba(0,255,102,.14);
+}
+.nav{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 22px}
+.brand{font-weight:900;letter-spacing:.4px;color:#c9ffda;text-transform:uppercase;text-shadow:0 0 14px rgba(0,255,102,.7)}
+.brand::before{content:"> ";color:var(--green)}
+.brand span{display:block;font-size:.74rem;color:var(--muted);font-weight:700;text-transform:none;text-shadow:none}
+.nav-links{display:flex;gap:12px;flex-wrap:wrap}
+.nav-links a{font-size:.88rem;color:var(--muted);padding:7px 10px;border:1px solid transparent;border-radius:999px}
+.nav-links a:hover{color:var(--green);border-color:var(--line);background:rgba(0,255,102,.08)}
+.hero{max-width:1180px;margin:0 auto;padding:72px 22px 30px;display:grid;grid-template-columns:1.45fr .8fr;gap:34px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:#07150a;background:linear-gradient(90deg,var(--green),#b6ffbf);padding:8px 12px;border-radius:999px;font-weight:900;font-size:.85rem;box-shadow:0 0 22px rgba(0,255,102,.42)}
+.eyebrow::before{content:"SYSTEM ONLINE";color:#001b08;background:rgba(255,255,255,.55);padding:2px 8px;border-radius:999px}
+.hero h1{font-size:clamp(2.05rem,5vw,4.4rem);line-height:1.03;margin:18px 0 14px;letter-spacing:-.055em;color:#eaffef;text-shadow:0 0 16px rgba(0,255,102,.45), 0 0 44px rgba(0,255,102,.16)}
+.hero h1::after{content:"_";color:var(--green);animation:blink 1s steps(2,end) infinite;text-shadow:0 0 18px var(--green)}
+@keyframes blink{50%{opacity:0}}
+.hero p{color:#a8f5bf;font-size:1.05rem;max-width:760px}
+.hero-card,.content,.toc{
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,var(--panel),rgba(0,10,5,.82));
+  box-shadow:var(--shadow), inset 0 1px 0 rgba(184,255,208,.08);
+}
+.hero-card{border-radius:var(--radius);padding:24px;position:relative;overflow:hidden}
+.hero-card::before,.content::before,.toc::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(135deg,rgba(0,255,102,.12),transparent 28%,rgba(0,255,102,.055));}
+.stat{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding:12px 0;position:relative}
+.stat:last-child{border-bottom:0}.stat b{color:#e8fff0;text-shadow:0 0 8px rgba(0,255,102,.38)}.stat span{color:var(--muted)}
+.wrap{max-width:1180px;margin:0 auto;padding:22px;display:grid;grid-template-columns:290px minmax(0,1fr);gap:28px}
+.toc{position:sticky;top:78px;align-self:start;max-height:calc(100vh - 100px);overflow:auto;border-radius:18px;padding:18px;scrollbar-color:var(--green) #031006}
+.toc h2{font-size:1rem;margin:0 0 10px;color:#d9ffe7;text-shadow:0 0 10px rgba(0,255,102,.4)}
+.toc h2::before{content:"./";color:var(--green)}
+.toc ul{list-style:none;padding-left:0;margin:0}.toc li{margin:6px 0}.toc a{font-size:.84rem;color:#8fe9a8}.toc a:hover{color:#eaffef}
+main{min-width:0}.content{position:relative;border-radius:var(--radius);padding:30px;overflow:hidden}
+.content h1{display:none}
+.content h2,.content h1:not(:first-child){margin-top:34px;padding-top:10px;font-size:1.62rem;letter-spacing:-.02em;border-top:1px solid var(--line);color:#eaffef;text-shadow:0 0 13px rgba(0,255,102,.38)}
+.content h2::before,.content h1:not(:first-child)::before{content:"# ";color:var(--green)}
+.content h3{margin-top:24px;color:#c8ffd6;text-shadow:0 0 8px rgba(0,255,102,.25)}
+.content h3::before{content:"> ";color:var(--green)}
+.content h4{color:#b6ffbf}.content p,.content li{color:#c3f7cf}.content strong{color:#fff;text-shadow:0 0 7px rgba(0,255,102,.28)}
+.content hr{border:0;border-top:1px dashed var(--line);margin:30px 0}
+.content table{width:100%;border-collapse:separate;border-spacing:0;margin:18px 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(0,20,8,.55);box-shadow:0 0 18px rgba(0,255,102,.08)}
+.content th,.content td{padding:12px 14px;border-bottom:1px solid rgba(0,255,102,.18);vertical-align:top}
+.content th{background:linear-gradient(90deg,rgba(0,255,102,.22),rgba(0,64,22,.34));text-align:left;color:#eaffef;font-size:.92rem;text-transform:uppercase;letter-spacing:.04em}
+.content tr:hover td{background:rgba(0,255,102,.045)}.content tr:last-child td{border-bottom:0}.content td:last-child,.content th:last-child{text-align:right}.content ul{padding-left:1.35rem}.content li::marker{color:var(--green)}
+pre{position:relative;background:#000b04;border:1px solid rgba(0,255,102,.42);border-radius:14px;padding:18px;overflow:auto;box-shadow:inset 0 0 24px rgba(0,255,102,.08), 0 0 20px rgba(0,255,102,.12)}
+pre::before{content:"terminal@ccna:~$";display:block;color:var(--green);font-size:.82rem;margin-bottom:10px;text-shadow:0 0 8px rgba(0,255,102,.65)}
+code{font-family:"Courier New",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em;color:#b9ffc9;text-shadow:0 0 5px rgba(0,255,102,.25)}
+p code,li code{background:rgba(0,255,102,.1);border:1px solid rgba(0,255,102,.24);padding:2px 6px;border-radius:7px;color:#d8ffe5}
+.badge-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.badge{border:1px solid var(--line);background:rgba(0,255,102,.07);padding:8px 11px;border-radius:999px;color:#a6f7ba;font-size:.9rem;box-shadow:0 0 10px rgba(0,255,102,.08)}
+.callout{border:1px solid rgba(0,255,102,.48);background:rgba(0,255,102,.09);border-radius:18px;padding:16px;margin:18px 0;color:#dcffe5;box-shadow:0 0 18px rgba(0,255,102,.1)}
+.callout::before{content:"[ALERTA] ";color:var(--green);font-weight:900}.footer{max-width:1180px;margin:36px auto 0;padding:30px 22px 46px;color:#86d99d;border-top:1px solid var(--line);text-align:center;text-shadow:0 0 8px rgba(0,255,102,.22)}
+@media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:46px}.wrap{grid-template-columns:1fr}.toc{position:relative;top:0}.content{padding:20px}.nav{align-items:flex-start;flex-direction:column}.content table{display:block;overflow-x:auto}.content td:last-child,.content th:last-child{text-align:left}}
+@media print{#matrixRain,.site-header,.toc,body::before,body::after{display:none}body{background:white;color:#111}.hero,.wrap{display:block;max-width:none}.hero-card,.content{box-shadow:none;border:1px solid #ddd;background:white;color:#111}.content p,.content li,.hero p{color:#222}.content h2,.content h3{color:#111;text-shadow:none}a{color:#0645ad;text-shadow:none}pre{white-space:pre-wrap;background:#f6f8fa;color:#111}}
+</style>
+</head>
+<body>
+  <canvas id="matrixRain" aria-hidden="true"></canvas>
+  <header class="site-header">
+    <nav class="nav" aria-label="Navegação principal">
+      <div class="brand">Prof. Dr. Laerte Peotta de Melo<span>Professor • Pesquisador • Segurança Cibernética • Redes</span></div>
+      <div class="nav-links">
+        <a href="#objetivo-do-plano">Objetivo</a>
+        <a href="#plano-semanal-completo-16-semanas">16 semanas</a>
+        <a href="#checklist-de-comandos-essenciais">Comandos</a>
+        <a href="#critério-para-marcar-a-prova">Prontidão</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <span class="eyebrow">Cisco CCNA 200-301 v1.1 • Plano de estudos</span>
+      <h1>Preparação CCNA em 60 minutos por dia</h1>
+      <p>Roteiro progressivo de 16 semanas com teoria, laboratórios, revisão, questões, comandos Cisco IOS e simulado final, alinhado à rotina de estudo diária.</p>
+      <div class="badge-row">
+        <span class="badge">16 semanas</span>
+        <span class="badge">112 horas</span>
+        <span class="badge">Laboratórios semanais</span>
+        <span class="badge">Subnetting recorrente</span>
+      </div>
+    </div>
+    <aside class="hero-card" aria-label="Resumo do plano">
+      <div class="stat"><span>Certificação</span><b>CCNA 200-301</b></div>
+      <div class="stat"><span>Carga diária</span><b>60 min</b></div>
+      <div class="stat"><span>Duração</span><b>16 semanas</b></div>
+      <div class="stat"><span>Foco</span><b>Teoria + prática</b></div>
+    </aside>
+  </section>
+
+  <div class="wrap">
+    <aside class="toc">
+      <h2>Sumário</h2>
+      <ul>
+      <li><a href="#plano-de-estudos-ccna-cisco-200-301"
+      id="toc-plano-de-estudos-ccna-cisco-200-301">Plano de Estudos CCNA
+      Cisco 200-301</a>
+      <ul>
+      <li><a href="#objetivo-do-plano" id="toc-objetivo-do-plano">1.
+      Objetivo do plano</a></li>
+      <li><a href="#domínios-do-exame-ccna-200-301"
+      id="toc-domínios-do-exame-ccna-200-301">2. Domínios do exame CCNA
+      200-301</a></li>
+      <li><a href="#estratégia-geral-de-estudo"
+      id="toc-estratégia-geral-de-estudo">3. Estratégia geral de
+      estudo</a></li>
+      <li><a href="#organização-de-cada-sessão-de-60-minutos"
+      id="toc-organização-de-cada-sessão-de-60-minutos">4. Organização
+      de cada sessão de 60 minutos</a></li>
+      <li><a href="#ferramentas-recomendadas"
+      id="toc-ferramentas-recomendadas">5. Ferramentas
+      recomendadas</a></li>
+      </ul></li>
+      <li><a href="#plano-semanal-completo-16-semanas"
+      id="toc-plano-semanal-completo-16-semanas">6. Plano semanal
+      completo — 16 semanas</a>
+      <ul>
+      <li><a href="#semana-1-fundamentos-de-redes"
+      id="toc-semana-1-fundamentos-de-redes">Semana 1 — Fundamentos de
+      redes</a></li>
+      <li><a href="#semana-2-ipv4-e-subnetting-básico"
+      id="toc-semana-2-ipv4-e-subnetting-básico">Semana 2 — IPv4 e
+      subnetting básico</a></li>
+      <li><a href="#semana-3-subnetting-avançado-e-ipv6"
+      id="toc-semana-3-subnetting-avançado-e-ipv6">Semana 3 — Subnetting
+      avançado e IPv6</a></li>
+      <li><a href="#semana-4-switching-básico"
+      id="toc-semana-4-switching-básico">Semana 4 — Switching
+      básico</a></li>
+      <li><a href="#semana-5-vlans-e-trunk"
+      id="toc-semana-5-vlans-e-trunk">Semana 5 — VLANs e trunk</a></li>
+      <li><a href="#semana-6-inter-vlan-routing-e-etherchannel"
+      id="toc-semana-6-inter-vlan-routing-e-etherchannel">Semana 6 —
+      Inter-VLAN routing e EtherChannel</a></li>
+      <li><a href="#semana-7-stp-e-rapid-pvst"
+      id="toc-semana-7-stp-e-rapid-pvst">Semana 7 — STP e Rapid
+      PVST+</a></li>
+      <li><a href="#semana-8-segurança-de-camada-2"
+      id="toc-semana-8-segurança-de-camada-2">Semana 8 — Segurança de
+      camada 2</a></li>
+      <li><a href="#semana-9-roteamento-estático"
+      id="toc-semana-9-roteamento-estático">Semana 9 — Roteamento
+      estático</a></li>
+      <li><a href="#semana-10-ospfv2-single-area"
+      id="toc-semana-10-ospfv2-single-area">Semana 10 — OSPFv2
+      single-area</a></li>
+      <li><a href="#semana-11-serviços-ip-i"
+      id="toc-semana-11-serviços-ip-i">Semana 11 — Serviços IP
+      I</a></li>
+      <li><a href="#semana-12-serviços-ip-ii"
+      id="toc-semana-12-serviços-ip-ii">Semana 12 — Serviços IP
+      II</a></li>
+      <li><a href="#semana-13-wireless-e-gerenciamento"
+      id="toc-semana-13-wireless-e-gerenciamento">Semana 13 — Wireless e
+      gerenciamento</a></li>
+      <li><a href="#semana-14-segurança"
+      id="toc-semana-14-segurança">Semana 14 — Segurança</a></li>
+      <li><a href="#semana-15-automação-sdn-e-programabilidade"
+      id="toc-semana-15-automação-sdn-e-programabilidade">Semana 15 —
+      Automação, SDN e programabilidade</a></li>
+      <li><a href="#semana-16-revisão-final-e-simulado"
+      id="toc-semana-16-revisão-final-e-simulado">Semana 16 — Revisão
+      final e simulado</a></li>
+      </ul></li>
+      <li><a href="#checklist-de-comandos-essenciais"
+      id="toc-checklist-de-comandos-essenciais">7. Checklist de comandos
+      essenciais</a></li>
+      <li><a href="#temas-prioritários-para-aprovação"
+      id="toc-temas-prioritários-para-aprovação">8. Temas prioritários
+      para aprovação</a></li>
+      <li><a href="#regra-de-estudo-para-subnetting"
+      id="toc-regra-de-estudo-para-subnetting">9. Regra de estudo para
+      subnetting</a></li>
+      <li><a href="#critério-para-marcar-a-prova"
+      id="toc-critério-para-marcar-a-prova">10. Critério para marcar a
+      prova</a></li>
+      <li><a href="#cronograma-resumido"
+      id="toc-cronograma-resumido">11. Cronograma resumido</a></li>
+      <li><a href="#observações-finais" id="toc-observações-finais">12.
+      Observações finais</a></li>
+      </ul>
+    </aside>
+    <main>
+      <article class="content">
+        <h1 id="plano-de-estudos-ccna-cisco-200-301">Plano de Estudos
+        CCNA Cisco 200-301</h1>
+        <p><strong>Prof:</strong> Dr. Laerte Peotta de Melo<br />
+        <strong>Certificação:</strong> Cisco Certified Network Associate
+        — CCNA 200-301<br />
+        <strong>Versão de referência:</strong> CCNA 200-301 v1.1<br />
+        <strong>Carga disponível:</strong> 60 minutos por dia<br />
+        <strong>Duração sugerida:</strong> 16 semanas<br />
+        <strong>Carga total aproximada:</strong> 112 horas</p>
+        <hr />
+        <h2 id="objetivo-do-plano">1. Objetivo do plano</h2>
+        <p>Este plano tem como objetivo organizar uma preparação
+        objetiva, progressiva e prática para a certificação
+        <strong>Cisco CCNA 200-301</strong>, considerando uma
+        disponibilidade diária de <strong>60 minutos de
+        estudo</strong>.</p>
+        <p>A estratégia combina:</p>
+        <ul>
+        <li>estudo teórico;</li>
+        <li>laboratórios práticos;</li>
+        <li>revisão contínua;</li>
+        <li>resolução de questões;</li>
+        <li>simulados;</li>
+        <li>consolidação dos principais comandos Cisco IOS.</li>
+        </ul>
+        <hr />
+        <h2 id="domínios-do-exame-ccna-200-301">2. Domínios do exame
+        CCNA 200-301</h2>
+        <p>O exame CCNA 200-301 está organizado em seis grandes
+        domínios:</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Domínio</th>
+        <th style="text-align: right;">Peso aproximado no exame</th>
+        <th>Prioridade</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Network Fundamentals</td>
+        <td style="text-align: right;">20%</td>
+        <td>Alta</td>
+        </tr>
+        <tr class="even">
+        <td>Network Access</td>
+        <td style="text-align: right;">20%</td>
+        <td>Alta</td>
+        </tr>
+        <tr class="odd">
+        <td>IP Connectivity</td>
+        <td style="text-align: right;">25%</td>
+        <td>Muito alta</td>
+        </tr>
+        <tr class="even">
+        <td>IP Services</td>
+        <td style="text-align: right;">10%</td>
+        <td>Média</td>
+        </tr>
+        <tr class="odd">
+        <td>Security Fundamentals</td>
+        <td style="text-align: right;">15%</td>
+        <td>Alta</td>
+        </tr>
+        <tr class="even">
+        <td>Automation and Programmability</td>
+        <td style="text-align: right;">10%</td>
+        <td>Média</td>
+        </tr>
+        </tbody>
+        </table>
+        <hr />
+        <h2 id="estratégia-geral-de-estudo">3. Estratégia geral de
+        estudo</h2>
+        <p>Com apenas <strong>60 minutos por dia</strong>, o estudo deve
+        ser direto e bem distribuído.</p>
+        <p>A recomendação é estudar <strong>7 dias por semana</strong>,
+        com a seguinte estrutura:</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Dia</th>
+        <th>Atividade principal</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Segunda-feira</td>
+        <td>Teoria principal</td>
+        <td style="text-align: right;">60 min</td>
+        </tr>
+        <tr class="even">
+        <td>Terça-feira</td>
+        <td>Teoria + anotações</td>
+        <td style="text-align: right;">60 min</td>
+        </tr>
+        <tr class="odd">
+        <td>Quarta-feira</td>
+        <td>Laboratório guiado</td>
+        <td style="text-align: right;">60 min</td>
+        </tr>
+        <tr class="even">
+        <td>Quinta-feira</td>
+        <td>Laboratório sem consulta</td>
+        <td style="text-align: right;">60 min</td>
+        </tr>
+        <tr class="odd">
+        <td>Sexta-feira</td>
+        <td>Questões e flashcards</td>
+        <td style="text-align: right;">60 min</td>
+        </tr>
+        <tr class="even">
+        <td>Sábado</td>
+        <td>Laboratório integrador</td>
+        <td style="text-align: right;">60 min</td>
+        </tr>
+        <tr class="odd">
+        <td>Domingo</td>
+        <td>Revisão leve + subnetting</td>
+        <td style="text-align: right;">60 min</td>
+        </tr>
+        </tbody>
+        </table>
+        <p>Caso seja necessário descansar aos domingos, recomenda-se
+        estender o plano para aproximadamente <strong>18
+        semanas</strong>.</p>
+        <hr />
+        <h2 id="organização-de-cada-sessão-de-60-minutos">4. Organização
+        de cada sessão de 60 minutos</h2>
+        <h3 id="dia-de-teoria">4.1 Dia de teoria</h3>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Bloco</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Estudo do conteúdo</td>
+        <td style="text-align: right;">35 min</td>
+        </tr>
+        <tr class="even">
+        <td>Anotações resumidas</td>
+        <td style="text-align: right;">10 min</td>
+        </tr>
+        <tr class="odd">
+        <td>Questões rápidas</td>
+        <td style="text-align: right;">10 min</td>
+        </tr>
+        <tr class="even">
+        <td>Flashcards</td>
+        <td style="text-align: right;">5 min</td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="dia-de-laboratório">4.2 Dia de laboratório</h3>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Bloco</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Abrir ou montar a topologia</td>
+        <td style="text-align: right;">10 min</td>
+        </tr>
+        <tr class="even">
+        <td>Configurar comandos</td>
+        <td style="text-align: right;">30 min</td>
+        </tr>
+        <tr class="odd">
+        <td>Testar conectividade</td>
+        <td style="text-align: right;">10 min</td>
+        </tr>
+        <tr class="even">
+        <td>Registrar erros e comandos</td>
+        <td style="text-align: right;">10 min</td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="dia-de-revisão">4.3 Dia de revisão</h3>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Bloco</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Revisar anotações</td>
+        <td style="text-align: right;">15 min</td>
+        </tr>
+        <tr class="even">
+        <td>Refazer comandos importantes</td>
+        <td style="text-align: right;">20 min</td>
+        </tr>
+        <tr class="odd">
+        <td>Resolver questões</td>
+        <td style="text-align: right;">20 min</td>
+        </tr>
+        <tr class="even">
+        <td>Marcar dúvidas</td>
+        <td style="text-align: right;">5 min</td>
+        </tr>
+        </tbody>
+        </table>
+        <hr />
+        <h2 id="ferramentas-recomendadas">5. Ferramentas
+        recomendadas</h2>
+        <h3 id="simulação-e-laboratório">5.1 Simulação e
+        laboratório</h3>
+        <ul>
+        <li>Cisco Packet Tracer;</li>
+        <li>PNetLab;</li>
+        <li>GNS3;</li>
+        <li>Cisco Modeling Labs, se disponível;</li>
+        <li>equipamento físico Cisco, se houver disponibilidade.</li>
+        </ul>
+        <h3 id="materiais-de-estudo">5.2 Materiais de estudo</h3>
+        <ul>
+        <li>Cisco CCNA Exam Topics oficial;</li>
+        <li>Cisco Networking Academy;</li>
+        <li>Wendell Odom — <em>CCNA 200-301 Official Cert Guide</em>,
+        volumes 1 e 2;</li>
+        <li>Allan Johnson — <em>31 Days Before Your CCNA Exam</em>;</li>
+        <li>Todd Lammle — <em>CCNA Certification Study Guide</em>.</li>
+        </ul>
+        <hr />
+        <h1 id="plano-semanal-completo-16-semanas">6. Plano semanal
+        completo — 16 semanas</h1>
+        <hr />
+        <h2 id="semana-1-fundamentos-de-redes">Semana 1 — Fundamentos de
+        redes</h2>
+        <p><strong>Objetivo:</strong> compreender os fundamentos de
+        comunicação em redes, dispositivos e modelos de referência.</p>
+        <table>
+        <colgroup>
+        <col style="width: 42%" />
+        <col style="width: 57%" />
+        </colgroup>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Modelo OSI e modelo TCP/IP</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Dispositivos de rede: switch, roteador, firewall, access
+        point, WLC e endpoints</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Topologias: LAN, WAN, SOHO, cloud, on-premises e
+        spine-leaf</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Ethernet, endereço MAC, ARP, quadros, broadcast, unicast e
+        multicast</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Cabos, fibra, cobre, PoE, velocidade e duplex</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Laboratório: PCs e switches no Packet Tracer</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Revisão e questões</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana">Laboratório da semana</h3>
+        <p>Montar uma topologia simples com:</p>
+        <ul>
+        <li>2 PCs;</li>
+        <li>1 switch;</li>
+        <li>endereçamento IPv4 manual;</li>
+        <li>testes com <code>ping</code>;</li>
+        <li>verificação da tabela MAC.</li>
+        </ul>
+        <h3 id="comandos-principais">Comandos principais</h3>
+        <div class="sourceCode" id="cb1"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> mac address-table</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> interfaces status</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> interfaces</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> running-config</span></code></pre></div>
+        <hr />
+        <h2 id="semana-2-ipv4-e-subnetting-básico">Semana 2 — IPv4 e
+        subnetting básico</h2>
+        <p><strong>Objetivo:</strong> dominar os fundamentos de
+        endereçamento IPv4 e iniciar a prática de subnetting.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>IPv4, máscara de rede e CIDR</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Classes históricas e endereços privados</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Cálculo de rede, broadcast e quantidade de hosts</td>
+        <td style="text-align: right;">2h</td>
+        </tr>
+        <tr class="even">
+        <td>Gateway padrão e planejamento de sub-redes</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Laboratório: duas sub-redes IPv4</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Questões de subnetting</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana-1">Laboratório da semana</h3>
+        <p>Montar duas redes IPv4 separadas e testar:</p>
+        <ul>
+        <li>endereçamento manual nos PCs;</li>
+        <li>gateway padrão;</li>
+        <li>comunicação dentro da mesma sub-rede;</li>
+        <li>ausência de comunicação entre sub-redes sem roteamento.</li>
+        </ul>
+        <h3 id="comandos-principais-1">Comandos principais</h3>
+        <div class="sourceCode" id="cb2"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ipconfig</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ping</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">tracert</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip interface brief</span></code></pre></div>
+        <hr />
+        <h2 id="semana-3-subnetting-avançado-e-ipv6">Semana 3 —
+        Subnetting avançado e IPv6</h2>
+        <p><strong>Objetivo:</strong> consolidar subnetting e introduzir
+        os principais conceitos de IPv6 cobrados no exame.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>VLSM</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Exercícios de subnetting</td>
+        <td style="text-align: right;">2h</td>
+        </tr>
+        <tr class="odd">
+        <td>IPv6 global unicast e link-local</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>IPv6 multicast, anycast e EUI-64</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Laboratório: IPv4 e IPv6 básico</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Revisão e questões</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana-2">Laboratório da semana</h3>
+        <p>Montar uma pequena rede com IPv4 e IPv6:</p>
+        <ul>
+        <li>configurar endereços IPv4;</li>
+        <li>configurar endereços IPv6;</li>
+        <li>testar conectividade com <code>ping</code> e
+        <code>ping ipv6</code>;</li>
+        <li>verificar interfaces.</li>
+        </ul>
+        <h3 id="comandos-principais-2">Comandos principais</h3>
+        <div class="sourceCode" id="cb3"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip interface brief</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ipv6 interface brief</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ipv6 route</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ping</span></span></code></pre></div>
+        <hr />
+        <h2 id="semana-4-switching-básico">Semana 4 — Switching
+        básico</h2>
+        <p><strong>Objetivo:</strong> compreender o funcionamento de
+        switches e a lógica de VLANs em ambiente local.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Funcionamento de switches</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Tabela MAC</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>VLAN default, VLAN de dados, VLAN de voz e VLAN nativa</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Portas access</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Laboratório: VLAN em um switch</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Questões</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Revisão</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana-3">Laboratório da semana</h3>
+        <p>Criar VLANs em um switch:</p>
+        <ul>
+        <li>VLAN 10 — ALUNOS;</li>
+        <li>VLAN 20 — PROFESSORES;</li>
+        <li>associar portas às VLANs;</li>
+        <li>testar isolamento entre VLANs.</li>
+        </ul>
+        <h3 id="comandos-principais-3">Comandos principais</h3>
+        <div class="sourceCode" id="cb4"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vlan</span> 10</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">name</span> ALUNOS</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vlan</span> 20</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">name</span> PROFESSORES</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">interface</span> fa0/1</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">switchport</span> mode access</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">switchport</span> access vlan 10</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> vlan brief</span></code></pre></div>
+        <hr />
+        <h2 id="semana-5-vlans-e-trunk">Semana 5 — VLANs e trunk</h2>
+        <p><strong>Objetivo:</strong> configurar VLANs em múltiplos
+        switches e compreender o funcionamento de trunks 802.1Q.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>VLANs em múltiplos switches</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Trunk 802.1Q</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Native VLAN</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Verificação de VLANs e trunk</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Laboratório: dois switches com VLANs</td>
+        <td style="text-align: right;">2h</td>
+        </tr>
+        <tr class="even">
+        <td>Questões e revisão</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana-4">Laboratório da semana</h3>
+        <p>Montar:</p>
+        <ul>
+        <li>2 switches;</li>
+        <li>VLAN 10 e VLAN 20 nos dois switches;</li>
+        <li>trunk entre switches;</li>
+        <li>PCs da mesma VLAN em switches diferentes.</li>
+        </ul>
+        <h3 id="comandos-principais-4">Comandos principais</h3>
+        <div class="sourceCode" id="cb5"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">interface</span> fa0/24</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">switchport</span> mode trunk</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">switchport</span> trunk native vlan 99</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> interfaces trunk</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> vlan brief</span></code></pre></div>
+        <hr />
+        <h2 id="semana-6-inter-vlan-routing-e-etherchannel">Semana 6 —
+        Inter-VLAN routing e EtherChannel</h2>
+        <p><strong>Objetivo:</strong> permitir comunicação entre VLANs e
+        configurar agregação de links com EtherChannel.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Router-on-a-stick</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Subinterfaces e encapsulamento 802.1Q</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>SVIs e switch camada 3</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>EtherChannel</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>LACP</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Laboratório: inter-VLAN + EtherChannel</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Questões e revisão</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana-5">Laboratório da semana</h3>
+        <p>Montar:</p>
+        <ul>
+        <li>VLAN 10 e VLAN 20;</li>
+        <li>roteador com subinterfaces;</li>
+        <li>trunk entre switch e roteador;</li>
+        <li>EtherChannel entre dois switches.</li>
+        </ul>
+        <h3 id="comandos-principais-5">Comandos principais</h3>
+        <div class="sourceCode" id="cb6"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">interface</span> g0/0.10</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">encapsulation</span> dot1Q 10</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ip</span> address 192.168.10.1 255.255.255.0</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">interface</span> g0/0.20</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">encapsulation</span> dot1Q 20</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">ip</span> address 192.168.20.1 255.255.255.0</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">interface</span> range fa0/23 <span class="at">-</span> 24</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ex">channel-group</span> 1 mode active</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> etherchannel summary</span></code></pre></div>
+        <hr />
+        <h2 id="semana-7-stp-e-rapid-pvst">Semana 7 — STP e Rapid
+        PVST+</h2>
+        <p><strong>Objetivo:</strong> compreender prevenção de loops em
+        camada 2 e funcionamento do STP.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Loops de camada 2</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>STP: root bridge, root port e designated port</td>
+        <td style="text-align: right;">2h</td>
+        </tr>
+        <tr class="odd">
+        <td>Estados das portas</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Rapid PVST+</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Laboratório: três switches com STP</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Questões e revisão</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana-6">Laboratório da semana</h3>
+        <p>Montar topologia triangular com 3 switches:</p>
+        <ul>
+        <li>observar eleição do root bridge;</li>
+        <li>alterar prioridade STP;</li>
+        <li>verificar portas bloqueadas;</li>
+        <li>testar convergência.</li>
+        </ul>
+        <h3 id="comandos-principais-6">Comandos principais</h3>
+        <div class="sourceCode" id="cb7"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> spanning-tree</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">spanning-tree</span> vlan 1 root primary</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">spanning-tree</span> vlan 1 priority 4096</span></code></pre></div>
+        <hr />
+        <h2 id="semana-8-segurança-de-camada-2">Semana 8 — Segurança de
+        camada 2</h2>
+        <p><strong>Objetivo:</strong> aplicar mecanismos de proteção em
+        switches de acesso.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>PortFast e BPDU Guard</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Root Guard, Loop Guard e BPDU Filter</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Port Security</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>DHCP Snooping</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Dynamic ARP Inspection</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Laboratório: segurança em switch</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Questões e revisão</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana-7">Laboratório da semana</h3>
+        <p>Configurar:</p>
+        <ul>
+        <li>PortFast;</li>
+        <li>BPDU Guard;</li>
+        <li>Port Security;</li>
+        <li>limite de MAC por porta;</li>
+        <li>violação de segurança.</li>
+        </ul>
+        <h3 id="comandos-principais-7">Comandos principais</h3>
+        <div class="sourceCode" id="cb8"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">interface</span> fa0/1</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">spanning-tree</span> portfast</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">spanning-tree</span> bpduguard enable</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">switchport</span> port-security</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">switchport</span> port-security maximum 2</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">switchport</span> port-security violation restrict</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> port-security</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> port-security interface fa0/1</span></code></pre></div>
+        <hr />
+        <h2 id="semana-9-roteamento-estático">Semana 9 — Roteamento
+        estático</h2>
+        <p><strong>Objetivo:</strong> compreender a tabela de roteamento
+        e configurar rotas estáticas, default e flutuantes.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Tabela de roteamento</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Longest prefix match</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Administrative Distance e métrica</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Rotas conectadas e locais</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Rotas estáticas e default</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Laboratório: 3 roteadores com rotas estáticas</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Questões e revisão</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana-8">Laboratório da semana</h3>
+        <p>Montar:</p>
+        <ul>
+        <li>3 roteadores em linha;</li>
+        <li>3 LANs;</li>
+        <li>rotas estáticas;</li>
+        <li>rota default;</li>
+        <li>rota flutuante.</li>
+        </ul>
+        <h3 id="comandos-principais-8">Comandos principais</h3>
+        <div class="sourceCode" id="cb9"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ip</span> route 192.168.20.0 255.255.255.0 10.0.0.2</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ip</span> route 0.0.0.0 0.0.0.0 10.0.0.1</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip route</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">traceroute</span></span></code></pre></div>
+        <hr />
+        <h2 id="semana-10-ospfv2-single-area">Semana 10 — OSPFv2
+        single-area</h2>
+        <p><strong>Objetivo:</strong> configurar e diagnosticar OSPFv2
+        em área única.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Conceito de protocolo link-state</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>OSPF área 0 e Router ID</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Vizinhança OSPF</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>DR e BDR</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Passive interface e cost</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Laboratório: OSPF em 3 roteadores</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Questões e revisão</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana-9">Laboratório da semana</h3>
+        <p>Montar:</p>
+        <ul>
+        <li>3 roteadores;</li>
+        <li>OSPF single-area;</li>
+        <li>redes LAN anunciadas;</li>
+        <li>passive-interface nas LANs;</li>
+        <li>teste de falha de link.</li>
+        </ul>
+        <h3 id="comandos-principais-9">Comandos principais</h3>
+        <div class="sourceCode" id="cb10"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">router</span> ospf 1</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">router-id</span> 1.1.1.1</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">network</span> 192.168.10.0 0.0.0.255 area 0</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">network</span> 10.0.0.0 0.0.0.3 area 0</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">passive-interface</span> g0/0</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip ospf neighbor</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip ospf interface brief</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip route ospf</span></code></pre></div>
+        <hr />
+        <h2 id="semana-11-serviços-ip-i">Semana 11 — Serviços IP I</h2>
+        <p><strong>Objetivo:</strong> configurar serviços essenciais de
+        rede como DHCP, DNS e NAT.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>DHCP</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>DNS</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>NAT estático</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Dynamic NAT</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>PAT / NAT overload</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Laboratório: DHCP e NAT</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Questões e revisão</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana-10">Laboratório da semana</h3>
+        <p>Configurar:</p>
+        <ul>
+        <li>DHCP em roteador;</li>
+        <li>NAT overload;</li>
+        <li>rede interna e externa;</li>
+        <li>teste de conectividade simulando acesso à Internet.</li>
+        </ul>
+        <h3 id="comandos-principais-10">Comandos principais</h3>
+        <div class="sourceCode" id="cb11"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ip</span> dhcp pool LAN10</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">network</span> 192.168.10.0 255.255.255.0</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">default-router</span> 192.168.10.1</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">dns-server</span> 8.8.8.8</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ip</span> nat inside source list 1 interface g0/1 overload</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="ex">access-list</span> 1 permit 192.168.10.0 0.0.0.255</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip dhcp binding</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip nat translations</span></code></pre></div>
+        <hr />
+        <h2 id="semana-12-serviços-ip-ii">Semana 12 — Serviços IP
+        II</h2>
+        <p><strong>Objetivo:</strong> estudar serviços auxiliares de
+        operação e gerenciamento de redes.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>NTP</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Syslog</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>SNMP</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>QoS básico</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Backup de configuração com TFTP/FTP</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Laboratório: NTP, Syslog e backup</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Questões e revisão</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana-11">Laboratório da semana</h3>
+        <p>Configurar:</p>
+        <ul>
+        <li>horário em roteador ou switch;</li>
+        <li>servidor Syslog no Packet Tracer;</li>
+        <li>backup de configuração;</li>
+        <li>verificação de logs.</li>
+        </ul>
+        <h3 id="comandos-principais-11">Comandos principais</h3>
+        <div class="sourceCode" id="cb12"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> clock</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">clock</span> set 10:00:00 25 APR 2026</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">logging</span> host 192.168.10.100</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> logging</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ex">copy</span> running-config startup-config</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="ex">copy</span> running-config tftp</span></code></pre></div>
+        <hr />
+        <h2 id="semana-13-wireless-e-gerenciamento">Semana 13 — Wireless
+        e gerenciamento</h2>
+        <p><strong>Objetivo:</strong> compreender conceitos de redes sem
+        fio e acesso administrativo seguro.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Fundamentos de Wi-Fi, RF, canais e SSID</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>WPA2, WPA3 e autenticação wireless</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Access Point, WLC e modos de AP</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Arquitetura wireless centralizada</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>SSH, Telnet e HTTPS</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>CDP e LLDP</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Questões e revisão</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana-12">Laboratório da semana</h3>
+        <p>Configurar:</p>
+        <ul>
+        <li>hostname;</li>
+        <li>domínio;</li>
+        <li>usuário local;</li>
+        <li>chave RSA;</li>
+        <li>acesso SSH;</li>
+        <li>descoberta de vizinhos com CDP/LLDP.</li>
+        </ul>
+        <h3 id="comandos-principais-12">Comandos principais</h3>
+        <div class="sourceCode" id="cb13"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hostname</span> SW1</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ip</span> domain-name lab.local</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">crypto</span> key generate rsa</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ex">username</span> admin secret Cisco123</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">line</span> vty 0 4</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">login</span> local</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="ex">transport</span> input ssh</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip ssh</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> cdp neighbors</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> lldp neighbors</span></code></pre></div>
+        <hr />
+        <h2 id="semana-14-segurança">Semana 14 — Segurança</h2>
+        <p><strong>Objetivo:</strong> aplicar controles básicos de
+        segurança em dispositivos e tráfego de rede.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Princípios de segurança e menor privilégio</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Senhas, privilege level e login local</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>SSH seguro</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>ACL standard</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>ACL extended</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>VPNs em nível conceitual</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Laboratório: ACLs e hardening básico</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-da-semana-13">Laboratório da semana</h3>
+        <p>Configurar:</p>
+        <ul>
+        <li>ACL standard;</li>
+        <li>ACL extended;</li>
+        <li>aplicação de ACL em interface;</li>
+        <li>teste de bloqueio e permissão;</li>
+        <li>acesso administrativo seguro.</li>
+        </ul>
+        <h3 id="comandos-principais-13">Comandos principais</h3>
+        <div class="sourceCode" id="cb14"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">access-list</span> 10 permit 192.168.10.0 0.0.0.255</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">access-list</span> 10 deny any</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ip</span> access-list extended BLOQUEIO</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">permit</span> tcp 192.168.10.0 0.0.0.255 any eq 80</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="ex">permit</span> tcp 192.168.10.0 0.0.0.255 any eq 443</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="ex">deny</span> icmp any any</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="ex">permit</span> ip any any</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> access-lists</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip interface</span></code></pre></div>
+        <hr />
+        <h2 id="semana-15-automação-sdn-e-programabilidade">Semana 15 —
+        Automação, SDN e programabilidade</h2>
+        <p><strong>Objetivo:</strong> compreender conceitos modernos de
+        automação, APIs e redes baseadas em controladora.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Assunto</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>SDN e redes baseadas em controladora</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Cisco DNA Center / Catalyst Center</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>APIs REST</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Métodos HTTP e autenticação em API</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>JSON</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Ansible e Terraform</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Questões e revisão</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="exercício-da-semana">Exercício da semana</h3>
+        <p>Interpretar um exemplo simples de JSON:</p>
+        <div class="sourceCode" id="cb15"><pre
+        class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;hostname&quot;</span><span class="fu">:</span> <span class="st">&quot;R1&quot;</span><span class="fu">,</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;interface&quot;</span><span class="fu">:</span> <span class="st">&quot;GigabitEthernet0/0&quot;</span><span class="fu">,</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;ip&quot;</span><span class="fu">:</span> <span class="st">&quot;192.168.10.1&quot;</span><span class="fu">,</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="st">&quot;up&quot;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+        <h3 id="conceitos-a-memorizar">Conceitos a memorizar</h3>
+        <ul>
+        <li>API REST;</li>
+        <li>métodos GET, POST, PUT e DELETE;</li>
+        <li>JSON;</li>
+        <li>controller-based networking;</li>
+        <li>SDN;</li>
+        <li>Ansible;</li>
+        <li>Terraform;</li>
+        <li>automação versus configuração manual.</li>
+        </ul>
+        <hr />
+        <h2 id="semana-16-revisão-final-e-simulado">Semana 16 — Revisão
+        final e simulado</h2>
+        <p><strong>Objetivo:</strong> consolidar o conteúdo e avaliar
+        prontidão para a prova.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Atividade</th>
+        <th style="text-align: right;">Tempo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Revisão de subnetting</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Revisão de VLANs, trunk, STP e EtherChannel</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Revisão de roteamento estático e OSPF</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Revisão de NAT, DHCP, DNS e serviços IP</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Revisão de ACLs, segurança e wireless</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td>Simulado parcial ou completo</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="odd">
+        <td>Correção do simulado e plano de reforço</td>
+        <td style="text-align: right;">1h</td>
+        </tr>
+        <tr class="even">
+        <td><strong>Total semanal</strong></td>
+        <td style="text-align: right;"><strong>7h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <h3 id="laboratório-integrador-recomendado">Laboratório
+        integrador recomendado</h3>
+        <p>Montar uma rede com:</p>
+        <ul>
+        <li>3 roteadores;</li>
+        <li>3 switches;</li>
+        <li>4 VLANs;</li>
+        <li>inter-VLAN routing;</li>
+        <li>OSPF;</li>
+        <li>DHCP;</li>
+        <li>NAT/PAT;</li>
+        <li>ACL;</li>
+        <li>SSH;</li>
+        <li>Port Security;</li>
+        <li>STP com root bridge definido.</li>
+        </ul>
+        <hr />
+        <h1 id="checklist-de-comandos-essenciais">7. Checklist de
+        comandos essenciais</h1>
+        <div class="sourceCode" id="cb16"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> running-config</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> startup-config</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip interface brief</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ipv6 interface brief</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> interfaces</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> interfaces status</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> vlan brief</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> interfaces trunk</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> etherchannel summary</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> spanning-tree</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> mac address-table</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip route</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip protocols</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip ospf neighbor</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip ospf interface brief</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> access-lists</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip nat translations</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> ip dhcp binding</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> cdp neighbors</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> lldp neighbors</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="ex">copy</span> running-config startup-config</span></code></pre></div>
+        <hr />
+        <h1 id="temas-prioritários-para-aprovação">8. Temas prioritários
+        para aprovação</h1>
+        <table>
+        <colgroup>
+        <col style="width: 40%" />
+        <col style="width: 30%" />
+        <col style="width: 30%" />
+        </colgroup>
+        <thead>
+        <tr class="header">
+        <th style="text-align: right;">Prioridade</th>
+        <th>Tema</th>
+        <th>Motivo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td style="text-align: right;">1</td>
+        <td>Subnetting</td>
+        <td>Base para vários domínios do exame</td>
+        </tr>
+        <tr class="even">
+        <td style="text-align: right;">2</td>
+        <td>VLANs, trunk e inter-VLAN routing</td>
+        <td>Muito recorrente em Network Access</td>
+        </tr>
+        <tr class="odd">
+        <td style="text-align: right;">3</td>
+        <td>Roteamento estático e OSPF</td>
+        <td>Parte central de IP Connectivity</td>
+        </tr>
+        <tr class="even">
+        <td style="text-align: right;">4</td>
+        <td>NAT, DHCP e ACLs</td>
+        <td>Temas muito práticos e frequentes</td>
+        </tr>
+        <tr class="odd">
+        <td style="text-align: right;">5</td>
+        <td>STP e EtherChannel</td>
+        <td>Fundamentais em switching</td>
+        </tr>
+        <tr class="even">
+        <td style="text-align: right;">6</td>
+        <td>Segurança básica</td>
+        <td>Representa parcela importante do exame</td>
+        </tr>
+        <tr class="odd">
+        <td style="text-align: right;">7</td>
+        <td>Wireless</td>
+        <td>Exige domínio conceitual</td>
+        </tr>
+        <tr class="even">
+        <td style="text-align: right;">8</td>
+        <td>Automação e SDN</td>
+        <td>Conteúdo menor, mas decisivo para pontuação</td>
+        </tr>
+        </tbody>
+        </table>
+        <hr />
+        <h1 id="regra-de-estudo-para-subnetting">9. Regra de estudo para
+        subnetting</h1>
+        <p>Subnetting deve ser praticado durante todo o plano.</p>
+        <p>Recomendação mínima:</p>
+        <ul>
+        <li>10 minutos, 3 vezes por semana;</li>
+        <li>resolver questões de rede, broadcast, primeiro host, último
+        host e quantidade de hosts;</li>
+        <li>praticar CIDR de <code>/24</code> até <code>/30</code>
+        inicialmente;</li>
+        <li>depois incluir <code>/16</code>, <code>/20</code>,
+        <code>/22</code>, <code>/26</code>, <code>/27</code>,
+        <code>/28</code> e <code>/29</code>.</li>
+        </ul>
+        <hr />
+        <h1 id="critério-para-marcar-a-prova">10. Critério para marcar a
+        prova</h1>
+        <p>Recomenda-se marcar a prova quando os seguintes critérios
+        forem atendidos:</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th>Habilidade</th>
+        <th>Meta</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td>Subnetting</td>
+        <td>Resolver em até 2 minutos por questão</td>
+        </tr>
+        <tr class="even">
+        <td>VLAN/trunk/inter-VLAN</td>
+        <td>Configurar sem consulta</td>
+        </tr>
+        <tr class="odd">
+        <td>OSPF</td>
+        <td>Configurar e diagnosticar vizinhança</td>
+        </tr>
+        <tr class="even">
+        <td>NAT/PAT</td>
+        <td>Configurar e validar</td>
+        </tr>
+        <tr class="odd">
+        <td>ACL</td>
+        <td>Aplicar no sentido correto</td>
+        </tr>
+        <tr class="even">
+        <td>STP</td>
+        <td>Identificar root bridge e papéis das portas</td>
+        </tr>
+        <tr class="odd">
+        <td>Simulados</td>
+        <td>Atingir 80% ou mais de acertos de forma consistente</td>
+        </tr>
+        </tbody>
+        </table>
+        <hr />
+        <h1 id="cronograma-resumido">11. Cronograma resumido</h1>
+        <table>
+        <thead>
+        <tr class="header">
+        <th style="text-align: right;">Semana</th>
+        <th>Tema principal</th>
+        <th style="text-align: right;">Carga</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td style="text-align: right;">1</td>
+        <td>Fundamentos de redes</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="even">
+        <td style="text-align: right;">2</td>
+        <td>IPv4 e subnetting básico</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="odd">
+        <td style="text-align: right;">3</td>
+        <td>Subnetting avançado e IPv6</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="even">
+        <td style="text-align: right;">4</td>
+        <td>Switching básico</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="odd">
+        <td style="text-align: right;">5</td>
+        <td>VLANs e trunk</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="even">
+        <td style="text-align: right;">6</td>
+        <td>Inter-VLAN routing e EtherChannel</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="odd">
+        <td style="text-align: right;">7</td>
+        <td>STP e Rapid PVST+</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="even">
+        <td style="text-align: right;">8</td>
+        <td>Segurança de camada 2</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="odd">
+        <td style="text-align: right;">9</td>
+        <td>Roteamento estático</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="even">
+        <td style="text-align: right;">10</td>
+        <td>OSPFv2 single-area</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="odd">
+        <td style="text-align: right;">11</td>
+        <td>Serviços IP I</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="even">
+        <td style="text-align: right;">12</td>
+        <td>Serviços IP II</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="odd">
+        <td style="text-align: right;">13</td>
+        <td>Wireless e gerenciamento</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="even">
+        <td style="text-align: right;">14</td>
+        <td>Segurança</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="odd">
+        <td style="text-align: right;">15</td>
+        <td>Automação, SDN e programabilidade</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="even">
+        <td style="text-align: right;">16</td>
+        <td>Revisão final e simulado</td>
+        <td style="text-align: right;">7h</td>
+        </tr>
+        <tr class="odd">
+        <td style="text-align: right;"><strong>Total</strong></td>
+        <td></td>
+        <td style="text-align: right;"><strong>112h</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        <hr />
+        <h1 id="observações-finais">12. Observações finais</h1>
+        <p>Este plano foi construído para uma rotina realista de
+        <strong>60 minutos por dia</strong>. A chave para aprovação é
+        manter consistência, praticar laboratórios semanalmente e
+        resolver questões desde o início.</p>
+        <p>Para o perfil do Prof. Dr. Laerte Peotta de Melo, com
+        experiência prévia em redes e cibersegurança, o foco deve estar
+        principalmente em:</p>
+        <ul>
+        <li>comandos Cisco IOS;</li>
+        <li>detalhes específicos do exame;</li>
+        <li>prática repetida de subnetting;</li>
+        <li>configuração de VLANs, OSPF, NAT, ACLs e STP;</li>
+        <li>familiaridade com os temas modernos de automação e SDN.</li>
+        </ul>
+        <p>A recomendação é considerar a marcação da prova após a 16ª
+        semana, desde que os simulados estejam consistentemente acima de
+        80%.</p>
+        <div class="callout"><strong>Observação:</strong> mantenha a prática de subnetting e laboratórios como rotina fixa. A consistência diária é o principal fator de aprovação.</div>
+      </article>
+    </main>
+  </div>
+
+  <footer class="footer">
+    Plano gerado para Prof. Dr. Laerte Peotta de Melo • CCNA Cisco 200-301 • Tema Matrix • CCNA Cisco 200-301
+  </footer>
+
+  <script>
+    const canvas = document.getElementById('matrixRain');
+    const ctx = canvas.getContext('2d');
+    const chars = '01 TCP/IP VLAN OSPF NAT ACL STP SSH CCNA 200-301'.split('');
+    let width, height, columns, drops;
+    function resize(){
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      columns = Math.floor(width / 18);
+      drops = Array.from({length: columns}, () => Math.random() * height / 18);
+    }
+    function draw(){
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+      ctx.fillRect(0, 0, width, height);
+      ctx.font = '16px Courier New, monospace';
+      for(let i=0; i<drops.length; i++){
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillStyle = Math.random() > 0.985 ? '#d9ffe7' : '#00ff66';
+        ctx.fillText(text, i * 18, drops[i] * 18);
+        if(drops[i] * 18 > height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+    draw();
+  </script>
+
+</body>
+</html>
