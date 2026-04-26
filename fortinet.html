@@ -447,6 +447,142 @@
       border-radius: 22px;
     }
 
+
+
+    .level-overview {
+      display: grid;
+      gap: 16px;
+    }
+
+    .level-row {
+      display: grid;
+      grid-template-columns: 210px 140px 1fr;
+      gap: 14px;
+      align-items: stretch;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(45,255,124,0.16);
+      background: rgba(0,0,0,0.25);
+      box-shadow: 0 0 22px rgba(0,0,0,0.18);
+    }
+
+    .level-name,
+    .exam-name {
+      display: grid;
+      align-content: center;
+      border-radius: 14px;
+      padding: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      min-height: 84px;
+    }
+
+    .level-name strong,
+    .exam-name strong {
+      display: block;
+      color: #ffffff;
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+    }
+
+    .level-name span,
+    .exam-name span {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .level-detail {
+      border-radius: 14px;
+      padding: 14px 16px;
+      background: rgba(3, 17, 10, 0.72);
+      border: 1px solid rgba(45,255,124,0.12);
+    }
+
+    .level-detail p {
+      margin: 0 0 10px;
+    }
+
+    .level-detail p:last-child {
+      margin-bottom: 0;
+    }
+
+    .level-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .level-tag {
+      padding: 6px 9px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      border: 1px solid rgba(255,255,255,0.13);
+      background: rgba(0,0,0,0.25);
+      color: #ecffee;
+    }
+
+    .level-row.expert { border-color: rgba(190,190,190,0.32); }
+    .level-row.expert .level-name { background: linear-gradient(135deg, rgba(32,32,32,0.86), rgba(90,90,90,0.28)); }
+
+    .level-row.specialist { border-color: rgba(72,207,137,0.34); }
+    .level-row.specialist .level-name { background: linear-gradient(135deg, rgba(25,120,75,0.70), rgba(48,170,105,0.28)); }
+
+    .level-row.professional { border-color: rgba(238,49,36,0.34); }
+    .level-row.professional .level-name { background: linear-gradient(135deg, rgba(185,31,22,0.72), rgba(238,49,36,0.24)); }
+
+    .level-row.associate { border-color: rgba(139,93,215,0.40); }
+    .level-row.associate .level-name { background: linear-gradient(135deg, rgba(91,49,150,0.82), rgba(139,93,215,0.30)); }
+
+    .level-row.fundamentals { border-color: rgba(34,197,203,0.40); }
+    .level-row.fundamentals .level-name { background: linear-gradient(135deg, rgba(8,132,146,0.76), rgba(34,197,203,0.24)); }
+
+    .source-box {
+      margin-top: 18px;
+      border: 1px solid rgba(255, 209, 102, 0.24);
+      background: rgba(255, 209, 102, 0.08);
+      border-radius: 18px;
+      padding: 18px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .source-box strong {
+      color: var(--warn);
+    }
+
+    .source-box p {
+      margin: 0;
+    }
+
+    .mini-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .mini-summary {
+      border-radius: 16px;
+      border: 1px solid rgba(45,255,124,0.15);
+      background: rgba(0,0,0,0.24);
+      padding: 16px;
+    }
+
+    .mini-summary strong {
+      display: block;
+      color: var(--green);
+      margin-bottom: 5px;
+      font-size: 1.08rem;
+    }
+
+    .mini-summary span {
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 0.92rem;
+    }
+
     footer {
       margin-top: 70px;
       padding-top: 28px;
@@ -461,7 +597,8 @@
       .fortinet-brand { min-height: auto; }
       .stats, .grid.three, .grid.two, .link-grid { grid-template-columns: 1fr; }
       .official-badge-card { grid-template-columns: 1fr; }
-      .official-badge-card { grid-template-columns: 1fr; }
+      .level-row { grid-template-columns: 1fr; }
+      .mini-summary-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 880px) {
@@ -479,6 +616,7 @@
   <nav aria-label="Navegação principal">
     <div class="nav-inner">
       <a href="#visao-geral">Visão geral</a>
+      <a href="#niveis">Níveis</a>
       <a href="#trilha">Trilha</a>
       <a href="#cadastro">Cadastro</a>
       <a href="#badges">Badges</a>
@@ -505,8 +643,8 @@
             <div class="stats">
               <div class="stat"><strong>FCF</strong><span>Fundamentos de cibersegurança</span></div>
               <div class="stat"><strong>FCA</strong><span>Operação básica com FortiGate</span></div>
-              <div class="stat"><strong>NSE 1 a 3</strong><span>Base da trilha Fortinet</span></div>
-              <div class="stat"><strong>Online</strong><span>Cursos self-paced</span></div>
+              <div class="stat"><strong>5 níveis</strong><span>Da base ao especialista</span></div>
+              <div class="stat"><strong>11 cert.</strong><span>Certificações NSE atuais</span></div>
             </div>
           </div>
 
@@ -542,8 +680,87 @@
       </div>
     </section>
 
+
+
+    <section id="niveis">
+      <h2>Como a certificação Fortinet é organizada em níveis</h2>
+      <div class="card highlight">
+        <p>O programa NSE organiza as certificações em <strong>cinco níveis de proficiência</strong>, indo da formação básica em cibersegurança até o nível expert. A lógica é simples: quanto maior o nível NSE, maior a profundidade técnica exigida, maior a dependência de experiência prática e maior a complexidade dos exames. Para mais informações, acesse o <a href="arquivos/nse-training-fortinet.pdf" target="_blank" rel="noopener">PDF com o guia de certificações Fortinet</a>.</p>
+        <div class="mini-summary-grid">
+          <div class="mini-summary"><strong>Fundamentos</strong><span>Base conceitual para quem está começando em cibersegurança.</span></div>
+          <div class="mini-summary"><strong>Operação e gestão</strong><span>Administração, implantação e monitoramento de soluções Fortinet.</span></div>
+          <div class="mini-summary"><strong>Especialização e arquitetura</strong><span>Projeto, solução de problemas e desenho de ambientes complexos.</span></div>
+        </div>
+      </div>
+
+      <div class="level-overview" style="margin-top:18px;">
+        <div class="level-row expert">
+          <div class="level-name"><strong>Expert</strong><span>Fortinet Certified Expert</span></div>
+          <div class="exam-name"><strong>NSE 8</strong><span>Nível máximo</span></div>
+          <div class="level-detail">
+            <p><strong>Certificação:</strong> FCX em Cybersecurity.</p>
+            <p><strong>Foco:</strong> conhecimento especialista em projeto, configuração e troubleshooting de segurança de rede em ambientes complexos.</p>
+            <p><strong>Exigência geral:</strong> aprovação no exame escrito NSE 8 e no exame prático NSE 8.</p>
+          </div>
+        </div>
+
+        <div class="level-row specialist">
+          <div class="level-name"><strong>Solution Specialist</strong><span>Fortinet Certified Solution Specialist</span></div>
+          <div class="exam-name"><strong>NSE 6 e NSE 7</strong><span>Especialista</span></div>
+          <div class="level-detail">
+            <p><strong>Certificações:</strong> FCSS por trilha de solução.</p>
+            <div class="level-tags">
+              <span class="level-tag">Secure Networking</span>
+              <span class="level-tag">SASE</span>
+              <span class="level-tag">Cloud Security</span>
+              <span class="level-tag">Security Operations</span>
+            </div>
+            <p><strong>Foco:</strong> desenhar, administrar, monitorar e solucionar problemas em soluções avançadas da Fortinet.</p>
+            <p><strong>Exigência geral:</strong> aprovação em um exame NSE 6 e um exame NSE 7 da trilha escolhida.</p>
+          </div>
+        </div>
+
+        <div class="level-row professional">
+          <div class="level-name"><strong>Professional</strong><span>Fortinet Certified Professional</span></div>
+          <div class="exam-name"><strong>NSE 4 e NSE 5</strong><span>Profissional</span></div>
+          <div class="level-detail">
+            <p><strong>Certificações:</strong> FCP por área de atuação.</p>
+            <div class="level-tags">
+              <span class="level-tag">Secure Networking</span>
+              <span class="level-tag">SASE</span>
+              <span class="level-tag">Cloud Security</span>
+              <span class="level-tag">Security Operations</span>
+            </div>
+            <p><strong>Foco:</strong> proteger redes e aplicações por meio da implantação, administração e monitoramento dos produtos Fortinet.</p>
+            <p><strong>Exigência geral:</strong> aprovação no exame NSE 4 e em um exame NSE 5 da trilha correspondente.</p>
+          </div>
+        </div>
+
+        <div class="level-row associate">
+          <div class="level-name"><strong>Associate</strong><span>Fortinet Certified Associate</span></div>
+          <div class="exam-name"><strong>NSE 3</strong><span>Associado</span></div>
+          <div class="level-detail">
+            <p><strong>Certificação:</strong> FCA em Cybersecurity.</p>
+            <p><strong>Foco:</strong> operação em alto nível do FortiGate, incluindo recursos básicos, políticas, perfis de segurança, VPN e monitoramento.</p>
+            <p><strong>Exigência geral:</strong> conclusão do curso FortiGate Operator e aprovação no exame NSE 3 ao final do curso.</p>
+          </div>
+        </div>
+
+        <div class="level-row fundamentals">
+          <div class="level-name"><strong>Fundamentals</strong><span>Fortinet Certified Fundamentals</span></div>
+          <div class="exam-name"><strong>NSE 1 e NSE 2</strong><span>Fundamentos</span></div>
+          <div class="level-detail">
+            <p><strong>Certificação:</strong> FCF em Cybersecurity.</p>
+            <p><strong>Foco:</strong> domínio dos conhecimentos técnicos e conceitos necessários para funções iniciais em cibersegurança.</p>
+            <p><strong>Exigência geral:</strong> conclusão de dois cursos: Introduction to the Threat Landscape e um curso complementar, como Getting Started in Cybersecurity ou Technical Introduction to Cybersecurity.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
     <section id="trilha">
-      <h2>Trilha recomendada</h2>
+      <h2>Trilha recomendada para NSE 1 a NSE 3</h2>
       <table>
         <thead>
           <tr>
@@ -813,6 +1030,10 @@
     <section id="links">
       <h2>Links oficiais</h2>
       <div class="link-grid">
+        <div class="link-card">
+          <a href="arquivos/nse-training-fortinet.pdf" target="_blank" rel="noopener">PDF local - NSE Training Fortinet</a>
+          <small>Arquivo de apoio para publicar na pasta arquivos/ do GitHub Pages.</small>
+        </div>
         <div class="link-card">
           <a href="https://www.fortinet.com/br/nse-training" target="_blank" rel="noopener">Programa NSE - Fortinet Brasil</a>
           <small>Visão geral oficial das certificações Fortinet e níveis NSE.</small>
