@@ -853,8 +853,8 @@
         <div class="menu">
           <a href="#sobre" data-i18n="nav.about">Sobre</a>
           <a href="#atuacao" data-i18n="nav.work">Atuação</a>
-          <a href="#repositorios" data-i18n="nav.repos">Repositórios</a>
-          <a href="ccna.html" data-i18n="nav.cert">Certificação</a>
+          <a href="#disciplinas" data-i18n="nav.repos">Disciplinas</a>
+          <a href="#certificacoes" data-i18n="nav.cert">Certificações</a>
           <a href="#podcast" data-i18n="nav.podcast">Podcast</a>
           <a href="#contato" data-i18n="nav.contact">Contato</a>
         </div>
@@ -884,7 +884,7 @@
                 Professor, pesquisador e profissional com atuação em <strong>Cibersegurança</strong>, <strong>Engenharia de Redes</strong>, <strong>Ciência da Computação</strong>, <strong>crimes cibernéticos</strong>, <strong>forense digital</strong> e <strong>Segurança do Sistema Financeiro</strong>. Mestre e Doutor em Engenharia Elétrica, articula ensino, pesquisa aplicada e produção de materiais acadêmicos e técnicos voltados à formação e ao desenvolvimento profissional.
               </p>
               <div class="hero-actions">
-                <a class="button button-primary" href="#repositorios" data-i18n="hero.btnRepos">Ver repositórios</a>
+                <a class="button button-primary" href="#disciplinas" data-i18n="hero.btnRepos">Ver materiais</a>
                 <a class="button button-secondary" href="https://github.com/peotta" target="_blank" rel="noreferrer">↗ GitHub</a>
               </div>
             </div>
@@ -996,10 +996,10 @@
       </div>
     </section>
 
-    <section id="repositorios">
+    <section id="disciplinas">
       <div class="container">
         <div class="section-head">
-          <h2 data-i18n="repos.title">Repositórios e materiais</h2>
+          <h2 data-i18n="repos.title">Disciplinas e Materiais de Aulas</h2>
         </div>
         <div class="repo-grid">
           <article class="repo-card">
@@ -1030,17 +1030,40 @@
             <div class="repo-meta" data-i18n="repos.grad">Graduação em Engenharia de Redes de Comunicação</div>
             <a class="button button-secondary" href="https://github.com/peotta/topicos" target="_blank" rel="noreferrer" data-i18n="repos.open">Abrir repositório</a>
           </article>
-          <article class="repo-card featured-resource">
-            <h3 class="repo-title"><span class="repo-icon" aria-hidden="true">🛡️</span><span data-i18n="repos.cyber.title">Tópicos Avançados em Cyber Segurança</span></h3>
+          <article class="repo-card">
+            <div class="ene-badge"><span class="unb-icon"></span> Universidade de Brasília</div>
+            <h3><span data-i18n="repos.cyber.title">Tópicos Avançados em Cyber Segurança</span></h3>
             <p class="muted" data-i18n="repos.cyber.text">Discussão avançada sobre cibercrimes, ataques cibernéticos, vulnerabilidades, privacidade e redes anônimas.</p>
             <div class="repo-meta" data-i18n="repos.cyber.meta">Mestrado em Cyber Segurança na UnB</div>
             <a class="button button-secondary" href="https://github.com/peotta/topicos-avancados-cyber" target="_blank" rel="noreferrer" data-i18n="repos.open">Abrir repositório</a>
           </article>
           <article class="repo-card featured-resource">
+            <h3 class="repo-title"><span class="repo-icon" aria-hidden="true">✍️</span><span data-i18n="repos.guide.title">Guia - Como escrever um artigo ou TCC</span></h3>
+            <p class="muted" data-i18n="repos.guide.text">Material de apoio para organização, escrita e desenvolvimento de trabalhos acadêmicos.</p>
+            <div class="repo-meta" data-i18n="repos.support">Material de apoio</div>
+            <a class="button button-secondary" href="dicas.html" target="_blank" rel="noreferrer" data-i18n="repos.read">Ler material</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="certificacoes">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i18n="certs.title">Certificações Profissionais e Grupos de Estudos</h2>
+        </div>
+        <div class="repo-grid">
+          <article class="repo-card featured-resource">
             <h3 class="repo-title"><span class="repo-icon" aria-hidden="true">🌐</span><span data-i18n="repos.ccna.title">Certificação CCNA Cisco 200-301</span></h3>
             <p class="muted" data-i18n="repos.ccna.text">Plano de estudos para preparação à certificação Cisco CCNA 200-301, com organização semanal, laboratórios, comandos e revisão.</p>
             <div class="repo-meta" data-i18n="repos.certification">Certificação profissional</div>
             <a class="button button-secondary" href="ccna.html" data-i18n="repos.accessPlan">Acessar plano</a>
+          </article>
+          <article class="repo-card featured-resource">
+            <h3 class="repo-title"><span class="repo-icon" aria-hidden="true">🛡️</span><span data-i18n="repos.ccnacyber.title">Certificação CCNA Cybersecurity 200-201</span></h3>
+            <p class="muted" data-i18n="repos.ccnacyber.text">Plano de estudos para a certificação CCNA Cybersecurity 200-201, com foco em operações de segurança, SOC, monitoramento, análise de hosts, intrusão em rede e resposta a incidentes.</p>
+            <div class="repo-meta" data-i18n="repos.certification">Certificação profissional</div>
+            <a class="button button-secondary" href="ccna-cybersecurity.html" data-i18n="repos.accessPlan">Acessar plano</a>
           </article>
           <article class="repo-card featured-resource">
             <h3 class="repo-title"><span class="repo-icon" aria-hidden="true">🔐</span><span data-i18n="repos.ccst.title">Certificação CCST Cybersecurity 100-160</span></h3>
@@ -1055,10 +1078,10 @@
             <a class="button button-secondary" href="fortinet.html" data-i18n="repos.accessGuide">Acessar guia</a>
           </article>
           <article class="repo-card featured-resource">
-            <h3 class="repo-title"><span class="repo-icon" aria-hidden="true">✍️</span><span data-i18n="repos.guide.title">Guia - Como escrever um artigo ou TCC</span></h3>
-            <p class="muted" data-i18n="repos.guide.text">Material de apoio para organização, escrita e desenvolvimento de trabalhos acadêmicos.</p>
-            <div class="repo-meta" data-i18n="repos.support">Material de apoio</div>
-            <a class="button button-secondary" href="dicas.html" target="_blank" rel="noreferrer" data-i18n="repos.read">Ler material</a>
+            <h3 class="repo-title"><span class="repo-icon" aria-hidden="true">🦅</span><span data-i18n="certs.ravens.title">Grupo RAVENS</span></h3>
+            <p class="muted" data-i18n="certs.ravens.text">Grupo de estudos e pesquisa em cibersegurança, redes, vulnerabilidades, engenharia e análise de ameaças.</p>
+            <div class="repo-meta" data-i18n="certs.studyGroup">Grupo de estudos</div>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer" data-i18n="ravens.open">Acessar RAVENS</a>
           </article>
         </div>
       </div>
@@ -1131,7 +1154,7 @@
   <script>
     const matrixCanvas = document.getElementById('matrixRainCanvas');
     const matrixCtx = matrixCanvas.getContext('2d');
-    const matrixAlphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789CCSTCYBERSECURITYCCNACISCOIOSOSPFVLANSTPACLNATSSHJSONTCPIP';
+    const matrixAlphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789CCSTCYBERSECURITYCCNACYBERSECURITYCYBEROPSCCNACISCOIOSOSPFVLANSTPACLNATSSHJSONTCPIP';
     let matrixDrops = [];
     let matrixFontSize = 15;
     let matrixColumns = 0;
@@ -1188,14 +1211,14 @@
         brand: 'Prof. Dr. Laerte Peotta de Melo',
         'nav.about': 'Sobre',
         'nav.work': 'Atuação',
-        'nav.repos': 'Repositórios',
-        'nav.cert': 'Certificação',
+        'nav.repos': 'Disciplinas',
+        'nav.cert': 'Certificações',
         'nav.podcast': 'Podcast',
         'nav.contact': 'Contato',
         'hero.eyebrow': 'Professor • Pesquisador • Segurança Cibernética • Redes',
         'hero.title': 'Prof. Dr. Laerte Peotta de Melo',
         'hero.text': 'Professor, pesquisador e profissional com atuação em <strong>Cibersegurança</strong>, <strong>Engenharia de Redes</strong>, <strong>Ciência da Computação</strong>, <strong>crimes cibernéticos</strong>, <strong>forense digital</strong> e <strong>Segurança do Sistema Financeiro</strong>. Mestre e Doutor em Engenharia Elétrica, articula ensino, pesquisa aplicada e produção de materiais acadêmicos e técnicos voltados à formação e ao desenvolvimento profissional.',
-        'hero.btnRepos': 'Ver repositórios',
+        'hero.btnRepos': 'Ver materiais',
         'hero.photoAlt': 'Foto de perfil do Prof. Dr. Laerte Peotta de Melo',
         'metrics.teaching.title': 'Ensino',
         'metrics.teaching.text': 'Graduação, especialização, mestrado e doutorado em Cibersegurança, Engenharia de Redes e Ciência da Computação',
@@ -1236,7 +1259,11 @@
         'profiles.dblpText': 'Publicações acadêmicas',
         'profiles.linkedinText': 'Rede profissional',
         'profiles.githubText': 'Repositórios e materiais',
-        'repos.title': 'Repositórios e materiais',
+        'repos.title': 'Disciplinas e Materiais de Aulas',
+        'certs.title': 'Certificações Profissionais e Grupos de Estudos',
+        'certs.ravens.title': 'Grupo RAVENS',
+        'certs.ravens.text': 'Grupo de estudos e pesquisa em cibersegurança, redes, vulnerabilidades, engenharia e análise de ameaças.',
+        'certs.studyGroup': 'Grupo de estudos',
         'repos.labredes.title': 'Laboratório de Redes',
         'repos.labredes.text': 'Atividades experimentais com dispositivos de rede, análise de protocolos, VLANs e roteamento.',
         'repos.grad': 'Graduação em Engenharia de Redes de Comunicação',
@@ -1253,6 +1280,8 @@
         'repos.postgrad': 'Pós-graduação',
         'repos.ccna.title': 'Certificação CCNA Cisco 200-301',
         'repos.ccna.text': 'Plano de estudos para preparação à certificação Cisco CCNA 200-301, com organização semanal, laboratórios, comandos e revisão.',
+        'repos.ccnacyber.title': 'Certificação CCNA Cybersecurity 200-201',
+        'repos.ccnacyber.text': 'Plano de estudos para a certificação CCNA Cybersecurity 200-201, com foco em operações de segurança, SOC, monitoramento, análise de hosts, intrusão em rede e resposta a incidentes.',
         'repos.ccst.title': 'Certificação CCST Cybersecurity 100-160',
         'repos.ccst.text': 'Plano de estudos para a certificação Cisco Certified Support Technician Cybersecurity, exame 100-160, com fundamentos de segurança, redes, endpoints, vulnerabilidades, risco e resposta a incidentes.',
         'repos.fortinet.title': 'Certificação Fortinet NSE 1 a NSE 3',
@@ -1281,14 +1310,14 @@
         brand: 'Prof. Dr. Laerte Peotta de Melo',
         'nav.about': 'About',
         'nav.work': 'Expertise',
-        'nav.repos': 'Repositories',
-        'nav.cert': 'Certification',
+        'nav.repos': 'Courses',
+        'nav.cert': 'Certifications',
         'nav.podcast': 'Podcast',
         'nav.contact': 'Contact',
         'hero.eyebrow': 'Professor • Researcher • Cybersecurity • Networks',
         'hero.title': 'Prof. Dr. Laerte Peotta de Melo',
         'hero.text': 'Professor, researcher, and professional working in <strong>Cybersecurity</strong>, <strong>Network Engineering</strong>, <strong>Computer Science</strong>, <strong>cybercrime</strong>, <strong>digital forensics</strong>, and <strong>Financial System Security</strong>. Holding both M.Sc. and Ph.D. degrees in Electrical Engineering, he connects teaching, applied research, and the development of academic and technical materials aimed at education and professional growth.',
-        'hero.btnRepos': 'View repositories',
+        'hero.btnRepos': 'View materials',
         'hero.photoAlt': 'Profile photo of Prof. Dr. Laerte Peotta de Melo',
         'metrics.teaching.title': 'Teaching',
         'metrics.teaching.text': 'Undergraduate, specialization, master’s, and doctoral education in Cybersecurity, Network Engineering, and Computer Science',
@@ -1329,7 +1358,11 @@
         'profiles.dblpText': 'Academic publications',
         'profiles.linkedinText': 'Professional network',
         'profiles.githubText': 'Repositories and materials',
-        'repos.title': 'Repositories and materials',
+        'repos.title': 'Courses and Teaching Materials',
+        'certs.title': 'Professional Certifications and Study Groups',
+        'certs.ravens.title': 'RAVENS Group',
+        'certs.ravens.text': 'Study and research group in cybersecurity, networks, vulnerabilities, engineering, and threat analysis.',
+        'certs.studyGroup': 'Study group',
         'repos.labredes.title': 'Network Laboratory',
         'repos.labredes.text': 'Experimental activities with network devices, protocol analysis, VLANs, and routing.',
         'repos.grad': 'Undergraduate Program in Communication Network Engineering',
@@ -1346,6 +1379,8 @@
         'repos.postgrad': 'Graduate studies',
         'repos.ccna.title': 'Cisco CCNA 200-301 Certification',
         'repos.ccna.text': 'Study plan for Cisco CCNA 200-301 certification preparation, including weekly organization, labs, commands, and review.',
+        'repos.ccnacyber.title': 'CCNA Cybersecurity 200-201 Certification',
+        'repos.ccnacyber.text': 'Study plan for the CCNA Cybersecurity 200-201 certification, focused on security operations, SOC, monitoring, host analysis, network intrusion analysis, and incident response.',
         'repos.ccst.title': 'CCST Cybersecurity 100-160 Certification',
         'repos.ccst.text': 'Study plan for the Cisco Certified Support Technician Cybersecurity certification, exam 100-160, covering security fundamentals, networks, endpoints, vulnerabilities, risk, and incident response.',
         'repos.fortinet.title': 'Fortinet NSE 1 to NSE 3 Certification',
@@ -1353,7 +1388,7 @@
         'repos.certification': 'Professional certification',
         'repos.accessPlan': 'Access plan',
         'repos.accessGuide': 'Access guide',
-        'repos.guide.title': 'Guide – How to write a paper or thesis',
+        'repos.guide.title': 'Guide - How to write a paper or thesis',
         'repos.guide.text': 'Support material for organizing, writing, and developing academic work.',
         'repos.support': 'Support material',
         'repos.read': 'Read material',
@@ -1374,14 +1409,14 @@
         brand: 'Prof. Dr. Laerte Peotta de Melo',
         'nav.about': 'Sobre',
         'nav.work': 'Actuación',
-        'nav.repos': 'Repositorios',
-        'nav.cert': 'Certificación',
+        'nav.repos': 'Asignaturas',
+        'nav.cert': 'Certificaciones',
         'nav.podcast': 'Podcast',
         'nav.contact': 'Contacto',
         'hero.eyebrow': 'Profesor • Investigador • Ciberseguridad • Redes',
         'hero.title': 'Prof. Dr. Laerte Peotta de Melo',
         'hero.text': 'Profesor, investigador y profesional con actuación en <strong>Ciberseguridad</strong>, <strong>Ingeniería de Redes</strong>, <strong>Ciencias de la Computación</strong>, <strong>ciberdelitos</strong>, <strong>forense digital</strong> y <strong>Seguridad del Sistema Financiero</strong>. Magíster y Doctor en Ingeniería Eléctrica, articula docencia, investigación aplicada y producción de materiales académicos y técnicos orientados a la formación y al desarrollo profesional.',
-        'hero.btnRepos': 'Ver repositorios',
+        'hero.btnRepos': 'Ver materiales',
         'hero.photoAlt': 'Foto de perfil del Prof. Dr. Laerte Peotta de Melo',
         'metrics.teaching.title': 'Docencia',
         'metrics.teaching.text': 'Grado, especialización, maestría y doctorado en Ciberseguridad, Ingeniería de Redes y Ciencias de la Computación',
@@ -1422,7 +1457,11 @@
         'profiles.dblpText': 'Publicaciones académicas',
         'profiles.linkedinText': 'Red profesional',
         'profiles.githubText': 'Repositorios y materiales',
-        'repos.title': 'Repositorios y materiales',
+        'repos.title': 'Asignaturas y Materiales de Clases',
+        'certs.title': 'Certificaciones Profesionales y Grupos de Estudio',
+        'certs.ravens.title': 'Grupo RAVENS',
+        'certs.ravens.text': 'Grupo de estudio e investigación en ciberseguridad, redes, vulnerabilidades, ingeniería y análisis de amenazas.',
+        'certs.studyGroup': 'Grupo de estudio',
         'repos.labredes.title': 'Laboratorio de Redes',
         'repos.labredes.text': 'Actividades experimentales con dispositivos de red, análisis de protocolos, VLAN y enrutamiento.',
         'repos.grad': 'Carrera de Ingeniería de Redes de Comunicación',
@@ -1439,6 +1478,8 @@
         'repos.postgrad': 'Posgrado',
         'repos.ccna.title': 'Certificación Cisco CCNA 200-301',
         'repos.ccna.text': 'Plan de estudios para la preparación de la certificación Cisco CCNA 200-301, con organización semanal, laboratorios, comandos y revisión.',
+        'repos.ccnacyber.title': 'Certificación CCNA Cybersecurity 200-201',
+        'repos.ccnacyber.text': 'Plan de estudios para la certificación CCNA Cybersecurity 200-201, con foco en operaciones de seguridad, SOC, monitoreo, análisis de hosts, intrusión en red y respuesta a incidentes.',
         'repos.ccst.title': 'Certificación CCST Cybersecurity 100-160',
         'repos.ccst.text': 'Plan de estudios para la certificación Cisco Certified Support Technician Cybersecurity, examen 100-160, con fundamentos de seguridad, redes, endpoints, vulnerabilidades, riesgo y respuesta a incidentes.',
         'repos.fortinet.title': 'Certificación Fortinet NSE 1 a NSE 3',
@@ -1446,7 +1487,7 @@
         'repos.certification': 'Certificación profesional',
         'repos.accessPlan': 'Acceder al plan',
         'repos.accessGuide': 'Acceder a la guía',
-        'repos.guide.title': 'Guía – Cómo escribir un artículo o TFG',
+        'repos.guide.title': 'Guía - Cómo escribir un artículo o TFG',
         'repos.guide.text': 'Material de apoyo para la organización, redacción y desarrollo de trabajos académicos.',
         'repos.support': 'Material de apoyo',
         'repos.read': 'Leer material',
