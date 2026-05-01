@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plano de Estudos CCST Cybersecurity 100-160 | Prof. Dr. Laerte Peotta de Melo</title>
+  <meta name="description" content="Plano de estudos para a certificação Cisco Certified Support Technician CCST Cybersecurity 100-160, com rotina semanal, revisão, laboratórios e critérios de prontidão." />
+  <meta name="author" content="Prof. Dr. Laerte Peotta de Melo" />
+
+  <style>
+    :root {
+      --bg: #020403;
+      --bg-soft: rgba(2, 15, 9, 0.86);
+      --panel: rgba(0, 22, 13, 0.82);
+      --panel-2: rgba(0, 36, 20, 0.72);
+      --text: #d9ffe9;
+      --muted: #8ad9ac;
+      --green: #00ff7f;
+      --green-2: #20ff9a;
+      --green-dark: #006b3c;
+      --line: rgba(0, 255, 127, 0.28);
+      --danger: #ffcc66;
+      --shadow: 0 0 26px rgba(0, 255, 127, 0.22);
+      --radius: 22px;
+      --max: 1180px;
+      --mono: "Cascadia Code", "Fira Code", "Consolas", monospace;
+      --sans: Inter, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: radial-gradient(circle at 20% 10%, rgba(0, 255, 127, 0.14), transparent 30%),
+                  radial-gradient(circle at 80% 20%, rgba(32, 255, 154, 0.10), transparent 25%),
+                  linear-gradient(180deg, #020403 0%, #031008 45%, #010302 100%);
+      font-family: var(--sans);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    canvas#matrix {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      opacity: 0.48;
+      background: #020403;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,0,0,.16), rgba(0,0,0,.72)),
+                  repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0, rgba(255,255,255,.025) 1px, transparent 1px, transparent 4px);
+    }
+
+    a { color: var(--green-2); text-decoration: none; }
+    a:hover { text-shadow: 0 0 12px rgba(0,255,127,.9); }
+
+    .wrap {
+      width: min(var(--max), calc(100% - 34px));
+      margin: 0 auto;
+    }
+
+    header.hero {
+      padding: 34px 0 22px;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 34px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .brand small {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .82rem;
+      font-weight: 500;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      border: 1px solid var(--line);
+      background: rgba(0, 20, 10, .72);
+      padding: 9px 13px;
+      border-radius: 999px;
+      color: var(--text);
+      font-size: .9rem;
+      box-shadow: 0 0 12px rgba(0,255,127,.10);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .hero-card, .stat-card, section.card, .week-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(2, 25, 12, .90), rgba(0, 10, 6, .90));
+      box-shadow: var(--shadow), inset 0 0 28px rgba(0,255,127,.035);
+      border-radius: var(--radius);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-card {
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card:before {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -120px;
+      top: -120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,255,127,.24), transparent 60%);
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      font-size: .86rem;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 5vw, 4.6rem);
+      line-height: 1.03;
+      letter-spacing: -1.8px;
+      color: #ecfff4;
+      text-shadow: 0 0 22px rgba(0,255,127,.36);
+    }
+
+    h2, h3, h4 { color: #effff6; line-height: 1.25; }
+    h2 { font-size: clamp(1.55rem, 2.5vw, 2.2rem); margin: 0 0 16px; }
+    h3 { font-size: 1.28rem; margin: 26px 0 10px; }
+    h4 { font-size: 1.05rem; margin: 20px 0 8px; color: var(--green-2); }
+
+    .lead {
+      font-size: 1.12rem;
+      color: #c7f7d9;
+      max-width: 760px;
+      margin: 18px 0 0;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .tag {
+      border: 1px solid rgba(0,255,127,.32);
+      color: var(--green-2);
+      background: rgba(0, 255, 127, .08);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: .86rem;
+    }
+
+    .stats {
+      display: grid;
+      gap: 14px;
+    }
+
+    .stat-card {
+      padding: 20px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.58rem;
+      color: var(--green);
+      font-family: var(--mono);
+    }
+
+    .stat-card span { color: var(--muted); }
+
+    main { padding: 34px 0 60px; }
+
+    section.card {
+      padding: 28px;
+      margin: 24px 0;
+      scroll-margin-top: 18px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-title .dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 18px rgba(0,255,127,.9);
+      flex: 0 0 auto;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .mini-card {
+      border: 1px solid rgba(0,255,127,.20);
+      background: rgba(0, 12, 7, .70);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .mini-card p { margin: 6px 0 0; color: #c2f0d4; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid rgba(0,255,127,.24);
+      margin: 16px 0 8px;
+      background: rgba(0, 10, 6, .70);
+    }
+
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid rgba(0,255,127,.16);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--green);
+      font-family: var(--mono);
+      background: rgba(0,255,127,.08);
+      font-weight: 700;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    ul, ol { padding-left: 1.25rem; }
+    li { margin: 6px 0; }
+
+    code, pre {
+      font-family: var(--mono);
+    }
+
+    code {
+      color: var(--green-2);
+      background: rgba(0,255,127,.08);
+      border: 1px solid rgba(0,255,127,.18);
+      border-radius: 6px;
+      padding: 2px 6px;
+    }
+
+    pre {
+      margin: 14px 0;
+      padding: 18px;
+      overflow-x: auto;
+      border-radius: 18px;
+      border: 1px solid rgba(0,255,127,.22);
+      background: rgba(0, 4, 3, .88);
+      color: #d7ffe7;
+      box-shadow: inset 0 0 20px rgba(0,255,127,.06);
+    }
+
+    .weeks {
+      display: grid;
+      gap: 20px;
+    }
+
+    .week-card {
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .week-card:before {
+      content: attr(data-week);
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      font-family: var(--mono);
+      font-size: 3.3rem;
+      color: rgba(0,255,127,.07);
+      font-weight: 800;
+    }
+
+    .week-card h3 {
+      margin-top: 0;
+      color: var(--green-2);
+    }
+
+    .callout {
+      border-left: 4px solid var(--green);
+      background: rgba(0,255,127,.07);
+      padding: 16px 18px;
+      border-radius: 14px;
+      margin: 18px 0;
+    }
+
+    .warning {
+      border-left-color: var(--danger);
+      background: rgba(255,204,102,.08);
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 14px;
+    }
+
+    .summary-list a {
+      display: block;
+      padding: 12px 14px;
+      border: 1px solid rgba(0,255,127,.20);
+      border-radius: 14px;
+      background: rgba(0, 14, 8, .76);
+      color: #dfffe9;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 26px 0 40px;
+      color: var(--muted);
+      text-align: center;
+      font-family: var(--mono);
+      font-size: .88rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid, .grid-2, .grid-3, .summary-list { grid-template-columns: 1fr; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .nav { justify-content: flex-start; }
+      .hero-card { padding: 26px; }
+    }
+
+    @media print {
+      canvas#matrix, .overlay, .nav { display: none; }
+      body { background: #fff; color: #111; }
+      .hero-card, .stat-card, section.card, .week-card, .mini-card, table, pre {
+        box-shadow: none;
+        background: #fff;
+        border-color: #aaa;
+        color: #111;
+      }
+      h1, h2, h3, h4, .eyebrow, .stat-card strong, th, a { color: #111; text-shadow: none; }
+      .tag, code { color: #111; border-color: #aaa; background: #f1f1f1; }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <div class="overlay" aria-hidden="true"></div>
+
+  <header class="hero">
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand">
+          Prof. Dr. Laerte Peotta de Melo
+          <small>Professor • Pesquisador • Segurança Cibernética • Redes</small>
+        </div>
+        <nav class="nav" aria-label="Navegação principal">
+          <a href="#objetivo">Objetivo</a>
+          <a href="#dominios">Domínios</a>
+          <a href="#rotina">Rotina</a>
+          <a href="#semanas">6 semanas</a>
+          <a href="#prontidao">Prontidão</a>
+        </nav>
+      </div>
+
+      <div class="hero-grid">
+        <div class="hero-card">
+          <div class="eyebrow">Cisco CCST Cybersecurity 100-160 • Plano de estudos</div>
+          <h1>Preparação CCST Cybersecurity em 60 minutos por dia</h1>
+          <p class="lead">Roteiro progressivo de 6 semanas com teoria, revisão, laboratórios defensivos, vocabulário essencial, questões e simulado final para a certificação Cisco Certified Support Technician Cybersecurity.</p>
+          <div class="hero-tags">
+            <span class="tag">6 semanas</span>
+            <span class="tag">42 horas</span>
+            <span class="tag">Labs defensivos</span>
+            <span class="tag">SOC nível 1</span>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat-card"><strong>100-160</strong><span>Exame CCST Cybersecurity</span></div>
+          <div class="stat-card"><strong>50 min</strong><span>Duração oficial do exame</span></div>
+          <div class="stat-card"><strong>US$ 125</strong><span>Preço informado pela Cisco</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card" id="sumario">
+      <div class="section-title"><span class="dot"></span><h2>Sumário</h2></div>
+      <div class="summary-list">
+        <a href="#objetivo">Plano de Estudos CCST Cybersecurity 100-160</a>
+        <a href="#dominios">Domínios do exame</a>
+        <a href="#estrategia">Estratégia geral de estudo</a>
+        <a href="#rotina">Organização da sessão de 60 minutos</a>
+        <a href="#ferramentas">Ferramentas recomendadas</a>
+        <a href="#semanas">Plano semanal completo</a>
+        <a href="#checklist">Checklist essencial</a>
+        <a href="#prontidao">Critério para marcar a prova</a>
+      </div>
+    </section>
+
+    <section class="card" id="objetivo">
+      <div class="section-title"><span class="dot"></span><h2>Plano de Estudos CCST Cybersecurity 100-160</h2></div>
+      <p><strong>Prof:</strong> Dr. Laerte Peotta de Melo</p>
+      <p><strong>Certificação:</strong> Cisco Certified Support Technician - CCST Cybersecurity</p>
+      <p><strong>Exame:</strong> 100-160 CCST Cybersecurity</p>
+      <p><strong>Carga disponível:</strong> 60 minutos por dia</p>
+      <p><strong>Duração sugerida:</strong> 6 semanas</p>
+      <p><strong>Carga total aproximada:</strong> 42 horas</p>
+
+      <div class="callout">
+        <strong>Objetivo do plano.</strong> Organizar uma preparação objetiva, progressiva e prática para a certificação CCST Cybersecurity, formando uma base sólida para quem deseja avançar depois para Cisco CyberOps Associate, CCNA Cybersecurity ou trilhas profissionais em operações de segurança.
+      </div>
+    </section>
+
+    <section class="card" id="dominios">
+      <div class="section-title"><span class="dot"></span><h2>Domínios do exame CCST Cybersecurity</h2></div>
+      <p>O exame valida conhecimentos iniciais de cibersegurança, com foco em princípios de segurança, segurança de redes, segurança de endpoints, avaliação de vulnerabilidades, gestão de risco e tratamento de incidentes.</p>
+      <table>
+        <thead>
+          <tr><th>Domínio</th><th>Foco de estudo</th><th>Prioridade</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Essential Security Principles</td><td>CIA, ameaças, vulnerabilidades, risco, controles e conceitos básicos</td><td>Alta</td></tr>
+          <tr><td>Basic Network Security Concepts</td><td>Firewall, IDS/IPS, VPN, segmentação, portas, protocolos e tráfego</td><td>Muito alta</td></tr>
+          <tr><td>Endpoint Security Concepts</td><td>Antivírus, EDR, hardening, patching, backup e proteção de dispositivos</td><td>Alta</td></tr>
+          <tr><td>Vulnerability Assessment and Risk Management</td><td>CVE, CVSS, scanner, exposição, probabilidade, impacto e tratamento de risco</td><td>Alta</td></tr>
+          <tr><td>Incident Handling</td><td>Eventos, incidentes, logs, escalonamento, contenção, erradicação e recuperação</td><td>Muito alta</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card" id="estrategia">
+      <div class="section-title"><span class="dot"></span><h2>Estratégia geral de estudo</h2></div>
+      <p>Com apenas 60 minutos por dia, o estudo deve ser direto, recorrente e orientado a conceitos aplicados. A recomendação é estudar todos os dias, alternando teoria, revisão, questões e laboratórios defensivos simples.</p>
+      <table>
+        <thead>
+          <tr><th>Dia</th><th>Atividade principal</th><th>Tempo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Segunda-feira</td><td>Teoria principal do domínio da semana</td><td>60 min</td></tr>
+          <tr><td>Terça-feira</td><td>Resumo, glossário e mapa mental</td><td>60 min</td></tr>
+          <tr><td>Quarta-feira</td><td>Laboratório defensivo guiado</td><td>60 min</td></tr>
+          <tr><td>Quinta-feira</td><td>Estudo de caso e análise de cenário</td><td>60 min</td></tr>
+          <tr><td>Sexta-feira</td><td>Questões e flashcards</td><td>60 min</td></tr>
+          <tr><td>Sábado</td><td>Revisão acumulada</td><td>60 min</td></tr>
+          <tr><td>Domingo</td><td>Simulado curto ou revisão leve</td><td>60 min</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card" id="rotina">
+      <div class="section-title"><span class="dot"></span><h2>Organização de cada sessão de 60 minutos</h2></div>
+      <div class="grid-3">
+        <div class="mini-card">
+          <h3>Dia de teoria</h3>
+          <table>
+            <tr><th>Bloco</th><th>Tempo</th></tr>
+            <tr><td>Estudo do conteúdo</td><td>35 min</td></tr>
+            <tr><td>Anotações resumidas</td><td>10 min</td></tr>
+            <tr><td>Questões rápidas</td><td>10 min</td></tr>
+            <tr><td>Flashcards</td><td>5 min</td></tr>
+          </table>
+        </div>
+        <div class="mini-card">
+          <h3>Dia de laboratório</h3>
+          <table>
+            <tr><th>Bloco</th><th>Tempo</th></tr>
+            <tr><td>Preparar ambiente</td><td>10 min</td></tr>
+            <tr><td>Executar atividade</td><td>30 min</td></tr>
+            <tr><td>Interpretar resultado</td><td>10 min</td></tr>
+            <tr><td>Registrar aprendizado</td><td>10 min</td></tr>
+          </table>
+        </div>
+        <div class="mini-card">
+          <h3>Dia de revisão</h3>
+          <table>
+            <tr><th>Bloco</th><th>Tempo</th></tr>
+            <tr><td>Revisar anotações</td><td>15 min</td></tr>
+            <tr><td>Refazer questões</td><td>20 min</td></tr>
+            <tr><td>Corrigir erros</td><td>20 min</td></tr>
+            <tr><td>Marcar dúvidas</td><td>5 min</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="ferramentas">
+      <div class="section-title"><span class="dot"></span><h2>Ferramentas recomendadas</h2></div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Ambiente de prática</h3>
+          <ul>
+            <li>Cisco Packet Tracer para cenários simples de rede.</li>
+            <li>Wireshark para observar pacotes, protocolos e fluxos.</li>
+            <li>Windows Event Viewer ou Linux journald para leitura de logs.</li>
+            <li>Máquina virtual Linux para comandos básicos de rede e segurança.</li>
+            <li>Planilha ou Markdown para glossário e controle de revisão.</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h3>Materiais de estudo</h3>
+          <ul>
+            <li>Cisco CCST Cybersecurity Exam Topics oficial.</li>
+            <li>Cisco Networking Academy - Junior Cybersecurity Analyst Career Path.</li>
+            <li>Cisco Press - CCST Cybersecurity 100-160 Official Cert Guide.</li>
+            <li>Questões de revisão próprias, flashcards e pequenos estudos de caso.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="semanas">
+      <div class="section-title"><span class="dot"></span><h2>Plano semanal completo - 6 semanas</h2></div>
+      <div class="weeks">
+        <article class="week-card" id="semana-1" data-week="01">
+          <h3>Semana 1 - Princípios essenciais de segurança</h3>
+          <p><strong>Objetivo:</strong> compreender a base conceitual de cibersegurança e diferenciar ameaça, vulnerabilidade, risco, controle, evento e incidente.</p>
+          <table>
+            <tr><th>Assunto</th><th>Tempo</th></tr>
+            <tr><td>Tríade CIA: confidencialidade, integridade e disponibilidade</td><td>1h</td></tr>
+            <tr><td>Ameaças comuns: phishing, malware, engenharia social, brute force e DoS</td><td>1h</td></tr>
+            <tr><td>Vulnerabilidade, risco, impacto e probabilidade</td><td>1h</td></tr>
+            <tr><td>Controles preventivos, detectivos e corretivos</td><td>1h</td></tr>
+            <tr><td>Autenticação, autorização, MFA, privilégio mínimo e RBAC</td><td>1h</td></tr>
+            <tr><td>Questões e flashcards</td><td>1h</td></tr>
+            <tr><td>Revisão semanal</td><td>1h</td></tr>
+          </table>
+          <h4>Exercício da semana</h4>
+          <p>Criar uma tabela classificando situações como ameaça, vulnerabilidade, risco, controle, evento ou incidente.</p>
+        </article>
+
+        <article class="week-card" id="semana-2" data-week="02">
+          <h3>Semana 2 - Segurança de redes</h3>
+          <p><strong>Objetivo:</strong> relacionar fundamentos de redes com mecanismos básicos de proteção, filtragem, segmentação e monitoramento.</p>
+          <table>
+            <tr><th>Assunto</th><th>Tempo</th></tr>
+            <tr><td>Revisão de TCP/IP, portas, protocolos e tráfego</td><td>1h</td></tr>
+            <tr><td>Firewall, regras, filtragem por IP, porta e protocolo</td><td>1h</td></tr>
+            <tr><td>IDS, IPS, alertas e detecção de comportamento suspeito</td><td>1h</td></tr>
+            <tr><td>VPN, acesso remoto seguro e criptografia em trânsito</td><td>1h</td></tr>
+            <tr><td>Segmentação, VLAN, DMZ e separação de redes</td><td>1h</td></tr>
+            <tr><td>Laboratório conceitual no Packet Tracer ou desenho de topologia</td><td>1h</td></tr>
+            <tr><td>Questões e revisão</td><td>1h</td></tr>
+          </table>
+          <h4>Topologia conceitual</h4>
+          <pre><code>Internet -> Firewall -> DMZ -> Servidor Web
+                  |
+                  +-> Rede Interna -> Estações de trabalho
+                  |
+                  +-> VPN -> Usuário remoto</code></pre>
+        </article>
+
+        <article class="week-card" id="semana-3" data-week="03">
+          <h3>Semana 3 - Segurança de endpoints</h3>
+          <p><strong>Objetivo:</strong> compreender como proteger computadores, servidores, notebooks, dispositivos móveis e sistemas operacionais.</p>
+          <table>
+            <tr><th>Assunto</th><th>Tempo</th></tr>
+            <tr><td>Antivírus, EDR, detecção por assinatura e comportamento</td><td>1h</td></tr>
+            <tr><td>Patching, atualização e correção de vulnerabilidades</td><td>1h</td></tr>
+            <tr><td>Hardening, redução de superfície de ataque e serviços desnecessários</td><td>1h</td></tr>
+            <tr><td>Backup, restauração e resiliência operacional</td><td>1h</td></tr>
+            <tr><td>Controle de aplicações, privilégios e dispositivos móveis</td><td>1h</td></tr>
+            <tr><td>Checklist de proteção de endpoint</td><td>1h</td></tr>
+            <tr><td>Questões e revisão</td><td>1h</td></tr>
+          </table>
+          <h4>Checklist mínimo</h4>
+          <pre><code>- Sistema operacional atualizado
+- Antivírus ou EDR ativo
+- Firewall local habilitado
+- Usuário sem privilégio administrativo
+- Backup configurado
+- MFA nas contas críticas
+- Criptografia de disco habilitada</code></pre>
+        </article>
+
+        <article class="week-card" id="semana-4" data-week="04">
+          <h3>Semana 4 - Vulnerabilidades e gestão de risco</h3>
+          <p><strong>Objetivo:</strong> entender como vulnerabilidades são identificadas, classificadas, priorizadas e tratadas.</p>
+          <table>
+            <tr><th>Assunto</th><th>Tempo</th></tr>
+            <tr><td>Vulnerabilidade, exploit, exposição e superfície de ataque</td><td>1h</td></tr>
+            <tr><td>CVE, CVSS e severidade</td><td>1h</td></tr>
+            <tr><td>Varredura de vulnerabilidades em nível conceitual</td><td>1h</td></tr>
+            <tr><td>Risco: probabilidade, impacto e priorização</td><td>1h</td></tr>
+            <tr><td>Tratamento de risco: mitigar, aceitar, transferir ou evitar</td><td>1h</td></tr>
+            <tr><td>Estudo de caso com priorização de correções</td><td>1h</td></tr>
+            <tr><td>Questões e revisão</td><td>1h</td></tr>
+          </table>
+          <h4>Exercício da semana</h4>
+          <p>Receber uma lista fictícia de vulnerabilidades e ordenar por severidade, impacto no negócio e facilidade de correção.</p>
+        </article>
+
+        <article class="week-card" id="semana-5" data-week="05">
+          <h3>Semana 5 - Tratamento de incidentes</h3>
+          <p><strong>Objetivo:</strong> compreender o ciclo básico de resposta a incidentes, leitura de alertas, escalonamento e preservação de evidências.</p>
+          <table>
+            <tr><th>Assunto</th><th>Tempo</th></tr>
+            <tr><td>Evento, alerta, incidente e severidade</td><td>1h</td></tr>
+            <tr><td>Preparação, identificação, contenção, erradicação e recuperação</td><td>1h</td></tr>
+            <tr><td>Logs de endpoint, rede e autenticação</td><td>1h</td></tr>
+            <tr><td>Escalonamento, comunicação e registro de evidências</td><td>1h</td></tr>
+            <tr><td>Noções de forense digital e cadeia de custódia em nível introdutório</td><td>1h</td></tr>
+            <tr><td>Estudo de caso de host comprometido</td><td>1h</td></tr>
+            <tr><td>Questões e revisão</td><td>1h</td></tr>
+          </table>
+          <h4>Cenário de estudo</h4>
+          <pre><code>Um computador interno começou a enviar tráfego suspeito para a Internet.
+1. Identificar o evento
+2. Classificar a severidade
+3. Isolar o host, se necessário
+4. Coletar logs relevantes
+5. Escalonar para o responsável
+6. Registrar lições aprendidas</code></pre>
+        </article>
+
+        <article class="week-card" id="semana-6" data-week="06">
+          <h3>Semana 6 - Revisão final e simulado</h3>
+          <p><strong>Objetivo:</strong> consolidar o conteúdo, corrigir pontos fracos e avaliar prontidão para a prova.</p>
+          <table>
+            <tr><th>Atividade</th><th>Tempo</th></tr>
+            <tr><td>Revisão de princípios de segurança</td><td>1h</td></tr>
+            <tr><td>Revisão de segurança de redes</td><td>1h</td></tr>
+            <tr><td>Revisão de endpoints</td><td>1h</td></tr>
+            <tr><td>Revisão de vulnerabilidades e risco</td><td>1h</td></tr>
+            <tr><td>Revisão de tratamento de incidentes</td><td>1h</td></tr>
+            <tr><td>Simulado parcial ou completo</td><td>1h</td></tr>
+            <tr><td>Correção do simulado e plano de reforço</td><td>1h</td></tr>
+          </table>
+          <h4>Revisão final</h4>
+          <p>Antes da prova, o aluno deve explicar os principais termos sem consulta e acertar simulados de forma consistente.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="card" id="checklist">
+      <div class="section-title"><span class="dot"></span><h2>Checklist essencial para a prova</h2></div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Conceitos que devem estar claros</h3>
+          <ul>
+            <li>Confidencialidade, integridade e disponibilidade.</li>
+            <li>Ameaça, vulnerabilidade, risco, evento e incidente.</li>
+            <li>Firewall, IDS, IPS, VPN, DMZ e segmentação.</li>
+            <li>Criptografia, hash, assinatura digital, certificado e MFA.</li>
+            <li>Hardening, patching, backup, antivírus e EDR.</li>
+            <li>CVE, CVSS, severidade, impacto e probabilidade.</li>
+            <li>Fases básicas de resposta a incidentes.</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h3>Vocabulário mínimo</h3>
+          <ul>
+            <li>Authentication, authorization e accounting.</li>
+            <li>Least privilege e role-based access control.</li>
+            <li>Malware, phishing, ransomware e social engineering.</li>
+            <li>Log, alert, event, incident e escalation.</li>
+            <li>Containment, eradication, recovery e lessons learned.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="prontidao">
+      <div class="section-title"><span class="dot"></span><h2>Critério para marcar a prova</h2></div>
+      <p>Recomenda-se marcar a prova quando os seguintes critérios forem atendidos:</p>
+      <table>
+        <thead>
+          <tr><th>Habilidade</th><th>Meta</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Conceitos básicos de segurança</td><td>Explicar sem consulta e diferenciar exemplos práticos.</td></tr>
+          <tr><td>Segurança de redes</td><td>Identificar o papel de firewall, IDS, IPS, VPN e segmentação.</td></tr>
+          <tr><td>Segurança de endpoints</td><td>Montar checklist básico de proteção e justificar cada controle.</td></tr>
+          <tr><td>Risco e vulnerabilidades</td><td>Classificar severidade e sugerir tratamento de risco.</td></tr>
+          <tr><td>Incidentes</td><td>Descrever as fases de resposta e o momento de escalonamento.</td></tr>
+          <tr><td>Simulados</td><td>Atingir 80% ou mais de acertos de forma consistente.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout warning">
+        <strong>Observação.</strong> A CCST Cybersecurity é uma certificação de entrada. Para uma trilha mais forte em cibersegurança, use este plano como base e avance para Cisco CyberOps Associate, CCNA Cybersecurity ou CCNP Cybersecurity.
+      </div>
+    </section>
+
+    <section class="card" id="cronograma">
+      <div class="section-title"><span class="dot"></span><h2>Cronograma resumido</h2></div>
+      <table>
+        <thead><tr><th>Semana</th><th>Tema principal</th><th>Carga</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Princípios essenciais de segurança</td><td>7h</td></tr>
+          <tr><td>2</td><td>Segurança de redes</td><td>7h</td></tr>
+          <tr><td>3</td><td>Segurança de endpoints</td><td>7h</td></tr>
+          <tr><td>4</td><td>Vulnerabilidades e gestão de risco</td><td>7h</td></tr>
+          <tr><td>5</td><td>Tratamento de incidentes</td><td>7h</td></tr>
+          <tr><td>6</td><td>Revisão final e simulado</td><td>7h</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>Plano completo</strong></td><td><strong>42h</strong></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card" id="referencias">
+      <div class="section-title"><span class="dot"></span><h2>Referências e links úteis</h2></div>
+      <ul>
+        <li><a href="https://www.cisco.com/site/us/en/learn/training-certifications/exams/ccst-cybersecurity.html" target="_blank" rel="noopener">Página oficial do exame Cisco CCST Cybersecurity 100-160</a></li>
+        <li><a href="https://learningnetwork.cisco.com/s/ccst-cybersecurity-exam-topics" target="_blank" rel="noopener">Tópicos oficiais do exame no Cisco Learning Network</a></li>
+        <li><a href="https://www.netacad.com/" target="_blank" rel="noopener">Cisco Networking Academy</a></li>
+        <li><a href="https://www.ciscopress.com/store/cisco-certified-support-technician-ccst-cybersecurity-9780138203924" target="_blank" rel="noopener">Cisco Press - CCST Cybersecurity 100-160 Official Cert Guide</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">Plano gerado para Prof. Dr. Laerte Peotta de Melo • CCST Cybersecurity 100-160</div>
+  </footer>
+
+  <script>
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@#$%&*+-=<>/{}[]()CiscoCCSTCyberSecurity';
+    const fontSize = 15;
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops = Array(columns).fill(1);
+
+    function resetDrops() {
+      columns = Math.floor(canvas.width / fontSize);
+      drops = Array(columns).fill(1);
+    }
+
+    window.addEventListener('resize', resetDrops);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.075)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00ff7f';
+      ctx.font = fontSize + 'px Consolas, monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.968) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 44);
+  </script>
+</body>
+</html>
