@@ -63,6 +63,27 @@
     a { color: var(--green-2); text-decoration: none; }
     a:hover { text-shadow: 0 0 12px rgba(0,255,127,.9); }
 
+    .exam-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,255,127,.28);
+      background: rgba(0,255,127,.08);
+      color: #dfffe9;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      font-size: .86rem;
+    }
+
+    .exam-link:hover {
+      background: rgba(0,255,127,.14);
+      border-color: rgba(0,255,127,.45);
+    }
+
     .wrap {
       width: min(var(--max), calc(100% - 34px));
       margin: 0 auto;
@@ -413,6 +434,7 @@
           <a href="#rotina">Rotina</a>
           <a href="#semanas">6 semanas</a>
           <a href="#prontidao">Prontidão</a>
+          <a href="#exame">Exame</a>
         </nav>
       </div>
 
@@ -432,6 +454,7 @@
         <div class="stats">
           <div class="stat-card"><strong>100-160</strong><span>Exame CCST Cybersecurity</span></div>
           <div class="stat-card"><strong>50 min</strong><span>Duração oficial do exame</span></div>
+          <div class="stat-card"><strong>40–50</strong><span>Questões aproximadas, podendo variar</span></div>
           <div class="stat-card"><strong>US$ 125</strong><span>Preço informado pela Cisco</span></div>
         </div>
       </div>
@@ -450,6 +473,7 @@
         <a href="#semanas">Plano semanal completo</a>
         <a href="#checklist">Checklist essencial</a>
         <a href="#prontidao">Critério para marcar a prova</a>
+        <a href="#exame">Informações do exame e agendamento</a>
       </div>
     </section>
 
@@ -458,6 +482,8 @@
       <p><strong>Prof:</strong> Dr. Laerte Peotta de Melo</p>
       <p><strong>Certificação:</strong> Cisco Certified Support Technician - CCST Cybersecurity</p>
       <p><strong>Exame:</strong> 100-160 CCST Cybersecurity</p>
+      <p><strong>Quantidade de questões:</strong> aproximadamente 40 a 50 questões, podendo variar conforme a versão do exame.</p>
+      <p><strong>Onde fazer:</strong> agendamento pela <a href="https://www.pearsonvue.com/us/en/cisco.html" target="_blank" rel="noreferrer">Pearson VUE</a> ou consulta pela página da <a href="https://certiport.pearsonvue.com/Certifications/Cisco/Certified-Support-Technician/Certify.aspx" target="_blank" rel="noreferrer">Certiport</a>, com realização em centro autorizado de testes ou, quando disponível, na modalidade online supervisionada.</p>
       <p><strong>Carga disponível:</strong> 60 minutos por dia</p>
       <p><strong>Duração sugerida:</strong> 6 semanas</p>
       <p><strong>Carga total aproximada:</strong> 42 horas</p>
@@ -735,6 +761,48 @@
         <strong>Observação.</strong> A CCST Cybersecurity é uma certificação de entrada. Para uma trilha mais forte em cibersegurança, use este plano como base e avance para Cisco CyberOps Associate, CCNA Cybersecurity ou CCNP Cybersecurity.
       </div>
     </section>
+
+    <section class="card" id="exame">
+      <div class="section-title"><span class="dot"></span><h2>Informações do exame e agendamento</h2></div>
+      <p>O exame <strong>100-160 CCST Cybersecurity</strong> possui duração oficial de <strong>50 minutos</strong>. A Cisco não informa publicamente um número fixo de questões na página do exame; por isso, para fins de planejamento, recomenda-se considerar aproximadamente <strong>40 a 50 questões</strong>, com possibilidade de variação conforme a versão aplicada.</p>
+
+      <div class="grid-3">
+        <div class="mini-card">
+          <h3>Exame</h3>
+          <p><strong>Código:</strong> 100-160</p>
+          <p><strong>Certificação:</strong> CCST Cybersecurity</p>
+          <p><strong>Duração:</strong> 50 minutos</p>
+        </div>
+        <div class="mini-card">
+          <h3>Questões</h3>
+          <p><strong>Estimativa:</strong> 40 a 50 questões</p>
+          <p><strong>Observação:</strong> a quantidade pode variar conforme a versão do exame.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Onde fazer</h3>
+          <p><strong>Pearson VUE:</strong> agendamento para exames Cisco em centro autorizado de testes ou, quando disponível, por OnVUE online supervisionado.</p>
+          <p><a class="exam-link" href="https://www.pearsonvue.com/us/en/cisco.html" target="_blank" rel="noreferrer">Agendar pela Pearson VUE</a></p>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 18px;">
+        <div class="mini-card">
+          <h3>Link oficial Cisco</h3>
+          <p>Página oficial do exame <strong>100-160 CCST Cybersecurity</strong>, com visão geral, duração, preço, idiomas e botão de agendamento.</p>
+          <p><a class="exam-link" href="https://www.cisco.com/site/us/en/learn/training-certifications/exams/ccst-cybersecurity.html" target="_blank" rel="noreferrer">Ver exame na Cisco</a></p>
+        </div>
+        <div class="mini-card">
+          <h3>Link oficial Certiport</h3>
+          <p>Página da <strong>Certiport</strong> sobre o programa Cisco Certified Support Technician, incluindo informações para certificação, centros autorizados e vouchers.</p>
+          <p><a class="exam-link" href="https://certiport.pearsonvue.com/Certifications/Cisco/Certified-Support-Technician/Certify.aspx" target="_blank" rel="noreferrer">Ver CCST na Certiport</a></p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Orientação para o aluno.</strong> Antes de marcar a prova, confirme a disponibilidade de idioma, modalidade, centro autorizado, prova online e eventuais taxas diretamente nos ambientes oficiais da Cisco, Pearson VUE e Certiport, pois essas opções podem variar por país, cidade e período.
+      </div>
+    </section>
+
 
     <section class="card" id="cronograma">
       <div class="section-title"><span class="dot"></span><h2>Cronograma resumido</h2></div>
