@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plano de Estudos CCNA Cybersecurity 200-201 CCNACBR | Prof. Dr. Laerte Peotta de Melo</title>
+  <meta name="description" content="Plano de estudos para a certificação Cisco CCNA Cybersecurity 200-201 CCNACBR, com rotina semanal, laboratórios, revisão e preparação para atuação em SOC." />
+  <meta name="author" content="Prof. Dr. Laerte Peotta de Melo" />
+
+  <style>
+    :root {
+      --bg: #020403;
+      --bg-soft: rgba(2, 15, 9, 0.86);
+      --panel: rgba(0, 22, 13, 0.82);
+      --panel-2: rgba(0, 36, 20, 0.72);
+      --text: #d9ffe9;
+      --muted: #8ad9ac;
+      --green: #00ff7f;
+      --green-2: #20ff9a;
+      --green-dark: #006b3c;
+      --line: rgba(0, 255, 127, 0.28);
+      --warning: #ffcc66;
+      --shadow: 0 0 26px rgba(0, 255, 127, 0.22);
+      --radius: 22px;
+      --max: 1180px;
+      --mono: "Cascadia Code", "Fira Code", "Consolas", monospace;
+      --sans: Inter, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: radial-gradient(circle at 20% 10%, rgba(0, 255, 127, 0.14), transparent 30%),
+                  radial-gradient(circle at 80% 20%, rgba(32, 255, 154, 0.10), transparent 25%),
+                  linear-gradient(180deg, #020403 0%, #031008 45%, #010302 100%);
+      font-family: var(--sans);
+      line-height: 1.62;
+      overflow-x: hidden;
+    }
+
+    canvas#matrix {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      opacity: 0.48;
+      background: #020403;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,0,0,.16), rgba(0,0,0,.72)),
+                  repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0, rgba(255,255,255,.025) 1px, transparent 1px, transparent 4px);
+    }
+
+    a { color: var(--green-2); text-decoration: none; }
+    a:hover { text-shadow: 0 0 12px rgba(0,255,127,.9); }
+
+    .wrap {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 22px 0;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-family: var(--mono);
+      font-weight: 900;
+      color: #ecfff3;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      text-shadow: var(--shadow);
+    }
+
+    .brand small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .78rem;
+      letter-spacing: .03em;
+      text-transform: none;
+      font-weight: 600;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .nav a, .exam-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,255,127,.28);
+      background: rgba(0,255,127,.08);
+      color: #dfffe9;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      font-size: .82rem;
+      transition: .18s ease;
+    }
+
+    .nav a:hover, .exam-link:hover {
+      transform: translateY(-2px);
+      background: rgba(0,255,127,.18);
+      box-shadow: var(--shadow);
+    }
+
+    header.hero { padding-bottom: 28px; }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.38fr .62fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .hero-card, .stat-card, section.card, .week-card, .mini-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(0, 22, 13, .88), rgba(0, 12, 7, .78));
+      box-shadow: 0 20px 70px rgba(0,0,0,.38), var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 30px;
+      padding: 42px;
+    }
+
+    .hero-card:before, section.card:before, .week-card:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 34px;
+      background: radial-gradient(circle at 18px 17px, #00ff7f 0 4px, transparent 4.5px),
+                  radial-gradient(circle at 38px 17px, #20ff9a 0 4px, transparent 4.5px),
+                  radial-gradient(circle at 58px 17px, #b8ffd0 0 4px, transparent 4.5px),
+                  linear-gradient(180deg, rgba(0,255,127,.12), rgba(0,255,127,.035));
+      border-bottom: 1px solid rgba(0,255,127,.18);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      margin-top: 12px;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,255,127,.24);
+      background: rgba(0,255,127,.08);
+      color: #effff4;
+      font-family: var(--mono);
+      font-size: .86rem;
+      letter-spacing: .04em;
+    }
+
+    h1 {
+      margin: 0;
+      color: #f2fff6;
+      font-size: clamp(2.2rem, 4.8vw, 4.7rem);
+      line-height: 1.02;
+      letter-spacing: -.055em;
+      text-shadow: 0 0 22px rgba(0,255,127,.18);
+    }
+
+    .lead {
+      max-width: 78ch;
+      color: var(--muted);
+      font-size: 1.08rem;
+      margin: 18px 0 0;
+    }
+
+    .hero-tags {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .tag {
+      border: 1px solid rgba(0,255,127,.22);
+      background: rgba(0,255,127,.07);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-family: var(--mono);
+      color: #eafff0;
+      font-size: .88rem;
+    }
+
+    .stats {
+      display: grid;
+      gap: 12px;
+    }
+
+    .stat-card {
+      border-radius: 22px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 112px;
+    }
+
+    .stat-card strong {
+      font-family: var(--mono);
+      color: var(--green);
+      font-size: 2rem;
+      line-height: 1;
+      text-shadow: var(--shadow);
+    }
+
+    .stat-card span {
+      margin-top: 8px;
+      color: var(--muted);
+    }
+
+    main { padding: 18px 0 56px; }
+
+    section.card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      padding: 52px 28px 28px;
+      margin: 18px 0;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 18px rgba(0,255,127,.8);
+      flex: 0 0 auto;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.45rem, 2.8vw, 2.2rem);
+      letter-spacing: -.03em;
+      text-transform: uppercase;
+      color: #effff4;
+    }
+
+    h3 { margin: 0 0 8px; color: #effff4; }
+    h4 { margin: 18px 0 8px; color: var(--green-2); }
+
+    p { margin: 0 0 12px; }
+
+    .muted { color: var(--muted); }
+
+    .summary-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .summary-list a, .mini-card {
+      border-radius: 18px;
+      border: 1px solid rgba(0,255,127,.18);
+      background: rgba(0,255,127,.055);
+      padding: 16px;
+    }
+
+    .grid-2, .grid-3 {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .callout {
+      margin: 18px 0 0;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(0,255,127,.28);
+      background: linear-gradient(135deg, rgba(0,255,127,.12), rgba(0,255,127,.035));
+      color: #eafff0;
+    }
+
+    .callout.warning {
+      border-color: rgba(255,204,102,.38);
+      background: linear-gradient(135deg, rgba(255,204,102,.11), rgba(0,255,127,.03));
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid rgba(0,255,127,.20);
+      margin-top: 12px;
+    }
+
+    th, td {
+      padding: 13px 14px;
+      border-bottom: 1px solid rgba(0,255,127,.14);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(0,255,127,.12);
+      color: #f0fff5;
+      font-family: var(--mono);
+      font-size: .88rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+    td { color: var(--muted); }
+    td strong { color: var(--text); }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    li { margin: 7px 0; }
+
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: rgba(0,0,0,.34);
+      border: 1px solid rgba(0,255,127,.18);
+      border-radius: 18px;
+      color: #eafff0;
+      padding: 16px;
+      overflow: auto;
+    }
+
+    code { font-family: var(--mono); }
+
+    .weeks {
+      display: grid;
+      gap: 18px;
+    }
+
+    .week-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 22px;
+      padding: 50px 20px 20px;
+    }
+
+    .week-card:after {
+      content: attr(data-week);
+      position: absolute;
+      right: 16px;
+      top: 38px;
+      font-family: var(--mono);
+      font-weight: 900;
+      font-size: 4rem;
+      line-height: 1;
+      color: rgba(0,255,127,.08);
+    }
+
+    footer {
+      padding: 28px 0 46px;
+      text-align: center;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .9rem;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid, .grid-2, .grid-3, .summary-list { grid-template-columns: 1fr; }
+      .hero-card { padding: 36px 24px 24px; }
+      .nav { justify-content: flex-start; }
+      .stat-card { min-height: auto; }
+    }
+
+    @media (max-width: 640px) {
+      .hero-card, .stat-card, section.card, .week-card, .mini-card, table, pre { border-radius: 16px; }
+      th, td { display: block; width: 100%; }
+      th { border-bottom: 1px solid rgba(0,255,127,.18); }
+      tr { display: block; border-bottom: 1px solid rgba(0,255,127,.14); }
+      tr:last-child { border-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <div class="overlay" aria-hidden="true"></div>
+
+  <header class="hero">
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand">
+          Prof. Dr. Laerte Peotta de Melo
+          <small>Professor • Pesquisador • Segurança Cibernética • Redes</small>
+        </div>
+        <nav class="nav" aria-label="Navegação principal">
+          <a href="#objetivo">Objetivo</a>
+          <a href="#dominios">Domínios</a>
+          <a href="#rotina">Rotina</a>
+          <a href="#semanas">8 semanas</a>
+          <a href="#labs">Labs</a>
+          <a href="#labs-wireshark">Wireshark</a>
+          <a href="#exame">Exame</a>
+        </nav>
+      </div>
+
+      <div class="hero-grid">
+        <div class="hero-card">
+          <div class="eyebrow">Cisco CCNA Cybersecurity 200-201 CCNACBR • Plano de estudos</div>
+          <h1>Preparação para CCNA Cybersecurity com foco em SOC</h1>
+          <p class="lead">Roteiro progressivo de 8 semanas para estudar fundamentos, monitoramento, análise em host, análise de intrusão em rede e procedimentos de resposta.</p>
+          <p class="lead">A proposta combina teoria curta, revisão, laboratórios defensivos, análise de logs, leitura de PCAP e simulados.</p>
+          <div class="hero-tags">
+            <span class="tag">8 semanas</span>
+            <span class="tag">SOC</span>
+            <span class="tag">Wireshark</span>
+            <span class="tag">Logs</span>
+            <span class="tag">200-201 CCNACBR</span>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat-card"><strong>200-201</strong><span>Exame CCNACBR v1.2</span></div>
+          <div class="stat-card"><strong>120 min</strong><span>Duração oficial do exame</span></div>
+          <div class="stat-card"><strong>US$ 300</strong><span>Preço informado pela Cisco</span></div>
+          <div class="stat-card"><strong>Inglês</strong><span>Idioma informado pela Cisco</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card" id="netacad">
+      <div class="section-title"><span class="dot"></span><h2>Turma específica na NetAcad</h2></div>
+      <p>O professor abrirá uma turma específica na <strong>Cisco Networking Academy</strong>.</p>
+      <p>O curso utilizado será o <strong>CyberOps Associate</strong>.</p>
+      <p>Essa turma apoiará a preparação para a <strong>CCNA Cybersecurity 200-201 CCNACBR</strong>.</p>
+      <p>Os alunos deverão acompanhar os módulos, atividades e avaliações diretamente na plataforma NetAcad.</p>
+
+      <div class="grid-3">
+        <div class="mini-card">
+          <h3>Curso-base</h3>
+          <p><strong>CyberOps Associate</strong></p>
+          <p>Conteúdo alinhado a operações de segurança e rotina de SOC.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Uso na disciplina</h3>
+          <p>A turma funcionará como ambiente de apoio.</p>
+          <p>O estudo será complementado com laboratórios, logs, PCAP e discussão de casos.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Acesso</h3>
+          <p>O link de inscrição será informado pelo professor após a criação da turma.</p>
+          <p><a class="exam-link" href="https://www.netacad.com/" target="_blank" rel="noreferrer">Acessar Cisco Networking Academy</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="sumario">
+      <div class="section-title"><span class="dot"></span><h2>Sumário</h2></div>
+      <div class="summary-list">
+        <a href="#netacad">Turma NetAcad</a>
+        <a href="#objetivo">Plano de estudos</a>
+        <a href="#dominios">Domínios do exame</a>
+        <a href="#estrategia">Estratégia de estudo</a>
+        <a href="#rotina">Rotina semanal</a>
+        <a href="#ferramentas">Ferramentas</a>
+        <a href="#semanas">Plano de 8 semanas</a>
+        <a href="#labs">Laboratórios</a>
+        <a href="#labs-wireshark">Laboratórios Wireshark</a>
+        <a href="#checklist">Checklist</a>
+        <a href="#exame">Exame e agendamento</a>
+      </div>
+    </section>
+
+    <section class="card" id="objetivo">
+      <div class="section-title"><span class="dot"></span><h2>Plano de Estudos CCNA Cybersecurity</h2></div>
+      <p><strong>Prof:</strong> Dr. Laerte Peotta de Melo</p>
+      <p><strong>Certificação:</strong> CCNA Cybersecurity</p>
+      <p><strong>Exame:</strong> 200-201 CCNACBR v1.2</p>
+      <p><strong>Nome do exame:</strong> Understanding Cisco Cybersecurity Operations Fundamentals</p>
+      <p><strong>Duração sugerida:</strong> 8 semanas</p>
+      <p><strong>Carga sugerida:</strong> 6 horas por semana</p>
+      <p><strong>Perfil:</strong> aluno com base em redes e interesse em SOC, monitoramento, análise de alertas e resposta a incidentes.</p>
+
+      <div class="callout">
+        <strong>Objetivo do plano.</strong> Preparar o aluno para compreender a rotina de operações de segurança e interpretar evidências básicas em redes, hosts, logs e alertas.
+      </div>
+
+      <div class="callout warning">
+        <strong>Turma específica na Cisco Networking Academy.</strong> O professor abrirá uma turma própria na NetAcad para o curso <strong>CyberOps Associate</strong>. Essa turma servirá como apoio estruturado ao estudo da CCNA Cybersecurity.
+      </div>
+    </section>
+
+    <section class="card" id="dominios">
+      <div class="section-title"><span class="dot"></span><h2>Domínios do exame</h2></div>
+      <p>O exame avalia competências fundamentais para operações de segurança.</p>
+      <p>O foco é interpretar eventos, identificar ameaças e aplicar procedimentos de análise e resposta.</p>
+      <table>
+        <thead>
+          <tr><th>Domínio</th><th>Foco de estudo</th><th>Prioridade</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Security Concepts</td><td>CIA, risco, ameaças, vulnerabilidades, malware, criptografia, identidade e controles.</td><td>Alta</td></tr>
+          <tr><td>Security Monitoring</td><td>Logs, SIEM, alertas, eventos, incidentes, IoC, falso positivo e falso negativo.</td><td>Muito alta</td></tr>
+          <tr><td>Host-Based Analysis</td><td>Processos, serviços, autenticação, arquivos suspeitos, persistência e evidências em endpoint.</td><td>Muito alta</td></tr>
+          <tr><td>Network Intrusion Analysis</td><td>PCAP, NetFlow, TCP/IP, portas, protocolos, IDS, assinaturas e padrões de ataque.</td><td>Muito alta</td></tr>
+          <tr><td>Security Policies and Procedures</td><td>Resposta a incidentes, escalonamento, severidade, cadeia de custódia, relatórios e conformidade.</td><td>Alta</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card" id="estrategia">
+      <div class="section-title"><span class="dot"></span><h2>Estratégia geral de estudo</h2></div>
+      <p>Estude com ciclos curtos.</p>
+      <p>Leia, pratique, registre evidências e revise os erros.</p>
+      <p>Não concentre a preparação apenas em teoria.</p>
+      <p>A prova exige leitura de cenário e raciocínio operacional.</p>
+      <table>
+        <thead>
+          <tr><th>Etapa</th><th>Finalidade</th><th>Resultado esperado</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Teoria</td><td>Entender conceitos e vocabulário.</td><td>Explicar sem consulta.</td></tr>
+          <tr><td>Laboratório</td><td>Aplicar conceitos em tráfego, logs e hosts.</td><td>Gerar evidências simples.</td></tr>
+          <tr><td>Questões</td><td>Treinar interpretação de cenário.</td><td>Identificar pontos fracos.</td></tr>
+          <tr><td>Revisão</td><td>Corrigir erros recorrentes.</td><td>Aumentar retenção.</td></tr>
+          <tr><td>Simulado</td><td>Treinar tempo e tomada de decisão.</td><td>Medir prontidão.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card" id="rotina">
+      <div class="section-title"><span class="dot"></span><h2>Rotina semanal sugerida</h2></div>
+      <div class="grid-3">
+        <div class="mini-card">
+          <h3>Segunda e terça</h3>
+          <p>Estudo teórico do domínio da semana.</p>
+          <p>Resumo curto em Markdown.</p>
+          <p>Criação de flashcards.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Quarta e quinta</h3>
+          <p>Laboratório prático.</p>
+          <p>Análise de logs, PCAP ou host.</p>
+          <p>Registro das evidências encontradas.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Sexta e sábado</h3>
+          <p>Questões de revisão.</p>
+          <p>Correção dos erros.</p>
+          <p>Revisão acumulada.</p>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>Domingo.</strong> Use 30 minutos para revisão leve ou descanso. Evite estudar somente por memorização.
+      </div>
+    </section>
+
+    <section class="card" id="ferramentas">
+      <div class="section-title"><span class="dot"></span><h2>Ferramentas recomendadas</h2></div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Prática técnica</h3>
+          <ul>
+            <li>Wireshark para análise de pacotes.</li>
+            <li>Packet Tracer para cenários de rede.</li>
+            <li>Linux para comandos de rede e logs.</li>
+            <li>Windows Event Viewer para eventos de host.</li>
+            <li>Arquivos PCAP públicos para treinamento defensivo.</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h3>Organização</h3>
+          <ul>
+            <li>Markdown para resumos semanais.</li>
+            <li>Planilha para controle de simulados.</li>
+            <li>Flashcards para portas, termos e fases de resposta.</li>
+            <li>Checklist de prontidão antes da prova.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="semanas">
+      <div class="section-title"><span class="dot"></span><h2>Plano semanal completo - 8 semanas</h2></div>
+      <div class="weeks">
+        <article class="week-card" data-week="01">
+          <h3>Semana 1 - Fundamentos de segurança</h3>
+          <p><strong>Objetivo:</strong> revisar os conceitos essenciais de cibersegurança.</p>
+          <table>
+            <tr><th>Tema</th><th>Estudo</th></tr>
+            <tr><td>Tríade CIA</td><td>Confidencialidade, integridade e disponibilidade.</td></tr>
+            <tr><td>Ameaças</td><td>Malware, phishing, engenharia social, brute force, DoS e DDoS.</td></tr>
+            <tr><td>Risco</td><td>Diferença entre ameaça, vulnerabilidade, impacto e probabilidade.</td></tr>
+            <tr><td>Controles</td><td>Preventivos, detectivos e corretivos.</td></tr>
+            <tr><td>Threat intelligence</td><td>IoC, TTP, adversário, campanha e indicador.</td></tr>
+          </table>
+          <h4>Atividade</h4>
+          <p>Monte uma tabela com ameaça, vulnerabilidade, risco, controle e impacto.</p>
+        </article>
+
+        <article class="week-card" data-week="02">
+          <h3>Semana 2 - Segurança de redes e infraestrutura</h3>
+          <p><strong>Objetivo:</strong> conectar fundamentos de redes com operações defensivas.</p>
+          <table>
+            <tr><th>Tema</th><th>Estudo</th></tr>
+            <tr><td>TCP/IP</td><td>IP, TCP, UDP, ICMP, DNS, HTTP e HTTPS.</td></tr>
+            <tr><td>Portas</td><td>Serviços comuns usados em análise de tráfego.</td></tr>
+            <tr><td>Firewall</td><td>ACL, inspeção e regras de entrada e saída.</td></tr>
+            <tr><td>IDS e IPS</td><td>Diferença entre detecção e prevenção.</td></tr>
+            <tr><td>Segmentação</td><td>VLAN, DMZ, redes internas e externas.</td></tr>
+          </table>
+          <h4>Laboratório</h4>
+          <p>Capture tráfego ICMP, DNS e TCP no Wireshark.</p>
+        </article>
+
+        <article class="week-card" data-week="03">
+          <h3>Semana 3 - Monitoramento de segurança</h3>
+          <p><strong>Objetivo:</strong> entender como eventos viram alertas e incidentes.</p>
+          <table>
+            <tr><th>Tema</th><th>Estudo</th></tr>
+            <tr><td>Logs</td><td>Firewall, proxy, sistema operacional, IDS e endpoint.</td></tr>
+            <tr><td>SIEM</td><td>Coleta, normalização, correlação e alerta.</td></tr>
+            <tr><td>Eventos</td><td>Diferença entre registro, alerta e incidente.</td></tr>
+            <tr><td>IoC</td><td>IP, domínio, URL, hash e artefatos.</td></tr>
+            <tr><td>Triagem</td><td>Severidade, prioridade e falso positivo.</td></tr>
+          </table>
+          <h4>Mini-playbook</h4>
+          <pre><code>Alerta: conexão com domínio suspeito.
+1. Validar origem do alerta
+2. Identificar host afetado
+3. Consultar usuário logado
+4. Verificar processo responsável
+5. Coletar logs
+6. Escalar, se necessário</code></pre>
+        </article>
+
+        <article class="week-card" data-week="04">
+          <h3>Semana 4 - Análise baseada em host</h3>
+          <p><strong>Objetivo:</strong> identificar evidências em endpoints Windows e Linux.</p>
+          <table>
+            <tr><th>Tema</th><th>Estudo</th></tr>
+            <tr><td>Processos</td><td>Nome, caminho, hash e comportamento.</td></tr>
+            <tr><td>Persistência</td><td>Serviços, tarefas agendadas e inicialização.</td></tr>
+            <tr><td>Arquivos suspeitos</td><td>Extensão, localização, assinatura e hash.</td></tr>
+            <tr><td>Autenticação</td><td>Falhas, logins incomuns e usuários privilegiados.</td></tr>
+            <tr><td>Endpoint security</td><td>Antivírus, EDR, hardening e patching.</td></tr>
+          </table>
+          <h4>Comandos úteis</h4>
+          <pre><code>Windows: tasklist, netstat, PowerShell, Event Viewer
+Linux: ps aux, ss -tunap, journalctl, last, who</code></pre>
+        </article>
+
+        <article class="week-card" data-week="05">
+          <h3>Semana 5 - Análise de intrusão em rede</h3>
+          <p><strong>Objetivo:</strong> interpretar pacotes, fluxos e alertas de rede.</p>
+          <table>
+            <tr><th>Tema</th><th>Estudo</th></tr>
+            <tr><td>PCAP</td><td>Cabeçalhos, payload, fluxo e sessão.</td></tr>
+            <tr><td>TCP handshake</td><td>SYN, SYN/ACK, ACK e encerramento.</td></tr>
+            <tr><td>Reconhecimento</td><td>Varredura, enumeração e padrões anormais.</td></tr>
+            <tr><td>NetFlow</td><td>Fluxos, origem, destino, portas e volume.</td></tr>
+            <tr><td>IDS signatures</td><td>Leitura de alertas e correlação com tráfego.</td></tr>
+          </table>
+          <h4>Perguntas para o PCAP</h4>
+          <pre><code>Quem iniciou a comunicação?
+Qual protocolo foi usado?
+Qual porta foi acessada?
+Há tráfego DNS incomum?
+Existe padrão de varredura?
+O alerta parece verdadeiro ou falso positivo?</code></pre>
+        </article>
+
+        <article class="week-card" data-week="06">
+          <h3>Semana 6 - Políticas e resposta a incidentes</h3>
+          <p><strong>Objetivo:</strong> organizar a resposta operacional a eventos de segurança.</p>
+          <table>
+            <tr><th>Tema</th><th>Estudo</th></tr>
+            <tr><td>Fases</td><td>Preparação, identificação, contenção, erradicação, recuperação e lições aprendidas.</td></tr>
+            <tr><td>Escalonamento</td><td>Quando acionar SOC nível 2, CSIRT ou gestão.</td></tr>
+            <tr><td>Severidade</td><td>Impacto, urgência e criticidade do ativo.</td></tr>
+            <tr><td>Evidência</td><td>Preservação, registro e cadeia de custódia.</td></tr>
+            <tr><td>Comunicação</td><td>Relatório técnico, registro de ticket e stakeholders.</td></tr>
+          </table>
+          <h4>Atividade</h4>
+          <p>Crie uma matriz com tipo de evento, severidade e ação inicial.</p>
+        </article>
+
+        <article class="week-card" data-week="07">
+          <h3>Semana 7 - Revisão por domínio</h3>
+          <p><strong>Objetivo:</strong> revisar os cinco domínios do exame.</p>
+          <table>
+            <tr><th>Dia</th><th>Revisão</th></tr>
+            <tr><td>Dia 1</td><td>Security Concepts.</td></tr>
+            <tr><td>Dia 2</td><td>Security Monitoring.</td></tr>
+            <tr><td>Dia 3</td><td>Host-Based Analysis.</td></tr>
+            <tr><td>Dia 4</td><td>Network Intrusion Analysis.</td></tr>
+            <tr><td>Dia 5</td><td>Security Policies and Procedures.</td></tr>
+            <tr><td>Dia 6</td><td>Simulado parcial.</td></tr>
+            <tr><td>Dia 7</td><td>Correção dos erros.</td></tr>
+          </table>
+        </article>
+
+        <article class="week-card" data-week="08">
+          <h3>Semana 8 - Simulados e preparação final</h3>
+          <p><strong>Objetivo:</strong> consolidar conhecimento e treinar tomada de decisão.</p>
+          <table>
+            <tr><th>Atividade</th><th>Meta</th></tr>
+            <tr><td>Simulado 1</td><td>Fazer sem consulta.</td></tr>
+            <tr><td>Correção</td><td>Classificar erros por domínio.</td></tr>
+            <tr><td>Revisão focada</td><td>Estudar somente pontos fracos.</td></tr>
+            <tr><td>Simulado 2</td><td>Refazer com tempo controlado.</td></tr>
+            <tr><td>Revisão final</td><td>Conceitos, portas, logs, PCAP e procedimentos.</td></tr>
+            <tr><td>Agendamento</td><td>Conferir documento, horário e requisitos.</td></tr>
+          </table>
+        </article>
+      </div>
+    </section>
+
+    <section class="card" id="labs">
+      <div class="section-title"><span class="dot"></span><h2>Laboratórios recomendados</h2></div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Lab 1 - Wireshark básico</h3>
+          <p>Capture ICMP, DNS, TCP e HTTP.</p>
+          <p>Identifique IP de origem, IP de destino, portas e protocolo.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Lab 2 - Logs Linux</h3>
+          <p>Analise autenticação, sessões e conexões ativas.</p>
+          <p>Use journalctl, last, who, ss e ps.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Lab 3 - Logs Windows</h3>
+          <p>Use Event Viewer e PowerShell.</p>
+          <p>Procure falhas de login, processos incomuns e alertas.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Lab 4 - Mini-SOC</h3>
+          <p>Simule a triagem de um alerta.</p>
+          <p>Responda o que aconteceu, qual host foi afetado e qual ação inicial tomar.</p>
+        </div>
+      </div>
+      <div class="callout" style="margin-top: 18px;">
+        <strong>Arquivos de apoio.</strong> Os laboratórios práticos de Wireshark estão disponíveis na pasta <strong>arquivos/CCNA-200-201/</strong>.
+      </div>
+    </section>
+
+
+    <section class="card" id="labs-wireshark">
+      <div class="section-title"><span class="dot"></span><h2>Laboratórios Wireshark</h2></div>
+      <p>Use estes arquivos como prática guiada para análise de pacotes.</p>
+      <p>Os links apontam para a pasta <strong>arquivos/CCNA-200-201/</strong>.</p>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Introdução ao Wireshark</h3>
+          <p>Captura e análise de dados ICMP no Wireshark.</p>
+          <p>Inclui uso da topologia Mininet na VM CyberOps.</p>
+          <p><a class="exam-link" href="arquivos/CCNA-200-201/5.3.7-lab---introduction-to-wireshark_pt-BR.pdf" target="_blank" rel="noreferrer">Abrir laboratório PDF</a></p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Quadros Ethernet</h3>
+          <p>Exame dos campos do cabeçalho Ethernet II.</p>
+          <p>Captura e análise de quadros Ethernet com Wireshark.</p>
+          <p><a class="exam-link" href="arquivos/CCNA-200-201/8.2.8-lab---using-wireshark-to-examine-ethernet-frames_pt-BR.pdf" target="_blank" rel="noreferrer">Abrir laboratório PDF</a></p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Handshake triplo TCP</h3>
+          <p>Observação do estabelecimento de sessão TCP.</p>
+          <p>Analisa flags, portas e sequência SYN, SYN/ACK e ACK.</p>
+          <p><a class="exam-link" href="arquivos/CCNA-200-201/9.2.6-lab---using-wireshark-to-observe-the-tcp-3-way-handshake_pt-BR.pdf" target="_blank" rel="noreferrer">Abrir laboratório PDF</a></p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Captura UDP DNS</h3>
+          <p>Captura de consultas e respostas DNS.</p>
+          <p>Mostra uso de UDP, porta 53 e análise de pacotes DNS.</p>
+          <p><a class="exam-link" href="arquivos/CCNA-200-201/10.2.7-lab---using-wireshark-to-examine-a-udp-dns-capture_pt-BR.pdf" target="_blank" rel="noreferrer">Abrir laboratório PDF</a></p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Capturas TCP e UDP</h3>
+          <p>Análise de capturas FTP e TFTP.</p>
+          <p>Compara operação TCP e UDP em transferências de arquivo.</p>
+          <p><a class="exam-link" href="arquivos/CCNA-200-201/10.4.3-lab---using-wireshark-to-examine-tcp-and-udp-captures_pt-BR.pdf" target="_blank" rel="noreferrer">Abrir laboratório PDF</a></p>
+        </div>
+
+        <div class="mini-card">
+          <h3>HTTP e HTTPS</h3>
+          <p>Captura e comparação de tráfego HTTP e HTTPS.</p>
+          <p>Mostra diferenças entre tráfego em texto claro e tráfego criptografado.</p>
+          <p><a class="exam-link" href="arquivos/CCNA-200-201/10.6.7-lab---using-wireshark-to-examine-http-and-https-traffic_pt-BR.pdf" target="_blank" rel="noreferrer">Abrir laboratório PDF</a></p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Telnet e SSH</h3>
+          <p>Examina sessões Telnet e SSH com Wireshark.</p>
+          <p>Demonstra a importância da criptografia no acesso remoto.</p>
+          <p><a class="exam-link" href="arquivos/CCNA-200-201/21.2.12-lab---examining-telnet-and-ssh-in-wireshark_pt-BR.pdf" target="_blank" rel="noreferrer">Abrir laboratório PDF</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="checklist">
+      <div class="section-title"><span class="dot"></span><h2>Checklist antes da prova</h2></div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Conceitos</h3>
+          <ul>
+            <li>Ameaça, vulnerabilidade, risco e incidente.</li>
+            <li>Malware, exploit, IoC, TTP e threat hunting.</li>
+            <li>Firewall, IDS, IPS, proxy, VPN e SIEM.</li>
+            <li>Falso positivo e falso negativo.</li>
+            <li>Fases da resposta a incidentes.</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h3>Prática</h3>
+          <ul>
+            <li>Interpretar logs de autenticação.</li>
+            <li>Analisar tráfego básico no Wireshark.</li>
+            <li>Identificar evidências em Windows e Linux.</li>
+            <li>Classificar severidade e prioridade.</li>
+            <li>Escalar um incidente dentro de um SOC.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout warning">
+        <strong>Critério de prontidão.</strong> Recomenda-se marcar a prova quando o aluno atingir 80% ou mais em simulados e conseguir justificar os erros corrigidos.
+      </div>
+    </section>
+
+    <section class="card" id="exame">
+      <div class="section-title"><span class="dot"></span><h2>Informações do exame e agendamento</h2></div>
+      <p>O exame <strong>200-201 CCNACBR v1.2</strong> tem duração oficial de <strong>120 minutos</strong>.</p>
+      <p>A Cisco informa o preço de <strong>US$ 300</strong> ou uso de Cisco Learning Credits.</p>
+      <p>O idioma informado é <strong>inglês</strong>.</p>
+      <p>O agendamento é realizado pela <strong>Pearson VUE</strong>, parceira autorizada da Cisco.</p>
+
+      <div class="grid-3">
+        <div class="mini-card">
+          <h3>Exame</h3>
+          <p><strong>Código:</strong> 200-201</p>
+          <p><strong>Nome:</strong> CCNACBR v1.2</p>
+          <p><strong>Certificação:</strong> CCNA Cybersecurity</p>
+        </div>
+        <div class="mini-card">
+          <h3>Formato</h3>
+          <p><strong>Duração:</strong> 120 minutos</p>
+          <p><strong>Idioma:</strong> inglês</p>
+          <p><strong>Resultado:</strong> pass/fail, conforme página Cisco de exame e treinamento.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Onde fazer</h3>
+          <p>Centros autorizados Pearson VUE.</p>
+          <p>Modalidade OnVUE online supervisionada, quando disponível.</p>
+          <p><a class="exam-link" href="https://www.pearsonvue.com/us/en/cisco.html" target="_blank" rel="noreferrer">Agendar pela Pearson VUE</a></p>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 18px;">
+        <div class="mini-card">
+          <h3>Link oficial Cisco</h3>
+          <p>Página oficial do exame 200-201 CCNACBR.</p>
+          <p><a class="exam-link" href="https://www.cisco.com/site/us/en/learn/training-certifications/exams/ccnacbr.html" target="_blank" rel="noreferrer">Ver exame na Cisco</a></p>
+        </div>
+        <div class="mini-card">
+          <h3>Tópicos oficiais</h3>
+          <p>Lista oficial de tópicos do exame no Cisco Learning Network.</p>
+          <p><a class="exam-link" href="https://learningnetwork.cisco.com/s/ccnacbr-exam-topics" target="_blank" rel="noreferrer">Ver tópicos do exame</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="referencias">
+      <div class="section-title"><span class="dot"></span><h2>Referências e links úteis</h2></div>
+      <ul>
+        <li><a href="https://www.cisco.com/site/us/en/learn/training-certifications/exams/ccnacbr.html" target="_blank" rel="noopener">Página oficial Cisco - 200-201 CCNACBR</a></li>
+        <li><a href="https://learningnetwork.cisco.com/s/ccnacbr-exam-topics" target="_blank" rel="noopener">Cisco Learning Network - tópicos do exame</a></li>
+        <li><a href="https://www.cisco.com/site/us/en/learn/training-certifications/certifications/cybersecurity/ccna-cybersecurity/exams-and-training.html" target="_blank" rel="noopener">Cisco - CCNA Cybersecurity exam and training</a></li>
+        <li><a href="https://www.pearsonvue.com/us/en/cisco.html" target="_blank" rel="noopener">Pearson VUE - Cisco certification exams</a></li>
+        <li><a href="arquivos/CCNA-200-201/5.3.7-lab---introduction-to-wireshark_pt-BR.pdf" target="_blank" rel="noopener">Laboratório 5.3.7 - Introdução ao Wireshark</a></li>
+        <li><a href="arquivos/CCNA-200-201/8.2.8-lab---using-wireshark-to-examine-ethernet-frames_pt-BR.pdf" target="_blank" rel="noopener">Laboratório 8.2.8 - Quadros Ethernet</a></li>
+        <li><a href="arquivos/CCNA-200-201/9.2.6-lab---using-wireshark-to-observe-the-tcp-3-way-handshake_pt-BR.pdf" target="_blank" rel="noopener">Laboratório 9.2.6 - Handshake triplo TCP</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">Plano gerado para Prof. Dr. Laerte Peotta de Melo • CCNA Cybersecurity 200-201 CCNACBR</div>
+  </footer>
+
+  <script>
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@#$%&*+-=<>/{}[]()CiscoCCNACybersecuritySOCWiresharkPCAPSIEMCCNACBRNetAcadCyberOps';
+    const fontSize = 15;
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops = Array(columns).fill(1);
+
+    function resetDrops() {
+      columns = Math.floor(canvas.width / fontSize);
+      drops = Array(columns).fill(1);
+    }
+
+    window.addEventListener('resize', resetDrops);
+
+    function draw() {
+      ctx.fillStyle = 'rgba(2, 4, 3, 0.15)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = fontSize + 'px Cascadia Code, Consolas, monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+        ctx.fillStyle = Math.random() > 0.975 ? '#d9ffe9' : '#00ff7f';
+        ctx.fillText(text, x, y);
+
+        if (y > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 36);
+  </script>
+</body>
+</html>
