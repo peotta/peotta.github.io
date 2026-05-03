@@ -757,14 +757,50 @@
       box-shadow: var(--shadow), var(--glow);
     }
 
-    .ravens-logo {
-      width: min(100%, 430px);
+    .podcast-split {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(280px, 1.05fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .podcast-copy-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 300px;
+    }
+
+    .podcast-copy-card p {
+      max-width: 54ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .podcast-copy-card .button {
+      margin-top: 1.15rem;
+    }
+
+    .podcast-image-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+    }
+
+    .podcast-image-card a {
+      width: min(100%, 500px);
       display: block;
-      margin: 0 auto;
-      border-radius: 22px;
-      border: 1px solid rgba(72,255,139,0.20);
+    }
+
+    .podcast-image-card .podcast-banner {
+      width: 100%;
+      max-height: 340px;
+      object-fit: contain;
       background: rgba(0,0,0,0.18);
-      box-shadow: var(--shadow), var(--glow);
+      padding: 0.45rem;
     }
 
     .ravens-card-logo {
@@ -787,6 +823,57 @@
 
     .ravens-title-stack span {
       display: block;
+    }
+
+
+    .feature-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      height: 100%;
+    }
+
+    .feature-card .feature-copy,
+    .feature-card .feature-media {
+      min-width: 0;
+    }
+
+    .feature-card .feature-copy {
+      min-height: 230px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .feature-card .feature-copy .button {
+      align-self: flex-start;
+      margin-top: auto;
+    }
+
+    .feature-card .feature-media {
+      margin-top: auto;
+    }
+
+    .feature-card .feature-media a {
+      display: block;
+    }
+
+
+    .feature-pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.2rem;
+      align-items: stretch;
+    }
+
+    .feature-pair .feature-card {
+      height: 100%;
+      grid-template-columns: minmax(0, 1fr);
+      align-content: start;
+    }
+
+    .feature-pair .feature-media {
+      margin-top: 0.6rem;
     }
 
     .contact-list {
@@ -850,7 +937,12 @@
       .highlight-grid,
       .links-grid,
       .repo-grid,
-      .metric-grid {
+      .metric-grid,
+      .feature-pair {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card {
         grid-template-columns: 1fr;
       }
 
@@ -1070,6 +1162,12 @@
             <a class="button button-secondary" href="https://github.com/peotta/topicos-avancados-cyber" target="_blank" rel="noreferrer" data-i18n="repos.open">Abrir repositório</a>
           </article>
           <article class="repo-card featured-resource">
+            <h3 class="repo-title ravens-title-stack"><img class="ravens-card-logo" src="arquivos/Ravens-logo.png" alt="Logo do RAVENS" /><span data-i18n="certs.ravens.title">Ravens Research Group on Advanced Vulnerability Exploration and Network Security</span></h3>
+            <p class="muted" data-i18n="certs.ravens.text">Grupo de pesquisa em cibersegurança, redes, exploração avançada de vulnerabilidades e segurança.</p>
+            <div class="repo-meta" data-i18n="certs.studyGroup">Grupo de pesquisa</div>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer" data-i18n="ravens.open">Acessar RAVENS</a>
+          </article>
+          <article class="repo-card featured-resource">
             <h3 class="repo-title"><span class="repo-icon" aria-hidden="true">✍️</span><span data-i18n="repos.guide.title">Guia - Como escrever um artigo ou TCC</span></h3>
             <p class="muted" data-i18n="repos.guide.text">Material de apoio para organização, escrita e desenvolvimento de trabalhos acadêmicos.</p>
             <div class="repo-meta" data-i18n="repos.support">Material de apoio</div>
@@ -1082,7 +1180,7 @@
     <section id="certificacoes">
       <div class="container">
         <div class="section-head">
-          <h2 data-i18n="certs.title">Certificações Profissionais e Grupos de Estudos</h2>
+          <h2 data-i18n="certs.title">Certificações Profissionais</h2>
         </div>
         <div class="repo-grid">
           <article class="repo-card featured-resource">
@@ -1109,44 +1207,23 @@
             <div class="repo-meta" data-i18n="repos.certification">Certificação profissional</div>
             <a class="button button-secondary" href="fortinet.html" data-i18n="repos.accessGuide">Acessar guia</a>
           </article>
-          <article class="repo-card featured-resource">
-            <h3 class="repo-title ravens-title-stack"><img class="ravens-card-logo" src="arquivos/Ravens-logo.png" alt="Logo do RAVENS" /><span data-i18n="certs.ravens.title">Ravens Research Group on Advanced Vulnerability Exploration and Network Security</span></h3>
-            <p class="muted" data-i18n="certs.ravens.text">Grupo de estudos e pesquisa em cibersegurança, redes, exploração avançada de vulnerabilidades e segurança.</p>
-            <div class="repo-meta" data-i18n="certs.studyGroup">Grupo de estudos</div>
-            <a class="button button-secondary" href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer" data-i18n="ravens.open">Acessar RAVENS</a>
-          </article>
         </div>
       </div>
     </section>
 
     <section id="podcast">
-      <div class="container split">
-        <article class="card">
+      <div class="container podcast-split">
+        <article class="card podcast-copy-card">
           <h2 data-i18n="podcast.title">Podcast Latência Zero</h2>
-          <p data-i18n="podcast.text">
+          <p class="muted" data-i18n="podcast.text">
             Podcast dedicado a redes de computadores, infraestrutura, desempenho e temas associados às atividades de ensino.
           </p>
           <a class="button button-primary" href="https://open.spotify.com/show/59S06LhFsKlyvfLFQCJ8fK?si=64f2b8a5edcd4c8e" target="_blank" rel="noreferrer" data-i18n="podcast.listen">Ouvir no Spotify</a>
         </article>
-        <article class="card">
+        <article class="card podcast-image-card">
           <a href="https://open.spotify.com/show/59S06LhFsKlyvfLFQCJ8fK?si=64f2b8a5edcd4c8e" target="_blank" rel="noreferrer">
             <img class="podcast-banner" src="Latência Zero 2 - podcast.png" alt="Podcast Latência Zero" data-alt-key="podcast.alt" />
           </a>
-        </article>
-      </div>
-    </section>
-
-    <section>
-      <div class="container split">
-        <article class="card">
-          <h2 style="line-height: 1.22; font-weight: 800; letter-spacing: 0.02em; color: #d8ffe7;" data-i18n="ravens.fullTitle">Ravens Research Group on Advanced Vulnerability Exploration and Network Security</h2>
-          <p data-i18n="ravens.text">
-            Grupo voltado à pesquisa, à formação acadêmica e à produção técnica em Cibersegurança, redes, vulnerabilidades e análise de ameaças.
-          </p>
-          <a class="button button-secondary" href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer" data-i18n="ravens.open">Acessar RAVENS</a>
-        </article>
-        <article class="card">
-          <img class="ravens-logo" src="arquivos/Ravens-logo.png" alt="Logo do RAVENS - Ravens Research Group on Advanced Vulnerability Exploration and Network Security" data-alt-key="ravens.alt" />
         </article>
       </div>
     </section>
@@ -1284,10 +1361,10 @@
         'profiles.linkedinText': 'Rede profissional',
         'profiles.githubText': 'Repositórios e materiais',
         'repos.title': 'Disciplinas e Materiais de Aulas',
-        'certs.title': 'Certificações Profissionais e Grupos de Estudos',
+        'certs.title': 'Certificações Profissionais',
         'certs.ravens.title': 'Ravens Research Group on Advanced Vulnerability Exploration and Network Security',
-        'certs.ravens.text': 'Grupo de estudos e pesquisa em cibersegurança, redes, exploração avançada de vulnerabilidades e segurança.',
-        'certs.studyGroup': 'Grupo de estudos',
+        'certs.ravens.text': 'Grupo de pesquisa em cibersegurança, redes, exploração avançada de vulnerabilidades e segurança.',
+        'certs.studyGroup': 'Grupo de pesquisa',
         'repos.labredes.title': 'Laboratório de Redes',
         'repos.labredes.text': 'Atividades experimentais com dispositivos de rede, análise de protocolos, VLANs e roteamento.',
         'repos.grad': 'Graduação em Engenharia de Redes de Comunicação',
@@ -1384,10 +1461,10 @@
         'profiles.linkedinText': 'Professional network',
         'profiles.githubText': 'Repositories and materials',
         'repos.title': 'Courses and Teaching Materials',
-        'certs.title': 'Professional Certifications and Study Groups',
+        'certs.title': 'Professional Certifications',
         'certs.ravens.title': 'Ravens Research Group on Advanced Vulnerability Exploration and Network Security',
-        'certs.ravens.text': 'Study and research group in cybersecurity, networks, advanced vulnerability exploration, and security.',
-        'certs.studyGroup': 'Study group',
+        'certs.ravens.text': 'Research group in cybersecurity, networks, advanced vulnerability exploration, and security.',
+        'certs.studyGroup': 'Research group',
         'repos.labredes.title': 'Network Laboratory',
         'repos.labredes.text': 'Experimental activities with network devices, protocol analysis, VLANs, and routing.',
         'repos.grad': 'Undergraduate Program in Communication Network Engineering',
@@ -1484,10 +1561,10 @@
         'profiles.linkedinText': 'Red profesional',
         'profiles.githubText': 'Repositorios y materiales',
         'repos.title': 'Asignaturas y Materiales de Clases',
-        'certs.title': 'Certificaciones Profesionales y Grupos de Estudio',
+        'certs.title': 'Certificaciones Profesionales',
         'certs.ravens.title': 'Ravens Research Group on Advanced Vulnerability Exploration and Network Security',
-        'certs.ravens.text': 'Grupo de estudio e investigación en ciberseguridad, redes, exploración avanzada de vulnerabilidades y seguridad.',
-        'certs.studyGroup': 'Grupo de estudio',
+        'certs.ravens.text': 'Grupo de investigación en ciberseguridad, redes, exploración avanzada de vulnerabilidades y seguridad.',
+        'certs.studyGroup': 'Grupo de investigación',
         'repos.labredes.title': 'Laboratorio de Redes',
         'repos.labredes.text': 'Actividades experimentales con dispositivos de red, análisis de protocolos, VLAN y enrutamiento.',
         'repos.grad': 'Carrera de Ingeniería de Redes de Comunicación',
