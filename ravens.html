@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAVENS - Research Group on Advanced Vulnerability Exploration and Network Security</title>
+  <meta name="description" content="Página do Ravens Research Group on Advanced Vulnerability Exploration and Network Security, com laboratórios de redes, segurança, criptografia, DNS e SMTP." />
+  <style>
+    :root {
+      --bg: #010301;
+      --bg-soft: #020b05;
+      --panel: rgba(3, 17, 8, 0.82);
+      --card: rgba(4, 18, 9, 0.76);
+      --card-border: rgba(72, 255, 139, 0.22);
+      --text: #d8ffe7;
+      --muted: #91caa4;
+      --primary: #48ff8b;
+      --secondary: #00d26a;
+      --accent: #b8ffd0;
+      --shadow: 0 20px 70px rgba(0,0,0,0.55);
+      --glow: 0 0 26px rgba(72,255,139,0.20), 0 0 60px rgba(0,210,106,0.08);
+      --radius: 24px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(72,255,139,0.16), transparent 28%),
+        radial-gradient(circle at 85% 8%, rgba(0,210,106,0.12), transparent 24%),
+        linear-gradient(180deg, #010201 0%, #020704 42%, #031008 100%);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(72,255,139,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(72,255,139,0.08) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.20;
+      pointer-events: none;
+      z-index: -4;
+      mask-image: linear-gradient(to bottom, black 0%, rgba(0,0,0,0.8) 42%, transparent 100%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(180deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 4px),
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.28) 100%);
+      pointer-events: none;
+      z-index: 100;
+      mix-blend-mode: screen;
+      opacity: 0.35;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .matrix-rain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: -3;
+    }
+
+    #matrixRainCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      opacity: 0.45;
+      filter: contrast(1.02) saturate(0.95) drop-shadow(0 0 5px rgba(72,255,139,0.22));
+    }
+
+    .matrix-rain::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(1,3,1,0.22), transparent 18%, transparent 82%, rgba(1,3,1,0.22)),
+        radial-gradient(circle at 50% 22%, rgba(72,255,139,0.045), transparent 28%),
+        linear-gradient(180deg, rgba(0,0,0,0.32), transparent 36%, rgba(0,0,0,0.46));
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(180deg, rgba(1,6,3,0.96), rgba(1,9,4,0.82));
+      border-bottom: 1px solid rgba(72,255,139,0.20);
+      box-shadow: 0 12px 34px rgba(0,0,0,0.42);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.85rem 0;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-weight: 900;
+      letter-spacing: 0.07em;
+      white-space: nowrap;
+      text-transform: uppercase;
+      color: #eafff0;
+      text-shadow: 0 0 14px rgba(72,255,139,0.40);
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      justify-content: flex-end;
+    }
+
+    .menu a {
+      color: var(--muted);
+      font-size: 0.82rem;
+      border: 1px solid rgba(72,255,139,0.14);
+      background: rgba(72,255,139,0.045);
+      padding: 0.52rem 0.72rem;
+      border-radius: 999px;
+      transition: 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .menu a:hover {
+      color: #031008;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 0 22px rgba(72,255,139,0.26);
+      border-color: transparent;
+    }
+
+    .hero { padding: 3.2rem 0 2.2rem; }
+
+    .hero-grid, .card, .lab-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow), var(--glow);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      background:
+        linear-gradient(135deg, rgba(72,255,139,0.060), transparent 30%),
+        radial-gradient(circle at 82% 24%, rgba(72,255,139,0.085), transparent 26%),
+        linear-gradient(180deg, rgba(4,18,9,0.94), rgba(1,9,4,0.86));
+      padding: 3.35rem 1.45rem 1.45rem;
+    }
+
+    .hero-grid::before, .card::before, .lab-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 34px;
+      width: 100%;
+      background:
+        radial-gradient(circle at 18px 17px, #48ff8b 0 4px, transparent 4.5px),
+        radial-gradient(circle at 38px 17px, #00d26a 0 4px, transparent 4.5px),
+        radial-gradient(circle at 58px 17px, #8bffb3 0 4px, transparent 4.5px),
+        linear-gradient(180deg, rgba(72,255,139,0.12), rgba(72,255,139,0.035));
+      border-bottom: 1px solid rgba(72,255,139,0.15);
+      opacity: 0.86;
+    }
+
+    .hero-grid::after {
+      content: "RAVENS // SECURE RESEARCH NODE";
+      position: absolute;
+      top: 9px;
+      right: 18px;
+      color: rgba(216,255,231,0.42);
+      font-size: 0.74rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .hero-grid > *, .card > *, .lab-card > * { position: relative; z-index: 1; }
+
+    .hero-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.48fr);
+      gap: clamp(1rem, 2.7vw, 2rem);
+      align-items: center;
+      padding: clamp(0.35rem, 1vw, 0.7rem);
+    }
+
+    .logo-panel {
+      min-height: 442px;
+      border-radius: 24px;
+      border: 1px solid rgba(72,255,139,0.16);
+      background:
+        radial-gradient(circle at 55% 28%, rgba(72,255,139,0.10), transparent 34%),
+        linear-gradient(180deg, rgba(0,0,0,0.16), rgba(0,0,0,0.34));
+      box-shadow: inset 0 0 38px rgba(72,255,139,0.035);
+      padding: 1.2rem;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .logo-panel img {
+      width: min(100%, 416px);
+      max-height: 416px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 22px rgba(72,255,139,0.16));
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(72,255,139,0.10);
+      border: 1px solid rgba(72,255,139,0.22);
+      color: #e2ffee;
+      font-size: 0.88rem;
+      margin: 0 0 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.075em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.25rem, 4.6vw, 4.35rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+      color: #f1fff5;
+      text-shadow: 0 0 22px rgba(72,255,139,0.22);
+    }
+
+    .hero p, .muted { color: var(--muted); }
+    .hero p { font-size: 1.03rem; max-width: 78ch; margin: 1.05rem 0 0; }
+
+    .hero-actions, .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      margin-top: 1.35rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.88rem 1.08rem;
+      border-radius: 14px;
+      font-weight: 800;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.88rem;
+    }
+
+    .button:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(72,255,139,0.18); }
+    .button-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #031008; box-shadow: var(--shadow); }
+    .button-secondary { background: rgba(72,255,139,0.055); border: 1px solid rgba(72,255,139,0.22); color: var(--text); }
+
+    section { padding: 1.05rem 0; position: relative; z-index: 1; }
+
+    .section-head { margin-bottom: 1rem; display: flex; align-items: center; gap: 0.8rem; }
+    .section-head::before { content: ">"; color: var(--primary); text-shadow: 0 0 14px rgba(72,255,139,0.55); font-size: 1.55rem; font-weight: 900; }
+    .section-head h2 { font-size: clamp(1.45rem, 3vw, 2.25rem); margin: 0; letter-spacing: -0.03em; text-transform: uppercase; text-shadow: 0 0 16px rgba(72,255,139,0.16); }
+
+    h3 { margin-top: 0; color: #f0fff5; }
+
+    .grid-2, .grid-3, .lab-grid, .summary-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3, .lab-grid { grid-template-columns: repeat(3, 1fr); }
+    .summary-grid { grid-template-columns: repeat(4, 1fr); margin-top: 1rem; }
+
+    .card, .lab-card { padding: 3rem 1.35rem 1.35rem; }
+
+    .summary-item {
+      min-height: 125px;
+      padding: 1rem;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(72,255,139,0.072), rgba(72,255,139,0.030));
+      border: 1px solid rgba(72,255,139,0.14);
+      box-shadow: inset 0 0 20px rgba(72,255,139,0.035);
+    }
+
+    .summary-item strong { display: block; color: #effff4; margin-bottom: 0.25rem; }
+    .summary-item span { color: var(--muted); font-size: 0.88rem; }
+
+    .tag-list { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 0.4rem; }
+    .tag { padding: 0.62rem 0.9rem; border-radius: 999px; background: rgba(72,255,139,0.08); border: 1px solid rgba(72,255,139,0.18); color: #ddffea; font-size: 0.9rem; box-shadow: inset 0 0 20px rgba(72,255,139,0.035); }
+
+    .list { margin: 0; padding-left: 1.1rem; color: var(--muted); }
+    .list li { margin-bottom: 0.45rem; }
+
+    .callout {
+      border-left: 3px solid var(--primary);
+      padding: 1rem 1rem 1rem 1.1rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: 14px;
+      color: var(--muted);
+    }
+
+    .code-box {
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(72,255,139,0.12);
+      border-radius: 14px;
+      padding: 0.95rem;
+      color: #dffff0;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      margin-top: 0.9rem;
+    }
+
+    .lab-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      min-height: 290px;
+    }
+
+    .lab-meta {
+      font-size: 0.87rem;
+      color: var(--primary);
+      border-top: 1px solid rgba(72,255,139,0.10);
+      padding-top: 0.7rem;
+      margin-top: auto;
+    }
+
+    footer { padding: 2.5rem 0 4rem; color: var(--muted); text-align: center; position: relative; z-index: 1; }
+
+    @media (max-width: 1100px) {
+      .grid-3, .lab-grid, .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 980px) {
+      .hero-main, .grid-2, .grid-3, .lab-grid, .summary-grid { grid-template-columns: 1fr; }
+      .menu { display: none; }
+      .hero-grid { padding: 3rem 1rem 1rem; }
+      .hero-grid::after { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #matrixRainCanvas { opacity: 0.12; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="matrix-rain" aria-hidden="true">
+    <canvas id="matrixRainCanvas"></canvas>
+  </div>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">RAVENS</div>
+      <div class="menu">
+        <a href="index.html">Página principal</a>
+        <a href="#grupo">Grupo</a>
+        <a href="#repositorio">Repositório</a>
+        <a href="#laboratorios">Laboratórios</a>
+        <a href="#seguranca">Segurança</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container hero-grid">
+      <div class="hero-main">
+        <div>
+          <div class="eyebrow">Pesquisa - Laboratórios - Redes - Segurança</div>
+          <h1>Ravens Research Group on Advanced Vulnerability Exploration and Network Security</h1>
+          <p>
+            Grupo de pesquisa dedicado ao estudo avançado de cibersegurança, redes de computadores, vulnerabilidades, defesa cibernética e análise de ameaças.
+          </p>
+          <p>
+            Esta página reúne a visão geral do grupo, os laboratórios disponíveis no repositório e as orientações para uso acadêmico e experimental, incluindo preparação de ambiente Kali Linux.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer">Abrir repositório</a>
+            <a class="button button-secondary" href="index.html">Voltar à página principal</a>
+          </div>
+        </div>
+        <div class="logo-panel">
+          <img src="arquivos/Ravens-logo.png" alt="Logo do Ravens Research Group" />
+        </div>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-item"><strong>Cibersegurança</strong><span>Estudo de ameaças, vulnerabilidades, defesa e resposta.</span></div>
+        <div class="summary-item"><strong>Redes</strong><span>Experimentos com protocolos, DNS, SMTP e tráfego de rede.</span></div>
+        <div class="summary-item"><strong>Criptografia</strong><span>Laboratórios com OpenSSL, AES, RSA, chaves e certificados.</span></div>
+        <div class="summary-item"><strong>Ambiente Kali</strong><span>Roteiros para instalação do Kali Linux e Metasploitable2 no VirtualBox.</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="grupo">
+      <div class="container">
+        <div class="section-head">
+          <h2>Grupo de Pesquisa RAVENS</h2>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Visão do grupo</h3>
+            <p class="muted">
+              O RAVENS atua na interseção entre pesquisa acadêmica, formação de recursos humanos e aplicações práticas em segurança digital.
+            </p>
+            <p class="muted">
+              O grupo desenvolve estudos, projetos e experimentos em cibersegurança, redes, vulnerabilidades, defesa cibernética e análise de ameaças.
+            </p>
+            <div class="tag-list">
+              <span class="tag">Network Security</span>
+              <span class="tag">Threat Hunting</span>
+              <span class="tag">CTI</span>
+              <span class="tag">Criptografia</span>
+              <span class="tag">Fraudes Digitais</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>Linhas de atuação</h3>
+            <ul class="list">
+              <li>Segurança em redes de computadores.</li>
+              <li>Detecção e mitigação de ataques cibernéticos.</li>
+              <li>Análise de malware e ameaças avançadas.</li>
+              <li>Cyber Threat Intelligence e Threat Hunting.</li>
+              <li>Criptografia aplicada e protocolos seguros.</li>
+              <li>Fraudes digitais e segurança bancária.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <h2>Objetivos do RAVENS</h2>
+        </div>
+        <div class="grid-3">
+          <article class="card"><h3>Pesquisa aplicada</h3><p class="muted">Produzir pesquisa científica aplicada em cibersegurança e redes.</p></article>
+          <article class="card"><h3>Formação</h3><p class="muted">Formar alunos de graduação e pós-graduação em temas avançados.</p></article>
+          <article class="card"><h3>Experimentação</h3><p class="muted">Desenvolver soluções experimentais e provas de conceito.</p></article>
+          <article class="card"><h3>Integração</h3><p class="muted">Integrar ensino, pesquisa e extensão em segurança cibernética.</p></article>
+          <article class="card"><h3>Impacto</h3><p class="muted">Contribuir para o fortalecimento da segurança cibernética nacional.</p></article>
+          <article class="card"><h3>Documentação</h3><p class="muted">Produzir roteiros reprodutíveis, claros e orientados à prática.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="repositorio">
+      <div class="container">
+        <div class="section-head">
+          <h2>Repositório e estrutura</h2>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Como usar</h3>
+            <ol class="list">
+              <li>Clone o repositório.</li>
+              <li>Entre na pasta do projeto.</li>
+              <li>Escolha o roteiro desejado.</li>
+              <li>Registre evidências, comandos, saídas, chaves, certificados e prints.</li>
+            </ol>
+            <div class="code-box">git clone https://github.com/peotta/ravens.git
+cd ravens</div>
+            <div class="button-row">
+              <a class="button button-primary" href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer">Acessar GitHub</a>
+            </div>
+          </article>
+          <article class="card">
+            <h3>Pré-requisitos</h3>
+            <ul class="list">
+              <li>Linux, macOS ou Windows 10/11 com WSL.</li>
+              <li>OpenSSL.</li>
+              <li>dnsutils ou bind9-dnsutils.</li>
+              <li>Python 3, quando necessário.</li>
+              <li>Conta Google com autenticação em dois fatores e senha de app para o laboratório SMTP.</li>
+              <li>Para os laboratórios de segurança ofensiva, instalar uma máquina Kali Linux conforme o roteiro indicado no Lab Kali 01.</li>
+            </ul>
+            <div class="code-box">sudo apt update && sudo apt install -y openssl dnsutils python3</div>
+            <div class="button-row">
+              <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/Kali/01%20Roteiro%20de%20instala%C3%A7%C3%A3o%20Kali%20Linux.md" target="_blank" rel="noreferrer">Pré-requisito - Instalar Kali Linux</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="laboratorios">
+      <div class="container">
+        <div class="section-head">
+          <h2>Laboratórios</h2>
+        </div>
+        <div class="lab-grid">
+
+          <article class="lab-card">
+            <h3>Lab Kali 01 - Instalação do Kali Linux</h3>
+            <p class="muted">Preparação da máquina Kali Linux para uso nos laboratórios de segurança ofensiva, análise e testes controlados.</p>
+            <p class="muted">Pré-requisito para os laboratórios que utilizam ferramentas de segurança, validação de ambiente e experimentação em máquina virtual.</p>
+            <div class="lab-meta">Kali Linux - Virtualização - Ambiente de laboratório</div>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/Kali/01%20Roteiro%20de%20instala%C3%A7%C3%A3o%20Kali%20Linux.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
+          </article>
+
+          <article class="lab-card">
+            <h3>Lab Kali 02 - Instalação do Metasploitable2 no VirtualBox</h3>
+            <p class="muted">Configuração do Metasploitable2 como ambiente vulnerável controlado para práticas de segurança e análise.</p>
+            <p class="muted">Conteúdos: VirtualBox, importação de máquina virtual, rede de laboratório e preparação de ambiente para testes.</p>
+            <div class="lab-meta">Metasploitable2 - VirtualBox - Ambiente vulnerável</div>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/Kali/02%20Roteriro%20de%20instala%C3%A7%C3%A3o%20do%20Metasploitable2%20no%20VirtualBox.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
+          </article>
+
+          <article class="lab-card">
+            <h3>Lab 1 - Enviando e-mail via SMTP do Google</h3>
+            <p class="muted">Compreensão do fluxo SMTP autenticado com STARTTLS e boas práticas no uso do Gmail.</p>
+            <p class="muted">Conteúdos: senha de app, handshake TLS, cabeçalhos SMTP, envio automatizado e autenticação.</p>
+            <div class="lab-meta">SMTP - Gmail - STARTTLS</div>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/Lab1%3ALaborat%C3%B3rio%3A%20Enviando%20e-mail%20via%20SMTP%20do%20Google.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
+          </article>
+
+          <article class="lab-card">
+            <h3>Lab - Criptografia Simétrica</h3>
+            <p class="muted">Uso prático de AES e modos de operação como CBC e GCM.</p>
+            <p class="muted">Conteúdos: geração de chaves, IV, PBKDF2, padding, integridade e riscos de reutilização de IV.</p>
+            <div class="lab-meta">AES - CBC - GCM - OpenSSL</div>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/Lab%3A%20Criptografia%20Sim%C3%A9trica.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
+          </article>
+
+          <article class="lab-card">
+            <h3>Lab - Criptografia Assimétrica com OpenSSL</h3>
+            <p class="muted">Aplicação de RSA e curvas elípticas em geração de chaves, assinatura e certificados.</p>
+            <p class="muted">Conteúdos: genpkey, assinatura, verificação, CSR e certificado autoassinado.</p>
+            <div class="lab-meta">RSA - ECC - CSR - Certificados</div>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/Laborat%C3%B3rio%20Criptografia%20Assim%C3%A9trica%20com%20OpenSSL.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
+          </article>
+
+          <article class="lab-card">
+            <h3>Lab - DNS</h3>
+            <p class="muted">Compreensão da resolução de nomes, registros DNS e práticas seguras.</p>
+            <p class="muted">Conteúdos: dig, TTL, DNSSEC, CAA, zone transfer e riscos de amplification.</p>
+            <div class="lab-meta">DNS - dig - DNSSEC - CAA</div>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/Lab%3ADNS.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="seguranca">
+      <div class="container">
+        <div class="section-head">
+          <h2>Boas práticas e segurança</h2>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Cuidados essenciais</h3>
+            <ul class="list">
+              <li>Nunca publique senhas, tokens ou chaves privadas.</li>
+              <li>Use RSA com pelo menos 3072 bits ou curvas elípticas modernas.</li>
+              <li>Documente versões de ferramentas e parâmetros usados.</li>
+              <li>Evite expor serviços internos por DNS público.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Contexto histórico</h3>
+            <p class="muted">
+              DNS surgiu nos anos 1980 para resolver nomes na ARPANET. Diffie-Hellman e RSA datam dos anos 1970. AES consolidou-se no fim dos anos 1990.
+            </p>
+            <p class="muted">
+              Compreender esse percurso ajuda a conectar redes, criptografia e História da Computação.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <h2>Como contribuir</h2>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Contribuição</h3>
+            <ol class="list">
+              <li>Abra uma issue com sua sugestão.</li>
+              <li>Faça um fork do repositório.</li>
+              <li>Envie um pull request com as modificações.</li>
+              <li>Mantenha o conteúdo em português e reprodutível.</li>
+            </ol>
+          </article>
+          <article class="card">
+            <h3>Sugestões futuras</h3>
+            <p class="muted">Novos laboratórios podem abordar TLS, mTLS, Zero Trust, Wireshark, tcpdump e forense digital.</p>
+            <div class="callout">Conteúdo sob CC BY-NC 4.0, salvo indicação contrária.</div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Prof. Dr. Laerte Peotta de Melo - Ravens Research Group on Advanced Vulnerability Exploration and Network Security.</p>
+    </div>
+  </footer>
+
+  <script>
+    const matrixCanvas = document.getElementById('matrixRainCanvas');
+    const matrixCtx = matrixCanvas.getContext('2d');
+    const matrixAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789RAVENSCYBERSECURITYNETWORKSVULNERABILITYEXPLORATIONDNSAESRSAOPENSSLTLSCTITHREATHUNTINGSMTP';
+    let matrixDrops = [];
+    let matrixFontSize = 15;
+    let matrixColumns = 0;
+
+    function resizeMatrixRain() {
+      const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
+      matrixCanvas.width = Math.floor(window.innerWidth * dpr);
+      matrixCanvas.height = Math.floor(window.innerHeight * dpr);
+      matrixCanvas.style.width = window.innerWidth + 'px';
+      matrixCanvas.style.height = window.innerHeight + 'px';
+      matrixCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      matrixFontSize = window.innerWidth < 700 ? 13 : 15;
+      matrixColumns = Math.ceil(window.innerWidth / matrixFontSize);
+      matrixDrops = Array.from({ length: matrixColumns }, () => Math.random() * -window.innerHeight / matrixFontSize);
+    }
+
+    function drawMatrixRain() {
+      matrixCtx.fillStyle = 'rgba(1, 3, 1, 0.155)';
+      matrixCtx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+      matrixCtx.font = matrixFontSize + 'px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace';
+      matrixCtx.textAlign = 'center';
+
+      for (let i = 0; i < matrixDrops.length; i++) {
+        const text = matrixAlphabet.charAt(Math.floor(Math.random() * matrixAlphabet.length));
+        const x = i * matrixFontSize + matrixFontSize / 2;
+        const y = matrixDrops[i] * matrixFontSize;
+        matrixCtx.shadowBlur = 7;
+        matrixCtx.shadowColor = 'rgba(72,255,139,0.55)';
+        matrixCtx.fillStyle = Math.random() > 0.985 ? '#d8ffe7' : (Math.random() > 0.80 ? '#58d684' : '#1fae58');
+        matrixCtx.fillText(text, x, y);
+        if (y > window.innerHeight && Math.random() > 0.972) matrixDrops[i] = Math.random() * -18;
+        matrixDrops[i] += 0.82 + Math.random() * 0.52;
+      }
+    }
+
+    resizeMatrixRain();
+    window.addEventListener('resize', resizeMatrixRain);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReducedMotion) setInterval(drawMatrixRain, 34); else drawMatrixRain();
+  </script>
+</body>
+</html>
