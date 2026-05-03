@@ -757,6 +757,38 @@
       box-shadow: var(--shadow), var(--glow);
     }
 
+    .ravens-logo {
+      width: min(100%, 430px);
+      display: block;
+      margin: 0 auto;
+      border-radius: 22px;
+      border: 1px solid rgba(72,255,139,0.20);
+      background: rgba(0,0,0,0.18);
+      box-shadow: var(--shadow), var(--glow);
+    }
+
+    .ravens-card-logo {
+      width: 68px;
+      height: 68px;
+      object-fit: contain;
+      border-radius: 16px;
+      padding: 0.35rem;
+      background: rgba(72,255,139,0.08);
+      border: 1px solid rgba(72,255,139,0.18);
+      box-shadow: 0 0 24px rgba(72,255,139,0.10);
+      flex: 0 0 auto;
+    }
+
+    .ravens-title-stack {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .ravens-title-stack span {
+      display: block;
+    }
+
     .contact-list {
       display: grid;
       gap: 0.85rem;
@@ -1078,8 +1110,8 @@
             <a class="button button-secondary" href="fortinet.html" data-i18n="repos.accessGuide">Acessar guia</a>
           </article>
           <article class="repo-card featured-resource">
-            <h3 class="repo-title"><span class="repo-icon" aria-hidden="true">🦅</span><span data-i18n="certs.ravens.title">Grupo RAVENS</span></h3>
-            <p class="muted" data-i18n="certs.ravens.text">Grupo de estudos e pesquisa em cibersegurança, redes, vulnerabilidades, engenharia e análise de ameaças.</p>
+            <h3 class="repo-title ravens-title-stack"><img class="ravens-card-logo" src="arquivos/Ravens-logo.png" alt="Logo do RAVENS" /><span data-i18n="certs.ravens.title">Ravens Research Group on Advanced Vulnerability Exploration and Network Security</span></h3>
+            <p class="muted" data-i18n="certs.ravens.text">Grupo de estudos e pesquisa em cibersegurança, redes, exploração avançada de vulnerabilidades e segurança.</p>
             <div class="repo-meta" data-i18n="certs.studyGroup">Grupo de estudos</div>
             <a class="button button-secondary" href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer" data-i18n="ravens.open">Acessar RAVENS</a>
           </article>
@@ -1107,22 +1139,14 @@
     <section>
       <div class="container split">
         <article class="card">
-          <h2 style="line-height: 1.22; font-weight: 700; letter-spacing: 0.035em; color: #d8ffe7;">
-            <span style="font-size: 1.4em; font-weight: 900; color: #39ff7a; text-shadow: 0 0 4px rgba(57,255,122,0.22);">RAVENS</span><br>
-            <span style="font-size: 1.16em; font-weight: 900; color: #39ff7a;">R</span>esearch Group on
-            <span style="font-size: 1.16em; font-weight: 900; color: #31da69;">A</span>dvanced
-            <span style="font-size: 1.16em; font-weight: 900; color: #28b95a;">V</span>ulnerabilities,
-            <span style="font-size: 1.16em; font-weight: 900; color: #72f0a3;">E</span>ngineering,
-            <span style="font-size: 1.16em; font-weight: 900; color: #4fd083;">N</span>etworks and
-            <span style="font-size: 1.16em; font-weight: 900; color: #9cf7c2;">S</span>ecurity
-          </h2>
+          <h2 style="line-height: 1.22; font-weight: 800; letter-spacing: 0.02em; color: #d8ffe7;" data-i18n="ravens.fullTitle">Ravens Research Group on Advanced Vulnerability Exploration and Network Security</h2>
           <p data-i18n="ravens.text">
             Grupo voltado à pesquisa, à formação acadêmica e à produção técnica em Cibersegurança, redes, vulnerabilidades e análise de ameaças.
           </p>
           <a class="button button-secondary" href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer" data-i18n="ravens.open">Acessar RAVENS</a>
         </article>
         <article class="card">
-          <img class="ravens-banner" src="ravens-1.webp" alt="Imagem do grupo RAVENS" data-alt-key="ravens.alt" />
+          <img class="ravens-logo" src="arquivos/Ravens-logo.png" alt="Logo do RAVENS - Ravens Research Group on Advanced Vulnerability Exploration and Network Security" data-alt-key="ravens.alt" />
         </article>
       </div>
     </section>
@@ -1261,8 +1285,8 @@
         'profiles.githubText': 'Repositórios e materiais',
         'repos.title': 'Disciplinas e Materiais de Aulas',
         'certs.title': 'Certificações Profissionais e Grupos de Estudos',
-        'certs.ravens.title': 'Grupo RAVENS',
-        'certs.ravens.text': 'Grupo de estudos e pesquisa em cibersegurança, redes, vulnerabilidades, engenharia e análise de ameaças.',
+        'certs.ravens.title': 'Ravens Research Group on Advanced Vulnerability Exploration and Network Security',
+        'certs.ravens.text': 'Grupo de estudos e pesquisa em cibersegurança, redes, exploração avançada de vulnerabilidades e segurança.',
         'certs.studyGroup': 'Grupo de estudos',
         'repos.labredes.title': 'Laboratório de Redes',
         'repos.labredes.text': 'Atividades experimentais com dispositivos de rede, análise de protocolos, VLANs e roteamento.',
@@ -1297,9 +1321,10 @@
         'podcast.text': 'Podcast dedicado a redes de computadores, infraestrutura, desempenho e temas associados às atividades de ensino.',
         'podcast.listen': 'Ouvir no Spotify',
         'podcast.alt': 'Podcast Latência Zero',
-        'ravens.text': 'Grupo voltado à pesquisa, à formação acadêmica e à produção técnica em Cibersegurança, redes, vulnerabilidades e análise de ameaças.',
+        'ravens.text': 'Grupo voltado à pesquisa, à formação acadêmica e à produção técnica em cibersegurança, redes, exploração avançada de vulnerabilidades e segurança.',
+        'ravens.fullTitle': 'Ravens Research Group on Advanced Vulnerability Exploration and Network Security',
         'ravens.open': 'Acessar RAVENS',
-        'ravens.alt': 'Imagem do grupo RAVENS',
+        'ravens.alt': 'Logo do RAVENS - Ravens Research Group on Advanced Vulnerability Exploration and Network Security',
         'contact.title': 'Contato',
         'footer.text': 'Prof. Dr. Laerte Peotta de Melo - ensino, pesquisa e atuação em cibersegurança, redes e computação.'
       },
@@ -1360,8 +1385,8 @@
         'profiles.githubText': 'Repositories and materials',
         'repos.title': 'Courses and Teaching Materials',
         'certs.title': 'Professional Certifications and Study Groups',
-        'certs.ravens.title': 'RAVENS Group',
-        'certs.ravens.text': 'Study and research group in cybersecurity, networks, vulnerabilities, engineering, and threat analysis.',
+        'certs.ravens.title': 'Ravens Research Group on Advanced Vulnerability Exploration and Network Security',
+        'certs.ravens.text': 'Study and research group in cybersecurity, networks, advanced vulnerability exploration, and security.',
         'certs.studyGroup': 'Study group',
         'repos.labredes.title': 'Network Laboratory',
         'repos.labredes.text': 'Experimental activities with network devices, protocol analysis, VLANs, and routing.',
@@ -1396,9 +1421,10 @@
         'podcast.text': 'Podcast dedicated to computer networks, infrastructure, performance, and topics related to teaching activities.',
         'podcast.listen': 'Listen on Spotify',
         'podcast.alt': 'Latency Zero Podcast',
-        'ravens.text': 'Research group focused on academic development and technical production in Cybersecurity, networks, vulnerabilities, and threat analysis.',
+        'ravens.text': 'Research group focused on academic development and technical production in cybersecurity, networks, advanced vulnerability exploration, and security.',
+        'ravens.fullTitle': 'Ravens Research Group on Advanced Vulnerability Exploration and Network Security',
         'ravens.open': 'Access RAVENS',
-        'ravens.alt': 'RAVENS group image',
+        'ravens.alt': 'RAVENS logo - Ravens Research Group on Advanced Vulnerability Exploration and Network Security',
         'contact.title': 'Contact',
         'footer.text': 'Prof. Dr. Laerte Peotta de Melo - teaching, research, and professional practice in cybersecurity, networks, and computing.'
       },
@@ -1459,8 +1485,8 @@
         'profiles.githubText': 'Repositorios y materiales',
         'repos.title': 'Asignaturas y Materiales de Clases',
         'certs.title': 'Certificaciones Profesionales y Grupos de Estudio',
-        'certs.ravens.title': 'Grupo RAVENS',
-        'certs.ravens.text': 'Grupo de estudio e investigación en ciberseguridad, redes, vulnerabilidades, ingeniería y análisis de amenazas.',
+        'certs.ravens.title': 'Ravens Research Group on Advanced Vulnerability Exploration and Network Security',
+        'certs.ravens.text': 'Grupo de estudio e investigación en ciberseguridad, redes, exploración avanzada de vulnerabilidades y seguridad.',
         'certs.studyGroup': 'Grupo de estudio',
         'repos.labredes.title': 'Laboratorio de Redes',
         'repos.labredes.text': 'Actividades experimentales con dispositivos de red, análisis de protocolos, VLAN y enrutamiento.',
@@ -1495,9 +1521,10 @@
         'podcast.text': 'Podcast dedicado a redes de computadoras, infraestructura, rendimiento y temas asociados a las actividades docentes.',
         'podcast.listen': 'Escuchar en Spotify',
         'podcast.alt': 'Podcast Latência Zero',
-        'ravens.text': 'Grupo orientado a la investigación, la formación académica y la producción técnica en Ciberseguridad, redes, vulnerabilidades y análisis de amenazas.',
+        'ravens.text': 'Grupo orientado a la investigación, la formación académica y la producción técnica en ciberseguridad, redes, exploración avanzada de vulnerabilidades y seguridad.',
+        'ravens.fullTitle': 'Ravens Research Group on Advanced Vulnerability Exploration and Network Security',
         'ravens.open': 'Acceder a RAVENS',
-        'ravens.alt': 'Imagen del grupo RAVENS',
+        'ravens.alt': 'Logotipo de RAVENS - Ravens Research Group on Advanced Vulnerability Exploration and Network Security',
         'contact.title': 'Contacto',
         'footer.text': 'Prof. Dr. Laerte Peotta de Melo - docencia, investigación y actuación en ciberseguridad, redes y computación.'
       }
