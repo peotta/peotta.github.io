@@ -7,17 +7,21 @@
   <meta name="description" content="Guia para escrita de TCC ou artigo científico, com estrutura sugerida, resumo, introdução, referencial teórico, desenvolvimento, conclusão e referências." />
   <style>
     :root {
-      --bg: #030604;
-      --bg-soft: #06110a;
-      --card: rgba(6, 20, 10, 0.72);
-      --card-border: rgba(69, 255, 146, 0.18);
+      --bg: #010301;
+      --bg-soft: #020b05;
+      --panel: rgba(3, 17, 8, 0.82);
+      --panel-strong: rgba(6, 28, 13, 0.92);
+      --card: rgba(4, 18, 9, 0.76);
+      --card-border: rgba(72, 255, 139, 0.22);
       --text: #d8ffe7;
-      --muted: #96c6a8;
+      --muted: #91caa4;
       --primary: #48ff8b;
       --secondary: #00d26a;
-      --accent: #8bffb3;
-      --shadow: 0 20px 60px rgba(0,0,0,0.45);
-      --radius: 22px;
+      --accent: #b8ffd0;
+      --terminal: #09160d;
+      --shadow: 0 20px 70px rgba(0,0,0,0.55);
+      --glow: 0 0 26px rgba(72,255,139,0.20), 0 0 60px rgba(0,210,106,0.08);
+      --radius: 24px;
       --max: 1180px;
     }
 
@@ -26,14 +30,14 @@
 
     body {
       margin: 0;
+      min-height: 100vh;
       font-family: Inter, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(72,255,139,0.10), transparent 22%),
-        radial-gradient(circle at top right, rgba(0,210,106,0.08), transparent 22%),
-        linear-gradient(180deg, #010201 0%, #020704 50%, #031008 100%);
+        radial-gradient(circle at 15% 0%, rgba(72,255,139,0.16), transparent 28%),
+        radial-gradient(circle at 85% 8%, rgba(0,210,106,0.12), transparent 24%),
+        linear-gradient(180deg, #010201 0%, #020704 42%, #031008 100%);
       line-height: 1.65;
-      position: relative;
       overflow-x: hidden;
     }
 
@@ -42,86 +46,189 @@
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(rgba(72,255,139,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(72,255,139,0.05) 1px, transparent 1px);
-      background-size: 32px 32px;
+        linear-gradient(rgba(72,255,139,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(72,255,139,0.08) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.20;
       pointer-events: none;
-      opacity: 0.22;
-      z-index: -2;
+      z-index: -4;
+      mask-image: linear-gradient(to bottom, black 0%, rgba(0,0,0,0.8) 42%, transparent 100%);
     }
 
     body::after {
-      content: "010101 001101 101010 011010 110001 001011 101101 010110";
+      content: "";
       position: fixed;
       inset: 0;
-      white-space: pre-wrap;
-      word-break: break-all;
-      font-size: 13px;
-      line-height: 1.8;
-      color: rgba(72,255,139,0.05);
+      background:
+        repeating-linear-gradient(180deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 4px),
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.28) 100%);
       pointer-events: none;
-      z-index: -1;
-      padding: 2rem;
+      z-index: 100;
+      mix-blend-mode: screen;
+      opacity: 0.35;
     }
 
     a { color: inherit; text-decoration: none; }
 
+    .matrix-rain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: -3;
+    }
+
+    #matrixRainCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      opacity: 0.50;
+      filter: contrast(1.02) saturate(0.95) drop-shadow(0 0 5px rgba(72,255,139,0.22));
+    }
+
+    .matrix-rain::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(1,3,1,0.22), transparent 18%, transparent 82%, rgba(1,3,1,0.22)),
+        radial-gradient(circle at 50% 22%, rgba(72,255,139,0.045), transparent 28%),
+        linear-gradient(180deg, rgba(0,0,0,0.32), transparent 36%, rgba(0,0,0,0.46));
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .matrix-rain::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(180deg, rgba(216,255,231,0.014) 0 1px, transparent 1px 3px),
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.46) 100%);
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.58;
+      mix-blend-mode: screen;
+    }
+
     .container {
       width: min(calc(100% - 2rem), var(--max));
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
     .nav {
       position: sticky;
       top: 0;
-      z-index: 50;
-      backdrop-filter: blur(14px);
-      background: rgba(2, 10, 5, 0.84);
-      border-bottom: 1px solid rgba(72,255,139,0.16);
+      z-index: 60;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(180deg, rgba(1,6,3,0.96), rgba(1,9,4,0.82));
+      border-bottom: 1px solid rgba(72,255,139,0.20);
+      box-shadow: 0 12px 34px rgba(0,0,0,0.42);
     }
 
     .nav-inner {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.9rem 0;
+      padding: 0.85rem 0;
       gap: 1rem;
+      flex-wrap: wrap;
     }
 
     .brand {
-      font-weight: 800;
-      letter-spacing: 0.06em;
+      font-weight: 900;
+      letter-spacing: 0.07em;
       white-space: nowrap;
       text-transform: uppercase;
-      text-shadow: 0 0 12px rgba(72,255,139,0.35);
+      color: #eafff0;
+      text-shadow: 0 0 14px rgba(72,255,139,0.40);
     }
 
     .menu {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.8rem;
+      gap: 0.55rem;
       justify-content: flex-end;
     }
 
     .menu a {
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.82rem;
+      border: 1px solid rgba(72,255,139,0.14);
+      background: rgba(72,255,139,0.045);
+      padding: 0.52rem 0.72rem;
+      border-radius: 999px;
       transition: 0.2s ease;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
 
-    .menu a:hover { color: white; }
-
-    .hero {
-      padding: 4rem 0 2.2rem;
+    .menu a:hover {
+      color: #031008;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 0 22px rgba(72,255,139,0.26);
+      border-color: transparent;
     }
+
+    .hero { padding: 3.2rem 0 2.2rem; }
 
     .hero-grid {
+      background:
+        linear-gradient(135deg, rgba(72,255,139,0.060), transparent 30%),
+        radial-gradient(circle at 82% 24%, rgba(72,255,139,0.085), transparent 26%),
+        linear-gradient(180deg, rgba(4,18,9,0.94), rgba(1,9,4,0.86));
+      border: 1px solid rgba(72,255,139,0.26);
+      border-radius: 30px;
+      box-shadow: var(--shadow), var(--glow), inset 0 0 0 1px rgba(216,255,231,0.035);
+      position: relative;
+      overflow: hidden;
+      padding: 3.35rem 1.45rem 1.45rem;
+    }
+
+    .hero-grid::before,
+    .card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 34px;
+      width: 100%;
+      background:
+        radial-gradient(circle at 18px 17px, #48ff8b 0 4px, transparent 4.5px),
+        radial-gradient(circle at 38px 17px, #00d26a 0 4px, transparent 4.5px),
+        radial-gradient(circle at 58px 17px, #8bffb3 0 4px, transparent 4.5px),
+        linear-gradient(180deg, rgba(72,255,139,0.12), rgba(72,255,139,0.035));
+      border-bottom: 1px solid rgba(72,255,139,0.15);
+      opacity: 0.86;
+    }
+
+    .hero-grid::after {
+      content: "ACADEMIC WRITING // TCC // SCIENTIFIC ARTICLE";
+      position: absolute;
+      top: 9px;
+      right: 18px;
+      color: rgba(216,255,231,0.42);
+      font-size: 0.74rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .hero-grid > *,
+    .card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-main {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 1.5rem;
+      grid-template-columns: minmax(0, 1.12fr) minmax(280px, 0.68fr);
+      gap: clamp(1rem, 2.7vw, 2rem);
       align-items: start;
+      padding: clamp(0.35rem, 1vw, 0.7rem);
     }
 
     .eyebrow {
@@ -131,34 +238,35 @@
       padding: 0.45rem 0.8rem;
       border-radius: 999px;
       background: rgba(72,255,139,0.10);
-      border: 1px solid rgba(72,255,139,0.18);
+      border: 1px solid rgba(72,255,139,0.22);
       color: #e2ffee;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
+      font-size: 0.88rem;
+      margin: 0 0 1rem;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.075em;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(2.2rem, 4.5vw, 4.3rem);
-      line-height: 1.04;
-      letter-spacing: -0.03em;
-      text-shadow: 0 0 18px rgba(72,255,139,0.14);
+      font-size: clamp(2.3rem, 5vw, 4.4rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+      color: #f1fff5;
+      text-shadow: 0 0 22px rgba(72,255,139,0.22);
     }
 
     .hero p {
       color: var(--muted);
-      font-size: 1.02rem;
-      max-width: 68ch;
-      margin: 1rem 0 0;
+      font-size: 1.03rem;
+      max-width: 76ch;
+      margin: 1.05rem 0 0;
     }
 
     .button-row {
       display: flex;
       flex-wrap: wrap;
       gap: 0.9rem;
-      margin-top: 1.5rem;
+      margin-top: 1.35rem;
     }
 
     .button {
@@ -166,25 +274,29 @@
       align-items: center;
       justify-content: center;
       gap: 0.55rem;
-      padding: 0.95rem 1.2rem;
-      border-radius: 12px;
-      font-weight: 700;
-      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      padding: 0.88rem 1.08rem;
+      border-radius: 14px;
+      font-weight: 800;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
+      font-size: 0.88rem;
     }
 
-    .button:hover { transform: translateY(-2px); }
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(72,255,139,0.18);
+    }
 
     .button-primary {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #041108;
+      color: #031008;
       box-shadow: var(--shadow);
     }
 
     .button-secondary {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(72,255,139,0.18);
+      background: rgba(72,255,139,0.055);
+      border: 1px solid rgba(72,255,139,0.22);
       color: var(--text);
     }
 
@@ -192,63 +304,88 @@
       background: var(--card);
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.35rem;
-      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow), var(--glow);
+      padding: 3rem 1.35rem 1.35rem;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
     }
 
     .summary-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.9rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
     }
 
-    .summary-item {
+    .summary-item,
+    .mini-card,
+    .example,
+    .callout {
       padding: 1rem;
       border-radius: 18px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(72,255,139,0.10);
+      background: rgba(72,255,139,0.055);
+      border: 1px solid rgba(72,255,139,0.12);
+      box-shadow: inset 0 0 20px rgba(72,255,139,0.035);
     }
 
     .summary-item strong {
       display: block;
       margin-bottom: 0.3rem;
+      color: #effff4;
     }
 
-    .summary-item span {
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
+    .summary-item span,
+    .muted,
+    .dash-list,
+    .check-list,
+    .number-list,
+    .example,
+    .callout { color: var(--muted); }
 
-    section { padding: 1.1rem 0; }
+    section {
+      padding: 1.05rem 0;
+      position: relative;
+      z-index: 1;
+    }
 
     .section-head {
       margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .section-head::before {
+      content: ">";
+      color: var(--primary);
+      text-shadow: 0 0 14px rgba(72,255,139,0.55);
+      font-size: 1.55rem;
+      font-weight: 900;
     }
 
     .section-head h2 {
-      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-size: clamp(1.45rem, 3vw, 2.25rem);
       margin: 0;
-      text-transform: uppercase;
       letter-spacing: -0.03em;
+      text-transform: uppercase;
+      text-shadow: 0 0 16px rgba(72,255,139,0.16);
     }
+
+    h3, h4 { color: #f0fff5; margin-top: 0; }
 
     .grid-2, .grid-3, .roadmap-grid, .cards-grid {
       display: grid;
       gap: 1.2rem;
     }
 
-    .grid-2 { grid-template-columns: 1fr 1fr; }
-    .grid-3 { grid-template-columns: repeat(3, 1fr); }
-    .roadmap-grid { grid-template-columns: repeat(2, 1fr); }
-    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .cards-grid, .roadmap-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
     .check-list,
     .dash-list,
     .number-list {
       margin: 0;
       padding-left: 1.2rem;
-      color: var(--muted);
     }
 
     .check-list li,
@@ -266,32 +403,10 @@
       padding: 0.62rem 0.9rem;
       border-radius: 999px;
       background: rgba(72,255,139,0.08);
-      border: 1px solid rgba(72,255,139,0.16);
+      border: 1px solid rgba(72,255,139,0.18);
       color: #ddffea;
-      font-size: 0.92rem;
-    }
-
-    .callout {
-      border-left: 3px solid var(--primary);
-      padding: 1rem 1rem 1rem 1.1rem;
-      background: rgba(255,255,255,0.03);
-      border-radius: 14px;
-      color: var(--muted);
-    }
-
-    .example {
-      border: 1px solid rgba(72,255,139,0.14);
-      border-radius: 16px;
-      padding: 1rem;
-      background: rgba(255,255,255,0.025);
-      color: var(--muted);
-    }
-
-    .example strong,
-    .card h3,
-    .card h4 {
-      color: var(--text);
-      margin-top: 0;
+      font-size: 0.9rem;
+      box-shadow: inset 0 0 20px rgba(72,255,139,0.035);
     }
 
     .code-box {
@@ -325,23 +440,16 @@
       background: rgba(255,255,255,0.04);
     }
 
-    .mini-card {
-      padding: 1rem;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(72,255,139,0.12);
-    }
-
-    .muted { color: var(--muted); }
-
     footer {
       padding: 2.5rem 0 4rem;
       color: var(--muted);
       text-align: center;
+      position: relative;
+      z-index: 1;
     }
 
     @media (max-width: 980px) {
-      .hero-grid,
+      .hero-main,
       .grid-2,
       .grid-3,
       .roadmap-grid,
@@ -351,21 +459,32 @@
       }
 
       .menu { display: none; }
-      .hero { padding-top: 3rem; }
+      .hero { padding-top: 2.4rem; }
+      .hero-grid { padding: 3rem 1rem 1rem; }
+      .hero-grid::after { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #matrixRainCanvas { opacity: 0.12; }
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
 <body>
+  <div class="matrix-rain" aria-hidden="true">
+    <canvas id="matrixRainCanvas"></canvas>
+  </div>
+
   <nav class="nav">
     <div class="container nav-inner">
-      <div class="brand">Guia TCC e Artigo</div>
+      <a class="brand" href="index.html">Prof. Dr. Laerte Peotta de Melo</a>
       <div class="menu">
+        <a href="index.html">Página principal</a>
         <a href="#orientacoes">Orientações</a>
         <a href="#estrutura">Estrutura</a>
         <a href="#resumo">Resumo</a>
         <a href="#introducao">Introdução</a>
         <a href="#desenvolvimento">Desenvolvimento</a>
-        <a href="#conclusao">Conclusão</a>
         <a href="#referencias">Referências</a>
       </div>
     </div>
@@ -373,40 +492,43 @@
 
   <header class="hero">
     <div class="container hero-grid">
-      <div>
-        <div class="eyebrow">Escrita acadêmica - TCC - artigo científico</div>
-        <h1>Guia para Escrita de TCC ou Artigo Científico</h1>
-        <p>
-          Página organizada para consulta rápida sobre estrutura acadêmica, boas práticas de redação, resumo, introdução, referencial teórico, desenvolvimento, conclusão e referências.
-        </p>
-        <p>
-          O conteúdo abaixo sintetiza orientações úteis para a elaboração de trabalhos científicos com foco em clareza, padronização e coerência textual.
-        </p>
-        <div class="button-row">
-          <a class="button button-primary" href="#roteiro">Ver roteiro resumido</a>
-          <a class="button button-secondary" href="#estrutura">Explorar estrutura</a>
+      <div class="hero-main">
+        <div>
+          <div class="eyebrow">Escrita acadêmica - TCC - artigo científico</div>
+          <h1>Guia para Escrita de TCC ou Artigo Científico</h1>
+          <p>
+            Página organizada para consulta rápida sobre estrutura acadêmica, boas práticas de redação, resumo, introdução, referencial teórico, desenvolvimento, conclusão e referências.
+          </p>
+          <p>
+            O conteúdo sintetiza orientações úteis para a elaboração de trabalhos científicos com foco em clareza, padronização e coerência textual.
+          </p>
+          <div class="button-row">
+            <a class="button button-primary" href="index.html">Voltar à página principal</a>
+            <a class="button button-secondary" href="#roteiro">Ver roteiro resumido</a>
+            <a class="button button-secondary" href="#estrutura">Explorar estrutura</a>
+          </div>
         </div>
+        <aside class="card">
+          <div class="summary-grid">
+            <div class="summary-item">
+              <strong>Redação</strong>
+              <span>Terceira pessoa, voz ativa e linguagem impessoal.</span>
+            </div>
+            <div class="summary-item">
+              <strong>Organização</strong>
+              <span>Seções numeradas e introdução breve no início de cada capítulo.</span>
+            </div>
+            <div class="summary-item">
+              <strong>Resumo</strong>
+              <span>Texto informativo entre 150 e 500 palavras, com palavras-chave.</span>
+            </div>
+            <div class="summary-item">
+              <strong>Normas</strong>
+              <span>Referências alinhadas à ABNT, com destaque para NBR 6023 e NBR 6028.</span>
+            </div>
+          </div>
+        </aside>
       </div>
-      <aside class="card">
-        <div class="summary-grid">
-          <div class="summary-item">
-            <strong>Redação</strong>
-            <span>Terceira pessoa, voz ativa e linguagem impessoal.</span>
-          </div>
-          <div class="summary-item">
-            <strong>Organização</strong>
-            <span>Seções numeradas e introdução breve no início de cada capítulo.</span>
-          </div>
-          <div class="summary-item">
-            <strong>Resumo</strong>
-            <span>Texto informativo entre 150 e 500 palavras, com palavras-chave.</span>
-          </div>
-          <div class="summary-item">
-            <strong>Normas</strong>
-            <span>Referências alinhadas à ABNT, com destaque para NBR 6023 e NBR 6028.</span>
-          </div>
-        </div>
-      </aside>
     </div>
   </header>
 
@@ -897,6 +1019,9 @@ O objetivo deste trabalho é propor...</div>
           <article class="card"><h3>Conclusão</h3><p class="muted">Retoma objetivos e resultados, sintetiza as conclusões e sugere trabalhos futuros, sem trazer informações novas.</p></article>
           <article class="card"><h3>Referências</h3><p class="muted">Lista padronizada de todas as obras citadas, conforme ABNT.</p></article>
         </div>
+        <div class="button-row" style="justify-content: center; margin-top: 1.4rem;">
+          <a class="button button-primary" href="index.html">Voltar à página principal</a>
+        </div>
       </div>
     </section>
   </main>
@@ -906,5 +1031,58 @@ O objetivo deste trabalho é propor...</div>
       <p>Prof. Dr. Laerte Peotta de Melo - guia de apoio à escrita acadêmica.</p>
     </div>
   </footer>
+
+  <script>
+    const matrixCanvas = document.getElementById('matrixRainCanvas');
+    const matrixCtx = matrixCanvas.getContext('2d');
+    const matrixAlphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789TCCARTIGOABNTCIENCIAREFERENCIASINTRODUCAOMETODOLOGIA';
+    let matrixDrops = [];
+    let matrixFontSize = 15;
+    let matrixColumns = 0;
+
+    function resizeMatrixRain() {
+      const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
+      matrixCanvas.width = Math.floor(window.innerWidth * dpr);
+      matrixCanvas.height = Math.floor(window.innerHeight * dpr);
+      matrixCanvas.style.width = window.innerWidth + 'px';
+      matrixCanvas.style.height = window.innerHeight + 'px';
+      matrixCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      matrixFontSize = window.innerWidth < 700 ? 13 : 15;
+      matrixColumns = Math.ceil(window.innerWidth / matrixFontSize);
+      matrixDrops = Array.from({ length: matrixColumns }, () => Math.random() * -window.innerHeight / matrixFontSize);
+    }
+
+    function drawMatrixRain() {
+      matrixCtx.fillStyle = 'rgba(1, 3, 1, 0.155)';
+      matrixCtx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+      matrixCtx.font = matrixFontSize + 'px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace';
+      matrixCtx.textAlign = 'center';
+
+      for (let i = 0; i < matrixDrops.length; i++) {
+        const text = matrixAlphabet.charAt(Math.floor(Math.random() * matrixAlphabet.length));
+        const x = i * matrixFontSize + matrixFontSize / 2;
+        const y = matrixDrops[i] * matrixFontSize;
+
+        matrixCtx.shadowBlur = 7;
+        matrixCtx.shadowColor = 'rgba(72,255,139,0.55)';
+        matrixCtx.fillStyle = Math.random() > 0.985 ? '#d8ffe7' : (Math.random() > 0.80 ? '#58d684' : '#1fae58');
+        matrixCtx.fillText(text, x, y);
+
+        if (y > window.innerHeight && Math.random() > 0.972) {
+          matrixDrops[i] = Math.random() * -18;
+        }
+        matrixDrops[i] += 0.82 + Math.random() * 0.52;
+      }
+    }
+
+    resizeMatrixRain();
+    window.addEventListener('resize', resizeMatrixRain);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReducedMotion) {
+      setInterval(drawMatrixRain, 34);
+    } else {
+      drawMatrixRain();
+    }
+  </script>
 </body>
 </html>
