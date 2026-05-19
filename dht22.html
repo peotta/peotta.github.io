@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Monitoramento Ambiental IoT</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg: #020617;
+      --card: #0f172a;
+      --card2: #111827;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --temp: #f97316;
+      --hum: #38bdf8;
+      --ok: #22c55e;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #1e293b, var(--bg));
+      color: var(--text);
+      padding: 32px;
+    }
+
+    header {
+      max-width: 1200px;
+      margin: 0 auto 32px auto;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.3rem;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .card h2 {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .value {
+      font-size: 2.1rem;
+      font-weight: bold;
+    }
+
+    .temp {
+      color: var(--temp);
+    }
+
+    .hum {
+      color: var(--hum);
+    }
+
+    .ok {
+      color: var(--ok);
+    }
+
+    .chart-card {
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .chart-card h2 {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    canvas {
+      width: 100% !important;
+      max-height: 430px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(15, 23, 42, 0.88);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    th, td {
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    th {
+      background: rgba(30, 41, 59, 0.9);
+      color: var(--text);
+    }
+
+    td {
+      color: #cbd5e1;
+    }
+
+    .erro {
+      display: none;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      color: #fecaca;
+      padding: 16px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 32px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Monitoramento Ambiental IoT</h1>
+    <p>Temperatura e umidade coletadas com NodeMCU ESP8266 e sensor DHT22</p>
+  </header>
+
+  <main class="container">
+
+    <div id="erro" class="erro">
+      Não foi possível carregar os dados da planilha. Verifique a URL do Google Apps Script.
+    </div>
+
+    <section class="cards">
+      <div class="card">
+        <h2>Temperatura Atual</h2>
+        <div id="temperaturaAtual" class="value temp">-- °C</div>
+      </div>
+
+      <div class="card">
+        <h2>Umidade Atual</h2>
+        <div id="umidadeAtual" class="value hum">-- %</div>
+      </div>
+
+      <div class="card">
+        <h2>Última Atualização</h2>
+        <div id="ultimaAtualizacao" class="value">--</div>
+      </div>
+
+      <div class="card">
+        <h2>Status</h2>
+        <div id="status" class="value ok">Online</div>
+      </div>
+    </section>
+
+    <section class="chart-card">
+      <h2>Histórico de Temperatura e Umidade</h2>
+      <canvas id="graficoAmbiental"></canvas>
+    </section>
+
+    <section class="chart-card">
+      <h2>Últimas Medições</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Data/Hora</th>
+            <th>Temperatura</th>
+            <th>Umidade</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaDados"></tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <footer>
+    Projeto desenvolvido por Prof. Dr. Laerte Peotta de Melo
+  </footer>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwhVdwnQ9qWubbtvgmptYiiImm59AwnKtBgI38vkiZqA23FY0rh2csHF-f-EcJhvZ_m/exec?acao=ler";
+
+    let grafico = null;
+
+    async function carregarDados() {
+      try {
+        const resposta = await fetch(API_URL);
+        const dados = await resposta.json();
+
+        if (!Array.isArray(dados) || dados.length === 0) {
+          throw new Error("Nenhum dado encontrado.");
+        }
+
+        const dadosValidos = dados.filter(item =>
+          item.dataHora &&
+          !isNaN(Number(item.temperatura)) &&
+          !isNaN(Number(item.umidade))
+        );
+
+        if (dadosValidos.length === 0) {
+          throw new Error("Nenhum dado válido encontrado.");
+        }
+
+        atualizarCards(dadosValidos);
+        atualizarGrafico(dadosValidos);
+        atualizarTabela(dadosValidos);
+
+        document.getElementById("erro").style.display = "none";
+
+      } catch (erro) {
+        console.error("Erro ao carregar dados:", erro);
+        document.getElementById("erro").style.display = "block";
+      }
+    }
+
+    function formatarData(data) {
+      const d = new Date(data);
+
+      if (isNaN(d.getTime())) {
+        return data;
+      }
+
+      return d.toLocaleString("pt-BR");
+    }
+
+    function atualizarCards(dados) {
+      const ultimo = dados[dados.length - 1];
+
+      document.getElementById("temperaturaAtual").textContent =
+        Number(ultimo.temperatura).toFixed(2) + " °C";
+
+      document.getElementById("umidadeAtual").textContent =
+        Number(ultimo.umidade).toFixed(2) + " %";
+
+      document.getElementById("ultimaAtualizacao").textContent =
+        formatarData(ultimo.dataHora);
+    }
+
+    function atualizarGrafico(dados) {
+      const ultimos = dados.slice(-50);
+
+      const labels = ultimos.map(item => formatarData(item.dataHora));
+      const temperaturas = ultimos.map(item => Number(item.temperatura));
+      const umidades = ultimos.map(item => Number(item.umidade));
+
+      const ctx = document.getElementById("graficoAmbiental").getContext("2d");
+
+      if (grafico) {
+        grafico.destroy();
+      }
+
+      grafico = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Temperatura (°C)",
+              data: temperaturas,
+              borderColor: "#f97316",
+              backgroundColor: "rgba(249, 115, 22, 0.14)",
+              fill: true,
+              tension: 0.35,
+              pointRadius: 3
+            },
+            {
+              label: "Umidade (%)",
+              data: umidades,
+              borderColor: "#38bdf8",
+              backgroundColor: "rgba(56, 189, 248, 0.14)",
+              fill: true,
+              tension: 0.35,
+              pointRadius: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: "#f8fafc"
+              }
+            },
+            tooltip: {
+              mode: "index",
+              intersect: false
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: "#94a3b8",
+                maxRotation: 45,
+                minRotation: 45
+              },
+              grid: {
+                color: "rgba(255,255,255,0.08)"
+              }
+            },
+            y: {
+              ticks: {
+                color: "#94a3b8"
+              },
+              grid: {
+                color: "rgba(255,255,255,0.08)"
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function atualizarTabela(dados) {
+      const tabela = document.getElementById("tabelaDados");
+      tabela.innerHTML = "";
+
+      dados.slice(-10).reverse().forEach(item => {
+        const linha = document.createElement("tr");
+
+        linha.innerHTML = `
+          <td>${formatarData(item.dataHora)}</td>
+          <td>${Number(item.temperatura).toFixed(2)} °C</td>
+          <td>${Number(item.umidade).toFixed(2)} %</td>
+        `;
+
+        tabela.appendChild(linha);
+      });
+    }
+
+    carregarDados();
+
+    setInterval(carregarDados, 300000);
+  </script>
+
+</body>
+</html>
