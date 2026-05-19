@@ -10,14 +10,15 @@
 
   <style>
     :root {
-      --bg: #020617;
-      --card: #0f172a;
-      --card2: #111827;
+      --bg: #0f172a;
+      --card: #111827;
+      --card-soft: #1f2937;
       --text: #f8fafc;
       --muted: #94a3b8;
       --temp: #f97316;
       --hum: #38bdf8;
       --ok: #22c55e;
+      --danger: #ef4444;
       --border: rgba(255, 255, 255, 0.08);
     }
 
@@ -29,20 +30,19 @@
     }
 
     body {
-      min-height: 100vh;
       background: radial-gradient(circle at top, #1e293b, var(--bg));
       color: var(--text);
+      min-height: 100vh;
       padding: 32px;
     }
 
     header {
-      max-width: 1200px;
-      margin: 0 auto 32px auto;
       text-align: center;
+      margin-bottom: 32px;
     }
 
     header h1 {
-      font-size: 2.3rem;
+      font-size: 2.4rem;
       margin-bottom: 10px;
     }
 
@@ -56,6 +56,16 @@
       margin: auto;
     }
 
+    .erro {
+      display: none;
+      background: rgba(239, 68, 68, 0.18);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      color: #fecaca;
+      padding: 16px;
+      border-radius: 14px;
+      margin-bottom: 22px;
+    }
+
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -64,7 +74,7 @@
     }
 
     .card {
-      background: rgba(15, 23, 42, 0.88);
+      background: rgba(17, 24, 39, 0.9);
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 24px;
@@ -96,7 +106,7 @@
     }
 
     .chart-card {
-      background: rgba(15, 23, 42, 0.88);
+      background: rgba(17, 24, 39, 0.9);
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 24px;
@@ -109,15 +119,21 @@
       font-size: 1.2rem;
     }
 
+    .chart-container {
+      position: relative;
+      height: 430px;
+      width: 100%;
+    }
+
     canvas {
       width: 100% !important;
-      max-height: 430px;
+      height: 100% !important;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      background: rgba(15, 23, 42, 0.88);
+      background: rgba(17, 24, 39, 0.9);
       border-radius: 20px;
       overflow: hidden;
       border: 1px solid var(--border);
@@ -138,14 +154,8 @@
       color: #cbd5e1;
     }
 
-    .erro {
-      display: none;
-      background: rgba(239, 68, 68, 0.15);
-      border: 1px solid rgba(239, 68, 68, 0.5);
-      color: #fecaca;
-      padding: 16px;
-      border-radius: 14px;
-      margin-bottom: 20px;
+    tr:last-child td {
+      border-bottom: none;
     }
 
     footer {
@@ -153,6 +163,29 @@
       color: var(--muted);
       margin-top: 32px;
       font-size: 0.9rem;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 18px;
+      }
+
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      .value {
+        font-size: 1.7rem;
+      }
+
+      .chart-container {
+        height: 360px;
+      }
+
+      th, td {
+        padding: 10px;
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
@@ -167,7 +200,7 @@
   <main class="container">
 
     <div id="erro" class="erro">
-      Não foi possível carregar os dados da planilha. Verifique a URL do Google Apps Script.
+      Não foi possível carregar os dados da planilha. Verifique se a planilha continua publicada como CSV.
     </div>
 
     <section class="cards">
@@ -187,14 +220,16 @@
       </div>
 
       <div class="card">
-        <h2>Status</h2>
-        <div id="status" class="value ok">Online</div>
+        <h2>Total de Registros</h2>
+        <div id="totalRegistros" class="value ok">--</div>
       </div>
     </section>
 
     <section class="chart-card">
       <h2>Histórico de Temperatura e Umidade</h2>
-      <canvas id="graficoAmbiental"></canvas>
+      <div class="chart-container">
+        <canvas id="graficoAmbiental"></canvas>
+      </div>
     </section>
 
     <section class="chart-card">
@@ -218,32 +253,44 @@
   </footer>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbwhVdwnQ9qWubbtvgmptYiiImm59AwnKtBgI38vkiZqA23FY0rh2csHF-f-EcJhvZ_m/exec?acao=ler";
+    const PLANILHA_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQon9HHB2U1hAKy7oRLt6GLjoy43UN2zxePxQmxXtcYV003hieMdlJaVDa0iL99sE9spuuWvQnvlTcm/pub?gid=0&single=true&output=csv";
 
     let grafico = null;
 
     async function carregarDados() {
       try {
-        const resposta = await fetch(API_URL);
-        const dados = await resposta.json();
+        const resposta = await fetch(PLANILHA_CSV_URL);
 
-        if (!Array.isArray(dados) || dados.length === 0) {
-          throw new Error("Nenhum dado encontrado.");
+        if (!resposta.ok) {
+          throw new Error("Erro ao acessar a planilha.");
         }
 
-        const dadosValidos = dados.filter(item =>
+        const csv = await resposta.text();
+
+        const linhas = csv
+          .trim()
+          .split("\n")
+          .map(linha => linha.split(","));
+
+        const dados = linhas.slice(1).map(linha => {
+          return {
+            dataHora: limparTexto(linha[0]),
+            temperatura: converterNumero(linha[1]),
+            umidade: converterNumero(linha[2])
+          };
+        }).filter(item =>
           item.dataHora &&
-          !isNaN(Number(item.temperatura)) &&
-          !isNaN(Number(item.umidade))
+          !isNaN(item.temperatura) &&
+          !isNaN(item.umidade)
         );
 
-        if (dadosValidos.length === 0) {
+        if (dados.length === 0) {
           throw new Error("Nenhum dado válido encontrado.");
         }
 
-        atualizarCards(dadosValidos);
-        atualizarGrafico(dadosValidos);
-        atualizarTabela(dadosValidos);
+        atualizarCards(dados);
+        atualizarGrafico(dados);
+        atualizarTabela(dados);
 
         document.getElementById("erro").style.display = "none";
 
@@ -253,35 +300,44 @@
       }
     }
 
-    function formatarData(data) {
-      const d = new Date(data);
+    function limparTexto(valor) {
+      if (!valor) return "";
+      return valor.replace(/"/g, "").trim();
+    }
 
-      if (isNaN(d.getTime())) {
-        return data;
-      }
+    function converterNumero(valor) {
+      if (!valor) return NaN;
 
-      return d.toLocaleString("pt-BR");
+      return parseFloat(
+        valor
+          .replace(/"/g, "")
+          .replace(",", ".")
+          .trim()
+      );
     }
 
     function atualizarCards(dados) {
       const ultimo = dados[dados.length - 1];
 
       document.getElementById("temperaturaAtual").textContent =
-        Number(ultimo.temperatura).toFixed(2) + " °C";
+        ultimo.temperatura.toFixed(2) + " °C";
 
       document.getElementById("umidadeAtual").textContent =
-        Number(ultimo.umidade).toFixed(2) + " %";
+        ultimo.umidade.toFixed(2) + " %";
 
       document.getElementById("ultimaAtualizacao").textContent =
-        formatarData(ultimo.dataHora);
+        ultimo.dataHora;
+
+      document.getElementById("totalRegistros").textContent =
+        dados.length;
     }
 
     function atualizarGrafico(dados) {
       const ultimos = dados.slice(-50);
 
-      const labels = ultimos.map(item => formatarData(item.dataHora));
-      const temperaturas = ultimos.map(item => Number(item.temperatura));
-      const umidades = ultimos.map(item => Number(item.umidade));
+      const labels = ultimos.map(item => item.dataHora);
+      const temperaturas = ultimos.map(item => item.temperatura);
+      const umidades = ultimos.map(item => item.umidade);
 
       const ctx = document.getElementById("graficoAmbiental").getContext("2d");
 
@@ -298,25 +354,31 @@
               label: "Temperatura (°C)",
               data: temperaturas,
               borderColor: "#f97316",
-              backgroundColor: "rgba(249, 115, 22, 0.14)",
+              backgroundColor: "rgba(249, 115, 22, 0.15)",
               fill: true,
               tension: 0.35,
-              pointRadius: 3
+              pointRadius: 3,
+              pointHoverRadius: 5
             },
             {
               label: "Umidade (%)",
               data: umidades,
               borderColor: "#38bdf8",
-              backgroundColor: "rgba(56, 189, 248, 0.14)",
+              backgroundColor: "rgba(56, 189, 248, 0.15)",
               fill: true,
               tension: 0.35,
-              pointRadius: 3
+              pointRadius: 3,
+              pointHoverRadius: 5
             }
           ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          interaction: {
+            mode: "index",
+            intersect: false
+          },
           plugins: {
             legend: {
               labels: {
@@ -360,9 +422,9 @@
         const linha = document.createElement("tr");
 
         linha.innerHTML = `
-          <td>${formatarData(item.dataHora)}</td>
-          <td>${Number(item.temperatura).toFixed(2)} °C</td>
-          <td>${Number(item.umidade).toFixed(2)} %</td>
+          <td>${item.dataHora}</td>
+          <td>${item.temperatura.toFixed(2)} °C</td>
+          <td>${item.umidade.toFixed(2)} %</td>
         `;
 
         tabela.appendChild(linha);
@@ -371,6 +433,10 @@
 
     carregarDados();
 
+    /*
+      Atualiza automaticamente a página a cada 5 minutos.
+      300000 milissegundos = 5 minutos.
+    */
     setInterval(carregarDados, 300000);
   </script>
 
