@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comandos Linux para Administração de Redes | Prof. Dr. Laerte Peotta de Melo</title>
+<meta name="description" content="Página HTML estilo Matrix com comandos Linux para administração de redes de computadores, organizada por tema.">
+<style>
+:root{
+  --bg:#000500;
+  --bg2:#001008;
+  --panel:rgba(0,18,8,.82);
+  --panel2:rgba(0,36,14,.72);
+  --text:#e7ffe7;
+  --muted:#9bd69b;
+  --line:rgba(40,255,80,.32);
+  --matrix:#39ff14;
+  --matrix2:#00d26a;
+  --green-soft:rgba(57,255,20,.10);
+  --green-mid:rgba(57,255,20,.22);
+  --amber:#d7ff7a;
+  --shadow:0 0 28px rgba(57,255,20,.18),0 24px 80px rgba(0,0,0,.72);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--text);
+  font-family:"JetBrains Mono","Fira Code",Consolas,"Courier New",monospace;
+  background:
+    radial-gradient(circle at 18% 8%,rgba(57,255,20,.16),transparent 28%),
+    radial-gradient(circle at 82% 4%,rgba(0,210,106,.12),transparent 32%),
+    linear-gradient(180deg,#000 0%,#000b04 45%,#000 100%);
+  overflow-x:hidden;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.18;
+  background-image:
+    linear-gradient(rgba(57,255,20,.16) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(57,255,20,.12) 1px,transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom,#000,transparent 92%);
+  z-index:-2;
+}
+body:after{
+  content:"010010 001101 111000 010101 101010 000111 110011 001010 010010 101001";
+  position:fixed;
+  inset:-20% 0 auto 0;
+  height:160%;
+  pointer-events:none;
+  white-space:pre-wrap;
+  word-spacing:34px;
+  line-height:34px;
+  letter-spacing:8px;
+  color:rgba(57,255,20,.10);
+  font-size:20px;
+  transform:rotate(0deg);
+  animation:matrixRain 28s linear infinite;
+  z-index:-1;
+}
+@keyframes matrixRain{from{transform:translateY(-18%)}to{transform:translateY(8%)}}
+a{color:inherit}
+.layout{display:grid;grid-template-columns:330px 1fr;min-height:100vh}
+.sidebar{
+  position:sticky;
+  top:0;
+  height:100vh;
+  padding:24px 18px;
+  background:linear-gradient(180deg,rgba(0,10,3,.94),rgba(0,18,8,.82));
+  border-right:1px solid var(--line);
+  box-shadow:8px 0 34px rgba(57,255,20,.08);
+  backdrop-filter:blur(14px);
+  overflow:auto;
+}
+.sidebar::-webkit-scrollbar, pre::-webkit-scrollbar{width:9px;height:9px}
+.sidebar::-webkit-scrollbar-thumb, pre::-webkit-scrollbar-thumb{background:rgba(57,255,20,.28);border-radius:999px}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.logo{
+  width:52px;height:52px;border-radius:10px;
+  border:1px solid var(--matrix);
+  background:#000;
+  display:grid;place-items:center;
+  color:var(--matrix);
+  font-weight:900;
+  text-shadow:0 0 14px var(--matrix);
+  box-shadow:0 0 26px rgba(57,255,20,.28),inset 0 0 22px rgba(57,255,20,.08);
+}
+.logo:before{content:">_";font-size:22px}
+.logo{font-size:0}
+.brand h1{font-size:15px;margin:0;line-height:1.25;color:var(--matrix);text-transform:uppercase;text-shadow:0 0 8px rgba(57,255,20,.7)}
+.brand p{font-size:12px;color:var(--text);margin:5px 0 0}
+.search{
+  width:100%;
+  padding:13px 14px;
+  border-radius:10px;
+  border:1px solid rgba(57,255,20,.45);
+  background:rgba(0,0,0,.58);
+  color:var(--text);
+  outline:none;
+  margin:10px 0 18px;
+  box-shadow:inset 0 0 18px rgba(57,255,20,.06);
+}
+.search::placeholder{color:rgba(231,255,231,.55)}
+.search:focus{border-color:var(--matrix);box-shadow:0 0 18px rgba(57,255,20,.26),inset 0 0 18px rgba(57,255,20,.08)}
+.toc-title{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:var(--matrix);
+  margin:20px 0 10px;
+  text-shadow:0 0 10px rgba(57,255,20,.6);
+}
+.toc a{
+  display:flex;justify-content:space-between;gap:8px;
+  text-decoration:none;
+  padding:10px 11px;margin:3px 0;
+  border-radius:8px;
+  color:#dfffdc;
+  font-size:13px;
+  border:1px solid transparent;
+}
+.toc a:hover,.toc a.active{
+  background:linear-gradient(90deg,rgba(57,255,20,.24),rgba(57,255,20,.04));
+  border-color:rgba(57,255,20,.45);
+  box-shadow:0 0 18px rgba(57,255,20,.16);
+}
+.toc em{font-style:normal;color:var(--muted)}
+.main{padding:34px;max-width:1380px}
+.hero{
+  position:relative;overflow:hidden;
+  border:1px solid rgba(57,255,20,.55);
+  border-radius:20px;
+  padding:38px;
+  background:
+    linear-gradient(135deg,rgba(0,20,8,.86),rgba(0,0,0,.92)),
+    radial-gradient(circle at 75% 20%,rgba(57,255,20,.12),transparent 38%);
+  box-shadow:var(--shadow);
+}
+.hero:before{
+  content:"root@linux:~# _";
+  display:block;
+  width:100%;
+  margin:6px 0 26px;
+  padding:14px 16px;
+  border:1px solid var(--matrix);
+  border-radius:10px;
+  color:var(--matrix);
+  background:rgba(0,0,0,.66);
+  text-shadow:0 0 10px rgba(57,255,20,.72);
+}
+.hero:after{
+  content:"01101001 01110000 00100000 01110010 01101111 01110101 01110100 01100101";
+  position:absolute;
+  right:22px;top:18px;
+  max-width:420px;
+  font-size:20px;
+  line-height:1.5;
+  color:rgba(57,255,20,.10);
+  text-align:right;
+}
+.eyebrow{
+  display:inline-flex;
+  border:1px solid rgba(57,255,20,.58);
+  background:rgba(57,255,20,.10);
+  color:var(--matrix);
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  text-shadow:0 0 8px rgba(57,255,20,.62);
+}
+h1{
+  font-size:clamp(36px,5vw,68px);
+  line-height:1;
+  margin:18px 0 8px;
+  color:var(--matrix);
+  text-transform:uppercase;
+  text-shadow:0 0 10px rgba(57,255,20,.78),0 0 30px rgba(57,255,20,.28);
+}
+.hero p{max-width:950px;color:var(--muted);font-size:17px;line-height:1.6}
+.note{
+  margin:22px 0 0;
+  padding:16px 18px;
+  border-radius:12px;
+  border:1px solid rgba(57,255,20,.38);
+  background:rgba(57,255,20,.07);
+  color:#dfffdc;
+  line-height:1.5;
+}
+.note b{color:var(--matrix);text-shadow:0 0 8px rgba(57,255,20,.62)}
+.section{margin-top:40px;scroll-margin-top:24px}
+.section-title{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:16px}
+.section-kicker{font-size:12px;color:var(--matrix);text-transform:uppercase;letter-spacing:.12em;text-shadow:0 0 8px rgba(57,255,20,.62)}
+.section h2{font-size:30px;margin:8px 0;color:var(--matrix);text-transform:uppercase;text-shadow:0 0 12px rgba(57,255,20,.52)}
+.section p{color:#cceccc;margin:0;line-height:1.55}
+.copy-section{
+  white-space:nowrap;
+  border:1px solid rgba(57,255,20,.52);
+  background:rgba(57,255,20,.08);
+  color:var(--matrix);
+  border-radius:10px;
+  padding:10px 13px;
+  cursor:pointer;
+  font-family:inherit;
+  text-shadow:0 0 8px rgba(57,255,20,.52);
+}
+.copy-section:hover{box-shadow:0 0 18px rgba(57,255,20,.22)}
+.terminal{
+  border:1px solid rgba(57,255,20,.38);
+  border-radius:16px;
+  overflow:hidden;
+  background:rgba(0,0,0,.88);
+  box-shadow:0 0 26px rgba(57,255,20,.10);
+}
+.bar{
+  height:44px;display:flex;align-items:center;gap:8px;
+  padding:0 15px;
+  border-bottom:1px solid rgba(57,255,20,.28);
+  background:linear-gradient(90deg,rgba(0,30,10,.92),rgba(0,0,0,.92));
+}
+.bar span{width:11px;height:11px;border-radius:50%;background:#154d18;border:1px solid rgba(57,255,20,.6)}
+.bar span:nth-child(2){background:#1c6b1f}
+.bar span:nth-child(3){background:var(--matrix);box-shadow:0 0 12px var(--matrix)}
+.bar b{margin-left:8px;color:var(--matrix);font-size:12px;letter-spacing:.04em}
+pre{margin:0;padding:18px 20px;overflow:auto;color:#dfffdc;font-size:13px;line-height:1.62;max-height:540px}
+code{font-family:"JetBrains Mono","Fira Code",Consolas,"Courier New",monospace}
+.details-card{
+  margin-top:16px;
+  background:rgba(0,12,4,.80);
+  border:1px solid rgba(57,255,20,.34);
+  border-radius:16px;
+  padding:18px;
+  overflow:auto;
+  box-shadow:0 0 22px rgba(57,255,20,.08);
+}
+.details-card h3{margin:0 0 14px;font-size:18px;color:var(--matrix);text-transform:uppercase;text-shadow:0 0 8px rgba(57,255,20,.62)}
+table{width:100%;border-collapse:collapse;min-width:880px}
+th{
+  font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--matrix);text-align:left;padding:11px;
+  border-bottom:1px solid rgba(57,255,20,.34);
+}
+td{
+  vertical-align:top;
+  padding:12px 11px;
+  border-bottom:1px solid rgba(57,255,20,.16);
+  color:#e7ffe7;
+  font-size:13px;line-height:1.45;
+}
+tr:hover td{background:rgba(57,255,20,.055)}
+td.num{color:var(--matrix);font-weight:900;width:48px;text-shadow:0 0 8px rgba(57,255,20,.55)}
+td b{display:block;color:var(--matrix);margin-bottom:4px}
+td span{color:#aee8ae;font-size:12px}
+.hidden{display:none!important}
+.footer{margin:42px 0 10px;color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:960px){
+  .layout{display:block}
+  .sidebar{position:relative;height:auto}
+  .main{padding:18px}
+  .hero{padding:24px}
+  .hero:after{display:none}
+  .section-title{display:block}
+  .copy-section{margin-top:14px}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">LP</div><div><h1>Prof. Dr. Laerte Peotta de Melo</h1><p>peotta.github.io • Administração de Redes</p></div></div>
+    <input id="search" class="search" placeholder="Buscar comando, tema ou aplicação...">
+    <div class="toc-title">Navegação Matrix</div>
+    <nav class="toc"><a href="#inventario"><span>🧭 Inventário e Identificação da Rede</span><em>08</em></a><a href="#conectividade"><span>📡 Conectividade e Diagnóstico Básico</span><em>08</em></a><a href="#ip"><span>🌐 Configuração IPv4, IPv6 e Rotas</span><em>08</em></a><a href="#dns"><span>🔎 DNS e Resolução de Nomes</span><em>08</em></a><a href="#portas"><span>🔌 Portas, Sockets e Serviços em Escuta</span><em>08</em></a><a href="#firewall"><span>🧱 Firewall, NAT e Controle de Tráfego</span><em>08</em></a><a href="#captura"><span>📦 Captura e Análise de Pacotes</span><em>08</em></a><a href="#switching"><span>🖧 Bridge, VLAN e Switching no Linux</span><em>08</em></a><a href="#wifi"><span>📶 Wi-Fi e Interfaces Sem Fio</span><em>08</em></a><a href="#servicos"><span>🧰 Serviços de Rede: SSH, DHCP, Web e NTP</span><em>08</em></a><a href="#monitoramento"><span>📊 Monitoramento, Performance e Capacidade</span><em>08</em></a><a href="#logs"><span>📜 Logs e Auditoria Operacional</span><em>08</em></a><a href="#automacao"><span>⚙️ Automação, Scripts e Administração Remota</span><em>08</em></a><a href="#troubleshooting"><span>🛠️ Fluxos Rápidos de Troubleshooting</span><em>08</em></a></nav>
+  </aside>
+  <main class="main">
+    <section class="hero">
+      <span class="eyebrow">Linux • Redes • Operação • Troubleshooting</span>
+      <h1>Comandos Linux para Administração de Redes</h1>
+      <div class="note"><b>Boa prática:</b> comandos de consulta podem ser usados livremente em laboratórios. Comandos que alteram IP, rotas, firewall, interfaces, serviços ou NAT devem ser testados antes e aplicados com controle de mudança.</div>
+    </section>
+    
+    <section class="section" id="inventario">
+      <div class="section-title"><div><span class="section-kicker">🧭 Tema 01</span><h2>Inventário e Identificação da Rede</h2><p>Comandos para descobrir interfaces, endereços, rotas, gateways, nomes e estado geral da conectividade.</p></div><button class="copy-section" data-target="code-inventario">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-inventario.sh</b></div><pre><code id="code-inventario"># 01. Identificação do host — Mostra hostname, sistema operacional, kernel e arquitetura.
+hostnamectl
+
+# 02. Kernel e plataforma — Exibe versão do kernel e informações de arquitetura.
+uname -a
+
+# 03. Endereços por interface — Lista interfaces, endereços IPv4/IPv6, MAC address e estado operacional.
+ip addr show
+ip -brief addr
+
+# 04. Estado de enlaces — Mostra interfaces, MTU, flags e estado UP/DOWN.
+ip link show
+ip -s link show eth0
+
+# 05. Tabela de rotas — Exibe rota padrão, rotas específicas e próximo salto.
+ip route show
+ip route get 8.8.8.8
+
+# 06. Resumo pelo NetworkManager — Lista dispositivos, conexões e perfis gerenciados pelo NetworkManager.
+nmcli device status
+nmcli connection show
+
+# 07. Características físicas da interface — Mostra velocidade, duplex, autonegociação e estatísticas da NIC.
+sudo ethtool eth0
+sudo ethtool -S eth0
+
+# 08. Interfaces do kernel — Lista interfaces reconhecidas pelo kernel Linux.
+ls -la /sys/class/net
+cat /sys/class/net/eth0/operstate</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="inventário e identificação da rede hostnamectl identificação do host mostra hostname, sistema operacional, kernel e arquitetura. use para documentar servidores e estações antes de iniciar manutenção. hostnamectl"><td class="num">01</td><td><b>hostnamectl</b><span>Identificação do host</span></td><td>Mostra hostname, sistema operacional, kernel e arquitetura.</td><td>Use para documentar servidores e estações antes de iniciar manutenção.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede uname kernel e plataforma exibe versão do kernel e informações de arquitetura. útil para compatibilidade de drivers, módulos e troubleshooting. uname -a"><td class="num">02</td><td><b>uname</b><span>Kernel e plataforma</span></td><td>Exibe versão do kernel e informações de arquitetura.</td><td>Útil para compatibilidade de drivers, módulos e troubleshooting.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede ip addr endereços por interface lista interfaces, endereços ipv4/ipv6, mac address e estado operacional. substitui o antigo ifconfig na maioria das distribuições modernas. ip addr show
+ip -brief addr"><td class="num">03</td><td><b>ip addr</b><span>Endereços por interface</span></td><td>Lista interfaces, endereços IPv4/IPv6, MAC address e estado operacional.</td><td>Substitui o antigo ifconfig na maioria das distribuições modernas.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede ip link estado de enlaces mostra interfaces, mtu, flags e estado up/down. use para validar cabos, links virtuais, vlans e interfaces desativadas. ip link show
+ip -s link show eth0"><td class="num">04</td><td><b>ip link</b><span>Estado de enlaces</span></td><td>Mostra interfaces, MTU, flags e estado UP/DOWN.</td><td>Use para validar cabos, links virtuais, VLANs e interfaces desativadas.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede ip route tabela de rotas exibe rota padrão, rotas específicas e próximo salto. primeiro comando para investigar ausência de conectividade fora da sub-rede local. ip route show
+ip route get 8.8.8.8"><td class="num">05</td><td><b>ip route</b><span>Tabela de rotas</span></td><td>Exibe rota padrão, rotas específicas e próximo salto.</td><td>Primeiro comando para investigar ausência de conectividade fora da sub-rede local.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede nmcli resumo pelo networkmanager lista dispositivos, conexões e perfis gerenciados pelo networkmanager. muito útil em desktops, notebooks e servidores que usam networkmanager. nmcli device status
+nmcli connection show"><td class="num">06</td><td><b>nmcli</b><span>Resumo pelo NetworkManager</span></td><td>Lista dispositivos, conexões e perfis gerenciados pelo NetworkManager.</td><td>Muito útil em desktops, notebooks e servidores que usam NetworkManager.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede ethtool características físicas da interface mostra velocidade, duplex, autonegociação e estatísticas da nic. ajuda a detectar problemas de cabo, duplex mismatch e limitações de velocidade. sudo ethtool eth0
+sudo ethtool -s eth0"><td class="num">07</td><td><b>ethtool</b><span>Características físicas da interface</span></td><td>Mostra velocidade, duplex, autonegociação e estatísticas da NIC.</td><td>Ajuda a detectar problemas de cabo, duplex mismatch e limitações de velocidade.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede ls /sys/class/net interfaces do kernel lista interfaces reconhecidas pelo kernel linux. útil quando ferramentas de rede não mostram uma interface esperada. ls -la /sys/class/net
+cat /sys/class/net/eth0/operstate"><td class="num">08</td><td><b>ls /sys/class/net</b><span>Interfaces do kernel</span></td><td>Lista interfaces reconhecidas pelo kernel Linux.</td><td>Útil quando ferramentas de rede não mostram uma interface esperada.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="conectividade">
+      <div class="section-title"><div><span class="section-kicker">📡 Tema 02</span><h2>Conectividade e Diagnóstico Básico</h2><p>Testes essenciais para validar alcance, latência, perda de pacotes e caminho de rede.</p></div><button class="copy-section" data-target="code-conectividade">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-conectividade.sh</b></div><pre><code id="code-conectividade"># 01. Teste ICMP de alcance — Verifica se um host responde e mede latência básica.
+ping -c 4 8.8.8.8
+ping -c 4 peotta.github.io
+
+# 02. Caminho até o destino — Mostra saltos percorridos até um destino e onde pode ocorrer perda.
+traceroute 8.8.8.8
+tracepath peotta.github.io
+
+# 03. Diagnóstico contínuo de rota — Combina ping e traceroute em uma visão dinâmica.
+mtr 8.8.8.8
+mtr -rw peotta.github.io
+
+# 04. Tabela ARP/NDP — Mostra vizinhos da camada 2 conhecidos pelo host.
+ip neigh show
+arp -n
+
+# 05. Teste de aplicação HTTP/HTTPS — Valida conectividade em camada de aplicação, certificados e códigos HTTP.
+curl -I https://peotta.github.io
+curl -v https://example.com
+
+# 06. Teste de portas TCP/UDP — Verifica se uma porta está aberta, filtrada ou recusando conexão.
+nc -vz 192.168.1.10 22
+nc -vzu 192.168.1.10 53
+
+# 07. Teste simples de porta TCP — Pode testar banner e conexão em portas TCP.
+telnet 192.168.1.10 25
+
+# 08. Medição de banda — Mede vazão TCP/UDP entre cliente e servidor.
+# no servidor
+iperf3 -s
+# no cliente
+iperf3 -c 192.168.1.10 -P 4</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="conectividade e diagnóstico básico ping teste icmp de alcance verifica se um host responde e mede latência básica. use com contagem limitada em produção para não gerar tráfego desnecessário. ping -c 4 8.8.8.8
+ping -c 4 peotta.github.io"><td class="num">01</td><td><b>ping</b><span>Teste ICMP de alcance</span></td><td>Verifica se um host responde e mede latência básica.</td><td>Use com contagem limitada em produção para não gerar tráfego desnecessário.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico traceroute / tracepath caminho até o destino mostra saltos percorridos até um destino e onde pode ocorrer perda. tracepath geralmente não exige privilégios elevados. traceroute 8.8.8.8
+tracepath peotta.github.io"><td class="num">02</td><td><b>traceroute / tracepath</b><span>Caminho até o destino</span></td><td>Mostra saltos percorridos até um destino e onde pode ocorrer perda.</td><td>tracepath geralmente não exige privilégios elevados.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico mtr diagnóstico contínuo de rota combina ping e traceroute em uma visão dinâmica. excelente para identificar perda intermitente por salto. mtr 8.8.8.8
+mtr -rw peotta.github.io"><td class="num">03</td><td><b>mtr</b><span>Diagnóstico contínuo de rota</span></td><td>Combina ping e traceroute em uma visão dinâmica.</td><td>Excelente para identificar perda intermitente por salto.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico arp / ip neigh tabela arp/ndp mostra vizinhos da camada 2 conhecidos pelo host. use para investigar conflitos ip, gateway inacessível e resolução mac. ip neigh show
+arp -n"><td class="num">04</td><td><b>arp / ip neigh</b><span>Tabela ARP/NDP</span></td><td>Mostra vizinhos da camada 2 conhecidos pelo host.</td><td>Use para investigar conflitos IP, gateway inacessível e resolução MAC.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico curl teste de aplicação http/https valida conectividade em camada de aplicação, certificados e códigos http. mais preciso que ping quando o serviço é web. curl -i https://peotta.github.io
+curl -v https://example.com"><td class="num">05</td><td><b>curl</b><span>Teste de aplicação HTTP/HTTPS</span></td><td>Valida conectividade em camada de aplicação, certificados e códigos HTTP.</td><td>Mais preciso que ping quando o serviço é web.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico nc teste de portas tcp/udp verifica se uma porta está aberta, filtrada ou recusando conexão. ferramenta prática para testar serviços sem cliente específico. nc -vz 192.168.1.10 22
+nc -vzu 192.168.1.10 53"><td class="num">06</td><td><b>nc</b><span>Teste de portas TCP/UDP</span></td><td>Verifica se uma porta está aberta, filtrada ou recusando conexão.</td><td>Ferramenta prática para testar serviços sem cliente específico.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico telnet teste simples de porta tcp pode testar banner e conexão em portas tcp. use apenas para diagnóstico; telnet como serviço remoto é inseguro. telnet 192.168.1.10 25"><td class="num">07</td><td><b>telnet</b><span>Teste simples de porta TCP</span></td><td>Pode testar banner e conexão em portas TCP.</td><td>Use apenas para diagnóstico; Telnet como serviço remoto é inseguro.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico iperf3 medição de banda mede vazão tcp/udp entre cliente e servidor. ideal para validar desempenho real entre segmentos de rede. # no servidor
+iperf3 -s
+# no cliente
+iperf3 -c 192.168.1.10 -p 4"><td class="num">08</td><td><b>iperf3</b><span>Medição de banda</span></td><td>Mede vazão TCP/UDP entre cliente e servidor.</td><td>Ideal para validar desempenho real entre segmentos de rede.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="ip">
+      <div class="section-title"><div><span class="section-kicker">🌐 Tema 03</span><h2>Configuração IPv4, IPv6 e Rotas</h2><p>Comandos para configurar endereços, gateways, rotas estáticas e parâmetros de rede.</p></div><button class="copy-section" data-target="code-ip">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-ip.sh</b></div><pre><code id="code-ip"># 01. Adicionar endereço IP — Configura endereço IPv4/IPv6 temporariamente em uma interface.
+sudo ip addr add 192.168.10.20/24 dev eth0
+sudo ip addr add 2001:db8:10::20/64 dev eth0
+
+# 02. Ativar ou desativar interface — Coloca a interface em estado UP ou DOWN.
+sudo ip link set eth0 up
+sudo ip link set eth0 down
+
+# 03. Adicionar rota estática — Cria rota temporária para uma rede ou host específico.
+sudo ip route add 10.20.0.0/16 via 192.168.1.1
+sudo ip route add default via 192.168.1.1
+
+# 04. Remover rota — Remove rota incorreta ou obsoleta da tabela de roteamento.
+sudo ip route del 10.20.0.0/16
+sudo ip route del default
+
+# 05. Habilitar roteamento no Linux — Permite que o host encaminhe pacotes entre interfaces.
+sudo sysctl -w net.ipv4.ip_forward=1
+sudo sysctl -w net.ipv6.conf.all.forwarding=1
+
+# 06. Política de roteamento — Exibe ou cria regras de roteamento baseado em origem, marcação ou tabelas.
+ip rule show
+sudo ip rule add from 192.168.10.0/24 table 100
+
+# 07. Tabela de roteamento alternativa — Gerencia rotas em tabelas específicas.
+sudo ip route add default via 10.0.0.1 dev eth1 table 100
+ip route show table 100
+
+# 08. Estado de resolução DNS por link — Mostra DNS configurado por interface e domínio de busca.
+resolvectl status
+resolvectl dns eth0 1.1.1.1 8.8.8.8</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ip addr add adicionar endereço ip configura endereço ipv4/ipv6 temporariamente em uma interface. alterações feitas com ip geralmente não persistem após reboot. sudo ip addr add 192.168.10.20/24 dev eth0
+sudo ip addr add 2001:db8:10::20/64 dev eth0"><td class="num">01</td><td><b>ip addr add</b><span>Adicionar endereço IP</span></td><td>Configura endereço IPv4/IPv6 temporariamente em uma interface.</td><td>Alterações feitas com ip geralmente não persistem após reboot.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ip link set ativar ou desativar interface coloca a interface em estado up ou down. útil após configuração manual, troubleshooting ou isolamento. sudo ip link set eth0 up
+sudo ip link set eth0 down"><td class="num">02</td><td><b>ip link set</b><span>Ativar ou desativar interface</span></td><td>Coloca a interface em estado UP ou DOWN.</td><td>Útil após configuração manual, troubleshooting ou isolamento.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ip route add adicionar rota estática cria rota temporária para uma rede ou host específico. use para testes rápidos antes de tornar a configuração persistente. sudo ip route add 10.20.0.0/16 via 192.168.1.1
+sudo ip route add default via 192.168.1.1"><td class="num">03</td><td><b>ip route add</b><span>Adicionar rota estática</span></td><td>Cria rota temporária para uma rede ou host específico.</td><td>Use para testes rápidos antes de tornar a configuração persistente.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ip route del remover rota remove rota incorreta ou obsoleta da tabela de roteamento. confirme a rota antes de remover para evitar perda de acesso remoto. sudo ip route del 10.20.0.0/16
+sudo ip route del default"><td class="num">04</td><td><b>ip route del</b><span>Remover rota</span></td><td>Remove rota incorreta ou obsoleta da tabela de roteamento.</td><td>Confirme a rota antes de remover para evitar perda de acesso remoto.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas sysctl forwarding habilitar roteamento no linux permite que o host encaminhe pacotes entre interfaces. necessário para transformar linux em roteador, gateway ou firewall. sudo sysctl -w net.ipv4.ip_forward=1
+sudo sysctl -w net.ipv6.conf.all.forwarding=1"><td class="num">05</td><td><b>sysctl forwarding</b><span>Habilitar roteamento no Linux</span></td><td>Permite que o host encaminhe pacotes entre interfaces.</td><td>Necessário para transformar Linux em roteador, gateway ou firewall.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ip rule política de roteamento exibe ou cria regras de roteamento baseado em origem, marcação ou tabelas. usado em multihoming, vpns, sd-wan simples e roteamento avançado. ip rule show
+sudo ip rule add from 192.168.10.0/24 table 100"><td class="num">06</td><td><b>ip rule</b><span>Política de roteamento</span></td><td>Exibe ou cria regras de roteamento baseado em origem, marcação ou tabelas.</td><td>Usado em multihoming, VPNs, SD-WAN simples e roteamento avançado.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ip route table tabela de roteamento alternativa gerencia rotas em tabelas específicas. combine com ip rule para roteamento por política. sudo ip route add default via 10.0.0.1 dev eth1 table 100
+ip route show table 100"><td class="num">07</td><td><b>ip route table</b><span>Tabela de roteamento alternativa</span></td><td>Gerencia rotas em tabelas específicas.</td><td>Combine com ip rule para roteamento por política.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas resolvectl estado de resolução dns por link mostra dns configurado por interface e domínio de busca. muito útil em sistemas com systemd-resolved. resolvectl status
+resolvectl dns eth0 1.1.1.1 8.8.8.8"><td class="num">08</td><td><b>resolvectl</b><span>Estado de resolução DNS por link</span></td><td>Mostra DNS configurado por interface e domínio de busca.</td><td>Muito útil em sistemas com systemd-resolved.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="dns">
+      <div class="section-title"><div><span class="section-kicker">🔎 Tema 04</span><h2>DNS e Resolução de Nomes</h2><p>Ferramentas para consultar registros, testar servidores DNS e diagnosticar falhas de resolução.</p></div><button class="copy-section" data-target="code-dns">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-dns.sh</b></div><pre><code id="code-dns"># 01. Consulta DNS detalhada — Consulta registros A, AAAA, MX, NS, TXT e exibe detalhes da resposta.
+dig peotta.github.io A
+dig peotta.github.io AAAA
+dig +short peotta.github.io
+
+# 02. Consulta usando DNS específico — Força a consulta em um resolvedor determinado.
+dig @8.8.8.8 peotta.github.io
+dig @1.1.1.1 example.com MX
+
+# 03. Consulta DNS rápida — Mostra resolução de nomes de forma simples.
+host peotta.github.io
+host -t ns example.com
+
+# 04. Consulta DNS tradicional — Ferramenta clássica disponível em muitos ambientes.
+nslookup peotta.github.io
+nslookup -type=mx example.com
+
+# 05. Ver resolvedores configurados — Mostra DNS configurado localmente, quando aplicável.
+cat /etc/resolv.conf
+
+# 06. Resolução via NSS — Testa a resolução considerando /etc/hosts, DNS e ordem do nsswitch.
+getent hosts peotta.github.io
+getent ahosts peotta.github.io
+
+# 07. Logs do resolvedor — Consulta logs do systemd-resolved.
+journalctl -u systemd-resolved --since &quot;1 hour ago&quot;
+
+# 08. Administração BIND — Controla e consulta status de servidores BIND.
+sudo rndc status
+sudo rndc reload</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="dns e resolução de nomes dig consulta dns detalhada consulta registros a, aaaa, mx, ns, txt e exibe detalhes da resposta. ferramenta principal para análise dns profissional. dig peotta.github.io a
+dig peotta.github.io aaaa
+dig +short peotta.github.io"><td class="num">01</td><td><b>dig</b><span>Consulta DNS detalhada</span></td><td>Consulta registros A, AAAA, MX, NS, TXT e exibe detalhes da resposta.</td><td>Ferramenta principal para análise DNS profissional.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes dig @servidor consulta usando dns específico força a consulta em um resolvedor determinado. use para comparar respostas entre dns interno e externo. dig @8.8.8.8 peotta.github.io
+dig @1.1.1.1 example.com mx"><td class="num">02</td><td><b>dig @servidor</b><span>Consulta usando DNS específico</span></td><td>Força a consulta em um resolvedor determinado.</td><td>Use para comparar respostas entre DNS interno e externo.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes host consulta dns rápida mostra resolução de nomes de forma simples. bom para checagens rápidas durante troubleshooting. host peotta.github.io
+host -t ns example.com"><td class="num">03</td><td><b>host</b><span>Consulta DNS rápida</span></td><td>Mostra resolução de nomes de forma simples.</td><td>Bom para checagens rápidas durante troubleshooting.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes nslookup consulta dns tradicional ferramenta clássica disponível em muitos ambientes. útil por familiaridade, embora dig seja mais completo. nslookup peotta.github.io
+nslookup -type=mx example.com"><td class="num">04</td><td><b>nslookup</b><span>Consulta DNS tradicional</span></td><td>Ferramenta clássica disponível em muitos ambientes.</td><td>Útil por familiaridade, embora dig seja mais completo.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes resolv.conf ver resolvedores configurados mostra dns configurado localmente, quando aplicável. em sistemas modernos, pode apontar para stub resolver local. cat /etc/resolv.conf"><td class="num">05</td><td><b>resolv.conf</b><span>Ver resolvedores configurados</span></td><td>Mostra DNS configurado localmente, quando aplicável.</td><td>Em sistemas modernos, pode apontar para stub resolver local.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes getent hosts resolução via nss testa a resolução considerando /etc/hosts, dns e ordem do nsswitch. mais próximo do comportamento real de muitas aplicações. getent hosts peotta.github.io
+getent ahosts peotta.github.io"><td class="num">06</td><td><b>getent hosts</b><span>Resolução via NSS</span></td><td>Testa a resolução considerando /etc/hosts, DNS e ordem do nsswitch.</td><td>Mais próximo do comportamento real de muitas aplicações.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes journalctl dns logs do resolvedor consulta logs do systemd-resolved. ajuda a investigar falhas intermitentes de dns. journalctl -u systemd-resolved --since &quot;1 hour ago&quot;"><td class="num">07</td><td><b>journalctl DNS</b><span>Logs do resolvedor</span></td><td>Consulta logs do systemd-resolved.</td><td>Ajuda a investigar falhas intermitentes de DNS.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes rndc administração bind controla e consulta status de servidores bind. usado em servidores dns autoritativos ou recursivos com bind. sudo rndc status
+sudo rndc reload"><td class="num">08</td><td><b>rndc</b><span>Administração BIND</span></td><td>Controla e consulta status de servidores BIND.</td><td>Usado em servidores DNS autoritativos ou recursivos com BIND.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="portas">
+      <div class="section-title"><div><span class="section-kicker">🔌 Tema 05</span><h2>Portas, Sockets e Serviços em Escuta</h2><p>Identificação de portas abertas, processos associados e exposição de serviços.</p></div><button class="copy-section" data-target="code-portas">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-portas.sh</b></div><pre><code id="code-portas"># 01. Portas abertas detalhadas — Lista TCP/UDP em escuta, PID, processo, usuário e sockets.
+sudo ss -tulpen
+
+# 02. Conexões estabelecidas — Mostra conexões ativas e destinos remotos.
+ss -tn state established
+ss -tunap
+
+# 03. Arquivos e sockets de rede — Relaciona processos com portas e conexões.
+sudo lsof -i
+sudo lsof -i :443
+
+# 04. Processo dono de porta — Identifica processo que ocupa porta ou arquivo.
+sudo fuser -v 80/tcp
+sudo fuser -k 8080/tcp
+
+# 05. Estado de serviços — Mostra se um serviço está ativo, falhou ou reiniciando.
+systemctl status ssh
+systemctl status nginx
+
+# 06. Logs de serviço — Mostra logs recentes de uma unidade systemd.
+journalctl -u ssh --since today
+journalctl -u nginx -f
+
+# 07. Varredura autorizada de portas — Descobre portas abertas em host ou rede sob sua administração.
+nmap -sV 192.168.1.10
+nmap -Pn -p 1-1000 192.168.1.0/24
+
+# 08. Monitoramento contínuo — Atualiza lista de sockets periodicamente.
+watch -n 1 &quot;ss -tulpen&quot;</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="portas, sockets e serviços em escuta ss -tulpen portas abertas detalhadas lista tcp/udp em escuta, pid, processo, usuário e sockets. comando essencial para auditoria de superfície de ataque. sudo ss -tulpen"><td class="num">01</td><td><b>ss -tulpen</b><span>Portas abertas detalhadas</span></td><td>Lista TCP/UDP em escuta, PID, processo, usuário e sockets.</td><td>Comando essencial para auditoria de superfície de ataque.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta ss state established conexões estabelecidas mostra conexões ativas e destinos remotos. útil para identificar comunicação inesperada ou troubleshooting de sessão. ss -tn state established
+ss -tunap"><td class="num">02</td><td><b>ss state established</b><span>Conexões estabelecidas</span></td><td>Mostra conexões ativas e destinos remotos.</td><td>Útil para identificar comunicação inesperada ou troubleshooting de sessão.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta lsof -i arquivos e sockets de rede relaciona processos com portas e conexões. excelente para descobrir qual aplicação usa determinada porta. sudo lsof -i
+sudo lsof -i :443"><td class="num">03</td><td><b>lsof -i</b><span>Arquivos e sockets de rede</span></td><td>Relaciona processos com portas e conexões.</td><td>Excelente para descobrir qual aplicação usa determinada porta.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta fuser processo dono de porta identifica processo que ocupa porta ou arquivo. útil quando um serviço não sobe porque a porta já está em uso. sudo fuser -v 80/tcp
+sudo fuser -k 8080/tcp"><td class="num">04</td><td><b>fuser</b><span>Processo dono de porta</span></td><td>Identifica processo que ocupa porta ou arquivo.</td><td>Útil quando um serviço não sobe porque a porta já está em uso.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta systemctl status estado de serviços mostra se um serviço está ativo, falhou ou reiniciando. primeiro passo para diagnosticar serviços de rede. systemctl status ssh
+systemctl status nginx"><td class="num">05</td><td><b>systemctl status</b><span>Estado de serviços</span></td><td>Mostra se um serviço está ativo, falhou ou reiniciando.</td><td>Primeiro passo para diagnosticar serviços de rede.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta journalctl service logs de serviço mostra logs recentes de uma unidade systemd. use com -f para acompanhamento em tempo real. journalctl -u ssh --since today
+journalctl -u nginx -f"><td class="num">06</td><td><b>journalctl service</b><span>Logs de serviço</span></td><td>Mostra logs recentes de uma unidade systemd.</td><td>Use com -f para acompanhamento em tempo real.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta nmap local varredura autorizada de portas descobre portas abertas em host ou rede sob sua administração. use somente em ambientes próprios ou com autorização. nmap -sv 192.168.1.10
+nmap -pn -p 1-1000 192.168.1.0/24"><td class="num">07</td><td><b>nmap local</b><span>Varredura autorizada de portas</span></td><td>Descobre portas abertas em host ou rede sob sua administração.</td><td>Use somente em ambientes próprios ou com autorização.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta watch ss monitoramento contínuo atualiza lista de sockets periodicamente. bom para acompanhar abertura/fechamento de conexões durante testes. watch -n 1 &quot;ss -tulpen&quot;"><td class="num">08</td><td><b>watch ss</b><span>Monitoramento contínuo</span></td><td>Atualiza lista de sockets periodicamente.</td><td>Bom para acompanhar abertura/fechamento de conexões durante testes.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="firewall">
+      <div class="section-title"><div><span class="section-kicker">🧱 Tema 06</span><h2>Firewall, NAT e Controle de Tráfego</h2><p>Comandos para visualizar e aplicar regras com nftables, iptables, UFW e firewalld.</p></div><button class="copy-section" data-target="code-firewall">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-firewall.sh</b></div><pre><code id="code-firewall"># 01. Visualizar nftables — Mostra todas as tabelas, cadeias e regras nftables.
+sudo nft list ruleset
+
+# 02. Adicionar regra nftables — Exemplo de liberação de SSH na cadeia input.
+sudo nft add rule inet filter input tcp dport 22 accept
+
+# 03. Visualizar iptables — Lista regras, contadores e políticas das cadeias.
+sudo iptables -L -n -v
+sudo iptables -t nat -L -n -v
+
+# 04. Masquerade para saída — Permite que uma rede interna saia pela interface externa.
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+
+# 05. Firewall simplificado — Mostra estado e regras UFW em Ubuntu e derivados.
+sudo ufw status verbose
+sudo ufw allow 22/tcp
+sudo ufw enable
+
+# 06. Administração firewalld — Gerencia zonas e serviços em Red Hat, Fedora e derivados.
+sudo firewall-cmd --state
+sudo firewall-cmd --list-all
+sudo firewall-cmd --add-service=https --permanent
+sudo firewall-cmd --reload
+
+# 07. Controle de tráfego — Mostra filas, disciplinas e limitação de banda.
+tc qdisc show dev eth0
+sudo tc qdisc add dev eth0 root netem delay 50ms
+
+# 08. Tabela de conexões — Mostra conexões rastreadas pelo kernel.
+sudo conntrack -L
+sudo conntrack -S</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="firewall, nat e controle de tráfego nft list ruleset visualizar nftables mostra todas as tabelas, cadeias e regras nftables. nftables é o framework moderno em muitas distribuições linux. sudo nft list ruleset"><td class="num">01</td><td><b>nft list ruleset</b><span>Visualizar nftables</span></td><td>Mostra todas as tabelas, cadeias e regras nftables.</td><td>nftables é o framework moderno em muitas distribuições Linux.</td></tr><tr class="cmd-row" data-search="firewall, nat e controle de tráfego nft add rule adicionar regra nftables exemplo de liberação de ssh na cadeia input. adapte à política de sua distribuição antes de aplicar. sudo nft add rule inet filter input tcp dport 22 accept"><td class="num">02</td><td><b>nft add rule</b><span>Adicionar regra nftables</span></td><td>Exemplo de liberação de SSH na cadeia input.</td><td>Adapte à política de sua distribuição antes de aplicar.</td></tr><tr class="cmd-row" data-search="firewall, nat e controle de tráfego iptables -l visualizar iptables lista regras, contadores e políticas das cadeias. ainda muito encontrado em servidores e appliances antigos. sudo iptables -l -n -v
+sudo iptables -t nat -l -n -v"><td class="num">03</td><td><b>iptables -L</b><span>Visualizar iptables</span></td><td>Lista regras, contadores e políticas das cadeias.</td><td>Ainda muito encontrado em servidores e appliances antigos.</td></tr><tr class="cmd-row" data-search="firewall, nat e controle de tráfego iptables nat masquerade para saída permite que uma rede interna saia pela interface externa. comum em laboratórios de roteador linux. sudo iptables -t nat -a postrouting -o eth0 -j masquerade"><td class="num">04</td><td><b>iptables NAT</b><span>Masquerade para saída</span></td><td>Permite que uma rede interna saia pela interface externa.</td><td>Comum em laboratórios de roteador Linux.</td></tr><tr class="cmd-row" data-search="firewall, nat e controle de tráfego ufw status firewall simplificado mostra estado e regras ufw em ubuntu e derivados. interface amigável para servidores simples. sudo ufw status verbose
+sudo ufw allow 22/tcp
+sudo ufw enable"><td class="num">05</td><td><b>ufw status</b><span>Firewall simplificado</span></td><td>Mostra estado e regras UFW em Ubuntu e derivados.</td><td>Interface amigável para servidores simples.</td></tr><tr class="cmd-row" data-search="firewall, nat e controle de tráfego firewall-cmd administração firewalld gerencia zonas e serviços em red hat, fedora e derivados. use --permanent para persistir após reload. sudo firewall-cmd --state
+sudo firewall-cmd --list-all
+sudo firewall-cmd --add-service=https --permanent
+sudo firewall-cmd --reload"><td class="num">06</td><td><b>firewall-cmd</b><span>Administração firewalld</span></td><td>Gerencia zonas e serviços em Red Hat, Fedora e derivados.</td><td>Use --permanent para persistir após reload.</td></tr><tr class="cmd-row" data-search="firewall, nat e controle de tráfego tc qdisc controle de tráfego mostra filas, disciplinas e limitação de banda. útil para qos, simulação de latência e laboratórios. tc qdisc show dev eth0
+sudo tc qdisc add dev eth0 root netem delay 50ms"><td class="num">07</td><td><b>tc qdisc</b><span>Controle de tráfego</span></td><td>Mostra filas, disciplinas e limitação de banda.</td><td>Útil para QoS, simulação de latência e laboratórios.</td></tr><tr class="cmd-row" data-search="firewall, nat e controle de tráfego conntrack tabela de conexões mostra conexões rastreadas pelo kernel. importante em firewalls stateful e diagnóstico de nat. sudo conntrack -l
+sudo conntrack -s"><td class="num">08</td><td><b>conntrack</b><span>Tabela de conexões</span></td><td>Mostra conexões rastreadas pelo kernel.</td><td>Importante em firewalls stateful e diagnóstico de NAT.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="captura">
+      <div class="section-title"><div><span class="section-kicker">📦 Tema 07</span><h2>Captura e Análise de Pacotes</h2><p>Comandos para inspeção de tráfego, criação de arquivos PCAP e análise de protocolos.</p></div><button class="copy-section" data-target="code-captura">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-captura.sh</b></div><pre><code id="code-captura"># 01. Captura em interface — Captura pacotes com endereços e portas numéricos.
+sudo tcpdump -i eth0 -nn
+
+# 02. Gravar captura — Salva tráfego para análise posterior no Wireshark.
+sudo tcpdump -i any -s 0 -w captura.pcap
+
+# 03. Filtrar por host, porta e protocolo — Captura apenas tráfego relevante para investigação.
+sudo tcpdump -i any host 192.168.1.10
+sudo tcpdump -i any tcp port 443
+sudo tcpdump -i any udp port 53
+
+# 04. Captura com rotação por tempo — Gera arquivos sucessivos, útil em monitoramento temporário.
+sudo tcpdump -i eth0 -w capture-%Y%m%d%H%M%S.pcap -G 3600 -W 24
+
+# 05. Wireshark em linha de comando — Analisa PCAP e extrai campos específicos.
+tshark -r captura.pcap -q -z io,phs
+tshark -r captura.pcap -Y dns
+
+# 06. Grep para tráfego — Procura padrões textuais em pacotes.
+sudo ngrep -d any &quot;Host:&quot; tcp port 80
+
+# 07. Tráfego por par de hosts — Mostra consumo de banda em tempo real por origem/destino.
+sudo iftop -i eth0
+
+# 08. Uso de banda por interface — Visualiza entrada e saída de tráfego em tempo real.
+nload eth0</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="captura e análise de pacotes tcpdump básico captura em interface captura pacotes com endereços e portas numéricos. use filtros para reduzir volume e proteger dados sensíveis. sudo tcpdump -i eth0 -nn"><td class="num">01</td><td><b>tcpdump básico</b><span>Captura em interface</span></td><td>Captura pacotes com endereços e portas numéricos.</td><td>Use filtros para reduzir volume e proteger dados sensíveis.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes tcpdump salvar pcap gravar captura salva tráfego para análise posterior no wireshark. evite capturas longas sem rotação para não encher disco. sudo tcpdump -i any -s 0 -w captura.pcap"><td class="num">02</td><td><b>tcpdump salvar PCAP</b><span>Gravar captura</span></td><td>Salva tráfego para análise posterior no Wireshark.</td><td>Evite capturas longas sem rotação para não encher disco.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes tcpdump filtros filtrar por host, porta e protocolo captura apenas tráfego relevante para investigação. reduz ruído e melhora foco da análise. sudo tcpdump -i any host 192.168.1.10
+sudo tcpdump -i any tcp port 443
+sudo tcpdump -i any udp port 53"><td class="num">03</td><td><b>tcpdump filtros</b><span>Filtrar por host, porta e protocolo</span></td><td>Captura apenas tráfego relevante para investigação.</td><td>Reduz ruído e melhora foco da análise.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes tcpdump rotação captura com rotação por tempo gera arquivos sucessivos, útil em monitoramento temporário. combine com diretório dedicado e compressão. sudo tcpdump -i eth0 -w capture-%y%m%d%h%m%s.pcap -g 3600 -w 24"><td class="num">04</td><td><b>tcpdump rotação</b><span>Captura com rotação por tempo</span></td><td>Gera arquivos sucessivos, útil em monitoramento temporário.</td><td>Combine com diretório dedicado e compressão.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes tshark wireshark em linha de comando analisa pcap e extrai campos específicos. ótimo para relatórios e automação de análise. tshark -r captura.pcap -q -z io,phs
+tshark -r captura.pcap -y dns"><td class="num">05</td><td><b>tshark</b><span>Wireshark em linha de comando</span></td><td>Analisa PCAP e extrai campos específicos.</td><td>Ótimo para relatórios e automação de análise.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes ngrep grep para tráfego procura padrões textuais em pacotes. útil para protocolos em texto claro em laboratório. sudo ngrep -d any &quot;host:&quot; tcp port 80"><td class="num">06</td><td><b>ngrep</b><span>Grep para tráfego</span></td><td>Procura padrões textuais em pacotes.</td><td>Útil para protocolos em texto claro em laboratório.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes iftop tráfego por par de hosts mostra consumo de banda em tempo real por origem/destino. ajuda a localizar quem está consumindo link. sudo iftop -i eth0"><td class="num">07</td><td><b>iftop</b><span>Tráfego por par de hosts</span></td><td>Mostra consumo de banda em tempo real por origem/destino.</td><td>Ajuda a localizar quem está consumindo link.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes nload uso de banda por interface visualiza entrada e saída de tráfego em tempo real. ferramenta simples para monitoramento visual rápido. nload eth0"><td class="num">08</td><td><b>nload</b><span>Uso de banda por interface</span></td><td>Visualiza entrada e saída de tráfego em tempo real.</td><td>Ferramenta simples para monitoramento visual rápido.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="switching">
+      <div class="section-title"><div><span class="section-kicker">🖧 Tema 08</span><h2>Bridge, VLAN e Switching no Linux</h2><p>Administração de bridges, VLANs e enlaces virtuais em servidores, labs e virtualização.</p></div><button class="copy-section" data-target="code-switching">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-switching.sh</b></div><pre><code id="code-switching"># 01. Estado de bridge — Mostra portas associadas a bridges Linux.
+bridge link show
+bridge vlan show
+
+# 02. Criar bridge — Cria bridge virtual e adiciona interface física.
+sudo ip link add br0 type bridge
+sudo ip link set eth0 master br0
+sudo ip link set br0 up
+
+# 03. Criar subinterface VLAN — Cria interface VLAN 802.1Q no Linux.
+sudo ip link add link eth0 name eth0.10 type vlan id 10
+sudo ip addr add 192.168.10.2/24 dev eth0.10
+sudo ip link set eth0.10 up
+
+# 04. Bridge em sistemas antigos — Ferramenta legada para gerenciar bridges.
+brctl show
+sudo brctl addbr br0
+
+# 05. Descoberta LLDP — Mostra switch, porta e vizinhos conectados.
+sudo lldpcli show neighbors
+sudo lldpcli show neighbors details
+
+# 06. Namespaces de rede — Cria ambientes de rede isolados para laboratório.
+sudo ip netns add host1
+sudo ip netns exec host1 ip addr
+
+# 07. Par virtual Ethernet — Conecta namespaces, containers ou bridges.
+sudo ip link add veth0 type veth peer name veth1
+sudo ip link set veth1 netns host1
+
+# 08. Open vSwitch — Gerencia switches virtuais avançados.
+sudo ovs-vsctl show
+sudo ovs-vsctl add-br br-lab
+sudo ovs-vsctl add-port br-lab eth1</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="bridge, vlan e switching no linux bridge link estado de bridge mostra portas associadas a bridges linux. comum em kvm, containers e laboratórios de redes. bridge link show
+bridge vlan show"><td class="num">01</td><td><b>bridge link</b><span>Estado de bridge</span></td><td>Mostra portas associadas a bridges Linux.</td><td>Comum em KVM, containers e laboratórios de redes.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux ip link add bridge criar bridge cria bridge virtual e adiciona interface física. cuidado para não perder acesso remoto ao mover interface. sudo ip link add br0 type bridge
+sudo ip link set eth0 master br0
+sudo ip link set br0 up"><td class="num">02</td><td><b>ip link add bridge</b><span>Criar bridge</span></td><td>Cria bridge virtual e adiciona interface física.</td><td>Cuidado para não perder acesso remoto ao mover interface.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux ip link vlan criar subinterface vlan cria interface vlan 802.1q no linux. use quando o servidor recebe trunk de switch. sudo ip link add link eth0 name eth0.10 type vlan id 10
+sudo ip addr add 192.168.10.2/24 dev eth0.10
+sudo ip link set eth0.10 up"><td class="num">03</td><td><b>ip link vlan</b><span>Criar subinterface VLAN</span></td><td>Cria interface VLAN 802.1Q no Linux.</td><td>Use quando o servidor recebe trunk de switch.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux brctl legado bridge em sistemas antigos ferramenta legada para gerenciar bridges. prefira bridge/ip em sistemas modernos. brctl show
+sudo brctl addbr br0"><td class="num">04</td><td><b>brctl legado</b><span>Bridge em sistemas antigos</span></td><td>Ferramenta legada para gerenciar bridges.</td><td>Prefira bridge/ip em sistemas modernos.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux lldpcli descoberta lldp mostra switch, porta e vizinhos conectados. excelente para documentação física e troubleshooting de cabeamento. sudo lldpcli show neighbors
+sudo lldpcli show neighbors details"><td class="num">05</td><td><b>lldpcli</b><span>Descoberta LLDP</span></td><td>Mostra switch, porta e vizinhos conectados.</td><td>Excelente para documentação física e troubleshooting de cabeamento.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux ip netns namespaces de rede cria ambientes de rede isolados para laboratório. base para simular hosts, roteadores e topologias. sudo ip netns add host1
+sudo ip netns exec host1 ip addr"><td class="num">06</td><td><b>ip netns</b><span>Namespaces de rede</span></td><td>Cria ambientes de rede isolados para laboratório.</td><td>Base para simular hosts, roteadores e topologias.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux veth pair par virtual ethernet conecta namespaces, containers ou bridges. muito usado em virtualização e simulação de redes. sudo ip link add veth0 type veth peer name veth1
+sudo ip link set veth1 netns host1"><td class="num">07</td><td><b>veth pair</b><span>Par virtual Ethernet</span></td><td>Conecta namespaces, containers ou bridges.</td><td>Muito usado em virtualização e simulação de redes.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux ovs-vsctl open vswitch gerencia switches virtuais avançados. útil em sdn, mininet, openstack e laboratórios. sudo ovs-vsctl show
+sudo ovs-vsctl add-br br-lab
+sudo ovs-vsctl add-port br-lab eth1"><td class="num">08</td><td><b>ovs-vsctl</b><span>Open vSwitch</span></td><td>Gerencia switches virtuais avançados.</td><td>Útil em SDN, Mininet, OpenStack e laboratórios.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="wifi">
+      <div class="section-title"><div><span class="section-kicker">📶 Tema 09</span><h2>Wi-Fi e Interfaces Sem Fio</h2><p>Comandos para diagnosticar adaptadores, redes disponíveis, potência e conexão sem fio.</p></div><button class="copy-section" data-target="code-wifi">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-wifi.sh</b></div><pre><code id="code-wifi"># 01. Interfaces Wi-Fi — Lista interfaces sem fio reconhecidas.
+iw dev
+
+# 02. Varredura de redes — Mostra SSIDs, BSSIDs, canais, sinal e segurança.
+sudo iw dev wlan0 scan | less
+
+# 03. Redes Wi-Fi via NetworkManager — Lista redes e permite conexão por perfil.
+nmcli device wifi list
+nmcli device wifi connect &quot;SSID&quot; password &quot;senha&quot;
+
+# 04. Estado Wi-Fi legado — Mostra parâmetros sem fio em sistemas antigos.
+iwconfig wlan0
+
+# 05. Bloqueios de rádio — Verifica se Wi-Fi/Bluetooth estão bloqueados por software ou hardware.
+rfkill list
+sudo rfkill unblock wifi
+
+# 06. Monitor Wi-Fi interativo — Exibe qualidade, sinal, ruído e estatísticas.
+wavemon
+
+# 07. Ponto de acesso Linux — Verifica logs e estado do hostapd.
+systemctl status hostapd
+journalctl -u hostapd -f
+
+# 08. Domínio regulatório — Mostra ou define país/região para canais permitidos.
+iw reg get
+sudo iw reg set BR</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="wi-fi e interfaces sem fio iw dev interfaces wi-fi lista interfaces sem fio reconhecidas. substitui parte das funções antigas do iwconfig. iw dev"><td class="num">01</td><td><b>iw dev</b><span>Interfaces Wi-Fi</span></td><td>Lista interfaces sem fio reconhecidas.</td><td>Substitui parte das funções antigas do iwconfig.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio iw scan varredura de redes mostra ssids, bssids, canais, sinal e segurança. pode exigir privilégios administrativos. sudo iw dev wlan0 scan | less"><td class="num">02</td><td><b>iw scan</b><span>Varredura de redes</span></td><td>Mostra SSIDs, BSSIDs, canais, sinal e segurança.</td><td>Pode exigir privilégios administrativos.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio nmcli wifi redes wi-fi via networkmanager lista redes e permite conexão por perfil. prático em notebooks e laboratórios. nmcli device wifi list
+nmcli device wifi connect &quot;ssid&quot; password &quot;senha&quot;"><td class="num">03</td><td><b>nmcli wifi</b><span>Redes Wi-Fi via NetworkManager</span></td><td>Lista redes e permite conexão por perfil.</td><td>Prático em notebooks e laboratórios.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio iwconfig legado estado wi-fi legado mostra parâmetros sem fio em sistemas antigos. prefira iw em distribuições modernas. iwconfig wlan0"><td class="num">04</td><td><b>iwconfig legado</b><span>Estado Wi-Fi legado</span></td><td>Mostra parâmetros sem fio em sistemas antigos.</td><td>Prefira iw em distribuições modernas.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio rfkill bloqueios de rádio verifica se wi-fi/bluetooth estão bloqueados por software ou hardware. muito útil quando a interface não aparece ativa. rfkill list
+sudo rfkill unblock wifi"><td class="num">05</td><td><b>rfkill</b><span>Bloqueios de rádio</span></td><td>Verifica se Wi-Fi/Bluetooth estão bloqueados por software ou hardware.</td><td>Muito útil quando a interface não aparece ativa.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio wavemon monitor wi-fi interativo exibe qualidade, sinal, ruído e estatísticas. ferramenta visual para diagnóstico de cobertura. wavemon"><td class="num">06</td><td><b>wavemon</b><span>Monitor Wi-Fi interativo</span></td><td>Exibe qualidade, sinal, ruído e estatísticas.</td><td>Ferramenta visual para diagnóstico de cobertura.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio hostapd status ponto de acesso linux verifica logs e estado do hostapd. usado quando linux atua como ap. systemctl status hostapd
+journalctl -u hostapd -f"><td class="num">07</td><td><b>hostapd status</b><span>Ponto de acesso Linux</span></td><td>Verifica logs e estado do hostapd.</td><td>Usado quando Linux atua como AP.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio iw reg domínio regulatório mostra ou define país/região para canais permitidos. configure corretamente para cumprir limites regulatórios. iw reg get
+sudo iw reg set br"><td class="num">08</td><td><b>iw reg</b><span>Domínio regulatório</span></td><td>Mostra ou define país/região para canais permitidos.</td><td>Configure corretamente para cumprir limites regulatórios.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="servicos">
+      <div class="section-title"><div><span class="section-kicker">🧰 Tema 10</span><h2>Serviços de Rede: SSH, DHCP, Web e NTP</h2><p>Administração e diagnóstico de serviços comuns de infraestrutura.</p></div><button class="copy-section" data-target="code-servicos">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-servicos.sh</b></div><pre><code id="code-servicos"># 01. Configuração efetiva do SSH — Mostra parâmetros finais do servidor SSH.
+sudo sshd -T | grep -E &quot;permitrootlogin|passwordauthentication|pubkeyauthentication&quot;
+
+# 02. Diagnóstico de cliente SSH — Mostra detalhes de autenticação, chave e negociação.
+ssh -vvv usuario@192.168.1.10
+
+# 03. Cópia remota de arquivos — Transfere arquivos entre hosts por SSH.
+scp arquivo.txt usuario@servidor:/tmp/
+rsync -avz ./dados/ usuario@servidor:/backup/dados/
+
+# 04. Cliente DHCP — Solicita ou renova endereço IP por DHCP.
+sudo dhclient -v eth0
+sudo dhclient -r eth0
+
+# 05. Logs de DHCP client/server — Localiza eventos de concessão, renovação e falha.
+journalctl -u NetworkManager --since today | grep -i dhcp
+journalctl -u isc-dhcp-server -f
+
+# 06. Serviços Web — Verifica estado dos principais servidores web.
+systemctl status nginx
+systemctl status apache2
+sudo nginx -t
+sudo apachectl configtest
+
+# 07. NTP/tempo — Mostra sincronização de tempo via chrony.
+chronyc tracking
+chronyc sources -v
+
+# 08. Data, hora e NTP — Mostra fuso, horário e sincronização.
+timedatectl status
+sudo timedatectl set-ntp true</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp sshd -t configuração efetiva do ssh mostra parâmetros finais do servidor ssh. útil para validar endurecimento e autenticação. sudo sshd -t | grep -e &quot;permitrootlogin|passwordauthentication|pubkeyauthentication&quot;"><td class="num">01</td><td><b>sshd -T</b><span>Configuração efetiva do SSH</span></td><td>Mostra parâmetros finais do servidor SSH.</td><td>Útil para validar endurecimento e autenticação.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp ssh verbose diagnóstico de cliente ssh mostra detalhes de autenticação, chave e negociação. use para investigar falhas de login e troca de chaves. ssh -vvv usuario@192.168.1.10"><td class="num">02</td><td><b>ssh verbose</b><span>Diagnóstico de cliente SSH</span></td><td>Mostra detalhes de autenticação, chave e negociação.</td><td>Use para investigar falhas de login e troca de chaves.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp scp / rsync cópia remota de arquivos transfere arquivos entre hosts por ssh. rsync é melhor para sincronização incremental. scp arquivo.txt usuario@servidor:/tmp/
+rsync -avz ./dados/ usuario@servidor:/backup/dados/"><td class="num">03</td><td><b>scp / rsync</b><span>Cópia remota de arquivos</span></td><td>Transfere arquivos entre hosts por SSH.</td><td>rsync é melhor para sincronização incremental.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp dhclient cliente dhcp solicita ou renova endereço ip por dhcp. útil quando a interface não recebeu ip automaticamente. sudo dhclient -v eth0
+sudo dhclient -r eth0"><td class="num">04</td><td><b>dhclient</b><span>Cliente DHCP</span></td><td>Solicita ou renova endereço IP por DHCP.</td><td>Útil quando a interface não recebeu IP automaticamente.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp journalctl dhcp logs de dhcp client/server localiza eventos de concessão, renovação e falha. o nome do serviço varia por distribuição. journalctl -u networkmanager --since today | grep -i dhcp
+journalctl -u isc-dhcp-server -f"><td class="num">05</td><td><b>journalctl DHCP</b><span>Logs de DHCP client/server</span></td><td>Localiza eventos de concessão, renovação e falha.</td><td>O nome do serviço varia por distribuição.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp nginx/apache status serviços web verifica estado dos principais servidores web. use com curl para validar aplicação e porta. systemctl status nginx
+systemctl status apache2
+sudo nginx -t
+sudo apachectl configtest"><td class="num">06</td><td><b>nginx/apache status</b><span>Serviços Web</span></td><td>Verifica estado dos principais servidores web.</td><td>Use com curl para validar aplicação e porta.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp chronyc ntp/tempo mostra sincronização de tempo via chrony. tempo correto é essencial para logs, tls, kerberos e auditoria. chronyc tracking
+chronyc sources -v"><td class="num">07</td><td><b>chronyc</b><span>NTP/tempo</span></td><td>Mostra sincronização de tempo via chrony.</td><td>Tempo correto é essencial para logs, TLS, Kerberos e auditoria.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp timedatectl data, hora e ntp mostra fuso, horário e sincronização. primeiro comando para validar relógio do sistema. timedatectl status
+sudo timedatectl set-ntp true"><td class="num">08</td><td><b>timedatectl</b><span>Data, hora e NTP</span></td><td>Mostra fuso, horário e sincronização.</td><td>Primeiro comando para validar relógio do sistema.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="monitoramento">
+      <div class="section-title"><div><span class="section-kicker">📊 Tema 11</span><h2>Monitoramento, Performance e Capacidade</h2><p>Comandos para acompanhar CPU, memória, disco, I/O e tráfego de rede.</p></div><button class="copy-section" data-target="code-monitoramento">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-monitoramento.sh</b></div><pre><code id="code-monitoramento"># 01. Processos em tempo real — Mostra consumo de CPU, memória e carga.
+top
+htop
+
+# 02. Memória RAM — Exibe memória livre, usada, buffers e cache.
+free -h
+
+# 03. Uso de disco — df mostra uso de filesystems; du mostra uso por diretório.
+df -h
+du -sh /var/log/* | sort -h
+
+# 04. I/O de disco — Mostra utilização e espera de dispositivos de bloco.
+iostat -xz 1 5
+
+# 05. Visão geral do sistema — Exibe processos, memória, swap, I/O e CPU.
+vmstat 1 10
+
+# 06. Histórico de performance — Coleta e consulta métricas de CPU, memória, disco e rede.
+sar -n DEV 1 5
+sar -u -r -d 1 5
+
+# 07. Tráfego por processo — Mostra quais processos consomem rede.
+sudo nethogs eth0
+
+# 08. Monitor de banda — Interface visual para tráfego por interface.
+bmon</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="monitoramento, performance e capacidade top / htop processos em tempo real mostra consumo de cpu, memória e carga. htop é mais amigável, mas pode não vir instalado. top
+htop"><td class="num">01</td><td><b>top / htop</b><span>Processos em tempo real</span></td><td>Mostra consumo de CPU, memória e carga.</td><td>htop é mais amigável, mas pode não vir instalado.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade free memória ram exibe memória livre, usada, buffers e cache. use -h para formato legível. free -h"><td class="num">02</td><td><b>free</b><span>Memória RAM</span></td><td>Exibe memória livre, usada, buffers e cache.</td><td>Use -h para formato legível.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade df / du uso de disco df mostra uso de filesystems; du mostra uso por diretório. essencial para evitar queda de serviços por disco cheio. df -h
+du -sh /var/log/* | sort -h"><td class="num">03</td><td><b>df / du</b><span>Uso de disco</span></td><td>df mostra uso de filesystems; du mostra uso por diretório.</td><td>Essencial para evitar queda de serviços por disco cheio.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade iostat i/o de disco mostra utilização e espera de dispositivos de bloco. ajuda a detectar gargalos de armazenamento. iostat -xz 1 5"><td class="num">04</td><td><b>iostat</b><span>I/O de disco</span></td><td>Mostra utilização e espera de dispositivos de bloco.</td><td>Ajuda a detectar gargalos de armazenamento.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade vmstat visão geral do sistema exibe processos, memória, swap, i/o e cpu. bom para diagnóstico rápido de saturação. vmstat 1 10"><td class="num">05</td><td><b>vmstat</b><span>Visão geral do sistema</span></td><td>Exibe processos, memória, swap, I/O e CPU.</td><td>Bom para diagnóstico rápido de saturação.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade sar histórico de performance coleta e consulta métricas de cpu, memória, disco e rede. depende do pacote sysstat. sar -n dev 1 5
+sar -u -r -d 1 5"><td class="num">06</td><td><b>sar</b><span>Histórico de performance</span></td><td>Coleta e consulta métricas de CPU, memória, disco e rede.</td><td>Depende do pacote sysstat.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade nethogs tráfego por processo mostra quais processos consomem rede. muito útil para localizar consumo anormal de banda. sudo nethogs eth0"><td class="num">07</td><td><b>nethogs</b><span>Tráfego por processo</span></td><td>Mostra quais processos consomem rede.</td><td>Muito útil para localizar consumo anormal de banda.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade bmon monitor de banda interface visual para tráfego por interface. boa opção para acompanhamento em terminal. bmon"><td class="num">08</td><td><b>bmon</b><span>Monitor de banda</span></td><td>Interface visual para tráfego por interface.</td><td>Boa opção para acompanhamento em terminal.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="logs">
+      <div class="section-title"><div><span class="section-kicker">📜 Tema 12</span><h2>Logs e Auditoria Operacional</h2><p>Consulta e filtragem de logs de sistema, autenticação, kernel e serviços.</p></div><button class="copy-section" data-target="code-logs">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-logs.sh</b></div><pre><code id="code-logs"># 01. Logs systemd — Consulta logs centralizados do sistema.
+journalctl -xe
+journalctl --since &quot;1 hour ago&quot;
+
+# 02. Logs do kernel — Mostra mensagens do kernel relacionadas a drivers e rede.
+journalctl -k
+dmesg -T | tail -100
+
+# 03. Autenticação — Mostra tentativas de login, sudo e SSH.
+sudo grep -i &quot;failed|accepted|sudo&quot; /var/log/auth.log
+sudo grep -i &quot;failed|accepted|sudo&quot; /var/log/secure
+
+# 04. Acompanhamento em tempo real — Segue logs enquanto eventos ocorrem.
+sudo tail -f /var/log/syslog
+sudo tail -f /var/log/messages
+
+# 05. Filtragem de eventos — Extrai padrões, IPs e contagens de logs.
+grep -Ei &quot;error|fail|denied|timeout&quot; /var/log/syslog
+awk &#x27;{print $1,$2,$3,$5}&#x27; /var/log/syslog | head
+
+# 06. Sessões de usuários — Mostra logins recentes e usuários conectados.
+w
+last -F | head -20
+
+# 07. Consulta auditd — Pesquisa eventos do Linux Audit.
+sudo ausearch -m USER_LOGIN -ts today
+sudo ausearch -k network_changes
+
+# 08. Rotação de logs — Valida configuração de rotação e compressão.
+sudo logrotate -d /etc/logrotate.conf</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="logs e auditoria operacional journalctl geral logs systemd consulta logs centralizados do sistema. use filtros por unidade, prioridade e período. journalctl -xe
+journalctl --since &quot;1 hour ago&quot;"><td class="num">01</td><td><b>journalctl geral</b><span>Logs systemd</span></td><td>Consulta logs centralizados do sistema.</td><td>Use filtros por unidade, prioridade e período.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional journalctl kernel logs do kernel mostra mensagens do kernel relacionadas a drivers e rede. útil para nics, firmware, link down/up e erros. journalctl -k
+dmesg -t | tail -100"><td class="num">02</td><td><b>journalctl kernel</b><span>Logs do kernel</span></td><td>Mostra mensagens do kernel relacionadas a drivers e rede.</td><td>Útil para NICs, firmware, link down/up e erros.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional auth logs autenticação mostra tentativas de login, sudo e ssh. o caminho pode variar entre distribuições. sudo grep -i &quot;failed|accepted|sudo&quot; /var/log/auth.log
+sudo grep -i &quot;failed|accepted|sudo&quot; /var/log/secure"><td class="num">03</td><td><b>auth logs</b><span>Autenticação</span></td><td>Mostra tentativas de login, sudo e SSH.</td><td>O caminho pode variar entre distribuições.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional tail -f acompanhamento em tempo real segue logs enquanto eventos ocorrem. use em outra janela durante testes de serviço. sudo tail -f /var/log/syslog
+sudo tail -f /var/log/messages"><td class="num">04</td><td><b>tail -f</b><span>Acompanhamento em tempo real</span></td><td>Segue logs enquanto eventos ocorrem.</td><td>Use em outra janela durante testes de serviço.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional grep / awk filtragem de eventos extrai padrões, ips e contagens de logs. base para relatórios rápidos de troubleshooting. grep -ei &quot;error|fail|denied|timeout&quot; /var/log/syslog
+awk &#x27;{print $1,$2,$3,$5}&#x27; /var/log/syslog | head"><td class="num">05</td><td><b>grep / awk</b><span>Filtragem de eventos</span></td><td>Extrai padrões, IPs e contagens de logs.</td><td>Base para relatórios rápidos de troubleshooting.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional last / w sessões de usuários mostra logins recentes e usuários conectados. importante em administração remota e auditoria. w
+last -f | head -20"><td class="num">06</td><td><b>last / w</b><span>Sessões de usuários</span></td><td>Mostra logins recentes e usuários conectados.</td><td>Importante em administração remota e auditoria.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional ausearch consulta auditd pesquisa eventos do linux audit. usado em ambientes com trilha de auditoria habilitada. sudo ausearch -m user_login -ts today
+sudo ausearch -k network_changes"><td class="num">07</td><td><b>ausearch</b><span>Consulta auditd</span></td><td>Pesquisa eventos do Linux Audit.</td><td>Usado em ambientes com trilha de auditoria habilitada.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional logrotate rotação de logs valida configuração de rotação e compressão. evita crescimento excessivo de logs. sudo logrotate -d /etc/logrotate.conf"><td class="num">08</td><td><b>logrotate</b><span>Rotação de logs</span></td><td>Valida configuração de rotação e compressão.</td><td>Evita crescimento excessivo de logs.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="automacao">
+      <div class="section-title"><div><span class="section-kicker">⚙️ Tema 13</span><h2>Automação, Scripts e Administração Remota</h2><p>Comandos úteis para executar tarefas repetitivas, coletar informações e administrar hosts remotos.</p></div><button class="copy-section" data-target="code-automacao">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-automacao.sh</b></div><pre><code id="code-automacao"># 01. Executar teste em vários hosts — Percorre uma lista de IPs e testa conectividade.
+for ip in 192.168.1.{1..254}; do ping -c1 -W1 $ip &gt;/dev/null &amp;&amp; echo &quot;$ip ativo&quot;; done
+
+# 02. Comando remoto com SSH — Executa comando em vários servidores listados em arquivo.
+while read host; do ssh $host &quot;hostname; ip -br addr&quot;; done &lt; hosts.txt
+
+# 03. Teste com Ansible — Valida conectividade e autenticação no inventário.
+ansible all -i hosts.ini -m ping
+ansible all -i hosts.ini -a &quot;ip -br addr&quot;
+
+# 04. Agendamento de tarefas — Edita tarefas recorrentes do usuário.
+crontab -e
+crontab -l
+
+# 05. Agendamento moderno — Alternativa ao cron com unidades systemd.
+systemctl list-timers
+systemctl status minha-tarefa.timer
+
+# 06. Repetir comando — Executa comando em intervalos regulares.
+watch -n 2 &quot;ip -br addr; ip route&quot;
+
+# 07. Gravar sessão de terminal — Registra comandos e saídas em arquivo.
+script administracao-rede.log
+
+# 08. Salvar e exibir saída — Mostra saída no terminal e grava em arquivo.
+ip addr | tee inventario-ip.txt
+ss -tulpen | sudo tee portas-abertas.txt</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="automação, scripts e administração remota for loop hosts executar teste em vários hosts percorre uma lista de ips e testa conectividade. base simples para automação de inventário. for ip in 192.168.1.{1..254}; do ping -c1 -w1 $ip &gt;/dev/null &amp;&amp; echo &quot;$ip ativo&quot;; done"><td class="num">01</td><td><b>for loop hosts</b><span>Executar teste em vários hosts</span></td><td>Percorre uma lista de IPs e testa conectividade.</td><td>Base simples para automação de inventário.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota parallel ssh comando remoto com ssh executa comando em vários servidores listados em arquivo. exige chaves ssh e autorização administrativa. while read host; do ssh $host &quot;hostname; ip -br addr&quot;; done &lt; hosts.txt"><td class="num">02</td><td><b>parallel ssh</b><span>Comando remoto com SSH</span></td><td>Executa comando em vários servidores listados em arquivo.</td><td>Exige chaves SSH e autorização administrativa.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota ansible ping teste com ansible valida conectividade e autenticação no inventário. ideal para administração de múltiplos servidores. ansible all -i hosts.ini -m ping
+ansible all -i hosts.ini -a &quot;ip -br addr&quot;"><td class="num">03</td><td><b>ansible ping</b><span>Teste com Ansible</span></td><td>Valida conectividade e autenticação no inventário.</td><td>Ideal para administração de múltiplos servidores.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota cron agendamento de tarefas edita tarefas recorrentes do usuário. use para coletas periódicas e scripts de manutenção. crontab -e
+crontab -l"><td class="num">04</td><td><b>cron</b><span>Agendamento de tarefas</span></td><td>Edita tarefas recorrentes do usuário.</td><td>Use para coletas periódicas e scripts de manutenção.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota systemd timer agendamento moderno alternativa ao cron com unidades systemd. boa escolha para serviços e automações robustas. systemctl list-timers
+systemctl status minha-tarefa.timer"><td class="num">05</td><td><b>systemd timer</b><span>Agendamento moderno</span></td><td>Alternativa ao cron com unidades systemd.</td><td>Boa escolha para serviços e automações robustas.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota watch repetir comando executa comando em intervalos regulares. excelente para acompanhar mudanças durante troubleshooting. watch -n 2 &quot;ip -br addr; ip route&quot;"><td class="num">06</td><td><b>watch</b><span>Repetir comando</span></td><td>Executa comando em intervalos regulares.</td><td>Excelente para acompanhar mudanças durante troubleshooting.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota script gravar sessão de terminal registra comandos e saídas em arquivo. útil para documentação de laboratório e auditoria. script administracao-rede.log"><td class="num">07</td><td><b>script</b><span>Gravar sessão de terminal</span></td><td>Registra comandos e saídas em arquivo.</td><td>Útil para documentação de laboratório e auditoria.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota tee salvar e exibir saída mostra saída no terminal e grava em arquivo. prático em coletas de evidência e relatórios. ip addr | tee inventario-ip.txt
+ss -tulpen | sudo tee portas-abertas.txt"><td class="num">08</td><td><b>tee</b><span>Salvar e exibir saída</span></td><td>Mostra saída no terminal e grava em arquivo.</td><td>Prático em coletas de evidência e relatórios.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="troubleshooting">
+      <div class="section-title"><div><span class="section-kicker">🛠️ Tema 14</span><h2>Fluxos Rápidos de Troubleshooting</h2><p>Sequências recomendadas para problemas comuns de rede.</p></div><button class="copy-section" data-target="code-troubleshooting">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-troubleshooting.sh</b></div><pre><code id="code-troubleshooting"># 01. Diagnóstico quando host não recebe endereço — Verifica link, DHCP e logs.
+ip link show
+ip -br addr
+sudo dhclient -v eth0
+journalctl -u NetworkManager --since &quot;30 min ago&quot;
+
+# 02. Diagnóstico de acesso externo — Valida IP, rota, DNS e HTTP.
+ip route
+ping -c 4 8.8.8.8
+dig peotta.github.io
+curl -I https://peotta.github.io
+
+# 03. Diagnóstico de serviço — Confirma serviço, porta local, firewall e teste remoto.
+systemctl status nginx
+sudo ss -tulpen | grep :80
+sudo firewall-cmd --list-all || sudo ufw status
+nc -vz servidor 80
+
+# 04. Diagnóstico de performance de rede — Mede rota, perda, banda e consumo por processo.
+mtr -rw 8.8.8.8
+iperf3 -c servidor
+sudo iftop -i eth0
+sudo nethogs eth0
+
+# 05. Diagnóstico de resolução — Compara resolução local, NSS e servidores externos.
+getent hosts peotta.github.io
+dig peotta.github.io
+dig @8.8.8.8 peotta.github.io
+resolvectl status
+
+# 06. Link oscilando — Procura eventos de link e erros físicos.
+journalctl -k | grep -Ei &quot;link is down|link is up|eth0|enp&quot;
+sudo ethtool eth0
+sudo ethtool -S eth0
+
+# 07. Detecção básica — Verifica ARP e mensagens do kernel.
+ip neigh show
+arping -D -I eth0 192.168.1.20
+journalctl -k | grep -i duplicate
+
+# 08. Relatório rápido — Gera arquivos com estado de rede para análise posterior.
+mkdir -p coleta-rede
+ip addr &gt; coleta-rede/ip-addr.txt
+ip route &gt; coleta-rede/ip-route.txt
+ss -tulpen &gt; coleta-rede/portas.txt
+journalctl --since &quot;1 hour ago&quot; &gt; coleta-rede/logs.txt</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting sem ip diagnóstico quando host não recebe endereço verifica link, dhcp e logs. siga a ordem para separar problema físico, dhcp ou configuração. ip link show
+ip -br addr
+sudo dhclient -v eth0
+journalctl -u networkmanager --since &quot;30 min ago&quot;"><td class="num">01</td><td><b>Sem IP</b><span>Diagnóstico quando host não recebe endereço</span></td><td>Verifica link, DHCP e logs.</td><td>Siga a ordem para separar problema físico, DHCP ou configuração.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting sem internet diagnóstico de acesso externo valida ip, rota, dns e http. ajuda a diferenciar problema local, gateway, dns ou aplicação. ip route
+ping -c 4 8.8.8.8
+dig peotta.github.io
+curl -i https://peotta.github.io"><td class="num">02</td><td><b>Sem Internet</b><span>Diagnóstico de acesso externo</span></td><td>Valida IP, rota, DNS e HTTP.</td><td>Ajuda a diferenciar problema local, gateway, DNS ou aplicação.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting porta inacessível diagnóstico de serviço confirma serviço, porta local, firewall e teste remoto. útil para ssh, web, banco e apis internas. systemctl status nginx
+sudo ss -tulpen | grep :80
+sudo firewall-cmd --list-all || sudo ufw status
+nc -vz servidor 80"><td class="num">03</td><td><b>Porta inacessível</b><span>Diagnóstico de serviço</span></td><td>Confirma serviço, porta local, firewall e teste remoto.</td><td>Útil para SSH, web, banco e APIs internas.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting lentidão diagnóstico de performance de rede mede rota, perda, banda e consumo por processo. combine medições em horários diferentes. mtr -rw 8.8.8.8
+iperf3 -c servidor
+sudo iftop -i eth0
+sudo nethogs eth0"><td class="num">04</td><td><b>Lentidão</b><span>Diagnóstico de performance de rede</span></td><td>Mede rota, perda, banda e consumo por processo.</td><td>Combine medições em horários diferentes.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting problema de dns diagnóstico de resolução compara resolução local, nss e servidores externos. mostra se a falha é no resolvedor local ou no dns autoritativo. getent hosts peotta.github.io
+dig peotta.github.io
+dig @8.8.8.8 peotta.github.io
+resolvectl status"><td class="num">05</td><td><b>Problema de DNS</b><span>Diagnóstico de resolução</span></td><td>Compara resolução local, NSS e servidores externos.</td><td>Mostra se a falha é no resolvedor local ou no DNS autoritativo.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting interface flapping link oscilando procura eventos de link e erros físicos. pode indicar cabo, porta de switch, driver ou energia. journalctl -k | grep -ei &quot;link is down|link is up|eth0|enp&quot;
+sudo ethtool eth0
+sudo ethtool -s eth0"><td class="num">06</td><td><b>Interface flapping</b><span>Link oscilando</span></td><td>Procura eventos de link e erros físicos.</td><td>Pode indicar cabo, porta de switch, driver ou energia.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting conflito de ip detecção básica verifica arp e mensagens do kernel. conflitos podem causar perda intermitente de conexão. ip neigh show
+arping -d -i eth0 192.168.1.20
+journalctl -k | grep -i duplicate"><td class="num">07</td><td><b>Conflito de IP</b><span>Detecção básica</span></td><td>Verifica ARP e mensagens do kernel.</td><td>Conflitos podem causar perda intermitente de conexão.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting checklist de coleta relatório rápido gera arquivos com estado de rede para análise posterior. use antes de alterar configurações em produção. mkdir -p coleta-rede
+ip addr &gt; coleta-rede/ip-addr.txt
+ip route &gt; coleta-rede/ip-route.txt
+ss -tulpen &gt; coleta-rede/portas.txt
+journalctl --since &quot;1 hour ago&quot; &gt; coleta-rede/logs.txt"><td class="num">08</td><td><b>Checklist de coleta</b><span>Relatório rápido</span></td><td>Gera arquivos com estado de rede para análise posterior.</td><td>Use antes de alterar configurações em produção.</td></tr></tbody></table></div>
+    </section>
+    <footer class="footer">Material didático criado para o Prof. Dr. Laerte Peotta de Melo • peotta.github.io • Atualizado em 05/06/2026</footer>
+  </main>
+</div>
+<script>
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+  const q=search.value.trim().toLowerCase();
+  document.querySelectorAll('.section').forEach(sec=>{
+    const text=sec.innerText.toLowerCase();
+    sec.classList.toggle('hidden', q && !text.includes(q));
+  });
+  document.querySelectorAll('.cmd-row').forEach(row=>{
+    row.classList.toggle('hidden', q && !row.dataset.search.includes(q));
+  });
+});
+document.querySelectorAll('.copy-section').forEach(btn=>btn.addEventListener('click',()=>{
+  const code=document.getElementById(btn.dataset.target).innerText;
+  navigator.clipboard.writeText(code);
+  const old=btn.textContent; btn.textContent='Bloco copiado'; setTimeout(()=>btn.textContent=old,1300);
+}));
+const links=[...document.querySelectorAll('.toc a')];
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));}})},{rootMargin:'-35% 0px -60% 0px'});
+document.querySelectorAll('.section').forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
