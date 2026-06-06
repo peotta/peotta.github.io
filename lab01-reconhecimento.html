@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Prof. Dr. Laerte Peotta de Melo">
+<title>Lab 01 — Reconhecimento Passivo | Prof. Dr. Laerte Peotta de Melo</title>
+<style>
+  :root{
+    --bg:#010503;--bg2:#031208;--panel:rgba(3,18,9,.82);--panel2:rgba(5,28,13,.72);
+    --line:rgba(62,255,132,.22);--line2:rgba(62,255,132,.10);--text:#dcffe8;
+    --muted:#9fd4b4;--green:#39ff7a;--green2:#00d26a;--amber:#ffd166;
+    --red:#ff6b6b;--blue:#64d2ff;
+    --shadow:0 24px 80px rgba(0,0,0,.55),0 0 38px rgba(57,255,122,.08);
+    --radius:22px;--max:1180px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{min-height:100vh;font-family:Inter,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:16px;line-height:1.75;color:var(--text);background:radial-gradient(circle at 18% 0%,rgba(57,255,122,.16),transparent 27%),radial-gradient(circle at 90% 12%,rgba(0,210,106,.11),transparent 24%),linear-gradient(180deg,#010201 0%,#020704 45%,#031008 100%);overflow-x:hidden;}
+  body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(57,255,122,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,122,.045) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;z-index:-2;}
+  body::after{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.58));pointer-events:none;z-index:-1;}
+  #matrix-rain{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:-3;opacity:.62;}
+  a{color:var(--green);text-decoration:none;}
+  a:hover{color:#fff;text-shadow:0 0 10px rgba(57,255,122,.75);}
+  nav{position:sticky;top:0;z-index:100;width:min(calc(100% - 2rem),var(--max));margin:1rem auto 0;padding:.75rem .9rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;background:rgba(2,12,6,.82);border:1px solid var(--line);border-radius:999px;box-shadow:0 16px 45px rgba(0,0,0,.34),inset 0 0 24px rgba(57,255,122,.035);backdrop-filter:blur(16px);}
+  .nav-brand{margin-right:auto;white-space:nowrap;font-size:.82rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#eafff0;text-shadow:0 0 12px rgba(57,255,122,.3);}
+  .nav-brand span{display:inline;margin-left:.5rem;color:var(--muted);font-weight:600;}
+  nav a{font-size:.78rem;font-weight:800;color:var(--muted);padding:.45rem .72rem;border-radius:999px;border:1px solid transparent;letter-spacing:.05em;text-transform:uppercase;}
+  nav a:hover{color:#051007;background:linear-gradient(135deg,var(--green),var(--green2));border-color:rgba(255,255,255,.14);text-shadow:none;}
+  .hero{width:min(calc(100% - 2rem),var(--max));margin:1.4rem auto 0;padding:2.25rem;background:linear-gradient(180deg,rgba(4,21,10,.92),rgba(3,15,8,.84));border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .hero::before,.container::before{content:"● ● ●";position:absolute;top:.75rem;left:1.1rem;color:var(--green);font-size:.78rem;letter-spacing:.45rem;opacity:.85;}
+  .hero::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(57,255,122,.018) 0 1px,transparent 1px 4px),linear-gradient(90deg,rgba(57,255,122,.07),transparent 45%,rgba(57,255,122,.04));pointer-events:none;}
+  .hero>*{position:relative;z-index:1;}
+  .hero-meta{display:inline-flex;align-items:center;gap:.5rem;margin:.2rem 0 1rem;padding:.45rem .75rem;border-radius:999px;border:1px solid rgba(57,255,122,.26);background:rgba(57,255,122,.08);color:#eafff0;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;}
+  .hero h1{max-width:980px;margin:0 0 1rem;font-size:clamp(2rem,5vw,4.4rem);line-height:1.05;letter-spacing:-.04em;color:#ecfff1;text-shadow:0 0 24px rgba(57,255,122,.18);}
+  .hero p{max-width:920px;margin:0 0 1.2rem;color:var(--muted);font-size:1rem;}
+  .hero strong{color:#eafff0;}
+  .badge-row{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;}
+  .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.38rem .75rem;border-radius:999px;font-size:.75rem;font-weight:900;letter-spacing:.045em;text-transform:uppercase;border:1px solid var(--line);background:rgba(57,255,122,.08);color:#dfffe9;}
+  .badge::before{content:"▸";color:var(--green);}
+  .badge-blue{color:#d9f7ff;border-color:rgba(100,210,255,.28);background:rgba(100,210,255,.08);}
+  .badge-green{color:#e4ffe9;border-color:rgba(57,255,122,.28);background:rgba(57,255,122,.10);}
+  .badge-gray{color:var(--muted);border-color:rgba(216,255,231,.18);background:rgba(216,255,231,.045);}
+  .badge-red{color:#ffe4e4;border-color:rgba(255,107,107,.34);background:rgba(255,107,107,.10);}
+  .badge-orange{color:#fff2d0;border-color:rgba(255,209,102,.34);background:rgba(255,209,102,.10);}
+  .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin:1.65rem 0 0;}
+  .stat{min-height:110px;padding:1rem;border-radius:18px;background:rgba(2,14,7,.78);border:1px solid var(--line2);box-shadow:inset 0 0 24px rgba(57,255,122,.035);}
+  .stat-val{font-size:clamp(1.35rem,3vw,2rem);line-height:1.1;color:#eafff0;font-weight:950;text-shadow:0 0 14px rgba(57,255,122,.2);}
+  .stat-lbl{margin-top:.38rem;color:var(--muted);font-size:.78rem;font-weight:700;}
+  .container{width:min(calc(100% - 2rem),var(--max));max-width:var(--max);margin:1.25rem auto 4rem;padding:2.1rem;background:rgba(2,12,6,.72);border:1px solid rgba(57,255,122,.16);border-radius:28px;box-shadow:var(--shadow);position:relative;backdrop-filter:blur(7px);overflow:hidden;}
+  .aviso{margin:1rem 0 1.4rem;padding:1rem 1.15rem;border-radius:18px;background:rgba(255,209,102,.10);border:1px solid rgba(255,209,102,.34);border-left:4px solid var(--amber);color:#fff1c9;font-size:.92rem;}
+  .sumario{margin:1.4rem 0 2.5rem;padding:1.25rem;border-radius:22px;background:rgba(4,22,10,.78);border:1px solid var(--line);}
+  .sumario h2{margin:0 0 .9rem;color:#eafff0;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;}
+  .sumario ol{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;}
+  .sumario li{line-height:1.35;}
+  .sumario a{display:block;min-height:54px;padding:.75rem .85rem;border-radius:16px;border:1px solid rgba(57,255,122,.12);background:rgba(216,255,231,.035);color:var(--muted);font-weight:800;font-size:.84rem;}
+  .sumario a:hover{color:#041108;background:linear-gradient(135deg,var(--green),var(--green2));text-shadow:none;}
+  section{margin-top:2.3rem;padding:1.3rem;border:1px solid rgba(57,255,122,.13);border-radius:24px;background:rgba(4,18,9,.58);box-shadow:inset 0 0 24px rgba(57,255,122,.025);}
+  section h2{display:flex;align-items:center;gap:.65rem;margin:0 0 1rem;padding-bottom:.75rem;border-bottom:1px solid rgba(57,255,122,.18);color:#eafff0;font-size:clamp(1.35rem,2.6vw,2rem);letter-spacing:-.02em;text-transform:uppercase;}
+  section h2::before{content:"▣";color:var(--green);text-shadow:0 0 12px rgba(57,255,122,.75);}
+  section h3{margin:1.4rem 0 .55rem;color:#eafff0;font-size:1.06rem;letter-spacing:.02em;}
+  section h3::before{content:"$ ";color:var(--green);}
+  section h4{margin:1rem 0 .4rem;color:#d5ffe1;font-size:.96rem;}
+  section p{margin:0 0 .75rem;color:#bfe8cd;font-size:.96rem;}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border:1px solid rgba(57,255,122,.16);border-radius:16px;}
+  table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:640px;}
+  th{background:rgba(57,255,122,.10);color:#eafff0;text-align:left;padding:.8rem .9rem;border-bottom:1px solid rgba(57,255,122,.16);font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+  td{padding:.78rem .9rem;color:#bfe8cd;vertical-align:top;border-bottom:1px solid rgba(57,255,122,.08);}
+  tr:nth-child(even) td{background:rgba(216,255,231,.025);}
+  tr:hover td{background:rgba(57,255,122,.045);}
+  pre{position:relative;overflow-x:auto;margin:.85rem 0 1.1rem;padding:2.3rem 1rem 1rem;border-radius:18px;background:rgba(0,8,3,.92);border:1px solid rgba(57,255,122,.22);box-shadow:inset 0 0 30px rgba(57,255,122,.045),0 16px 44px rgba(0,0,0,.22);}
+  pre::before{content:"terminal";position:absolute;top:.75rem;left:1rem;color:var(--green);font-size:.72rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;}
+  pre::after{content:"● ● ●";position:absolute;top:.72rem;right:1rem;color:rgba(57,255,122,.75);font-size:.72rem;letter-spacing:.28rem;}
+  code{font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.84rem;color:#eafff0;line-height:1.65;}
+  .cm{color:#7cae8e;}.ck{color:#ff7b72;}.cv{color:#79c0ff;}.cs{color:#6dff9f;}.cw{color:#ffd166;}
+  p code,li code,td code{display:inline-block;padding:.08rem .38rem;border-radius:7px;border:1px solid rgba(57,255,122,.14);background:rgba(0,8,3,.64);color:#dfffe9;font-size:.82rem;}
+  ul.lista,ol.lista{padding-left:1.25rem;margin:.5rem 0 1rem;}
+  ul.lista li,ol.lista li{color:#bfe8cd;margin:.25rem 0;}
+  ul.check{list-style:none;padding:0;margin:.85rem 0 1rem;display:grid;gap:.6rem;}
+  ul.check li{display:flex;gap:.65rem;align-items:flex-start;padding:.75rem .85rem;border-radius:15px;background:rgba(216,255,231,.035);border:1px solid rgba(57,255,122,.10);color:#c9f4d7;font-size:.92rem;}
+  ul.check li .ok{color:var(--green);font-weight:900;}
+  ul.check li .nao{color:var(--red);font-weight:900;}
+  .link-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin:1rem 0;}
+  .link-card{min-height:170px;padding:1rem;display:flex;flex-direction:column;gap:.4rem;border-radius:20px;background:rgba(2,14,7,.72);border:1px solid rgba(57,255,122,.14);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;}
+  .link-card:hover{transform:translateY(-3px);border-color:rgba(57,255,122,.36);box-shadow:0 18px 44px rgba(0,0,0,.28),0 0 24px rgba(57,255,122,.08);}
+  .link-card .lc-label{font-size:.7rem;font-weight:900;color:var(--green);letter-spacing:.1em;text-transform:uppercase;}
+  .link-card .lc-title{color:#eafff0;font-size:.96rem;font-weight:900;}
+  .link-card .lc-desc{flex:1;color:var(--muted);font-size:.84rem;}
+  .link-card a.lc-link{margin-top:.4rem;font-size:.82rem;font-weight:900;color:#041108;background:linear-gradient(135deg,var(--green),var(--green2));padding:.55rem .7rem;border-radius:999px;text-align:center;}
+  .flow{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;margin:1rem 0;padding:1rem;border-radius:18px;background:rgba(0,8,3,.5);border:1px solid rgba(57,255,122,.14);}
+  .flow-step{padding:.55rem .85rem;border-radius:999px;background:rgba(57,255,122,.09);border:1px solid rgba(57,255,122,.20);color:#eafff0;font-size:.84rem;font-family:'SFMono-Regular',Consolas,monospace;font-weight:900;}
+  .flow-arr{color:var(--green);font-size:1.1rem;}
+  footer{width:min(calc(100% - 2rem),var(--max));margin:0 auto 2rem;padding:1.2rem;border:1px solid rgba(57,255,122,.13);border-radius:20px;background:rgba(2,12,6,.72);color:var(--muted);text-align:center;font-size:.84rem;}
+  @media(max-width:980px){nav{border-radius:24px;}.nav-brand{width:100%;white-space:normal;}.nav-brand span{display:block;margin:.2rem 0 0;}.stats{grid-template-columns:repeat(2,minmax(0,1fr));}.sumario ol{grid-template-columns:repeat(2,minmax(0,1fr));}.link-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+  @media(max-width:640px){body{font-size:15px;}nav,.hero,.container,footer{width:min(calc(100% - 1rem),var(--max));}.hero,.container{padding:1.25rem;border-radius:22px;}.hero h1{font-size:2rem;}.stats,.sumario ol,.link-grid{grid-template-columns:1fr;}nav a{flex:1 1 auto;text-align:center;}}
+</style>
+</head>
+<body>
+<canvas id="matrix-rain" aria-hidden="true"></canvas>
+<nav>
+  <div class="nav-brand">Prof. Dr. Laerte Peotta de Melo <span>Professor • Pesquisador • Segurança Cibernética • Redes</span></div>
+  <a href="index.html">← Todos os Labs</a>
+  <a href="#objetivo">Objetivo</a>
+  <a href="#ambiente">Ambiente</a>
+  <a href="#kismet">Kismet</a>
+  <a href="#analise">Análise</a>
+  <a href="#ids">IDS</a>
+  <a href="#atividades">Atividades</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-meta">📡 Laboratório 01 · Reconhecimento Passivo</div>
+  <h1>Reconhecimento Passivo com Kismet</h1>
+  <p>Mapeamento de redes IEEE 802.11 sem transmitir nenhum pacote. Identificação de access points, clientes, protocolos, probe requests e uso do Kismet como sistema de detecção de intrusão (IDS) na própria rede.</p>
+  <div class="badge-row">
+    <span class="badge badge-blue">Kismet 2024</span>
+    <span class="badge badge-blue">Monitor Mode</span>
+    <span class="badge badge-green">Passivo — sem injeção</span>
+    <span class="badge badge-green">WPA2 · WPA3 · WEP</span>
+    <span class="badge badge-red">Somente rede própria/autorizada</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">Passivo</div><div class="stat-lbl">Modo de operação</div></div>
+    <div class="stat"><div class="stat-val">0</div><div class="stat-lbl">Pacotes transmitidos</div></div>
+    <div class="stat"><div class="stat-val">2501</div><div class="stat-lbl">Porta Web UI</div></div>
+    <div class="stat"><div class="stat-val">IDS</div><div class="stat-lbl">Função adicional</div></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="aviso">⚠️ <strong>Aviso legal.</strong> Execute estas atividades <strong>somente em redes próprias</strong> ou com autorização explícita. Acesso não autorizado é crime — <strong>Lei 12.737/2012</strong> e <strong>Lei 12.965/2014</strong>.</div>
+
+  <div class="sumario">
+    <h2>Sumário</h2>
+    <ol>
+      <li><a href="#objetivo">Objetivo do laboratório</a></li>
+      <li><a href="#ambiente">Configuração do ambiente</a></li>
+      <li><a href="#kismet">Iniciar e operar o Kismet</a></li>
+      <li><a href="#analise">Análise de resultados</a></li>
+      <li><a href="#ids">Kismet como IDS</a></li>
+      <li><a href="#atividades">Atividades avaliativas</a></li>
+    </ol>
+  </div>
+
+  <section id="objetivo">
+    <h2>1. Objetivo do laboratório</h2>
+    <p>Este laboratório demonstra como realizar <strong>reconhecimento passivo</strong> de redes IEEE 802.11 sem enviar qualquer pacote ao meio. A abordagem passiva é fundamental em auditorias onde a discreta observação do ambiente é necessária antes de qualquer ação ativa.</p>
+    <h3>O que você aprenderá</h3>
+    <ul class="lista">
+      <li>Configurar o adaptador Wi-Fi em modo monitor sem transmitir pacotes</li>
+      <li>Usar o Kismet para mapear APs, clientes e protocolos em tempo real</li>
+      <li>Interpretar probe requests e identificar riscos de privacidade</li>
+      <li>Exportar capturas para análise posterior no Wireshark</li>
+      <li>Configurar o Kismet como IDS para detectar ataques na própria rede</li>
+    </ul>
+    <h3>Conceitos-chave</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Conceito</th><th>Descrição</th></tr>
+      <tr><td>Monitor Mode</td><td>Interface captura todos os frames 802.11 sem se associar a nenhum AP — modo exclusivamente de escuta</td></tr>
+      <tr><td>Probe Request</td><td>Frame enviado por dispositivos buscando redes salvas anteriormente — revela histórico de conexões</td></tr>
+      <tr><td>Beacon Frame</td><td>Frame de anúncio enviado pelo AP a cada 100 ms com SSID, capacidades e parâmetros de segurança</td></tr>
+      <tr><td>BSSID</td><td>Endereço MAC do rádio do AP — identifica univocamente cada rádio wireless</td></tr>
+      <tr><td>Passive Scan</td><td>Escuta em cada canal aguardando beacons, sem enviar probe requests ativos</td></tr>
+    </table></div>
+  </section>
+
+  <section id="ambiente">
+    <h2>2. Configuração do ambiente</h2>
+    <p>O Kismet requer um adaptador com suporte a monitor mode. Nenhuma transmissão é feita — o adaptador apenas escuta.</p>
+    <h3>Instalar o Kismet</h3>
+    <pre><code><span class="cm"># Kali Linux / Parrot OS — Kismet disponível nos repositórios</span>
+apt update && apt install -y kismet
+
+<span class="cm"># Verificar versão instalada</span>
+kismet --version
+<span class="cs">Kismet 2023-07-R1</span>
+
+<span class="cm"># Adicionar usuário ao grupo kismet (evita root)</span>
+usermod -aG kismet </code></pre>
+
+    <h3>Verificar suporte a monitor mode</h3>
+    <pre><code><span class="cm"># Listar modos suportados pelo adaptador</span>
+iw list | grep -A 10 "Supported interface modes"
+
+<span class="cs">Supported interface modes:
+ * managed
+ * AP
+ * monitor          ← obrigatório
+ * P2P-client</span>
+
+<span class="cm"># Identificar interface</span>
+ip link show | grep wlan
+<span class="cs">3: wlan0: &lt;BROADCAST,MULTICAST&gt; mtu 1500 state DOWN</span></code></pre>
+
+    <h3>Adaptadores recomendados para este laboratório</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Chipset</th><th>Modelo</th><th>Observação</th></tr>
+      <tr><td>RTL8812AU</td><td>Alfa AWUS036ACH</td><td>Dual-band, excelente para passivo</td></tr>
+      <tr><td>MT7612U</td><td>Alfa AWUS036ACM</td><td>Boa compatibilidade nativa Linux</td></tr>
+      <tr><td>AR9271</td><td>TP-Link TL-WN722N v1</td><td>Clássico 2.4 GHz, plug-and-play</td></tr>
+    </table></div>
+  </section>
+
+  <section id="kismet">
+    <h2>3. Iniciar e operar o Kismet</h2>
+    <h3>Iniciar captura passiva</h3>
+    <pre><code><span class="cm"># Iniciar Kismet — ele ativa monitor mode automaticamente</span>
+kismet -c wlan0
+
+<span class="cs">[INFO] Launched kismet server in background
+[INFO] Web UI disponível → http://localhost:2501
+[INFO] Iniciando captura passiva em wlan0
+[INFO] Modo monitor ativado automaticamente</span>
+
+<span class="cm"># Alternativa: modo terminal (sem web UI)</span>
+kismet -c wlan0 --no-ncurses</code></pre>
+
+    <h3>Acessar a interface web</h3>
+    <p>Abra o navegador em <code>http://localhost:2501</code>. Na primeira execução, o Kismet solicitará criação de usuário e senha. A interface exibe mapa de APs, lista de clientes e alertas em tempo real.</p>
+
+    <h3>Captura em múltiplas interfaces simultaneamente</h3>
+    <pre><code><span class="cm"># Capturar em 2.4 GHz e 5 GHz ao mesmo tempo</span>
+kismet -c wlan0 -c wlan1
+
+<span class="cm"># Fixar em um canal específico (sem channel hopping)</span>
+kismet -c wlan0:channel=6</code></pre>
+
+    <h3>Saída em tempo real — exemplos de detecções</h3>
+    <pre><code><span class="cs">[FOUND] AP  SSID:"HomeNet_5G"  BSSID:AA:BB:CC:11:22:33  Ch:6   ENC:WPA2  Sig:-62dBm
+[FOUND] AP  SSID:"LabRouter"   BSSID:AA:BB:CC:44:55:66  Ch:36  ENC:WPA3  Sig:-55dBm</span>
+<span class="cw">[WARN]  AP  SSID:"OLD_ROUTER"  BSSID:AA:BB:CC:77:88:99  Ch:1   ENC:WEP   Sig:-78dBm ← VULNERÁVEL</span>
+<span class="cs">[CLIENT] Device DD:EE:FF:00:11:22 → associado a AA:BB:CC:11:22:33
+[PROBE]  Device DD:EE:FF:00:11:22 → buscando "CasaAntiga_WiFi"</span></code></pre>
+  </section>
+
+  <section id="analise">
+    <h2>4. Análise de resultados</h2>
+    <h3>Exportar para Wireshark (PCAP)</h3>
+    <pre><code><span class="cm"># Converter banco de dados Kismet para PCAP</span>
+kismetdb_to_wireshark --in kismet.kismet --out captura.pcap
+
+<span class="cs">✓ captura.pcap exportado (1.2 MB, 4832 frames)</span>
+
+<span class="cm"># Abrir diretamente no Wireshark</span>
+wireshark captura.pcap &
+
+<span class="cm"># Filtros úteis no Wireshark para 802.11</span>
+wlan.fc.type_subtype == 8       <span class="cm"># Beacon frames</span>
+wlan.fc.type_subtype == 4       <span class="cm"># Probe requests</span>
+wlan.fc.type_subtype == 5       <span class="cm"># Probe responses</span>
+eapol                            <span class="cm"># Handshakes WPA (4-way)</span></code></pre>
+
+    <h3>Exportar lista de redes para CSV</h3>
+    <pre><code><span class="cm"># Exportar redes detectadas</span>
+kismetdb_to_json --in kismet.kismet --out redes.json
+
+<span class="cm"># Via Python: processar JSON e gerar CSV</span>
+python3 -c "
+import json,csv
+data=json.load(open('redes.json'))
+with open('redes.csv','w') as f:
+    w=csv.writer(f)
+    w.writerow(['SSID','BSSID','Canal','Criptografia','Sinal'])
+    for ap in data:
+        w.writerow([ap.get('ssid'),ap.get('bssid'),ap.get('channel'),ap.get('crypt'),ap.get('signal')])
+print('redes.csv gerado')
+"</code></pre>
+
+    <h3>Identificar probe requests — riscos de privacidade</h3>
+    <pre><code><span class="cm"># Listar dispositivos e redes que estão procurando</span>
+grep "probe" kismet.log | awk '{print , }'
+
+<span class="cs">Device AA:11:22:33:44:55  →  "CasaAntiga_WiFi"
+Device BB:66:77:88:99:00  →  "HotelABC_Guest"
+Device CC:12:34:56:78:90  →  "Empresa_Corp_WiFi"</span>
+
+<span class="cm"># Risco: dispositivos revelam redes visitadas anteriormente
+# Um rogue AP pode responder a esses probes e capturar o cliente</span></code></pre>
+
+    <h3>Classificação de riscos detectados</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Protocolo</th><th>Risco</th><th>Ação recomendada</th></tr>
+      <tr><td>WEP</td><td style="color:var(--red)">Crítico — chave quebrável em minutos</td><td>Substituir imediatamente por WPA2-AES ou WPA3</td></tr>
+      <tr><td>WPA-TKIP</td><td style="color:var(--red)">Alto — TKIP vulnerável a ataques</td><td>Migrar para WPA2-AES ou WPA3</td></tr>
+      <tr><td>WPA2-CCMP</td><td style="color:var(--amber)">Médio — depende da senha e PMF</td><td>Habilitar PMF, usar senha forte ≥ 16 chars</td></tr>
+      <tr><td>WPA3-SAE</td><td style="color:var(--green)">Baixo — SAE protege contra offline crack</td><td>Manter atualizado, habilitar PMF obrigatório</td></tr>
+    </table></div>
+  </section>
+
+  <section id="ids">
+    <h2>5. Kismet como IDS</h2>
+    <p>O Kismet pode monitorar a <strong>própria rede</strong> e alertar sobre comportamentos anômalos como flood de desautenticação, rogue APs com SSID idêntico e clientes não autorizados.</p>
+    <h3>Configurar alertas de segurança</h3>
+    <pre><code><span class="cm"># Alertar sobre flood de desautenticação (ataque DeAuth)</span>
+kismet -c wlan0 --alert DEAUTHFLOOD,5,1
+
+<span class="cm"># Alertar sobre AP com SSID idêntico ao legítimo (Evil Twin)</span>
+kismet -c wlan0 --alert APSPOOF,10,60
+
+<span class="cm"># Combinar múltiplos alertas</span>
+kismet -c wlan0   --alert DEAUTHFLOOD,5,1   --alert APSPOOF,10,60   --alert BSSTIMESTAMP,5,60</code></pre>
+
+    <h3>Exemplos de alertas gerados</h3>
+    <pre><code><span class="cw">[ALERT] DEAUTHFLOOD: possível ataque de desautenticação detectado!
+        Origem: AA:BB:CC:11:22:33  Alvo: broadcast
+        5 frames em 1 segundo — possível aireplay-ng em execução</span>
+
+<span class="cw">[ALERT] APSPOOF: AP com SSID "LabRouter" detectado com BSSID diferente!
+        BSSID legítimo: AA:BB:CC:44:55:66
+        BSSID suspeito: FF:EE:DD:CC:BB:AA ← possível Evil Twin</span></code></pre>
+
+    <h3>Integrar alertas com syslog</h3>
+    <pre><code><span class="cm"># Redirecionar alertas para syslog</span>
+kismet -c wlan0 --log-types alert --log-prefix /var/log/kismet/
+
+<span class="cm"># Monitorar em tempo real</span>
+tail -f /var/log/kismet/Kismet-*.alert.log</code></pre>
+  </section>
+
+  <section id="atividades">
+    <h2>6. Atividades avaliativas</h2>
+    <ul class="check">
+      <li><span class="ok">①</span><span>Inicie o Kismet na rede de laboratório e documente todos os APs detectados: SSID, BSSID, canal, criptografia e intensidade de sinal.</span></li>
+      <li><span class="ok">②</span><span>Identifique todos os clientes conectados e liste os probe requests capturados. Analise os riscos de privacidade observados.</span></li>
+      <li><span class="ok">③</span><span>Exporte a captura em PCAP e filtre no Wireshark apenas os beacon frames do AP de laboratório. Identifique o campo RSN (Robust Security Network) e descreva os parâmetros de segurança anunciados.</span></li>
+      <li><span class="ok">④</span><span>Configure o Kismet como IDS com alerta para DEAUTHFLOOD. Solicite ao colega que execute um scan com airodump-ng e verifique se o alerta é gerado.</span></li>
+      <li><span class="ok">⑤</span><span>Elabore um relatório de auditoria passiva com: mapa de redes, classificação de riscos por protocolo e recomendações de hardening.</span></li>
+    </ul>
+    <div class="link-grid">
+      <div class="link-card">
+        <div class="lc-label">Documentação</div>
+        <div class="lc-title">Kismet Docs</div>
+        <div class="lc-desc">Referência oficial completa de configuração, alertas e integração.</div>
+        <a class="lc-link" href="https://www.kismetwireless.net/docs/readme/intro/kismet/" target="_blank">kismetwireless.net ↗</a>
+      </div>
+      <div class="link-card">
+        <div class="lc-label">Próximo Lab</div>
+        <div class="lc-title">Lab 02 — Captura com Wireshark</div>
+        <div class="lc-desc">Análise profunda de frames 802.11 e handshakes EAPOL.</div>
+        <a class="lc-link" href="lab02-captura.html">Acessar →</a>
+      </div>
+      <div class="link-card">
+        <div class="lc-label">RFC</div>
+        <div class="lc-title">IEEE 802.11-2020</div>
+        <div class="lc-desc">Especificação completa do padrão wireless IEEE 802.11.</div>
+        <a class="lc-link" href="https://standards.ieee.org/ieee/802.11/7028/" target="_blank">ieee.org ↗</a>
+      </div>
+      <div class="link-card">
+        <div class="lc-label">Índice</div>
+        <div class="lc-title">Todos os laboratórios</div>
+        <div class="lc-desc">Retornar à página inicial com todos os 5 laboratórios da série.</div>
+        <a class="lc-link" href="index.html">← Índice</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  Laboratório 01 · Prof. Dr. Laerte Peotta de Melo • <a href="https://peotta.github.io">peotta.github.io</a> •
+  <a href="https://github.com/peotta/lab-wifi" target="_blank">github.com/peotta/lab-wifi ↗</a>
+</footer>
+<script>
+(function(){const canvas=document.getElementById("matrix-rain");if(!canvas)return;const ctx=canvas.getContext("2d");const chars="01アイウエオカキクケコサシスセソタチツテトABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*+-/<>{}[]";let width,height,columns,drops,fontSize;function resize(){width=canvas.width=window.innerWidth;height=canvas.height=window.innerHeight;fontSize=Math.max(13,Math.floor(width/105));columns=Math.floor(width/fontSize);drops=Array.from({length:columns},()=>Math.floor(Math.random()*height/fontSize));ctx.font=fontSize+"px Consolas,monospace";}function draw(){ctx.fillStyle="rgba(1,5,3,0.105)";ctx.fillRect(0,0,width,height);ctx.font=fontSize+"px Consolas,monospace";for(let i=0;i<drops.length;i++){const text=chars.charAt(Math.floor(Math.random()*chars.length));const x=i*fontSize;const y=drops[i]*fontSize;ctx.fillStyle=Math.random()>.985?"rgba(220,255,232,.62)":"rgba(57,255,122,.32)";ctx.shadowColor="rgba(57,255,122,.22)";ctx.shadowBlur=7;ctx.fillText(text,x,y);ctx.shadowBlur=0;if(y>height&&Math.random()>.972)drops[i]=0;drops[i]+=1;}requestAnimationFrame(draw);}window.addEventListener("resize",resize);resize();draw();})();
+</script>
+</body>
+</html>

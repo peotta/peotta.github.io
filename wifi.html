@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Prof. Dr. Laerte Peotta de Melo">
+<meta name="description" content="Laboratórios práticos de segurança em redes Wi-Fi IEEE 802.11 — Prof. Dr. Laerte Peotta de Melo.">
+<title>Lab Wi-Fi | Prof. Dr. Laerte Peotta de Melo</title>
+<style>
+  :root{
+    --bg:#010503;--bg2:#031208;--panel:rgba(3,18,9,.82);--panel2:rgba(5,28,13,.72);
+    --line:rgba(62,255,132,.22);--line2:rgba(62,255,132,.10);--text:#dcffe8;
+    --muted:#9fd4b4;--green:#39ff7a;--green2:#00d26a;--amber:#ffd166;
+    --red:#ff6b6b;--blue:#64d2ff;
+    --shadow:0 24px 80px rgba(0,0,0,.55),0 0 38px rgba(57,255,122,.08);
+    --radius:22px;--max:1180px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{min-height:100vh;font-family:Inter,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:16px;line-height:1.75;color:var(--text);background:radial-gradient(circle at 18% 0%,rgba(57,255,122,.16),transparent 27%),radial-gradient(circle at 90% 12%,rgba(0,210,106,.11),transparent 24%),linear-gradient(180deg,#010201 0%,#020704 45%,#031008 100%);overflow-x:hidden;}
+  body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(57,255,122,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,122,.045) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;z-index:-2;}
+  body::after{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.58));pointer-events:none;z-index:-1;}
+  #matrix-rain{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:-3;opacity:.62;}
+  a{color:var(--green);text-decoration:none;}
+  a:hover{color:#fff;text-shadow:0 0 10px rgba(57,255,122,.75);}
+  nav{position:sticky;top:0;z-index:100;width:min(calc(100% - 2rem),var(--max));margin:1rem auto 0;padding:.75rem .9rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;background:rgba(2,12,6,.82);border:1px solid var(--line);border-radius:999px;box-shadow:0 16px 45px rgba(0,0,0,.34),inset 0 0 24px rgba(57,255,122,.035);backdrop-filter:blur(16px);}
+  .nav-brand{margin-right:auto;white-space:nowrap;font-size:.82rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#eafff0;text-shadow:0 0 12px rgba(57,255,122,.3);}
+  .nav-brand span{display:inline;margin-left:.5rem;color:var(--muted);font-weight:600;}
+  nav a{font-size:.78rem;font-weight:800;color:var(--muted);padding:.45rem .72rem;border-radius:999px;border:1px solid transparent;letter-spacing:.05em;text-transform:uppercase;}
+  nav a:hover{color:#051007;background:linear-gradient(135deg,var(--green),var(--green2));border-color:rgba(255,255,255,.14);text-shadow:none;}
+  .hero{width:min(calc(100% - 2rem),var(--max));margin:1.4rem auto 0;padding:2.25rem;background:linear-gradient(180deg,rgba(4,21,10,.92),rgba(3,15,8,.84));border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .hero::before{content:"● ● ●";position:absolute;top:.75rem;left:1.1rem;color:var(--green);font-size:.78rem;letter-spacing:.45rem;opacity:.85;}
+  .hero::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(57,255,122,.018) 0 1px,transparent 1px 4px),linear-gradient(90deg,rgba(57,255,122,.07),transparent 45%,rgba(57,255,122,.04));pointer-events:none;}
+  .hero>*{position:relative;z-index:1;}
+  .hero-meta{display:inline-flex;align-items:center;gap:.5rem;margin:.2rem 0 1rem;padding:.45rem .75rem;border-radius:999px;border:1px solid rgba(57,255,122,.26);background:rgba(57,255,122,.08);color:#eafff0;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;}
+  .hero h1{max-width:980px;margin:0 0 1rem;font-size:clamp(2rem,5vw,4.4rem);line-height:1.05;letter-spacing:-.04em;color:#ecfff1;text-shadow:0 0 24px rgba(57,255,122,.18);}
+  .hero p{max-width:920px;margin:0 0 1.2rem;color:var(--muted);font-size:1rem;}
+  .hero strong{color:#eafff0;}
+  .badge-row{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;}
+  .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.38rem .75rem;border-radius:999px;font-size:.75rem;font-weight:900;letter-spacing:.045em;text-transform:uppercase;border:1px solid var(--line);background:rgba(57,255,122,.08);color:#dfffe9;}
+  .badge::before{content:"▸";color:var(--green);}
+  .badge-blue{color:#d9f7ff;border-color:rgba(100,210,255,.28);background:rgba(100,210,255,.08);}
+  .badge-green{color:#e4ffe9;border-color:rgba(57,255,122,.28);background:rgba(57,255,122,.10);}
+  .badge-red{color:#ffe4e4;border-color:rgba(255,107,107,.34);background:rgba(255,107,107,.10);}
+  .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin:1.65rem 0 0;}
+  .stat{min-height:110px;padding:1rem;border-radius:18px;background:rgba(2,14,7,.78);border:1px solid var(--line2);box-shadow:inset 0 0 24px rgba(57,255,122,.035);}
+  .stat-val{font-size:clamp(1.35rem,3vw,2rem);line-height:1.1;color:#eafff0;font-weight:950;text-shadow:0 0 14px rgba(57,255,122,.2);}
+  .stat-lbl{margin-top:.38rem;color:var(--muted);font-size:.78rem;font-weight:700;}
+  .container{width:min(calc(100% - 2rem),var(--max));max-width:var(--max);margin:1.25rem auto 4rem;padding:2.1rem;background:rgba(2,12,6,.72);border:1px solid rgba(57,255,122,.16);border-radius:28px;box-shadow:var(--shadow);position:relative;backdrop-filter:blur(7px);overflow:hidden;}
+  .container::before{content:"● ● ●";position:absolute;top:.75rem;left:1.1rem;color:var(--green);font-size:.78rem;letter-spacing:.45rem;opacity:.85;}
+  .aviso{margin:1rem 0 1.4rem;padding:1rem 1.15rem;border-radius:18px;background:rgba(255,209,102,.10);border:1px solid rgba(255,209,102,.34);border-left:4px solid var(--amber);color:#fff1c9;font-size:.92rem;}
+
+  /* GRADE DE LABORATÓRIOS */
+  .labs-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem;margin:2rem 0;}
+  .lab-card{position:relative;display:flex;flex-direction:column;gap:.65rem;padding:1.5rem;border-radius:22px;background:rgba(2,14,7,.82);border:1px solid rgba(57,255,122,.15);box-shadow:0 8px 30px rgba(0,0,0,.3);transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;overflow:hidden;}
+  .lab-card::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(57,255,122,.04),transparent 55%);pointer-events:none;}
+  .lab-card:hover{transform:translateY(-5px);border-color:rgba(57,255,122,.38);box-shadow:0 22px 55px rgba(0,0,0,.4),0 0 28px rgba(57,255,122,.09);}
+  .lab-num{font-size:.72rem;font-weight:900;color:var(--green);letter-spacing:.14em;text-transform:uppercase;}
+  .lab-card h2{font-size:1.15rem;font-weight:900;color:#eafff0;letter-spacing:-.01em;line-height:1.2;}
+  .lab-card p{font-size:.88rem;color:var(--muted);flex:1;line-height:1.6;}
+  .lab-topics{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.4rem;}
+  .topic{font-size:.7rem;font-weight:800;padding:.28rem .55rem;border-radius:999px;background:rgba(57,255,122,.08);border:1px solid rgba(57,255,122,.18);color:#c5ffd5;letter-spacing:.04em;text-transform:uppercase;}
+  .lab-link{margin-top:.75rem;display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:900;color:#041108;background:linear-gradient(135deg,var(--green),var(--green2));padding:.6rem 1.1rem;border-radius:999px;align-self:flex-start;transition:opacity .15s;}
+  .lab-link:hover{opacity:.88;color:#041108;text-shadow:none;}
+  .lab-card.featured{grid-column:1/-1;flex-direction:row;align-items:center;gap:2rem;background:linear-gradient(135deg,rgba(4,24,10,.92),rgba(2,14,7,.88));border-color:rgba(57,255,122,.28);}
+  .lab-card.featured .lab-body{flex:1;}
+  .lab-card.featured h2{font-size:1.45rem;}
+
+  footer{width:min(calc(100% - 2rem),var(--max));margin:0 auto 2rem;padding:1.2rem;border:1px solid rgba(57,255,122,.13);border-radius:20px;background:rgba(2,12,6,.72);color:var(--muted);text-align:center;font-size:.84rem;}
+  @media(max-width:980px){nav{border-radius:24px;}.nav-brand{width:100%;}.stats{grid-template-columns:repeat(2,minmax(0,1fr));}.labs-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.lab-card.featured{flex-direction:column;grid-column:auto;}}
+  @media(max-width:640px){.labs-grid{grid-template-columns:1fr;}.stats{grid-template-columns:1fr 1fr;}.lab-card.featured{grid-column:auto;}}
+</style>
+</head>
+<body>
+<canvas id="matrix-rain" aria-hidden="true"></canvas>
+<nav>
+  <div class="nav-brand">Prof. Dr. Laerte Peotta de Melo <span>Professor • Pesquisador • Segurança Cibernética • Redes</span></div>
+  <a href="https://peotta.github.io">← Página principal</a>
+  <a href="#laboratorios">Laboratórios</a>
+  <a href="https://github.com/peotta/lab-wifi" target="_blank">GitHub ↗</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-meta">📡 Segurança em Redes Sem Fio · IEEE 802.11</div>
+  <h1>Laboratórios de<br>Segurança Wi-Fi</h1>
+  <p>Série de laboratórios práticos sobre análise, auditoria e defesa de redes IEEE 802.11. Material desenvolvido para disciplinas de segurança cibernética, pentests autorizados e preparação para certificações CEH, eJPT e OSCP.</p>
+  <div class="badge-row">
+    <span class="badge badge-blue">Kali Linux · Parrot OS</span>
+    <span class="badge badge-blue">IEEE 802.11 a/b/g/n/ac</span>
+    <span class="badge badge-green">WPA2 · WPA3</span>
+    <span class="badge badge-green">CEH · eJPT · OSCP</span>
+    <span class="badge badge-red">Somente uso autorizado</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">5</div><div class="stat-lbl">Laboratórios práticos</div></div>
+    <div class="stat"><div class="stat-val">802.11</div><div class="stat-lbl">Padrão IEEE alvo</div></div>
+    <div class="stat"><div class="stat-val">WPA2/3</div><div class="stat-lbl">Protocolos abordados</div></div>
+    <div class="stat"><div class="stat-val">Kali</div><div class="stat-lbl">Ambiente de laboratório</div></div>
+  </div>
+</div>
+
+<div class="container" id="laboratorios">
+  <div class="aviso">
+    ⚠️ <strong>Aviso legal.</strong> Execute as atividades destes laboratórios <strong>somente em redes próprias</strong> ou com <strong>autorização explícita e por escrito</strong> do responsável. No Brasil, acesso não autorizado é crime tipificado na <strong>Lei 12.737/2012</strong> e no <strong>Marco Civil da Internet (Lei 12.965/2014)</strong>. Todo o material é exclusivamente educacional.
+  </div>
+
+  <div class="labs-grid">
+
+    <div class="lab-card">
+      <div class="lab-num">Laboratório 01</div>
+      <h2>Reconhecimento Passivo com Kismet</h2>
+      <p>Mapeamento de redes IEEE 802.11 sem enviar pacotes. Identificação de APs, clientes, protocolos e probe requests. Uso do Kismet como IDS na própria rede.</p>
+      <div class="lab-topics">
+        <span class="topic">Monitor Mode</span><span class="topic">Kismet</span><span class="topic">Probe Request</span><span class="topic">IDS</span>
+      </div>
+      <a class="lab-link" href="lab01-reconhecimento.html">Acessar laboratório →</a>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-num">Laboratório 02</div>
+      <h2>Captura de Tráfego com Wireshark e tcpdump</h2>
+      <p>Captura e análise de frames 802.11 em modo monitor. Filtragem de handshakes EAPOL, beacons e probe responses. Análise forense de capturas PCAP.</p>
+      <div class="lab-topics">
+        <span class="topic">Wireshark</span><span class="topic">tcpdump</span><span class="topic">PCAP</span><span class="topic">EAPOL</span>
+      </div>
+      <a class="lab-link" href="lab02-captura.html">Acessar laboratório →</a>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-num">Laboratório 03</div>
+      <h2>Análise de Protocolos e Criptografia WPA2/WPA3</h2>
+      <p>Estudo dos mecanismos de autenticação 4-Way Handshake, SAE/Dragonfly (WPA3), PMF e PMKID. Comparação entre WEP, WPA, WPA2 e WPA3.</p>
+      <div class="lab-topics">
+        <span class="topic">WPA2</span><span class="topic">WPA3</span><span class="topic">4-Way Handshake</span><span class="topic">SAE</span>
+      </div>
+      <a class="lab-link" href="lab03-protocolos.html">Acessar laboratório →</a>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-num">Laboratório 04</div>
+      <h2>Ataques a Redes Wi-Fi e Contramedidas</h2>
+      <p>Demonstração de ataques em ambiente isolado: desautenticação, Evil Twin, PMKID attack e WPS PIN. Análise de impacto e contramedidas para cada vetor.</p>
+      <div class="lab-topics">
+        <span class="topic">DeAuth</span><span class="topic">Evil Twin</span><span class="topic">PMKID</span><span class="topic">WPS</span>
+      </div>
+      <a class="lab-link" href="lab04-ataques.html">Acessar laboratório →</a>
+    </div>
+
+    <div class="lab-card featured">
+      <div class="lab-body">
+        <div class="lab-num">Laboratório 05 · Referência de Ferramentas</div>
+        <h2>Ferramentas de Auditoria Wi-Fi — Kismet · Aircrack-ng · Reaver · Wifite</h2>
+        <p>Roteiro completo de auditoria com as principais ferramentas da suite Aircrack-ng, Kismet, Reaver e Wifite. Inclui setup do ambiente, adaptadores recomendados, acesso point de laboratório, fluxo de auditoria e hardening.</p>
+        <div class="lab-topics">
+          <span class="topic">Kismet</span><span class="topic">Aircrack-ng</span><span class="topic">Reaver</span><span class="topic">Wifite</span><span class="topic">Hashcat</span><span class="topic">Hardening</span>
+        </div>
+      </div>
+      <a class="lab-link" href="lab05-ferramentas.html">Acessar laboratório →</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  Prof. Dr. Laerte Peotta de Melo • Segurança em Redes Wi-Fi • <a href="https://peotta.github.io">peotta.github.io</a> •
+  <a href="https://github.com/peotta/lab-wifi" target="_blank">github.com/peotta/lab-wifi ↗</a>
+</footer>
+
+<script>
+(function(){
+  const canvas=document.getElementById('matrix-rain');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const chars='01アイウエオカキクケコサシスセソタチツテトABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*+-/<>{}[]';
+  let width,height,columns,drops,fontSize;
+  function resize(){width=canvas.width=window.innerWidth;height=canvas.height=window.innerHeight;fontSize=Math.max(13,Math.floor(width/105));columns=Math.floor(width/fontSize);drops=Array.from({length:columns},()=>Math.floor(Math.random()*height/fontSize));ctx.font=fontSize+'px Consolas,monospace';}
+  function draw(){ctx.fillStyle='rgba(1,5,3,0.105)';ctx.fillRect(0,0,width,height);ctx.font=fontSize+'px Consolas,monospace';for(let i=0;i<drops.length;i++){const text=chars.charAt(Math.floor(Math.random()*chars.length));const x=i*fontSize;const y=drops[i]*fontSize;ctx.fillStyle=Math.random()>.985?'rgba(220,255,232,.62)':'rgba(57,255,122,.32)';ctx.shadowColor='rgba(57,255,122,.22)';ctx.shadowBlur=7;ctx.fillText(text,x,y);ctx.shadowBlur=0;if(y>height&&Math.random()>.972)drops[i]=0;drops[i]+=1;}requestAnimationFrame(draw);}
+  window.addEventListener('resize',resize);resize();draw();
+})();
+</script>
+</body>
+</html>
