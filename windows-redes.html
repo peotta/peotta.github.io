@@ -42,11 +42,19 @@ body{
   overflow-x:hidden;
 }
 
-
+/* grid overlay */
+body::before{
+  content:"";position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(57,255,122,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(57,255,122,.03) 1px,transparent 1px);
+  background-size:28px 28px;
+  pointer-events:none;z-index:1;
+}
 
 /* ── LAYOUT ─────────────────────────────────────────────────── */
 .wrap{
-  position:relative;z-index:2;
+  position:relative;z-index:1;
   display:grid;
   grid-template-columns:var(--sidebar) 1fr;
   grid-template-rows:auto 1fr;
@@ -366,7 +374,6 @@ footer a{color:var(--green);font-weight:700;}
 </head>
 <body>
 
-<canvas id="mx" aria-hidden="true"></canvas>
 
 <div class="wrap">
 
@@ -1445,3 +1452,34 @@ ipconfig /renew
 
 </div><!-- /wrap -->
 
+<script>
+/* ── COPIAR BLOCO ── */
+function copyBlock(btn){
+  const code=btn.closest('.code-block').querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(()=>{
+    const orig=btn.textContent;
+    btn.textContent='✓ Copiado';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent=orig;btn.classList.remove('copied');},2000);
+  });
+}
+
+/* ── SIDEBAR ACTIVE STATE ── */
+(function(){
+  const items=document.querySelectorAll('.sb-item');
+  const secs=document.querySelectorAll('.tema');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const id=e.target.id;
+        items.forEach(a=>{
+          a.classList.toggle('active',a.getAttribute('href')==='#'+id);
+        });
+      }
+    });
+  },{threshold:.25,rootMargin:'-60px 0px -60% 0px'});
+  secs.forEach(s=>obs.observe(s));
+})();
+</script>
+</body>
+</html>
