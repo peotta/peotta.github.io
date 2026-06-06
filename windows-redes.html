@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Prof. Dr. Laerte Peotta de Melo">
+<meta name="description" content="Comandos Windows para administração de redes de computadores, organizados por tema — cmd, PowerShell e ferramentas nativas.">
+<title>Comandos Windows para Administração de Redes | Prof. Dr. Laerte Peotta de Melo</title>
+<style>
+/* ── RESET & BASE ───────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+
+:root{
+  --bg:#010403;
+  --green:#39ff7a;
+  --green2:#00d26a;
+  --green3:rgba(57,255,122,.08);
+  --green4:rgba(57,255,122,.14);
+  --line:rgba(57,255,122,.18);
+  --line2:rgba(57,255,122,.09);
+  --text:#d4f7e0;
+  --muted:#8ec9a4;
+  --dim:#5a8f6e;
+  --amber:#ffd166;
+  --red:#ff6b6b;
+  --blue:#64d2ff;
+  --panel:rgba(2,14,7,.88);
+  --panel2:rgba(4,20,10,.78);
+  --max:1340px;
+  --sidebar:280px;
+  --radius:16px;
+}
+
+body{
+  min-height:100vh;
+  font-family:'Courier New',Courier,monospace;
+  font-size:14px;
+  line-height:1.7;
+  color:var(--text);
+  background:#010403;
+  overflow-x:hidden;
+}
+
+/* matrix canvas */
+#mx{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.55;}
+
+/* grid overlay */
+body::before{
+  content:"";position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(57,255,122,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(57,255,122,.03) 1px,transparent 1px);
+  background-size:28px 28px;
+  pointer-events:none;z-index:1;
+}
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+.wrap{
+  position:relative;z-index:2;
+  display:grid;
+  grid-template-columns:var(--sidebar) 1fr;
+  grid-template-rows:auto 1fr;
+  min-height:100vh;
+}
+
+/* ── SIDEBAR ─────────────────────────────────────────────────── */
+.sidebar{
+  grid-row:1/3;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  overflow-x:hidden;
+  border-right:1px solid var(--line);
+  background:rgba(1,6,3,.96);
+  display:flex;
+  flex-direction:column;
+  scrollbar-width:thin;
+  scrollbar-color:var(--line) transparent;
+}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-track{background:transparent;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+
+/* Autor no topo da sidebar */
+.sb-author{
+  padding:1.4rem 1rem 1rem;
+  border-bottom:1px solid var(--line2);
+}
+.sb-avatar{
+  width:52px;height:52px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--green),var(--green2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;font-weight:900;color:#010403;
+  margin-bottom:.65rem;
+  box-shadow:0 0 18px rgba(57,255,122,.28);
+}
+.sb-name{
+  font-size:.78rem;font-weight:900;
+  color:#eafff0;letter-spacing:.05em;
+  text-transform:uppercase;line-height:1.3;
+}
+.sb-sub{font-size:.68rem;color:var(--dim);margin-top:.2rem;}
+
+/* Nav label */
+.sb-label{
+  font-size:.65rem;font-weight:900;
+  color:var(--dim);
+  letter-spacing:.14em;text-transform:uppercase;
+  padding:.9rem 1rem .35rem;
+}
+
+/* Nav items */
+.sb-nav{padding:.25rem 0;flex:1;}
+.sb-item{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.55rem 1rem;
+  color:var(--muted);
+  font-size:.76rem;font-weight:700;
+  text-decoration:none;
+  border-left:2px solid transparent;
+  transition:all .15s;
+  cursor:pointer;
+}
+.sb-item:hover{
+  color:#eafff0;
+  background:var(--green3);
+  border-left-color:var(--green);
+  text-decoration:none;
+}
+.sb-item.active{
+  color:var(--green);
+  background:var(--green3);
+  border-left-color:var(--green);
+}
+.sb-icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0;}
+.sb-txt{flex:1;line-height:1.25;}
+.sb-badge{
+  font-size:.6rem;font-weight:900;
+  background:var(--green4);
+  border:1px solid var(--line);
+  color:var(--green);
+  border-radius:999px;
+  padding:.15rem .45rem;
+  min-width:24px;text-align:center;
+  flex-shrink:0;
+}
+
+/* Sidebar footer */
+.sb-foot{
+  padding:.85rem 1rem;
+  border-top:1px solid var(--line2);
+  font-size:.65rem;color:var(--dim);line-height:1.6;
+}
+.sb-foot a{color:var(--green);font-weight:700;}
+
+/* ── HEADER ──────────────────────────────────────────────────── */
+header{
+  grid-column:2;
+  padding:1.4rem 2rem 1.2rem;
+  border-bottom:1px solid var(--line);
+  background:rgba(1,5,3,.96);
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(12px);
+}
+.hdr-inner{
+  max-width:var(--max);
+  display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+}
+.hdr-tag{
+  font-size:.68rem;font-weight:900;
+  color:var(--green);
+  letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:.25rem .7rem;
+  background:var(--green3);
+  white-space:nowrap;
+}
+.hdr-title{
+  font-size:clamp(1rem,2.5vw,1.3rem);
+  font-weight:900;color:#eafff0;
+  letter-spacing:-.01em;
+  flex:1;
+}
+.hdr-chips{display:flex;gap:.45rem;flex-wrap:wrap;margin-left:auto;}
+.chip{
+  font-size:.65rem;font-weight:800;
+  padding:.22rem .6rem;border-radius:999px;
+  border:1px solid var(--line2);
+  background:var(--green3);color:var(--muted);
+  white-space:nowrap;
+}
+
+/* ── MAIN ────────────────────────────────────────────────────── */
+main{
+  grid-column:2;
+  padding:1.5rem 2rem 4rem;
+  overflow:hidden;
+}
+
+/* aviso global */
+.aviso-global{
+  margin:0 0 1.5rem;
+  padding:.85rem 1.1rem;
+  border-radius:var(--radius);
+  background:rgba(255,209,102,.08);
+  border:1px solid rgba(255,209,102,.3);
+  border-left:3px solid var(--amber);
+  color:#fff5d0;
+  font-size:.82rem;line-height:1.6;
+}
+.aviso-global strong{color:var(--amber);}
+
+/* ── TEMA SECTION ────────────────────────────────────────────── */
+.tema{
+  margin-bottom:2.5rem;
+  scroll-margin-top:90px;
+}
+
+.tema-header{
+  display:flex;align-items:center;gap:.8rem;
+  margin-bottom:.9rem;
+  padding-bottom:.75rem;
+  border-bottom:1px solid var(--line);
+}
+.tema-num{
+  font-size:.65rem;font-weight:900;
+  color:var(--green);letter-spacing:.1em;text-transform:uppercase;
+  background:var(--green3);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:.25rem .65rem;
+  white-space:nowrap;
+}
+.tema-icon{font-size:1.25rem;}
+.tema h2{
+  font-size:clamp(1rem,2vw,1.2rem);
+  font-weight:900;color:#eafff0;
+  letter-spacing:-.01em;
+  margin:0;
+}
+.tema-desc{
+  font-size:.84rem;color:var(--muted);
+  margin-bottom:1rem;line-height:1.6;
+}
+
+/* Bloco de código */
+.code-block{
+  position:relative;
+  margin-bottom:1.1rem;
+  border-radius:var(--radius);
+  border:1px solid var(--line);
+  background:rgba(0,6,2,.94);
+  overflow:hidden;
+  box-shadow:0 8px 32px rgba(0,0,0,.3),inset 0 0 24px rgba(57,255,122,.025);
+}
+.code-top{
+  display:flex;align-items:center;
+  padding:.55rem .85rem;
+  border-bottom:1px solid var(--line2);
+  background:rgba(57,255,122,.04);
+  gap:.6rem;
+}
+.code-dots{display:flex;gap:.35rem;}
+.dot{width:10px;height:10px;border-radius:50%;}
+.dot-r{background:#ff5f57;}.dot-y{background:#febc2e;}.dot-g{background:#28c840;}
+.code-fname{
+  font-size:.68rem;font-weight:700;color:var(--dim);
+  letter-spacing:.05em;flex:1;
+}
+.code-shell{
+  font-size:.62rem;font-weight:900;color:var(--green);
+  letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:999px;
+  padding:.15rem .5rem;background:var(--green3);
+}
+.copy-btn{
+  font-size:.65rem;font-weight:900;
+  color:var(--dim);
+  background:none;border:1px solid var(--line2);
+  border-radius:999px;padding:.2rem .6rem;
+  cursor:pointer;transition:all .15s;
+  font-family:inherit;letter-spacing:.06em;text-transform:uppercase;
+}
+.copy-btn:hover{color:var(--green);border-color:var(--green);background:var(--green3);}
+.copy-btn.copied{color:#28c840;border-color:#28c840;}
+
+.code-body{
+  padding:.9rem 1rem 1rem;
+  overflow-x:auto;
+  font-size:.82rem;
+  line-height:1.75;
+}
+.code-body code{
+  font-family:'Courier New',Courier,monospace;
+  color:#c8f5d8;
+  white-space:pre;
+  display:block;
+}
+.cm{color:#4a7a5a;}   /* comentário */
+.cv{color:#79c0ff;}   /* valor/flag */
+.ck{color:#ff9d6c;}   /* keyword/cmdlet */
+.cs{color:#6dff9f;}   /* sucesso */
+.cw{color:#ffd166;}   /* warning */
+.cp{color:#d2a8ff;}   /* parametro especial */
+
+/* ── TABELA MAPA ─────────────────────────────────────────────── */
+.table-wrap{
+  overflow-x:auto;
+  border-radius:var(--radius);
+  border:1px solid var(--line);
+  margin-bottom:.5rem;
+}
+table{width:100%;border-collapse:collapse;font-size:.8rem;min-width:640px;}
+th{
+  background:rgba(57,255,122,.09);
+  color:#eafff0;text-align:left;
+  padding:.65rem .8rem;
+  border-bottom:1px solid var(--line);
+  font-weight:900;text-transform:uppercase;
+  letter-spacing:.06em;font-size:.7rem;
+}
+td{
+  padding:.62rem .8rem;color:#b8e8c8;
+  vertical-align:top;
+  border-bottom:1px solid var(--line2);
+}
+tr:last-child td{border-bottom:none;}
+tr:nth-child(even) td{background:rgba(57,255,122,.02);}
+tr:hover td{background:rgba(57,255,122,.04);}
+td:first-child{color:#eafff0;font-weight:900;white-space:nowrap;}
+td strong{color:#eafff0;}
+td em{color:var(--muted);font-style:normal;font-size:.78rem;display:block;margin-top:.15rem;}
+
+.map-label{
+  font-size:.68rem;font-weight:900;color:var(--dim);
+  letter-spacing:.1em;text-transform:uppercase;
+  margin:.6rem 0 .4rem;
+}
+
+/* ── FOOTER ──────────────────────────────────────────────────── */
+footer{
+  grid-column:2;
+  padding:1.1rem 2rem;
+  border-top:1px solid var(--line2);
+  background:rgba(1,5,3,.96);
+  font-size:.74rem;color:var(--dim);text-align:center;
+}
+footer a{color:var(--green);font-weight:700;}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────── */
+@media(max-width:900px){
+  .wrap{grid-template-columns:1fr;grid-template-rows:auto auto 1fr;}
+  .sidebar{
+    grid-row:auto;
+    position:relative;height:auto;
+    flex-direction:row;flex-wrap:wrap;
+    border-right:none;border-bottom:1px solid var(--line);
+    overflow-x:auto;overflow-y:hidden;
+    padding:.5rem;gap:.3rem;
+  }
+  .sb-author{display:none;}
+  .sb-label{display:none;}
+  .sb-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;padding:0;gap:.3rem;flex:1 1 auto;}
+  .sb-item{border-left:none;border-bottom:2px solid transparent;padding:.4rem .6rem;white-space:nowrap;font-size:.7rem;border-radius:999px;}
+  .sb-item:hover,.sb-item.active{border-left:none;border-bottom-color:var(--green);}
+  .sb-badge{display:none;}
+  .sb-foot{display:none;}
+  header{grid-column:1;position:sticky;top:0;}
+  main{grid-column:1;padding:1rem;}
+  footer{grid-column:1;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="mx" aria-hidden="true"></canvas>
+
+<div class="wrap">
+
+<!-- ═══════════════════════════════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sb-author">
+    <div class="sb-avatar">LP</div>
+    <div class="sb-name">Prof. Dr. Laerte Peotta de Melo</div>
+    <div class="sb-sub">peotta.github.io • Administração de Redes</div>
+  </div>
+
+  <div class="sb-label">Navegação Windows</div>
+  <nav class="sb-nav" id="sb-nav">
+    <a class="sb-item active" href="#inventario"><span class="sb-icon">🧭</span><span class="sb-txt">Inventário e Identificação</span><span class="sb-badge">08</span></a>
+    <a class="sb-item" href="#conectividade"><span class="sb-icon">📡</span><span class="sb-txt">Conectividade e Diagnóstico</span><span class="sb-badge">08</span></a>
+    <a class="sb-item" href="#ip"><span class="sb-icon">🌐</span><span class="sb-txt">Configuração IP e Rotas</span><span class="sb-badge">08</span></a>
+    <a class="sb-item" href="#dns"><span class="sb-icon">🔎</span><span class="sb-txt">DNS e Resolução de Nomes</span><span class="sb-badge">08</span></a>
+    <a class="sb-item" href="#portas"><span class="sb-icon">🔌</span><span class="sb-txt">Portas e Serviços</span><span class="sb-badge">08</span></a>
+    <a class="sb-item" href="#firewall"><span class="sb-icon">🧱</span><span class="sb-txt">Firewall e Segurança</span><span class="sb-badge">08</span></a>
+    <a class="sb-item" href="#captura"><span class="sb-icon">📦</span><span class="sb-txt">Captura de Pacotes</span><span class="sb-badge">08</span></a>
+    <a class="sb-item" href="#wifi"><span class="sb-icon">📶</span><span class="sb-txt">Wi-Fi e Interfaces Sem Fio</span><span class="sb-badge">08</span></a>
+    <a class="sb-item" href="#compartilhamento"><span class="sb-icon">🖧</span><span class="sb-txt">Compartilhamento e AD</span><span class="sb-badge">08</span></a>
+    <a class="sb-item" href="#servicos"><span class="sb-icon">🧰</span><span class="sb-txt">Serviços e Processos</span><span class="sb-badge">08</span></a>
+    <a class="sb-item" href="#monitoramento"><span class="sb-icon">📊</span><span class="sb-txt">Monitoramento e Performance</span><span class="sb-badge">08</span></a>
+    <a class="sb-item" href="#logs"><span class="sb-icon">📜</span><span class="sb-txt">Logs e Auditoria</span><span class="sb-badge">08</span></a>
+    <a class="sb-item" href="#automacao"><span class="sb-icon">⚙️</span><span class="sb-txt">Automação e PowerShell</span><span class="sb-badge">08</span></a>
+    <a class="sb-item" href="#troubleshooting"><span class="sb-icon">🛠️</span><span class="sb-txt">Fluxos de Troubleshooting</span><span class="sb-badge">08</span></a>
+  </nav>
+
+  <div class="sb-foot">
+    <strong style="color:var(--muted)">Windows • Redes • Operação</strong><br>
+    cmd · PowerShell · WinRM · netsh<br>
+    <a href="https://peotta.github.io">peotta.github.io</a> •
+    <a href="https://peotta.github.io/linux.html">Versão Linux</a>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════════════════ -->
+<header>
+  <div class="hdr-inner">
+    <span class="hdr-tag">Windows · Redes</span>
+    <h1 class="hdr-title">Comandos Windows para Administração de Redes</h1>
+    <div class="hdr-chips">
+      <span class="chip">cmd</span>
+      <span class="chip">PowerShell</span>
+      <span class="chip">netsh</span>
+      <span class="chip">WinRM</span>
+      <span class="chip">Windows 10/11/Server</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN
+═══════════════════════════════════════════════════════════ -->
+<main>
+
+<div class="aviso-global">
+  <strong>Boa prática:</strong> comandos de consulta podem ser usados livremente em laboratórios. Comandos que alteram IP, rotas, firewall, interfaces, serviços ou políticas devem ser testados antes e aplicados com controle de mudança. Comandos marcados com <strong>[Admin]</strong> requerem prompt elevado (Executar como Administrador).
+</div>
+
+<!-- ══════════════════════════════════════════
+     TEMA 01 — INVENTÁRIO
+══════════════════════════════════════════ -->
+<section class="tema" id="inventario">
+  <div class="tema-header">
+    <span class="tema-num">Tema 01</span>
+    <span class="tema-icon">🧭</span>
+    <h2>Inventário e Identificação da Rede</h2>
+  </div>
+  <p class="tema-desc">Comandos para descobrir interfaces, endereços, MACs, rotas, gateways, nomes e estado geral da conectividade no Windows.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">comandos-inventario.ps1 / .bat</span>
+      <span class="code-shell">cmd + PS</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm"># 01. Identificação do host — hostname, SO, BIOS e domínio.</span>
+systeminfo
+<span class="ck">Get-ComputerInfo</span> | Select-Object CsName,OsName,OsVersion,CsDomain
+
+<span class="cm"># 02. Endereços por interface — IPs, MACs, gateway e DNS de cada adaptador.</span>
+ipconfig /all
+<span class="ck">Get-NetIPAddress</span> | Select-Object InterfaceAlias,IPAddress,PrefixLength,AddressFamily
+
+<span class="cm"># 03. Estado de enlaces — interfaces, status, velocidade e MTU.</span>
+<span class="ck">Get-NetAdapter</span> | Select-Object Name,Status,LinkSpeed,MacAddress,MTU
+
+<span class="cm"># 04. Tabela de rotas — rota padrão e rotas específicas.</span>
+route print
+<span class="ck">Get-NetRoute</span> | Sort-Object RouteMetric | Format-Table -AutoSize
+
+<span class="cm"># 05. Resumo de adaptadores de rede — todos os adaptadores e estados.</span>
+<span class="ck">Get-NetAdapter</span> | Format-Table Name,InterfaceDescription,Status,LinkSpeed
+
+<span class="cm"># 06. Características físicas — driver, velocidade e fabricante da NIC.</span>
+<span class="ck">Get-NetAdapterAdvancedProperty</span> -Name "Ethernet"
+<span class="ck">Get-WmiObject</span> Win32_NetworkAdapter | Where-Object{<span class="cv">$_</span>.NetEnabled} | Select-Object Name,Speed,MACAddress
+
+<span class="cm"># 07. Informações de hardware — inventário completo de rede via WMI.</span>
+<span class="ck">Get-WmiObject</span> Win32_NetworkAdapterConfiguration | Where-Object{<span class="cv">$_</span>.IPEnabled} | Select-Object Description,IPAddress,DefaultIPGateway,DNSServerSearchOrder
+
+<span class="cm"># 08. Interfaces do sistema — listar adaptadores e GUIDs.</span>
+<span class="ck">Get-NetIPInterface</span> | Select-Object InterfaceAlias,AddressFamily,ConnectionState,NlMtu</code></div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr>
+    <tr><td>01</td><td><strong>systeminfo</strong><em>Identificação do host</em></td><td>Mostra hostname, SO, BIOS, domínio e hotfixes.</td><td>Use para documentar estações e servidores antes de iniciar manutenção.</td></tr>
+    <tr><td>02</td><td><strong>ipconfig /all</strong><em>Endereços por interface</em></td><td>Lista IPs, MACs, gateway, DNS e estado DHCP.</td><td>Primeiro comando para inventário de rede e troubleshooting de IP.</td></tr>
+    <tr><td>03</td><td><strong>Get-NetAdapter</strong><em>Estado de enlaces</em></td><td>Mostra interfaces, status operacional e velocidade.</td><td>Use para validar cabos, links virtuais e adaptadores desativados.</td></tr>
+    <tr><td>04</td><td><strong>route print</strong><em>Tabela de rotas</em></td><td>Exibe rota padrão, rotas específicas e métricas.</td><td>Primeiro comando para investigar ausência de conectividade fora da sub-rede.</td></tr>
+    <tr><td>05</td><td><strong>Get-NetAdapter</strong><em>Resumo de adaptadores</em></td><td>Lista todos os adaptadores e estados PowerShell.</td><td>Mais detalhado que ipconfig — inclui adaptadores virtuais e VPN.</td></tr>
+    <tr><td>06</td><td><strong>Get-NetAdapterAdvancedProperty</strong><em>Características físicas</em></td><td>Exibe propriedades avançadas da NIC.</td><td>Útil para detectar duplex mismatch, offloading e configurações de driver.</td></tr>
+    <tr><td>07</td><td><strong>Get-WmiObject Win32_NetworkAdapterConfiguration</strong><em>Inventário via WMI</em></td><td>Retorna configuração completa de IP via WMI/CIM.</td><td>Ideal para inventário remoto e scripts de auditoria automática.</td></tr>
+    <tr><td>08</td><td><strong>Get-NetIPInterface</strong><em>Interfaces do sistema</em></td><td>Lista todas as interfaces IP com estado de conexão.</td><td>Inclui adaptadores virtuais, loopback e tunelamentos.</td></tr>
+  </table></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TEMA 02 — CONECTIVIDADE
+══════════════════════════════════════════ -->
+<section class="tema" id="conectividade">
+  <div class="tema-header">
+    <span class="tema-num">Tema 02</span>
+    <span class="tema-icon">📡</span>
+    <h2>Conectividade e Diagnóstico Básico</h2>
+  </div>
+  <p class="tema-desc">Testes essenciais para validar alcance, latência, perda de pacotes e caminho de rede no Windows.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">comandos-conectividade.ps1</span>
+      <span class="code-shell">cmd + PS</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm"># 01. Teste ICMP de alcance — verifica se um host responde e mede latência.</span>
+ping 8.8.8.8
+ping -n 4 peotta.github.io
+<span class="ck">Test-Connection</span> -ComputerName 8.8.8.8 -Count 4
+
+<span class="cm"># 02. Caminho até o destino — mostra saltos percorridos e onde ocorre perda.</span>
+tracert 8.8.8.8
+tracert peotta.github.io
+<span class="ck">Test-NetConnection</span> -ComputerName 8.8.8.8 -TraceRoute
+
+<span class="cm"># 03. Diagnóstico TCP de porta — verifica se uma porta TCP está aberta.</span>
+<span class="ck">Test-NetConnection</span> -ComputerName 192.168.1.10 -Port 443
+<span class="ck">Test-NetConnection</span> -ComputerName smtp.gmail.com -Port 25 -InformationLevel Detailed
+
+<span class="cm"># 04. Tabela ARP — mostra vizinhos da camada 2 conhecidos pelo host.</span>
+arp -a
+<span class="ck">Get-NetNeighbor</span> | Select-Object InterfaceAlias,IPAddress,LinkLayerAddress,State
+
+<span class="cm"># 05. Teste HTTP/HTTPS — valida conectividade em camada de aplicação.</span>
+<span class="ck">Invoke-WebRequest</span> -Uri https://peotta.github.io -UseBasicParsing | Select-Object StatusCode
+<span class="ck">curl.exe</span> -I https://peotta.github.io
+
+<span class="cm"># 06. Resolução de nome e alcance simultâneos — diagnóstico completo.</span>
+<span class="ck">Resolve-DnsName</span> peotta.github.io | Select-Object Name,Type,IPAddress
+<span class="ck">Test-NetConnection</span> -ComputerName peotta.github.io -Port 80
+
+<span class="cm"># 07. Medição de banda — iperf3 para Windows (requer instalação).</span>
+<span class="cm"># Servidor: iperf3 -s</span>
+iperf3 -c 192.168.1.10 -P 4
+iperf3 -c 192.168.1.10 -u -b 100M
+
+<span class="cm"># 08. Diagnóstico de rede completo — relatório automático do Windows.</span>
+<span class="ck">Get-NetConnectionProfile</span>
+netsh interface ip show config</code></div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr>
+    <tr><td>01</td><td><strong>ping / Test-Connection</strong><em>Teste ICMP de alcance</em></td><td>Verifica alcance e mede RTT para um destino.</td><td>Use Test-Connection em scripts PowerShell — retorna objetos, não texto.</td></tr>
+    <tr><td>02</td><td><strong>tracert / Test-NetConnection -TraceRoute</strong><em>Caminho até destino</em></td><td>Mostra saltos e onde ocorre perda ou alta latência.</td><td>tracert usa ICMP TTL — pode ser bloqueado por firewalls intermediários.</td></tr>
+    <tr><td>03</td><td><strong>Test-NetConnection -Port</strong><em>Diagnóstico TCP</em></td><td>Testa se uma porta TCP está aberta e acessível.</td><td>Equivalente ao nc -vz do Linux. Excelente para validar serviços.</td></tr>
+    <tr><td>04</td><td><strong>arp -a / Get-NetNeighbor</strong><em>Tabela ARP</em></td><td>Mostra vizinhos L2 com seus MACs resolvidos.</td><td>Use para investigar conflitos de IP e gateway inacessível.</td></tr>
+    <tr><td>05</td><td><strong>Invoke-WebRequest / curl.exe</strong><em>Teste HTTP/HTTPS</em></td><td>Valida conectividade em camada de aplicação web.</td><td>Mais preciso que ping quando o serviço é HTTP/HTTPS.</td></tr>
+    <tr><td>06</td><td><strong>Resolve-DnsName + Test-NetConnection</strong><em>Diagnóstico completo</em></td><td>Combina resolução DNS e teste de porta em sequência.</td><td>Use para validar serviços externos em uma única sessão.</td></tr>
+    <tr><td>07</td><td><strong>iperf3</strong><em>Medição de banda</em></td><td>Mede vazão TCP/UDP real entre dois pontos.</td><td>Baixar em github.com/ar51an/iperf3-win-builds para Windows.</td></tr>
+    <tr><td>08</td><td><strong>Get-NetConnectionProfile</strong><em>Perfil de rede</em></td><td>Mostra tipo de rede (pública/privada/domínio).</td><td>Importante pois o perfil afeta as regras de firewall aplicadas.</td></tr>
+  </table></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TEMA 03 — IP E ROTAS
+══════════════════════════════════════════ -->
+<section class="tema" id="ip">
+  <div class="tema-header">
+    <span class="tema-num">Tema 03</span>
+    <span class="tema-icon">🌐</span>
+    <h2>Configuração IPv4, IPv6 e Rotas</h2>
+  </div>
+  <p class="tema-desc">Comandos para configurar endereços IP, gateways, rotas estáticas e parâmetros de rede via netsh e PowerShell.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">comandos-ip.ps1 [Admin]</span>
+      <span class="code-shell">PS · Admin</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm"># 01. Configurar IP estático — define endereço, máscara e gateway [Admin].</span>
+<span class="ck">New-NetIPAddress</span> -InterfaceAlias "Ethernet" -IPAddress 192.168.10.20 -PrefixLength 24 -DefaultGateway 192.168.10.1
+<span class="cm"># via netsh (legado):</span>
+netsh interface ip set address "Ethernet" static 192.168.10.20 255.255.255.0 192.168.10.1
+
+<span class="cm"># 02. Ativar DHCP — remove IP estático e solicita via DHCP [Admin].</span>
+<span class="ck">Set-NetIPInterface</span> -InterfaceAlias "Ethernet" -Dhcp Enabled
+netsh interface ip set address "Ethernet" dhcp
+
+<span class="cm"># 03. Configurar DNS manualmente [Admin].</span>
+<span class="ck">Set-DnsClientServerAddress</span> -InterfaceAlias "Ethernet" -ServerAddresses ("8.8.8.8","1.1.1.1")
+netsh interface ip set dns "Ethernet" static 8.8.8.8
+
+<span class="cm"># 04. Adicionar rota estática — cria rota para rede específica [Admin].</span>
+route add 10.20.0.0 mask 255.255.0.0 192.168.1.1
+<span class="ck">New-NetRoute</span> -DestinationPrefix "10.20.0.0/16" -NextHop "192.168.1.1" -InterfaceAlias "Ethernet"
+
+<span class="cm"># 05. Remover rota — remove rota incorreta da tabela [Admin].</span>
+route delete 10.20.0.0
+<span class="ck">Remove-NetRoute</span> -DestinationPrefix "10.20.0.0/16" -Confirm:<span class="cv">$false</span>
+
+<span class="cm"># 06. Configurar IPv6 — adicionar endereço IPv6 estático [Admin].</span>
+<span class="ck">New-NetIPAddress</span> -InterfaceAlias "Ethernet" -IPAddress "2001:db8:10::20" -PrefixLength 64
+netsh interface ipv6 add address "Ethernet" 2001:db8:10::20/64
+
+<span class="cm"># 07. Habilitar roteamento IP no Windows — transforma a máquina em roteador [Admin].</span>
+<span class="ck">Set-ItemProperty</span> -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "IPEnableRouter" -Value 1
+netsh interface ipv4 set global forwarding=enabled
+
+<span class="cm"># 08. Liberar e renovar endereço DHCP.</span>
+ipconfig /release
+ipconfig /renew
+ipconfig /release6 <span class="cm"># IPv6</span>
+ipconfig /renew6</code></div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr>
+    <tr><td>01</td><td><strong>New-NetIPAddress</strong><em>Configurar IP estático</em></td><td>Define endereço, prefixo e gateway permanentemente.</td><td>Alterações via PowerShell persistem após reinício.</td></tr>
+    <tr><td>02</td><td><strong>Set-NetIPInterface -Dhcp</strong><em>Ativar DHCP</em></td><td>Remove configuração estática e usa DHCP.</td><td>Útil ao migrar de estático para dinâmico sem reconfiguração manual.</td></tr>
+    <tr><td>03</td><td><strong>Set-DnsClientServerAddress</strong><em>Configurar DNS</em></td><td>Define servidores DNS por interface.</td><td>Alteração persistente — preferível ao netsh em ambientes modernos.</td></tr>
+    <tr><td>04</td><td><strong>route add / New-NetRoute</strong><em>Adicionar rota estática</em></td><td>Cria rota para rede ou host específico.</td><td>route add sem -p não persiste após reinício. Use New-NetRoute para persistência.</td></tr>
+    <tr><td>05</td><td><strong>route delete / Remove-NetRoute</strong><em>Remover rota</em></td><td>Remove rota incorreta da tabela de roteamento.</td><td>Confirme a rota antes de remover para evitar perda de acesso remoto.</td></tr>
+    <tr><td>06</td><td><strong>New-NetIPAddress (IPv6)</strong><em>Configurar IPv6</em></td><td>Adiciona endereço IPv6 estático à interface.</td><td>Use prefixo /64 para endereços unicast de site.</td></tr>
+    <tr><td>07</td><td><strong>IPEnableRouter</strong><em>Habilitar roteamento</em></td><td>Ativa encaminhamento de pacotes entre interfaces.</td><td>Necessário para usar Windows como roteador, NAT ou gateway de VPN.</td></tr>
+    <tr><td>08</td><td><strong>ipconfig /release /renew</strong><em>Renovar DHCP</em></td><td>Libera IP atual e solicita novo lease ao servidor.</td><td>Use após alterações no servidor DHCP ou em problemas de endereçamento.</td></tr>
+  </table></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TEMA 04 — DNS
+══════════════════════════════════════════ -->
+<section class="tema" id="dns">
+  <div class="tema-header">
+    <span class="tema-num">Tema 04</span>
+    <span class="tema-icon">🔎</span>
+    <h2>DNS e Resolução de Nomes</h2>
+  </div>
+  <p class="tema-desc">Ferramentas para consultar registros DNS, testar resolução e diagnosticar falhas de nomes no Windows.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">comandos-dns.ps1</span>
+      <span class="code-shell">cmd + PS</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm"># 01. Consulta DNS detalhada — resolve nomes e exibe registros A, AAAA, MX, NS, TXT.</span>
+<span class="ck">Resolve-DnsName</span> peotta.github.io
+<span class="ck">Resolve-DnsName</span> peotta.github.io -Type MX
+<span class="ck">Resolve-DnsName</span> peotta.github.io -Type AAAA
+
+<span class="cm"># 02. Consulta em DNS específico — força resolução por servidor determinado.</span>
+<span class="ck">Resolve-DnsName</span> peotta.github.io -Server 8.8.8.8
+<span class="ck">Resolve-DnsName</span> example.com -Server 1.1.1.1 -Type MX
+
+<span class="cm"># 03. nslookup — ferramenta clássica disponível no cmd e PowerShell.</span>
+nslookup peotta.github.io
+nslookup -type=mx example.com
+nslookup peotta.github.io 8.8.8.8
+
+<span class="cm"># 04. Ver DNS configurado por interface.</span>
+<span class="ck">Get-DnsClientServerAddress</span> | Format-Table InterfaceAlias,ServerAddresses
+ipconfig /all | findstr "DNS Servers"
+
+<span class="cm"># 05. Cache DNS local — listar e limpar entradas em cache.</span>
+<span class="ck">Get-DnsClientCache</span> | Select-Object Entry,RecordType,Data
+ipconfig /displaydns | more
+ipconfig /flushdns          <span class="cm"># [Admin] limpar cache DNS</span>
+<span class="ck">Clear-DnsClientCache</span>       <span class="cm"># PowerShell — limpar cache</span>
+
+<span class="cm"># 06. Arquivo hosts — resolução local que precede DNS.</span>
+notepad C:\Windows\System32\drivers\etc\hosts
+<span class="ck">Get-Content</span> C:\Windows\System32\drivers\etc\hosts | Where-Object{<span class="cv">$_</span> -notmatch '^#' -and <span class="cv">$_</span>.Trim()}
+
+<span class="cm"># 07. Diagnóstico DNS no Windows Server — verificar serviço DNS local.</span>
+<span class="ck">Get-Service</span> DNS
+<span class="ck">Get-DnsServer</span>                              <span class="cm"># [Admin, módulo DNS Server]</span>
+<span class="ck">Get-DnsServerResourceRecord</span> -ZoneName "exemplo.com.br" -RRType A
+
+<span class="cm"># 08. Teste de resolução reversa — PTR a partir de IP.</span>
+<span class="ck">Resolve-DnsName</span> 8.8.8.8 -Type PTR
+nslookup 8.8.8.8</code></div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr>
+    <tr><td>01</td><td><strong>Resolve-DnsName</strong><em>Consulta DNS detalhada</em></td><td>Resolve qualquer tipo de registro DNS via PowerShell.</td><td>Ferramenta principal para análise DNS em ambientes Windows modernos.</td></tr>
+    <tr><td>02</td><td><strong>Resolve-DnsName -Server</strong><em>DNS específico</em></td><td>Força consulta em um resolvedor determinado.</td><td>Use para comparar respostas entre DNS interno e externo.</td></tr>
+    <tr><td>03</td><td><strong>nslookup</strong><em>Consulta DNS clássica</em></td><td>Ferramenta interativa disponível no cmd desde Windows NT.</td><td>Útil por familiaridade — Resolve-DnsName é mais completo em PS.</td></tr>
+    <tr><td>04</td><td><strong>Get-DnsClientServerAddress</strong><em>DNS por interface</em></td><td>Mostra servidores DNS configurados por adaptador.</td><td>Importante verificar por interface — redes diferentes podem ter DNS diferentes.</td></tr>
+    <tr><td>05</td><td><strong>ipconfig /flushdns</strong><em>Limpar cache DNS</em></td><td>Remove entradas em cache que podem estar obsoletas.</td><td>Use após alterações em DNS, mudança de IP ou erros de resolução.</td></tr>
+    <tr><td>06</td><td><strong>hosts</strong><em>Arquivo hosts local</em></td><td>Resolução local que tem precedência sobre DNS.</td><td>Útil em labs para simular hostnames sem servidor DNS.</td></tr>
+    <tr><td>07</td><td><strong>Get-DnsServer</strong><em>DNS Server local</em></td><td>Gerencia servidor DNS instalado no Windows Server.</td><td>Requer módulo RSAT-DNS-Server ou Windows Server com função DNS.</td></tr>
+    <tr><td>08</td><td><strong>Resolve-DnsName -Type PTR</strong><em>Resolução reversa</em></td><td>Resolve IP para nome via registro PTR.</td><td>Útil para validar configuração de reverse DNS em logs de servidor.</td></tr>
+  </table></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TEMA 05 — PORTAS E SERVIÇOS
+══════════════════════════════════════════ -->
+<section class="tema" id="portas">
+  <div class="tema-header">
+    <span class="tema-num">Tema 05</span>
+    <span class="tema-icon">🔌</span>
+    <h2>Portas, Sockets e Serviços em Escuta</h2>
+  </div>
+  <p class="tema-desc">Identificação de portas abertas, conexões ativas e processos associados no Windows.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">comandos-portas.ps1</span>
+      <span class="code-shell">cmd + PS</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm"># 01. Portas abertas com processo — lista TCP/UDP em escuta com PID e executável.</span>
+netstat -ano
+<span class="ck">Get-NetTCPConnection</span> -State Listen | Select-Object LocalAddress,LocalPort,State,OwningProcess
+
+<span class="cm"># 02. Identificar processo dono de porta — cruza PID com nome do processo.</span>
+netstat -ano | findstr :443
+<span class="ck">Get-Process</span> -Id ((<span class="ck">Get-NetTCPConnection</span> -LocalPort 443 -ErrorAction SilentlyContinue).OwningProcess)
+
+<span class="cm"># 03. Conexões estabelecidas — mostra conexões ativas e endpoints remotos.</span>
+netstat -an | findstr ESTABLISHED
+<span class="ck">Get-NetTCPConnection</span> -State Established | Select-Object LocalAddress,LocalPort,RemoteAddress,RemotePort,OwningProcess
+
+<span class="cm"># 04. Estatísticas TCP/UDP — contadores de segmentos, erros e retransmissões.</span>
+netstat -s -p tcp
+netstat -s -p udp
+<span class="ck">Get-NetTCPSetting</span>
+
+<span class="cm"># 05. Estado de serviços Windows — status de serviços de rede.</span>
+<span class="ck">Get-Service</span> | Where-Object{<span class="cv">$_</span>.Status -eq 'Running'} | Select-Object DisplayName,Name,Status
+<span class="ck">Get-Service</span> -Name "W32Time","WinRM","DHCP","DNS"
+
+<span class="cm"># 06. Iniciar, parar e reiniciar serviços [Admin].</span>
+<span class="ck">Start-Service</span> "WinRM"
+<span class="ck">Stop-Service</span> "Spooler"
+<span class="ck">Restart-Service</span> "W32Time"
+sc start wuauserv
+
+<span class="cm"># 07. Varredura de portas locais autorizada — via PowerShell ou nmap.</span>
+1..1024 | ForEach-Object {
+    <span class="cv">$t</span>=<span class="ck">New-Object</span> Net.Sockets.TcpClient
+    <span class="ck">Try</span>{<span class="cv">$t</span>.Connect("127.0.0.1",<span class="cv">$_</span>);Write-Host "Porta <span class="cv">$_</span>: ABERTA";}<span class="ck">Catch</span>{}
+    <span class="cv">$t</span>.Close()}
+nmap -sV 127.0.0.1                             <span class="cm"># requer nmap for Windows</span>
+
+<span class="cm"># 08. Monitoramento contínuo de conexões.</span>
+<span class="ck">while</span>(<span class="cv">$true</span>){<span class="ck">Get-NetTCPConnection</span> -State Established | Measure-Object; Start-Sleep 2}</code></div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr>
+    <tr><td>01</td><td><strong>netstat -ano / Get-NetTCPConnection</strong><em>Portas abertas</em></td><td>Lista portas TCP/UDP em escuta com PID.</td><td>Essencial para auditoria de superfície de ataque e troubleshooting.</td></tr>
+    <tr><td>02</td><td><strong>Get-Process + Get-NetTCPConnection</strong><em>Processo por porta</em></td><td>Identifica qual processo está usando determinada porta.</td><td>Equivalente ao lsof -i do Linux.</td></tr>
+    <tr><td>03</td><td><strong>Get-NetTCPConnection -State Established</strong><em>Conexões ativas</em></td><td>Mostra todas as conexões estabelecidas com endpoints.</td><td>Útil para identificar comunicações inesperadas ou persistência de malware.</td></tr>
+    <tr><td>04</td><td><strong>netstat -s</strong><em>Estatísticas TCP/UDP</em></td><td>Contadores de segmentos, erros e retransmissões.</td><td>Use para identificar degradação de rede por retransmissões excessivas.</td></tr>
+    <tr><td>05</td><td><strong>Get-Service</strong><em>Estado de serviços</em></td><td>Lista todos os serviços e seus estados.</td><td>Primeiro passo para diagnosticar serviços de rede parados.</td></tr>
+    <tr><td>06</td><td><strong>Start/Stop/Restart-Service</strong><em>Controlar serviços</em></td><td>Inicia, para e reinicia serviços Windows.</td><td>Use em scripts de manutenção e automação de deployment.</td></tr>
+    <tr><td>07</td><td><strong>PowerShell port scan / nmap</strong><em>Varredura local</em></td><td>Descobre portas abertas no host ou rede local.</td><td>Somente em ambientes próprios ou com autorização explícita.</td></tr>
+    <tr><td>08</td><td><strong>Loop Get-NetTCPConnection</strong><em>Monitoramento contínuo</em></td><td>Acompanha abertura e fechamento de conexões.</td><td>Útil durante testes de aplicação e análise de comportamento de rede.</td></tr>
+  </table></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TEMA 06 — FIREWALL
+══════════════════════════════════════════ -->
+<section class="tema" id="firewall">
+  <div class="tema-header">
+    <span class="tema-num">Tema 06</span>
+    <span class="tema-icon">🧱</span>
+    <h2>Firewall e Segurança de Rede</h2>
+  </div>
+  <p class="tema-desc">Gerenciamento do Windows Firewall (Defender Firewall) via PowerShell e netsh, além de IPSec e controle de tráfego.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">comandos-firewall.ps1 [Admin]</span>
+      <span class="code-shell">PS · Admin</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm"># 01. Estado do Firewall — perfis Domínio, Privado e Público [Admin].</span>
+<span class="ck">Get-NetFirewallProfile</span> | Select-Object Name,Enabled,DefaultInboundAction,DefaultOutboundAction
+netsh advfirewall show allprofiles
+
+<span class="cm"># 02. Listar regras de entrada e saída.</span>
+<span class="ck">Get-NetFirewallRule</span> | Where-Object{<span class="cv">$_</span>.Enabled -eq 'True'} | Select-Object DisplayName,Direction,Action,Profile
+<span class="ck">Get-NetFirewallRule</span> -Direction Inbound -Action Allow | Format-Table DisplayName,Enabled
+
+<span class="cm"># 03. Criar regra de entrada — liberar porta específica [Admin].</span>
+<span class="ck">New-NetFirewallRule</span> -DisplayName "Permitir RDP 3389" -Direction Inbound -Protocol TCP -LocalPort 3389 -Action Allow
+netsh advfirewall firewall add rule name="SSH Entrada" protocol=TCP dir=in localport=22 action=allow
+
+<span class="cm"># 04. Criar regra de saída — bloquear saída para destino [Admin].</span>
+<span class="ck">New-NetFirewallRule</span> -DisplayName "Bloquear porta 23 saída" -Direction Outbound -Protocol TCP -RemotePort 23 -Action Block
+
+<span class="cm"># 05. Remover regra existente [Admin].</span>
+<span class="ck">Remove-NetFirewallRule</span> -DisplayName "Permitir RDP 3389"
+netsh advfirewall firewall delete rule name="SSH Entrada"
+
+<span class="cm"># 06. Habilitar/desabilitar Firewall por perfil [Admin].</span>
+<span class="ck">Set-NetFirewallProfile</span> -Profile Domain,Public,Private -Enabled True
+netsh advfirewall set allprofiles state on
+netsh advfirewall set publicprofile state off  <span class="cm"># desabilitar só o perfil público</span>
+
+<span class="cm"># 07. Windows Defender — estado e varredura rápida [Admin].</span>
+<span class="ck">Get-MpComputerStatus</span> | Select-Object AntivirusEnabled,RealTimeProtectionEnabled,AMProductVersion
+<span class="ck">Start-MpScan</span> -ScanType QuickScan
+
+<span class="cm"># 08. IPSec — políticas de segurança de tráfego.</span>
+netsh ipsec static show all
+<span class="ck">Get-NetIPsecRule</span> | Select-Object DisplayName,Enabled,Mode</code></pre>
+    </div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr>
+    <tr><td>01</td><td><strong>Get-NetFirewallProfile</strong><em>Estado do Firewall</em></td><td>Mostra estado e política padrão de cada perfil.</td><td>O perfil ativo muda conforme tipo de rede — verifique antes de aplicar regras.</td></tr>
+    <tr><td>02</td><td><strong>Get-NetFirewallRule</strong><em>Listar regras</em></td><td>Lista todas as regras ativas com direção e ação.</td><td>Use -Direction e -Action para filtrar e auditar regras específicas.</td></tr>
+    <tr><td>03</td><td><strong>New-NetFirewallRule (Inbound)</strong><em>Regra de entrada</em></td><td>Cria regra para permitir ou bloquear tráfego entrante.</td><td>Especifique -Profile para limitar o escopo ao perfil correto.</td></tr>
+    <tr><td>04</td><td><strong>New-NetFirewallRule (Outbound)</strong><em>Regra de saída</em></td><td>Controla tráfego saindo da máquina.</td><td>Útil para bloquear protocolos inseguros como Telnet e FTP.</td></tr>
+    <tr><td>05</td><td><strong>Remove-NetFirewallRule</strong><em>Remover regra</em></td><td>Remove regra por nome ou identificador.</td><td>Verifique o DisplayName exato antes de remover — nomes podem ser similares.</td></tr>
+    <tr><td>06</td><td><strong>Set-NetFirewallProfile -Enabled</strong><em>Habilitar/Desabilitar</em></td><td>Controla estado do firewall por perfil.</td><td>Nunca desabilitar em produção — use regras permissivas se necessário.</td></tr>
+    <tr><td>07</td><td><strong>Get-MpComputerStatus</strong><em>Windows Defender</em></td><td>Verifica estado do antivírus e proteção em tempo real.</td><td>Use em scripts de conformidade e inventário de segurança.</td></tr>
+    <tr><td>08</td><td><strong>Get-NetIPsecRule</strong><em>IPSec</em></td><td>Lista políticas de IPSec configuradas no sistema.</td><td>Relevante em ambientes corporativos com autenticação mútua de hosts.</td></tr>
+  </table></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TEMA 07 — CAPTURA
+══════════════════════════════════════════ -->
+<section class="tema" id="captura">
+  <div class="tema-header">
+    <span class="tema-num">Tema 07</span>
+    <span class="tema-icon">📦</span>
+    <h2>Captura e Análise de Pacotes</h2>
+  </div>
+  <p class="tema-desc">Ferramentas nativas e externas para captura de tráfego, geração de PCAP e análise de protocolos no Windows.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">comandos-captura.ps1 [Admin]</span>
+      <span class="code-shell">PS · Admin</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm"># 01. Captura nativa com netsh (ETW) — gera .etl convertível para PCAP [Admin].</span>
+netsh trace start capture=yes tracefile=C:\captura.etl maxsize=500
+<span class="cm"># (reproduzir o problema)</span>
+netsh trace stop
+
+<span class="cm"># 02. Converter .etl para .pcap — requer etl2pcapng (github.com/microsoft/etl2pcapng).</span>
+etl2pcapng.exe C:\captura.etl C:\captura.pcap
+
+<span class="cm"># 03. Captura com PowerShell (Windows 10 2018+) [Admin].</span>
+<span class="ck">New-NetEventSession</span> -Name "Lab" -LocalFilePath "C:\lab.etl" -CaptureMode SaveToFile
+<span class="ck">Add-NetEventPacketCaptureProvider</span> -SessionName "Lab" -Level 4 -CaptureType BothPhysicalAndSwitch
+<span class="ck">Start-NetEventSession</span> "Lab"
+<span class="cm"># (reproduzir o problema)</span>
+<span class="ck">Stop-NetEventSession</span> "Lab"
+<span class="ck">Remove-NetEventSession</span> "Lab"
+
+<span class="cm"># 04. Wireshark para Windows — captura e análise com interface gráfica.</span>
+<span class="cm"># Download: wireshark.org — instala npcap automaticamente</span>
+<span class="cm"># Linha de comando (tshark):</span>
+tshark -i "Ethernet" -w C:\captura.pcap
+tshark -r C:\captura.pcap -Y "dns" -T fields -e dns.qry.name
+
+<span class="cm"># 05. Filtros Wireshark úteis para Windows — aplicar em display filter.</span>
+<span class="cm"># ARP:       arp</span>
+<span class="cm"># DNS:       dns</span>
+<span class="cm"># EAPOL:     eapol</span>
+<span class="cm"># ICMP:      icmp</span>
+<span class="cm"># SMB:       smb || smb2</span>
+<span class="cm"># Kerberos:  kerberos</span>
+<span class="cm"># HTTP:      http</span>
+<span class="cm"># TCP RST:   tcp.flags.reset==1</span>
+
+<span class="cm"># 06. pktmon — capturador nativo moderno (Windows 10 2004+) [Admin].</span>
+pktmon start --capture --file C:\pktmon.etl
+<span class="cm"># (reproduzir o problema)</span>
+pktmon stop
+pktmon pcapng C:\pktmon.etl -o C:\pktmon.pcap   <span class="cm"># converter para pcap</span>
+pktmon filter add -p 443                          <span class="cm"># filtrar apenas porta 443</span>
+
+<span class="cm"># 07. Monitoramento de banda por interface [Admin].</span>
+<span class="ck">Get-NetAdapterStatistics</span> -Name "Ethernet" | Select-Object ReceivedBytes,SentBytes
+<span class="ck">while</span>(<span class="cv">$true</span>){<span class="ck">Get-NetAdapterStatistics</span> "Ethernet" | Select-Object ReceivedBytes,SentBytes; Start-Sleep 2}
+
+<span class="cm"># 08. Análise de tráfego por processo — requer sysinternals TCPView ou Process Monitor.</span>
+<span class="cm"># TCPView:      live.sysinternals.com/Tcpview.exe</span>
+<span class="cm"># Process Monitor: live.sysinternals.com/Procmon.exe</span>
+<span class="cm"># NetworkMon:   microsoft.com/en-us/download/details.aspx?id=4865</span></code></div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr>
+    <tr><td>01</td><td><strong>netsh trace start</strong><em>Captura ETW nativa</em></td><td>Captura tráfego em formato ETL sem instalar nada.</td><td>Disponível em todos os Windows 7+ — ideal para ambientes sem Wireshark.</td></tr>
+    <tr><td>02</td><td><strong>etl2pcapng</strong><em>Converter ETL → PCAP</em></td><td>Converte captura nativa para formato PCAP do Wireshark.</td><td>Ferramenta oficial Microsoft — download em github.com/microsoft/etl2pcapng.</td></tr>
+    <tr><td>03</td><td><strong>New-NetEventSession</strong><em>Captura PowerShell</em></td><td>Sessão de captura ETW completa via PowerShell.</td><td>Permite captura em servidores headless sem interface gráfica.</td></tr>
+    <tr><td>04</td><td><strong>tshark</strong><em>Wireshark CLI</em></td><td>Análise de PCAP e captura em linha de comando.</td><td>Instale Wireshark — tshark é incluído automaticamente.</td></tr>
+    <tr><td>05</td><td><strong>Filtros Wireshark</strong><em>Display filters</em></td><td>Filtros específicos para protocolos Windows (SMB, Kerberos).</td><td>smb2 é essencial em ambientes Windows — inclui File Server e AD.</td></tr>
+    <tr><td>06</td><td><strong>pktmon</strong><em>Capturador moderno</em></td><td>Captura e filtra tráfego nativa com saída em PCAP.</td><td>Disponível a partir do Windows 10 2004 — nativo, sem instalação adicional.</td></tr>
+    <tr><td>07</td><td><strong>Get-NetAdapterStatistics</strong><em>Banda por interface</em></td><td>Mostra bytes enviados/recebidos por adaptador.</td><td>Use em loop para monitorar taxa de transferência em tempo real.</td></tr>
+    <tr><td>08</td><td><strong>TCPView / Process Monitor</strong><em>Sysinternals</em></td><td>Visualização gráfica de conexões por processo.</td><td>Ferramentas gratuitas Microsoft — essenciais para troubleshooting avançado.</td></tr>
+  </table></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TEMA 08 — WI-FI
+══════════════════════════════════════════ -->
+<section class="tema" id="wifi">
+  <div class="tema-header">
+    <span class="tema-num">Tema 08</span>
+    <span class="tema-icon">📶</span>
+    <h2>Wi-Fi e Interfaces Sem Fio</h2>
+  </div>
+  <p class="tema-desc">Gerenciamento de interfaces wireless, redes salvas, perfis e diagnóstico de conectividade sem fio no Windows.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">comandos-wifi.ps1</span>
+      <span class="code-shell">cmd + PS</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm"># 01. Listar redes Wi-Fi visíveis — escanear SSIDs próximos.</span>
+netsh wlan show networks mode=bssid
+<span class="ck">Get-NetAdapter</span> -Name "Wi-Fi" | Select-Object Status,LinkSpeed
+
+<span class="cm"># 02. Estado da interface Wi-Fi — informações de conexão atual.</span>
+netsh wlan show interfaces
+<span class="ck">Get-NetConnectionProfile</span> | Where-Object{<span class="cv">$_</span>.InterfaceAlias -like "*Wi*"}
+
+<span class="cm"># 03. Listar perfis salvos — todas as redes Wi-Fi conhecidas.</span>
+netsh wlan show profiles
+<span class="ck">Get-WifiProfile</span>  <span class="cm"># módulo WiFiProfileManagement (opcional)</span>
+
+<span class="cm"># 04. Ver senha de rede salva [Admin].</span>
+netsh wlan show profile name="NomeDaRede" key=clear
+<span class="cm"># Campo "Conteúdo da chave" exibe a senha em texto claro</span>
+
+<span class="cm"># 05. Conectar e desconectar de redes Wi-Fi.</span>
+netsh wlan connect name="NomeDaRede"
+netsh wlan disconnect
+
+<span class="cm"># 06. Exportar e importar perfis Wi-Fi [Admin].</span>
+netsh wlan export profile name="NomeDaRede" folder=C:\Perfis\
+netsh wlan add profile filename="C:\Perfis\NomeDaRede.xml"
+
+<span class="cm"># 07. Criar ponto de acesso (Hosted Network) [Admin].</span>
+netsh wlan set hostednetwork mode=allow ssid="LabHotspot" key="Senha12345!"
+netsh wlan start hostednetwork
+netsh wlan stop hostednetwork
+netsh wlan show hostednetwork
+
+<span class="cm"># 08. Relatório de diagnóstico Wi-Fi — histórico de conexões [Admin].</span>
+netsh wlan show wlanreport
+<span class="cm"># Relatório HTML em: C:\ProgramData\Microsoft\Windows\WlanReport\wlan-report-latest.html</span>
+<span class="ck">Start-Process</span> "C:\ProgramData\Microsoft\Windows\WlanReport\wlan-report-latest.html"</code></div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr>
+    <tr><td>01</td><td><strong>netsh wlan show networks</strong><em>Escanear redes</em></td><td>Lista SSIDs, BSSIDs, protocolos e sinal de redes próximas.</td><td>Use mode=bssid para ver todos os APs incluindo multi-BSSID.</td></tr>
+    <tr><td>02</td><td><strong>netsh wlan show interfaces</strong><em>Estado Wi-Fi</em></td><td>Mostra SSID conectado, BSSID, canal, sinal e autenticação.</td><td>Inclui força do sinal em % — útil para diagnóstico de desconexões.</td></tr>
+    <tr><td>03</td><td><strong>netsh wlan show profiles</strong><em>Redes salvas</em></td><td>Lista todos os perfis de redes Wi-Fi armazenados.</td><td>Use para auditoria de redes conhecidas e limpeza de perfis antigos.</td></tr>
+    <tr><td>04</td><td><strong>netsh wlan show profile key=clear</strong><em>Ver senha salva</em></td><td>Exibe a senha armazenada de um perfil Wi-Fi.</td><td>Requer admin. Use para recuperar senhas sem acessar o roteador.</td></tr>
+    <tr><td>05</td><td><strong>netsh wlan connect/disconnect</strong><em>Gerenciar conexão</em></td><td>Conecta a uma rede salva ou desconecta a atual.</td><td>Útil em scripts de automação de conexão por horário ou condição.</td></tr>
+    <tr><td>06</td><td><strong>netsh wlan export/add profile</strong><em>Backup de perfis</em></td><td>Exporta configuração de rede para XML e reimporta.</td><td>Use para migrar perfis de rede entre máquinas ou fazer backup.</td></tr>
+    <tr><td>07</td><td><strong>netsh wlan hostednetwork</strong><em>Ponto de acesso</em></td><td>Cria um AP virtual compartilhando a conexão.</td><td>Substituído pelo Mobile Hotspot no Windows 10/11 — ainda funciona no Server.</td></tr>
+    <tr><td>08</td><td><strong>netsh wlan show wlanreport</strong><em>Relatório Wi-Fi</em></td><td>Gera relatório HTML com histórico de conexões e falhas.</td><td>Excelente para diagnosticar desconexões intermitentes com dados históricos.</td></tr>
+  </table></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TEMA 09 — COMPARTILHAMENTO E AD
+══════════════════════════════════════════ -->
+<section class="tema" id="compartilhamento">
+  <div class="tema-header">
+    <span class="tema-num">Tema 09</span>
+    <span class="tema-icon">🖧</span>
+    <h2>Compartilhamento, SMB e Active Directory</h2>
+  </div>
+  <p class="tema-desc">Gerenciamento de compartilhamentos de rede, recursos SMB, sessões e integração com Active Directory.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">comandos-compartilhamento.ps1</span>
+      <span class="code-shell">cmd + PS</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm"># 01. Listar compartilhamentos locais.</span>
+net share
+<span class="ck">Get-SmbShare</span> | Select-Object Name,Path,Description
+
+<span class="cm"># 02. Criar e remover compartilhamento [Admin].</span>
+net share LabShare=C:\Lab /grant:Everyone,FULL
+<span class="ck">New-SmbShare</span> -Name "LabShare" -Path "C:\Lab" -FullAccess "Everyone"
+<span class="ck">Remove-SmbShare</span> -Name "LabShare" -Force
+
+<span class="cm"># 03. Listar sessões e conexões SMB abertas [Admin].</span>
+net session
+<span class="ck">Get-SmbSession</span> | Select-Object ClientComputerName,ClientUserName,NumOpens
+<span class="ck">Get-SmbConnection</span>
+
+<span class="cm"># 04. Mapear unidade de rede.</span>
+net use Z: \\servidor\LabShare /persistent:yes
+<span class="ck">New-PSDrive</span> -Name Z -PSProvider FileSystem -Root "\\servidor\LabShare" -Persist
+
+<span class="cm"># 05. Informações de domínio e controlador de domínio.</span>
+nltest /dsgetdc:dominio.com.br
+nltest /dclist:dominio.com.br
+<span class="ck">Get-ADDomainController</span> -Filter *   <span class="cm"># módulo RSAT Active Directory</span>
+
+<span class="cm"># 06. Usuários e grupos do AD [requer RSAT].</span>
+<span class="ck">Get-ADUser</span> -Filter * | Select-Object Name,SamAccountName,Enabled
+<span class="ck">Get-ADGroup</span> -Filter * | Select-Object Name,GroupCategory
+<span class="ck">Get-ADGroupMember</span> -Identity "Domain Admins"
+
+<span class="cm"># 07. GPO — listar e forçar atualização de políticas.</span>
+gpresult /r
+gpresult /h C:\relatorio-gpo.html
+gpupdate /force
+
+<span class="cm"># 08. Informações de autenticação Kerberos.</span>
+klist                      <span class="cm"># listar tickets Kerberos</span>
+klist purge                <span class="cm"># remover tickets expirados</span>
+<span class="ck">Get-WinEvent</span> -LogName Security -FilterXPath "*[System[EventID=4769]]" -MaxEvents 10</code></div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr>
+    <tr><td>01</td><td><strong>net share / Get-SmbShare</strong><em>Listar compartilhamentos</em></td><td>Lista recursos compartilhados localmente via SMB.</td><td>Inclui compartilhamentos administrativos (C$, IPC$, ADMIN$).</td></tr>
+    <tr><td>02</td><td><strong>New-SmbShare</strong><em>Criar compartilhamento</em></td><td>Cria compartilhamento com permissões definidas.</td><td>Defina permissões NTFS e de compartilhamento separadamente.</td></tr>
+    <tr><td>03</td><td><strong>Get-SmbSession</strong><em>Sessões abertas</em></td><td>Lista usuários e computadores conectados via SMB.</td><td>Use para auditoria de acesso a compartilhamentos e encerrar sessões.</td></tr>
+    <tr><td>04</td><td><strong>net use / New-PSDrive</strong><em>Mapear unidade</em></td><td>Conecta unidade de rede mapeada a letra local.</td><td>Use -Persist para manter após logoff. Exige autenticação no destino.</td></tr>
+    <tr><td>05</td><td><strong>nltest / Get-ADDomainController</strong><em>Controlador de domínio</em></td><td>Localiza e lista DCs do domínio.</td><td>Use nltest /dsgetdc quando há suspeita de falha de autenticação.</td></tr>
+    <tr><td>06</td><td><strong>Get-ADUser / Get-ADGroup</strong><em>Objetos do AD</em></td><td>Consulta usuários e grupos do Active Directory.</td><td>Requer módulo RSAT-AD-PowerShell — instalável via RSAT.</td></tr>
+    <tr><td>07</td><td><strong>gpresult / gpupdate</strong><em>Políticas de grupo</em></td><td>Exibe GPOs aplicadas e força atualização de políticas.</td><td>gpresult /h gera relatório HTML muito mais legível que /r.</td></tr>
+    <tr><td>08</td><td><strong>klist</strong><em>Tickets Kerberos</em></td><td>Lista e gerencia tickets de autenticação Kerberos.</td><td>Use klist purge quando houver erros de autenticação após mudança de senha.</td></tr>
+  </table></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TEMA 10 — SERVIÇOS E PROCESSOS
+══════════════════════════════════════════ -->
+<section class="tema" id="servicos">
+  <div class="tema-header">
+    <span class="tema-num">Tema 10</span>
+    <span class="tema-icon">🧰</span>
+    <h2>Serviços de Rede, Agendamento e Processos</h2>
+  </div>
+  <p class="tema-desc">Gestão de serviços, tarefas agendadas, WinRM, SSH nativo e administração remota no Windows.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">comandos-servicos.ps1</span>
+      <span class="code-shell">PS · Admin</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm"># 01. WinRM — habilitar gerenciamento remoto PowerShell [Admin].</span>
+<span class="ck">Enable-PSRemoting</span> -Force
+winrm quickconfig
+<span class="ck">Test-WSMan</span> -ComputerName servidor01
+
+<span class="cm"># 02. Executar comando remoto via WinRM.</span>
+<span class="ck">Invoke-Command</span> -ComputerName servidor01 -ScriptBlock {<span class="ck">Get-NetIPAddress</span>}
+<span class="ck">Enter-PSSession</span> -ComputerName servidor01
+
+<span class="cm"># 03. SSH nativo no Windows (OpenSSH) [Admin].</span>
+<span class="ck">Add-WindowsCapability</span> -Online -Name OpenSSH.Server~~~~0.0.1.0
+<span class="ck">Start-Service</span> sshd
+<span class="ck">Set-Service</span> -Name sshd -StartupType Automatic
+ssh usuario@192.168.1.10
+
+<span class="cm"># 04. DHCP Server no Windows Server [Admin].</span>
+<span class="ck">Get-DhcpServerv4Scope</span>
+<span class="ck">Get-DhcpServerv4Lease</span> -ScopeId 192.168.1.0
+<span class="ck">Add-DhcpServerv4Reservation</span> -ScopeId 192.168.1.0 -IPAddress 192.168.1.50 -ClientId "AA:BB:CC:DD:EE:FF" -Description "Impressora"
+
+<span class="cm"># 05. NTP — sincronização de hora.</span>
+w32tm /query /status
+w32tm /config /manualpeerlist:a.ntp.br /syncfromflags:manual /reliable:yes /update
+<span class="ck">Restart-Service</span> w32time
+
+<span class="cm"># 06. IIS — servidor web nativo do Windows [Admin].</span>
+<span class="ck">Get-WebSite</span>                        <span class="cm"># listar sites IIS</span>
+<span class="ck">Start-WebSite</span> -Name "Default Web Site"
+<span class="ck">Get-WebBinding</span> -Name "Default Web Site"
+iisreset                             <span class="cm"># reiniciar IIS</span>
+
+<span class="cm"># 07. Tarefas agendadas — listar e criar.</span>
+<span class="ck">Get-ScheduledTask</span> | Where-Object{<span class="cv">$_</span>.State -eq 'Ready'} | Select-Object TaskName,TaskPath
+<span class="ck">Register-ScheduledTask</span> -TaskName "BackupRede" -Trigger (<span class="ck">New-ScheduledTaskTrigger</span> -Daily -At "02:00") -Action (<span class="ck">New-ScheduledTaskAction</span> -Execute "robocopy.exe" -Argument "C:\Dados \\srv\backup /MIR")
+
+<span class="cm"># 08. RDP — habilitar acesso remoto [Admin].</span>
+<span class="ck">Set-ItemProperty</span> -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
+<span class="ck">Enable-NetFirewallRule</span> -DisplayGroup "Remote Desktop"
+mstsc /v:192.168.1.10</code></div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr>
+    <tr><td>01</td><td><strong>Enable-PSRemoting</strong><em>WinRM</em></td><td>Habilita gerenciamento remoto via PowerShell.</td><td>Necessário antes de usar Invoke-Command ou Enter-PSSession.</td></tr>
+    <tr><td>02</td><td><strong>Invoke-Command / Enter-PSSession</strong><em>Sessão remota</em></td><td>Executa comandos ou abre shell interativo em host remoto.</td><td>Equivalente ao SSH com PowerShell como shell.</td></tr>
+    <tr><td>03</td><td><strong>OpenSSH Server</strong><em>SSH nativo</em></td><td>Instala e ativa servidor SSH nativo do Windows.</td><td>Disponível desde Windows 10 1809 — preferível ao WinRM em ambientes heterogêneos.</td></tr>
+    <tr><td>04</td><td><strong>Get-DhcpServerv4Lease</strong><em>DHCP Server</em></td><td>Lista leases e reservas do servidor DHCP Windows.</td><td>Requer papel DHCP Server instalado no Windows Server.</td></tr>
+    <tr><td>05</td><td><strong>w32tm</strong><em>NTP</em></td><td>Configura e verifica sincronização de horário NTP.</td><td>Hora correta é crítica para Kerberos — desvio maior que 5 min bloqueia autenticação.</td></tr>
+    <tr><td>06</td><td><strong>Get-WebSite / iisreset</strong><em>IIS</em></td><td>Gerencia sites e pools de aplicações do IIS.</td><td>Requer módulo WebAdministration — importar com Import-Module WebAdministration.</td></tr>
+    <tr><td>07</td><td><strong>Register-ScheduledTask</strong><em>Tarefas agendadas</em></td><td>Cria tarefas automáticas via PowerShell.</td><td>Prefira PowerShell ao schtasks.exe para tarefas complexas.</td></tr>
+    <tr><td>08</td><td><strong>mstsc / RDP</strong><em>Acesso remoto RDP</em></td><td>Habilita e abre sessões de Área de Trabalho Remota.</td><td>Use Network Level Authentication (NLA) obrigatório em produção.</td></tr>
+  </table></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TEMA 11 — MONITORAMENTO
+══════════════════════════════════════════ -->
+<section class="tema" id="monitoramento">
+  <div class="tema-header">
+    <span class="tema-num">Tema 11</span>
+    <span class="tema-icon">📊</span>
+    <h2>Monitoramento, Performance e Capacidade</h2>
+  </div>
+  <p class="tema-desc">Coleta de métricas de CPU, memória, disco e rede; contadores de desempenho e monitoramento em tempo real.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">comandos-monitoramento.ps1</span>
+      <span class="code-shell">PS · cmd</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm"># 01. CPU, memória e processos — resumo de uso de recursos.</span>
+<span class="ck">Get-Process</span> | Sort-Object CPU -Descending | Select-Object -First 10 Name,CPU,WorkingSet
+<span class="ck">Get-WmiObject</span> Win32_OperatingSystem | Select-Object FreePhysicalMemory,TotalVisibleMemorySize
+
+<span class="cm"># 02. Desempenho de rede — bytes enviados/recebidos por adaptador.</span>
+<span class="ck">Get-Counter</span> "\Network Interface(*)\Bytes Total/sec"
+<span class="ck">Get-Counter</span> "\Network Interface(*)\Packets Received Errors"
+
+<span class="cm"># 03. Uso de disco — espaço livre por volume.</span>
+<span class="ck">Get-PSDrive</span> -PSProvider FileSystem | Select-Object Name,Used,Free
+<span class="ck">Get-Volume</span> | Select-Object DriveLetter,FileSystem,Size,SizeRemaining
+
+<span class="cm"># 04. Contadores de Performance — via perfmon ou PowerShell.</span>
+<span class="ck">Get-Counter</span> -Counter "\Processor(_Total)\% Processor Time" -Continuous -SampleInterval 2
+<span class="ck">Get-Counter</span> "\TCPv4\Connections Established"
+
+<span class="cm"># 05. Monitor de banda por processo — via Get-NetAdapterStatistics.</span>
+<span class="ck">Get-NetAdapterStatistics</span> | Select-Object Name,ReceivedBytes,SentBytes,ReceivedUnicastPackets
+
+<span class="cm"># 06. Resource Monitor — abrir monitor de recursos gráfico.</span>
+resmon.exe
+<span class="cm"># Ou via perfmon:</span>
+perfmon.exe
+
+<span class="cm"># 07. Relatório de saúde do sistema — coleta automática [Admin].</span>
+<span class="ck">Get-Counter</span> -ListSet * | Select-Object CounterSetName | Sort-Object CounterSetName
+<span class="cm"># Exportar métricas para CSV:</span>
+<span class="ck">Get-Counter</span> "\Network Interface(*)\Bytes Total/sec" -MaxSamples 60 | <span class="ck">Export-Counter</span> -Path C:\metricas.csv -FileFormat CSV
+
+<span class="cm"># 08. Uptime e informações de sistema.</span>
+<span class="ck">Get-CimInstance</span> -ClassName Win32_OperatingSystem | Select-Object LastBootUpTime,@{N='Uptime';E={(Get-Date)-<span class="cv">$_</span>.LastBootUpTime}}
+(Get-Date) - (gcim Win32_OperatingSystem).LastBootUpTime</code></div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr>
+    <tr><td>01</td><td><strong>Get-Process | Sort CPU</strong><em>Top processos</em></td><td>Lista processos ordenados por uso de CPU/memória.</td><td>Equivalente ao top/htop do Linux — use em investigações de alta carga.</td></tr>
+    <tr><td>02</td><td><strong>Get-Counter Network Interface</strong><em>Bytes por interface</em></td><td>Taxa de transferência em bytes/seg por adaptador.</td><td>Use -Continuous para monitoramento contínuo com interval definido.</td></tr>
+    <tr><td>03</td><td><strong>Get-Volume</strong><em>Uso de disco</em></td><td>Espaço usado e livre em todos os volumes.</td><td>Crie alerta quando SizeRemaining cair abaixo de 10%.</td></tr>
+    <tr><td>04</td><td><strong>Get-Counter TCPv4 Connections</strong><em>Conexões TCP</em></td><td>Número de conexões TCP ativas no sistema.</td><td>Monitore para detectar sobrecarga ou ataques de conexão.</td></tr>
+    <tr><td>05</td><td><strong>Get-NetAdapterStatistics</strong><em>Estatísticas NIC</em></td><td>Pacotes e bytes por adaptador de rede.</td><td>Compare ReceivedUnicastPackets antes e depois de um teste.</td></tr>
+    <tr><td>06</td><td><strong>resmon / perfmon</strong><em>Monitor gráfico</em></td><td>Visualização gráfica de CPU, memória, disco e rede.</td><td>resmon.exe mostra uso por processo — excelente para diagnóstico visual.</td></tr>
+    <tr><td>07</td><td><strong>Export-Counter</strong><em>Exportar métricas</em></td><td>Salva contadores em CSV ou BLG para análise posterior.</td><td>Use para baseline de desempenho antes e após alterações.</td></tr>
+    <tr><td>08</td><td><strong>Get-CimInstance Win32_OperatingSystem</strong><em>Uptime</em></td><td>Mostra data do último boot e tempo online.</td><td>Use para verificar se reinicializações inesperadas ocorreram.</td></tr>
+  </table></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TEMA 12 — LOGS E AUDITORIA
+══════════════════════════════════════════ -->
+<section class="tema" id="logs">
+  <div class="tema-header">
+    <span class="tema-num">Tema 12</span>
+    <span class="tema-icon">📜</span>
+    <h2>Logs e Auditoria Operacional</h2>
+  </div>
+  <p class="tema-desc">Consulta ao Windows Event Log, logs de segurança, auditoria de autenticação e eventos críticos do sistema.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">comandos-logs.ps1</span>
+      <span class="code-shell">PS · Admin</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm"># 01. Listar logs disponíveis — canais de log do sistema.</span>
+<span class="ck">Get-WinEvent</span> -ListLog * | Select-Object LogName,RecordCount,IsEnabled | Sort-Object RecordCount -Descending | Select-Object -First 20
+
+<span class="cm"># 02. Erros do sistema — log System, últimas 24 horas.</span>
+<span class="ck">Get-WinEvent</span> -LogName System -MaxEvents 50 | Where-Object{<span class="cv">$_</span>.Level -le 2} | Select-Object TimeCreated,Id,Message
+eventvwr.msc                <span class="cm"># abrir Visualizador de Eventos gráfico</span>
+
+<span class="cm"># 03. Log de Segurança — eventos de autenticação [Admin].</span>
+<span class="ck">Get-WinEvent</span> -LogName Security -MaxEvents 100 | Where-Object{<span class="cv">$_</span>.Id -in 4624,4625,4634,4647,4648} | Select-Object TimeCreated,Id,Message
+
+<span class="cm"># Eventos de segurança mais importantes:
+# 4624 = Logon bem-sucedido
+# 4625 = Falha de logon
+# 4634 = Logoff
+# 4648 = Logon com credenciais explícitas
+# 4740 = Conta bloqueada
+# 4769 = Solicitação de ticket Kerberos (TGS)
+# 7045 = Novo serviço instalado</span>
+
+<span class="cm"># 04. Falhas de logon — identificar tentativas de acesso.</span>
+<span class="ck">Get-WinEvent</span> -LogName Security -FilterXPath "*[System[EventID=4625]]" -MaxEvents 20 | Select-Object TimeCreated,Message
+
+<span class="cm"># 05. Log de aplicações — erros de software.</span>
+<span class="ck">Get-WinEvent</span> -LogName Application -MaxEvents 30 | Where-Object{<span class="cv">$_</span>.Level -le 2} | Select-Object TimeCreated,ProviderName,Id,Message
+
+<span class="cm"># 06. Eventos de rede — firewall e conexões.</span>
+<span class="ck">Get-WinEvent</span> -LogName "Microsoft-Windows-Windows Firewall With Advanced Security/Firewall" -MaxEvents 20
+
+<span class="cm"># 07. Exportar log para CSV para análise.</span>
+<span class="ck">Get-WinEvent</span> -LogName Security -MaxEvents 500 | Where-Object{<span class="cv">$_</span>.Id -eq 4625} | <span class="ck">Export-Csv</span> C:\falhas-logon.csv -NoTypeInformation
+
+<span class="cm"># 08. Limpar log de eventos [Admin] — usar com cautela.</span>
+<span class="ck">Clear-EventLog</span> -LogName Application
+wevtutil cl System   <span class="cm"># limpar log do sistema</span></code></div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr>
+    <tr><td>01</td><td><strong>Get-WinEvent -ListLog</strong><em>Listar logs</em></td><td>Descobre todos os canais de log disponíveis.</td><td>Use para encontrar logs de aplicações específicas e serviços do Windows.</td></tr>
+    <tr><td>02</td><td><strong>Get-WinEvent -LogName System</strong><em>Log do sistema</em></td><td>Erros e avisos do sistema operacional.</td><td>Filtre por Level ≤ 2 para ver apenas erros e críticos.</td></tr>
+    <tr><td>03</td><td><strong>Get-WinEvent -LogName Security</strong><em>Log de segurança</em></td><td>Eventos de autenticação, logon e auditoria.</td><td>Monitorar IDs 4625 e 4740 para detectar ataques de força bruta.</td></tr>
+    <tr><td>04</td><td><strong>EventID 4625</strong><em>Falhas de logon</em></td><td>Registra cada tentativa de logon falha com origem.</td><td>Use XPath filter para consultas eficientes em logs grandes.</td></tr>
+    <tr><td>05</td><td><strong>Get-WinEvent -LogName Application</strong><em>Log de aplicações</em></td><td>Erros de software e serviços instalados.</td><td>Primeiro lugar para verificar após crash de aplicação ou serviço.</td></tr>
+    <tr><td>06</td><td><strong>Log do Firewall</strong><em>Eventos de rede</em></td><td>Registra mudanças de regras e bloqueios do firewall.</td><td>Habilitar auditoria do firewall via GPO para logs de conexão.</td></tr>
+    <tr><td>07</td><td><strong>Export-Csv</strong><em>Exportar para análise</em></td><td>Salva eventos em CSV para análise em Excel ou SIEM.</td><td>Use para relatórios periódicos de segurança e conformidade.</td></tr>
+    <tr><td>08</td><td><strong>Clear-EventLog</strong><em>Limpar log</em></td><td>Remove entradas do log — use com cautela em produção.</td><td>Exporte antes de limpar. Em auditoria, considerar implicações legais.</td></tr>
+  </table></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TEMA 13 — AUTOMAÇÃO
+══════════════════════════════════════════ -->
+<section class="tema" id="automacao">
+  <div class="tema-header">
+    <span class="tema-num">Tema 13</span>
+    <span class="tema-icon">⚙️</span>
+    <h2>Automação, Scripts e Administração Remota</h2>
+  </div>
+  <p class="tema-desc">Padrões de automação com PowerShell, execução remota em massa, inventário automático e integração com ferramentas de gestão.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">comandos-automacao.ps1</span>
+      <span class="code-shell">PowerShell</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm"># 01. Execução remota em múltiplos hosts simultaneamente.</span>
+<span class="cv">$hosts</span> = @("srv01","srv02","srv03")
+<span class="ck">Invoke-Command</span> -ComputerName <span class="cv">$hosts</span> -ScriptBlock {
+    [PSCustomObject]@{
+        Host  = <span class="cv">$env:COMPUTERNAME</span>
+        IP    = (<span class="ck">Get-NetIPAddress</span> -AddressFamily IPv4 | Where-Object{<span class="cv">$_</span>.PrefixOrigin -ne 'WellKnown'}).IPAddress
+        Uptime= ((Get-Date)-(gcim Win32_OperatingSystem).LastBootUpTime).Days
+    }
+}
+
+<span class="cm"># 02. Inventário automático de rede — coletar IPs e status de vários hosts.</span>
+<span class="cv">$rede</span> = 1..254 | ForEach-Object -Parallel {
+    <span class="cv">$ip</span> = "192.168.1.<span class="cv">$_</span>"
+    <span class="ck">if</span>(<span class="ck">Test-Connection</span> <span class="cv">$ip</span> -Count 1 -Quiet){
+        [PSCustomObject]@{IP=<span class="cv">$ip</span>;DNS=(<span class="ck">Resolve-DnsName</span> <span class="cv">$ip</span> -ErrorAction SilentlyContinue).NameHost}
+    }
+} -ThrottleLimit 32
+<span class="cv">$rede</span> | <span class="ck">Export-Csv</span> C:\inventario.csv -NoTypeInformation
+
+<span class="cm"># 03. Verificar serviços em múltiplos servidores.</span>
+<span class="ck">Invoke-Command</span> -ComputerName <span class="cv">$hosts</span> -ScriptBlock {
+    <span class="ck">Get-Service</span> WinRM,W32Time,DNS -ErrorAction SilentlyContinue
+} | Select-Object MachineName,DisplayName,Status
+
+<span class="cm"># 04. Backup de configuração de rede — exportar configuração completa.</span>
+netsh dump | <span class="ck">Out-File</span> "C:\backup-rede-$(Get-Date -Format 'yyyyMMdd').txt"
+<span class="ck">Get-NetIPAddress</span> | <span class="ck">Export-Csv</span> "C:\backup-ip.csv"
+<span class="ck">Get-NetRoute</span> | <span class="ck">Export-Csv</span> "C:\backup-rotas.csv"
+
+<span class="cm"># 05. Relatório HTML de inventário de rede.</span>
+<span class="ck">Get-NetAdapter</span> | <span class="ck">ConvertTo-Html</span> -Title "Inventário de Rede" -PreContent "<h2>Adaptadores</h2>" |
+  <span class="ck">Out-File</span> "C:\relatorio-rede.html"
+<span class="ck">Start-Process</span> "C:\relatorio-rede.html"
+
+<span class="cm"># 06. Monitorar disponibilidade e alertar — loop com notificação.</span>
+<span class="cv">$hosts</span> | ForEach-Object {
+    <span class="ck">if</span>(!(<span class="ck">Test-Connection</span> <span class="cv">$_</span> -Count 1 -Quiet)){
+        <span class="ck">Write-Warning</span> "HOST INACESSÍVEL: <span class="cv">$_</span> em $(Get-Date)"
+        <span class="cm"># Enviar email ou chamar API de alerta aqui</span>
+    }
+}
+
+<span class="cm"># 07. PowerShell Remoting em massa — aplicar patch de configuração.</span>
+<span class="ck">Invoke-Command</span> -ComputerName <span class="cv">$hosts</span> -ScriptBlock {
+    <span class="ck">Set-DnsClientServerAddress</span> -InterfaceAlias "Ethernet" -ServerAddresses "8.8.8.8","1.1.1.1"
+    "DNS atualizado em <span class="cv">$env:COMPUTERNAME</span>"
+}
+
+<span class="cm"># 08. Configurar política de execução e importar módulos de rede.</span>
+<span class="ck">Set-ExecutionPolicy</span> -ExecutionPolicy RemoteSigned -Scope CurrentUser
+<span class="ck">Import-Module</span> NetTCPIP, DnsClient, NetAdapter
+<span class="ck">Get-Module</span> -ListAvailable | Where-Object{<span class="cv">$_</span>.Name -like "Net*"}</code></div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr>
+    <tr><td>01</td><td><strong>Invoke-Command -ComputerName</strong><em>Execução remota em massa</em></td><td>Executa bloco de código em múltiplos hosts simultaneamente.</td><td>Use -AsJob para rodar em background e coletar resultados depois.</td></tr>
+    <tr><td>02</td><td><strong>ForEach-Object -Parallel</strong><em>Inventário paralelo</em></td><td>Varre sub-rede em paralelo com ThrottleLimit controlado.</td><td>PS 7+ requerido para -Parallel. Use jobs em PS 5.1.</td></tr>
+    <tr><td>03</td><td><strong>Invoke-Command + Get-Service</strong><em>Status de serviços</em></td><td>Verifica serviços em lista de servidores de uma vez.</td><td>Excelente para verificações de pré-manutenção e health checks.</td></tr>
+    <tr><td>04</td><td><strong>netsh dump</strong><em>Backup de configuração</em></td><td>Exporta toda a configuração de rede para arquivo.</td><td>Execute antes de qualquer mudança de rede para rollback.</td></tr>
+    <tr><td>05</td><td><strong>ConvertTo-Html</strong><em>Relatório HTML</em></td><td>Gera relatório web a partir de objetos PowerShell.</td><td>Combine com CSS para relatórios profissionais de inventário.</td></tr>
+    <tr><td>06</td><td><strong>Test-Connection em loop</strong><em>Monitoramento básico</em></td><td>Verifica disponibilidade de hosts periodicamente.</td><td>Para monitoramento simples — em produção use ferramentas dedicadas.</td></tr>
+    <tr><td>07</td><td><strong>Invoke-Command + Set-Dns</strong><em>Aplicar configuração</em></td><td>Aplica configuração de DNS em toda a lista de hosts.</td><td>Modelo de script de remediação em massa para incidentes de DNS.</td></tr>
+    <tr><td>08</td><td><strong>Set-ExecutionPolicy + Import-Module</strong><em>Preparar ambiente</em></td><td>Configura política de execução e carrega módulos de rede.</td><td>RemoteSigned é o equilíbrio entre segurança e usabilidade.</td></tr>
+  </table></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TEMA 14 — TROUBLESHOOTING
+══════════════════════════════════════════ -->
+<section class="tema" id="troubleshooting">
+  <div class="tema-header">
+    <span class="tema-num">Tema 14</span>
+    <span class="tema-icon">🛠️</span>
+    <h2>Fluxos Rápidos de Troubleshooting</h2>
+  </div>
+  <p class="tema-desc">Sequências de diagnóstico para os cenários mais comuns de falha de rede no Windows, do mais simples ao mais específico.</p>
+
+  <div class="code-block">
+    <div class="code-top">
+      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <span class="code-fname">troubleshooting-windows.ps1</span>
+      <span class="code-shell">cmd + PS</span>
+      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
+    </div>
+    <div class="code-body"><code><span class="cm">## FLUXO 1 — Sem conectividade à Internet</span>
+ipconfig /all                      <span class="cm"># 1. Verificar IP, gateway e DNS configurados</span>
+ping 127.0.0.1                     <span class="cm"># 2. Stack TCP/IP local funciona?</span>
+ping 192.168.1.1                   <span class="cm"># 3. Gateway responde? (substituir pelo seu gateway)</span>
+ping 8.8.8.8                       <span class="cm"># 4. Internet responde (IP direto, sem DNS)?</span>
+ping google.com                    <span class="cm"># 5. DNS resolve? Se 4 OK e 5 não, problema de DNS</span>
+ipconfig /flushdns                 <span class="cm"># 6. Limpar cache DNS corrompido</span>
+netsh winsock reset                <span class="cm"># 7. [Admin] Reset Winsock — problemas de stack</span>
+netsh int ip reset                 <span class="cm"># 8. [Admin] Reset configuração IP</span>
+ipconfig /release && ipconfig /renew   <span class="cm"># 9. Renovar DHCP</span>
+
+<span class="cm">## FLUXO 2 — DNS não resolve</span>
+nslookup google.com                <span class="cm"># 1. Testar DNS padrão</span>
+nslookup google.com 8.8.8.8       <span class="cm"># 2. Testar com Google DNS — se funcionar, DNS local com problema</span>
+ipconfig /flushdns                 <span class="cm"># 3. Limpar cache</span>
+<span class="ck">Get-DnsClientServerAddress</span>        <span class="cm"># 4. Verificar DNS configurado por interface</span>
+<span class="ck">Set-DnsClientServerAddress</span> -InterfaceAlias "Ethernet" -ServerAddresses "8.8.8.8"  <span class="cm"># 5. [Admin] Forçar DNS externo</span>
+<span class="ck">Resolve-DnsName</span> google.com -Server 8.8.8.8   <span class="cm"># 6. Validar após mudança</span>
+
+<span class="cm">## FLUXO 3 — Serviço não acessível na rede</span>
+<span class="ck">Test-NetConnection</span> -ComputerName 192.168.1.10 -Port 443   <span class="cm"># 1. Porta TCP acessível?</span>
+netstat -ano | findstr :443        <span class="cm"># 2. Serviço está em escuta?</span>
+<span class="ck">Get-NetFirewallRule</span> | Where-Object{<span class="cv">$_</span>.LocalPort -eq '443'}   <span class="cm"># 3. Regra de firewall existe?</span>
+<span class="ck">Get-Service</span> -Name "W3SVC"         <span class="cm"># 4. Serviço está rodando?</span>
+ping 192.168.1.10                  <span class="cm"># 5. Host responde ICMP?</span>
+tracert 192.168.1.10              <span class="cm"># 6. Qual salto está bloqueando?</span>
+
+<span class="cm">## FLUXO 4 — Lentidão e alta latência</span>
+<span class="ck">Get-Counter</span> "\Network Interface(*)\Bytes Total/sec"   <span class="cm"># 1. Saturação de interface?</span>
+netstat -ano | findstr ESTABLISHED | <span class="ck">Measure-Object</span>   <span class="cm"># 2. Muitas conexões?</span>
+<span class="ck">Get-Process</span> | Sort-Object CPU -Desc | Select-Object -First 5   <span class="cm"># 3. Processo consumindo CPU?</span>
+pathping 8.8.8.8                   <span class="cm"># 4. Perda em algum salto?</span>
+<span class="ck">Get-NetAdapterStatistics</span> -Name "Ethernet"   <span class="cm"># 5. Erros de pacote na interface?</span>
+
+<span class="cm">## FLUXO 5 — Autenticação AD falhando</span>
+nltest /sc_verify:dominio.com.br   <span class="cm"># 1. Canal seguro com DC OK?</span>
+klist                              <span class="cm"># 2. Tickets Kerberos presentes?</span>
+klist purge                        <span class="cm"># 3. Limpar tickets expirados</span>
+w32tm /query /status               <span class="cm"># 4. Hora sincronizada? (desvio >5min bloqueia Kerberos)</span>
+w32tm /resync                      <span class="cm"># 5. Forçar sincronização</span>
+<span class="ck">Get-WinEvent</span> -LogName Security -FilterXPath "*[System[EventID=4740]]" -MaxEvents 10   <span class="cm"># 6. Conta bloqueada?</span>
+ping dominio.com.br                <span class="cm"># 7. DC acessível?</span>
+
+<span class="cm">## FLUXO 6 — Reset completo de configuração de rede [Admin]</span>
+netsh winsock reset
+netsh int ip reset C:\resetlog.txt
+netsh advfirewall reset
+ipconfig /release
+ipconfig /flushdns
+ipconfig /renew
+<span class="ck">Restart-Computer</span> -Force           <span class="cm"># reinicialização necessária após reset</span></code></div>
+  </div>
+
+  <p class="map-label">Mapa rápido de uso</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Fluxo</th><th>Cenário</th><th>Diagnóstico inicial</th></tr>
+    <tr><td>01</td><td><strong>Sem Internet</strong><em>Sem conectividade</em></td><td>Máquina não acessa a Internet.</td><td>Seguir pilha: loopback → gateway → IP externo → DNS. Isolar a camada com falha.</td></tr>
+    <tr><td>02</td><td><strong>DNS não resolve</strong><em>Resolução de nomes</em></td><td>Aplicações não resolvem nomes mas IP direto funciona.</td><td>Testar com DNS externo (8.8.8.8). Se funcionar, problema é no DNS configurado.</td></tr>
+    <tr><td>03</td><td><strong>Serviço inacessível</strong><em>Porta TCP bloqueada</em></td><td>Não consegue conectar em serviço remoto.</td><td>Verificar se serviço escuta, firewall permite e rota existe.</td></tr>
+    <tr><td>04</td><td><strong>Lentidão de rede</strong><em>Alta latência</em></td><td>Conexão lenta ou timeouts intermitentes.</td><td>Verificar saturação de link, erros de NIC e perda por salto com pathping.</td></tr>
+    <tr><td>05</td><td><strong>Autenticação AD</strong><em>Kerberos / LDAP</em></td><td>Login no domínio falha ou acesso a recursos negado.</td><td>Verificar canal seguro, hora sincronizada e tickets Kerberos.</td></tr>
+    <tr><td>06</td><td><strong>Reset de rede</strong><em>Último recurso</em></td><td>Configuração corrompida após mudanças ou malware.</td><td>Resetar Winsock, IP e firewall. Reinicialização necessária após o reset.</td></tr>
+  </table></div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════ -->
+<footer>
+  <strong style="color:var(--muted)">Prof. Dr. Laerte Peotta de Melo</strong> •
+  <a href="https://peotta.github.io">peotta.github.io</a> •
+  <a href="https://peotta.github.io/linux.html">Versão Linux</a> •
+  Windows 10 / 11 / Server 2019 / 2022 • cmd · PowerShell · netsh · WinRM
+</footer>
+
+</div><!-- /wrap -->
+
+<script>
+/* ── MATRIX RAIN ── */
+(function(){
+  const cv=document.getElementById('mx');
+  const ctx=cv.getContext('2d');
+  const chars='01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*<>{}[]アイウエオカキクケコサシスセソ';
+  let W,H,cols,drops,fs;
+  function resize(){
+    W=cv.width=window.innerWidth;
+    H=cv.height=window.innerHeight;
+    fs=Math.max(12,Math.floor(W/110));
+    cols=Math.floor(W/fs);
+    drops=Array.from({length:cols},()=>Math.floor(Math.random()*H/fs));
+    ctx.font=fs+'px Courier New,monospace';
+  }
+  function draw(){
+    ctx.fillStyle='rgba(1,4,3,0.1)';
+    ctx.fillRect(0,0,W,H);
+    ctx.font=fs+'px Courier New,monospace';
+    for(let i=0;i<drops.length;i++){
+      const t=chars[Math.floor(Math.random()*chars.length)];
+      const x=i*fs, y=drops[i]*fs;
+      ctx.fillStyle=Math.random()>.97?'rgba(220,255,232,.7)':'rgba(57,255,122,.28)';
+      ctx.shadowColor='rgba(57,255,122,.2)';ctx.shadowBlur=6;
+      ctx.fillText(t,x,y);ctx.shadowBlur=0;
+      if(y>H&&Math.random()>.975)drops[i]=0;
+      drops[i]+=1;
+    }
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize);
+  resize();draw();
+})();
+
+/* ── COPIAR BLOCO ── */
+function copyBlock(btn){
+  const code=btn.closest('.code-block').querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(()=>{
+    const orig=btn.textContent;
+    btn.textContent='✓ Copiado';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent=orig;btn.classList.remove('copied');},2000);
+  });
+}
+
+/* ── SIDEBAR ACTIVE STATE ── */
+(function(){
+  const items=document.querySelectorAll('.sb-item');
+  const secs=document.querySelectorAll('.tema');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const id=e.target.id;
+        items.forEach(a=>{
+          a.classList.toggle('active',a.getAttribute('href')==='#'+id);
+        });
+      }
+    });
+  },{threshold:.25,rootMargin:'-60px 0px -60% 0px'});
+  secs.forEach(s=>obs.observe(s));
+})();
+</script>
+</body>
+</html>
