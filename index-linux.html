@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="Prof. Dr. Laerte Peotta de Melo" name="author"/>
+<meta content="Curso Linux Essentials &amp; Security para Engenharia de Redes — teoria, prática, diagramas e avaliações." name="description"/>
+<title>Linux Essentials &amp; Security | Prof. Dr. Laerte Peotta de Melo</title>
+<link href="assets/style.css?v=3.0" rel="stylesheet"/>
+</head>
+<body>
+<div class="wrap">
+<aside class="sidebar">
+<div class="sb-author">
+  <div class="sb-avatar">LP</div>
+  <div class="sb-name">Prof. Dr. Laerte Peotta de Melo</div>
+  <div class="sb-sub">Linux · Redes · Segurança</div>
+</div>
+<div class="sb-label">Navegação detalhada</div>
+<nav>
+<a class="sb-item" href="#inicio"><span class="sb-icon">⌁</span><span>Início</span><span class="sb-badge">Curso</span></a>
+<a class="sb-item" href="#dashboard"><span class="sb-icon">▣</span><span>Dashboard</span></a>
+<a class="sb-item" href="#mapa"><span class="sb-icon">⌬</span><span>Mapa do curso</span></a>
+
+<div class="sb-section">
+<a class="sb-item sb-main" href="#m1"><span class="sb-icon">1</span><span>Fundamentos Linux</span></a>
+<a class="sb-subitem" href="#m1-a1">Unix, GNU/Linux e distribuições</a>
+<a class="sb-subitem" href="#m1-a2">Kernel, shell e syscalls</a>
+<a class="sb-subitem" href="#m1-a3">Hierarquia de diretórios (FHS)</a>
+<a class="sb-subitem" href="#m1-a4">Navegação, arquivos e pipes</a>
+<a class="sb-subitem quiz-link" href="#quiz-m1">Avaliação do módulo</a>
+</div>
+
+<div class="sb-section">
+<a class="sb-item sb-main" href="#m2"><span class="sb-icon">2</span><span>Administração Linux</span></a>
+<a class="sb-subitem" href="#m2-a1">Usuários, grupos e identidade</a>
+<a class="sb-subitem" href="#m2-a2">Permissões em arquivos</a>
+<a class="sb-subitem" href="#m2-a3">Processos e serviços</a>
+<a class="sb-subitem" href="#m2-a4">Pacotes, logs e cron</a>
+<a class="sb-subitem quiz-link" href="#quiz-m2">Avaliação do módulo</a>
+</div>
+
+<div class="sb-section">
+<a class="sb-item sb-main" href="#m3"><span class="sb-icon">3</span><span>Linux para Redes</span></a>
+<a class="sb-subitem" href="#m3-a1">Interfaces, endereços e modelo TCP/IP</a>
+<a class="sb-subitem" href="#m3-a2">Portas, sockets e serviços</a>
+<a class="sb-subitem" href="#m3-a3">DNS e resolução de nomes</a>
+<a class="sb-subitem" href="#m3-a4">Rotas, troubleshooting e captura</a>
+<a class="sb-subitem quiz-link" href="#quiz-m3">Avaliação do módulo</a>
+</div>
+
+<div class="sb-section">
+<a class="sb-item sb-main" href="#m4"><span class="sb-icon">4</span><span>Segurança Linux</span></a>
+<a class="sb-subitem" href="#m4-a1">Princípios de hardening</a>
+<a class="sb-subitem" href="#m4-a2">Logs e investigação de autenticação</a>
+<a class="sb-subitem" href="#m4-a3">Firewall de host</a>
+<a class="sb-subitem" href="#m4-a4">SSH seguro e auditoria defensiva</a>
+<a class="sb-subitem quiz-link" href="#quiz-m4">Avaliação do módulo</a>
+</div>
+
+<a class="sb-item" href="#diretorios"><span class="sb-icon">/</span><span>Ref: diretórios</span></a>
+<a class="sb-item" href="#permissoes"><span class="sb-icon">⚿</span><span>Ref: permissões</span></a>
+<a class="sb-item" href="#lab"><span class="sb-icon">⚙</span><span>Ambiente de laboratório</span></a>
+<a class="sb-item" href="#glossario"><span class="sb-icon">≡</span><span>Glossário técnico</span></a>
+<a class="sb-item" href="#cheatsheet"><span class="sb-icon">⌨</span><span>Referência rápida</span></a>
+<a class="sb-item" href="#rubrica"><span class="sb-icon">✓</span><span>Rubrica de avaliação</span></a>
+</nav>
+<div class="sb-foot">GitHub Pages<br/>peotta.github.io<br/><span class="muted">Curso acadêmico · v3.0</span></div>
+</aside>
+
+<div class="content">
+<header>
+  <div class="hdr-inner">
+    <span class="hdr-tag">curso online</span>
+    <div class="hdr-title">Linux Essentials &amp; Security</div>
+  </div>
+</header>
+<main>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="hero" id="inicio">
+<h1>Linux Essentials &amp; Security</h1>
+<p class="lead">Curso voltado para alunos de Engenharia de Redes: fundamentos do SO, administração, diagnóstico de redes e segurança defensiva em ambientes reais com Linux.</p>
+<div class="grid">
+  <div class="card span-3"><div class="metric">01</div><strong>Fundamentos</strong><p>Kernel, shell, FHS, navegação e documentação.</p></div>
+  <div class="card span-3"><div class="metric">02</div><strong>Administração</strong><p>Usuários, permissões, processos, pacotes e logs.</p></div>
+  <div class="card span-3"><div class="metric">03</div><strong>Redes</strong><p>Interfaces, DNS, rotas, portas e diagnóstico TCP/IP.</p></div>
+  <div class="card span-3"><div class="metric">04</div><strong>Segurança</strong><p>Hardening, SSH, firewall, auditoria e fail2ban.</p></div>
+</div>
+<p class="warn"><strong>Critério pedagógico:</strong> nenhum comando aparece sem finalidade. O aluno deve saber <em>o que</em> está observando, <em>por que</em> aquele comando existe e <em>qual risco</em> está sendo gerenciado.</p>
+</section>
+
+<!-- ══════════════════ DASHBOARD ══════════════════ -->
+<section id="dashboard">
+<div class="module-title"><span class="num">Painel</span><h2>Dashboard do aluno</h2></div>
+<div class="grid">
+  <div class="card span-6">
+    <h3>Progresso por módulo</h3>
+    <p>Módulo 1 — Fundamentos</p><div class="progress"><span id="p-m1"></span></div>
+    <p>Módulo 2 — Administração</p><div class="progress"><span id="p-m2"></span></div>
+    <p>Módulo 3 — Redes</p><div class="progress"><span id="p-m3"></span></div>
+    <p>Módulo 4 — Segurança</p><div class="progress"><span id="p-m4"></span></div>
+  </div>
+  <div class="card span-6" id="login-card">
+    <h3>Sessão do aluno</h3>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:.9rem">Autentique com sua conta GitHub para manter o progresso vinculado ao seu perfil. O progresso é salvo localmente neste dispositivo.</p>
+    <button id="gh-btn" onclick="openGHModal()" style="display:flex;align-items:center;gap:.6rem;background:#24292f;border:1px solid rgba(255,255,255,.15);color:#eafff0;border-radius:8px;padding:.6rem 1.1rem;font-size:.85rem;font-weight:700;cursor:pointer;width:100%;justify-content:center;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#eafff0"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      Entrar com GitHub
+    </button>
+  </div>
+
+  <!-- ── GitHub Login Modal ── -->
+  <div id="gh-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+    <div style="background:#0d1117;border:1px solid rgba(57,255,122,.25);border-radius:14px;padding:2rem;width:min(400px,90vw);box-shadow:0 0 60px rgba(57,255,122,.12);">
+      <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:1.2rem;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="#39ff7a"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        <span style="font-family:'Courier New',monospace;font-size:1.1rem;font-weight:900;color:#eafff0;">Sign in with GitHub</span>
+      </div>
+      <p style="font-family:'Courier New',monospace;color:#8ec9a4;font-size:.82rem;margin-bottom:1rem;">Digite seu <strong style="color:#39ff7a">username do GitHub</strong> para vincular sua sessão. O nome de usuário é verificado pela API pública do GitHub.</p>
+      <label style="display:block;font-family:'Courier New',monospace;font-size:.78rem;color:#5a8f6e;margin-bottom:.35rem;">GitHub username</label>
+      <input id="gh-input" type="text" placeholder="seu-usuario" onkeydown="if(event.key==='Enter')doGHLogin()"
+        style="width:100%;background:#010403;border:1px solid rgba(57,255,122,.3);color:#eafff0;border-radius:7px;padding:.6rem .8rem;font-family:'Courier New',monospace;font-size:.9rem;outline:none;box-sizing:border-box;margin-bottom:.5rem;"/>
+      <p id="gh-error" style="font-family:'Courier New',monospace;font-size:.78rem;color:#ff6b6b;min-height:1rem;margin-bottom:.6rem;"></p>
+      <div style="display:flex;gap:.6rem;">
+        <button id="gh-login-btn" onclick="doGHLogin()"
+          style="flex:1;background:linear-gradient(135deg,#39ff7a,#00d26a);border:0;border-radius:8px;color:#010403;font-weight:900;padding:.65rem;cursor:pointer;font-family:'Courier New',monospace;font-size:.88rem;">
+          Verificar e entrar
+        </button>
+        <button onclick="closeGHModal()"
+          style="background:transparent;border:1px solid rgba(57,255,122,.25);border-radius:8px;color:#5a8f6e;padding:.65rem 1rem;cursor:pointer;font-family:'Courier New',monospace;font-size:.88rem;">
+          Cancelar
+        </button>
+      </div>
+      <p style="font-family:'Courier New',monospace;font-size:.72rem;color:#5a8f6e;margin-top:.9rem;text-align:center;">Apenas o username é usado. Nenhuma senha ou token é solicitado.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════ MAPA ══════════════════ -->
+<section id="mapa">
+<div class="module-title"><span class="num">Mapa</span><h2>Organização acadêmica do curso</h2></div>
+<div class="timeline">
+  <div><strong>1. Teoria</strong><span>conceito, contexto e risco</span></div>
+  <div><strong>2. Diagrama</strong><span>visualização da arquitetura</span></div>
+  <div><strong>3. Comando</strong><span>finalidade e sintaxe</span></div>
+  <div><strong>4. Saída</strong><span>o que observar</span></div>
+  <div><strong>5. Prática</strong><span>execução em laboratório</span></div>
+  <div><strong>6. Avaliação</strong><span>questões objetivas</span></div>
+</div>
+</section>
+
+<!-- ══════════════════ MÓDULO 1 ══════════════════ -->
+<section class="module module-block" id="m1">
+<div class="module-title"><span class="num">Módulo 1</span><h2>Fundamentos Linux</h2></div>
+<p class="lead">Do Unix ao shell: visão histórica e conceitual, terminal, árvore de diretórios, documentação e comandos essenciais — tudo conectado à prática de redes.</p>
+<div class="module-map">
+  <a class="mini-card" href="#m1-a1"><strong>Aula 1.1 — Unix, GNU/Linux e distribuições</strong><span>Origem, filosofia e por que o Linux domina infraestruturas de rede.</span></a>
+  <a class="mini-card" href="#m1-a2"><strong>Aula 1.2 — Kernel, shell e syscalls</strong><span>Arquitetura de camadas: usuário, espaço de kernel e hardware.</span></a>
+  <a class="mini-card" href="#m1-a3"><strong>Aula 1.3 — Hierarquia de diretórios (FHS)</strong><span>Localizar configurações, logs, binários e sistemas de arquivo virtuais.</span></a>
+  <a class="mini-card" href="#m1-a4"><strong>Aula 1.4 — Navegação, arquivos e pipes</strong><span>Terminal autônomo: pipes, redirecionamento e documentação interna.</span></a>
+</div>
+
+<!-- M1-A1 -->
+<article class="lesson" id="m1-a1">
+<div class="lesson-head"><span class="lesson-code">M1-A1</span><h3>Aula 1.1 — Unix, GNU/Linux e distribuições</h3></div>
+<p class="objective"><strong>Objetivo:</strong> Compreender a origem do Linux, o papel das distribuições e por que servidores, redes e segurança usam amplamente ambientes Unix-like.</p>
+
+<div class="theory">
+<h4>Teoria essencial</h4>
+<ul>
+  <li><strong>Unix (1969, Bell Labs):</strong> sistema multitarefa e multiusuário que introduziu a filosofia de <em>ferramentas pequenas, combinadas por texto</em>. Cada programa faz uma coisa bem; a composição cria poder.</li>
+  <li><strong>GNU (1983, Richard Stallman):</strong> projeto para criar um sistema operacional livre compatível com Unix. Produziu compiladores (GCC), editores (Emacs), shell (bash) e centenas de utilitários — mas não o kernel.</li>
+  <li><strong>Linux (1991, Linus Torvalds):</strong> o kernel que completou o sistema GNU. A combinação GNU/Linux forma o que popularmente chamamos de "Linux".</li>
+  <li><strong>Distribuição:</strong> integração de kernel + shell + bibliotecas + gerenciador de pacotes + documentação + comunidade. Exemplos: Debian, Ubuntu, RHEL, Fedora, Arch.</li>
+  <li><strong>Relevância para redes:</strong> mais de 70 % dos servidores, 90 % da infraestrutura em nuvem, roteadores comerciais (Cisco IOS-XE, Junos) e switches correm Linux ou derivados Unix.</li>
+</ul>
+</div>
+
+<div class="callout callout-info">
+<strong>Conceito-chave: filosofia Unix</strong>
+"Escreva programas que façam uma coisa e façam bem. Escreva programas que trabalhem juntos. Escreva programas que tratem texto como interface universal." — Doug McIlroy, 1978.
+Essa filosofia é o motivo pelo qual <code>grep | awk | sort | uniq</code> é mais poderoso que qualquer ferramenta monolítica.
+</div>
+
+<h4>Famílias de distribuições Linux</h4>
+<table class="table">
+<thead><tr><th>Família</th><th>Distribuições</th><th>Gerenciador</th><th>Uso típico em redes</th></tr></thead>
+<tbody>
+<tr><td><strong>Debian</strong></td><td>Debian, Ubuntu, Kali Linux, Raspberry Pi OS</td><td>apt / dpkg</td><td>Laboratórios, servidores web, pentest (Kali)</td></tr>
+<tr><td><strong>Red Hat</strong></td><td>RHEL, Rocky Linux, AlmaLinux, Fedora, CentOS</td><td>dnf / rpm</td><td>Servidores corporativos, ambientes certificados</td></tr>
+<tr><td><strong>SUSE</strong></td><td>openSUSE Leap, SLES</td><td>zypper / rpm</td><td>Telecomunicações, mainframe</td></tr>
+<tr><td><strong>Arch</strong></td><td>Arch Linux, Manjaro</td><td>pacman</td><td>Uso avançado, customização total</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-tip">
+<strong>Dica para engenheiros de redes</strong>
+Em laboratórios acadêmicos, prefira <strong>Ubuntu Server LTS</strong> (suporte de 5 anos). Em ambientes corporativos, RHEL/Rocky Linux são os mais exigidos no mercado. Em testes de segurança, Kali Linux já traz ferramentas instaladas.
+</div>
+
+<h4>Comandos explicados</h4>
+<pre class="cmd"><code><span class="tok-prompt">$</span> <span class="tok-cmd">uname</span> <span class="tok-opt">-a</span>          <span class="tok-comment"># Kernel, hostname, arquitetura e data de compilação</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">cat</span> <span class="tok-path">/etc/os-release</span> <span class="tok-comment"># Nome e versão da distribuição</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">hostnamectl</span>       <span class="tok-comment"># Hostname, distro, kernel e tipo de virtualização</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">lsb_release</span> <span class="tok-opt">-a</span>   <span class="tok-comment"># Resumo da distro (requer lsb-release instalado)</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">whoami</span>            <span class="tok-comment"># Usuário efetivo da sessão</span></code></pre>
+<pre class="output"><code>Linux debian 6.1.0-21-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.90-1 x86_64 GNU/Linux
+PRETTY_NAME="Debian GNU/Linux 12 (bookworm)"
+NAME="Debian GNU/Linux"
+VERSION_ID="12"
+ID=debian
+   Static hostname: srv-redes
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: a3f2...
+           Boot ID: c91e...
+  Operating System: Debian GNU/Linux 12 (bookworm)
+            Kernel: Linux 6.1.0-21-amd64
+      Architecture: x86-64
+   Virtualization: kvm</code></pre>
+
+<div class="activity">
+<h4>Atividade prática exigida</h4>
+<ol>
+  <li>Identifique distribuição, versão, kernel e arquitetura.</li>
+  <li>Descubra a família da distribuição e qual gerenciador de pacotes ela usa.</li>
+  <li>Explique a diferença entre "Linux como kernel" e "Linux como distribuição".</li>
+  <li>Pesquise qual distro é mais utilizada em servidores de ISP na sua região.</li>
+</ol>
+<p><strong>Entrega:</strong> relatório Markdown — comando, saída, interpretação e conclusão.</p>
+</div>
+</article>
+
+<!-- M1-A2 -->
+<article class="lesson" id="m1-a2">
+<div class="lesson-head"><span class="lesson-code">M1-A2</span><h3>Aula 1.2 — Kernel, shell e chamadas de sistema</h3></div>
+<p class="objective"><strong>Objetivo:</strong> Entender que comandos não falam diretamente com o hardware: o shell interpreta, programas executam syscalls e o kernel gerencia todos os recursos.</p>
+
+<div class="theory">
+<h4>Teoria essencial</h4>
+<ul>
+  <li><strong>Kernel:</strong> núcleo do SO. Controla processos, memória, sistema de arquivos, dispositivos e rede. Roda em <em>modo privilegiado</em> (Ring 0 na arquitetura x86), com acesso irrestrito ao hardware.</li>
+  <li><strong>User Space:</strong> onde rodam aplicações, shell e bibliotecas. Operam em Ring 3 — sem acesso direto ao hardware. Para acessar recursos do kernel, precisam fazer syscalls.</li>
+  <li><strong>Syscall (chamada de sistema):</strong> mecanismo de solicitação controlada ao kernel. Ex: <code>open()</code> para abrir arquivo, <code>socket()</code> para criar socket de rede, <code>send()</code>/<code>recv()</code> para transmitir dados.</li>
+  <li><strong>Shell:</strong> interpretador de comandos que recebe texto do usuário, faz expansões (variáveis, globs, subshells), e cria processos (fork + exec) para cada comando.</li>
+  <li><strong>Importância para segurança:</strong> a separação kernel/user impede que processos comuns acessem memória de outros processos ou hardware diretamente — base do isolamento de segurança.</li>
+</ul>
+</div>
+
+<h4>Diagrama: Arquitetura de camadas do Linux</h4>
+<div class="svg-wrap">
+<svg viewBox="0 0 680 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto;">
+  <defs>
+    <marker id="arw" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <polygon points="0 0,7 2.5,0 5" fill="#39ff7a"/>
+    </marker>
+  </defs>
+  <rect width="680" height="340" fill="#010403" rx="10"/>
+  <!-- Hardware -->
+  <rect x="10" y="285" width="660" height="46" fill="rgba(90,143,110,.14)" rx="7" stroke="rgba(90,143,110,.4)" stroke-width="1"/>
+  <text x="340" y="302" text-anchor="middle" font-family="Courier New" font-size="9" font-weight="900" fill="#5a8f6e" letter-spacing="2">HARDWARE</text>
+  <text x="90"  y="321" text-anchor="middle" font-family="Courier New" font-size="9" fill="#64d2ff">CPU</text>
+  <text x="210" y="321" text-anchor="middle" font-family="Courier New" font-size="9" fill="#64d2ff">RAM</text>
+  <text x="340" y="321" text-anchor="middle" font-family="Courier New" font-size="9" fill="#64d2ff">DISCO</text>
+  <text x="470" y="321" text-anchor="middle" font-family="Courier New" font-size="9" fill="#64d2ff">PLACA DE REDE</text>
+  <text x="600" y="321" text-anchor="middle" font-family="Courier New" font-size="9" fill="#64d2ff">USB/PCI</text>
+  <!-- Kernel Space -->
+  <rect x="10" y="120" width="660" height="155" fill="rgba(255,107,107,.05)" rx="7" stroke="rgba(255,107,107,.35)" stroke-width="1"/>
+  <text x="340" y="138" text-anchor="middle" font-family="Courier New" font-size="9" font-weight="900" fill="#ff6b6b" letter-spacing="2">KERNEL SPACE — Ring 0</text>
+  <!-- Scheduler -->
+  <rect x="22"  y="148" width="130" height="42" fill="rgba(255,107,107,.13)" rx="5" stroke="rgba(255,107,107,.4)" stroke-width="1"/>
+  <text x="87"  y="165" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#ff8e8e">Scheduler</text>
+  <text x="87"  y="178" text-anchor="middle" font-family="Courier New" font-size="7" fill="#ffa0a0">Processos/CPU</text>
+  <!-- Memory -->
+  <rect x="160" y="148" width="130" height="42" fill="rgba(255,107,107,.13)" rx="5" stroke="rgba(255,107,107,.4)" stroke-width="1"/>
+  <text x="225" y="165" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#ff8e8e">Memória</text>
+  <text x="225" y="178" text-anchor="middle" font-family="Courier New" font-size="7" fill="#ffa0a0">Paginação/Swap</text>
+  <!-- Network Stack -->
+  <rect x="298" y="148" width="130" height="42" fill="rgba(255,107,107,.13)" rx="5" stroke="rgba(255,107,107,.4)" stroke-width="1"/>
+  <text x="363" y="165" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#ff8e8e">Stack TCP/IP</text>
+  <text x="363" y="178" text-anchor="middle" font-family="Courier New" font-size="7" fill="#ffa0a0">Sockets/Filtros</text>
+  <!-- VFS -->
+  <rect x="436" y="148" width="100" height="42" fill="rgba(255,107,107,.13)" rx="5" stroke="rgba(255,107,107,.4)" stroke-width="1"/>
+  <text x="486" y="165" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#ff8e8e">VFS</text>
+  <text x="486" y="178" text-anchor="middle" font-family="Courier New" font-size="7" fill="#ffa0a0">ext4/xfs/tmpfs</text>
+  <!-- LSM -->
+  <rect x="544" y="148" width="116" height="42" fill="rgba(199,146,234,.1)" rx="5" stroke="rgba(199,146,234,.38)" stroke-width="1"/>
+  <text x="602" y="165" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#c792ea">LSM</text>
+  <text x="602" y="178" text-anchor="middle" font-family="Courier New" font-size="7" fill="#c792ea">SELinux/AppArmor</text>
+  <!-- Device Drivers -->
+  <rect x="22" y="200" width="638" height="36" fill="rgba(255,209,102,.07)" rx="5" stroke="rgba(255,209,102,.3)" stroke-width="1"/>
+  <text x="341" y="215" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#ffd166">Drivers de Dispositivo</text>
+  <text x="341" y="228" text-anchor="middle" font-family="Courier New" font-size="7" fill="#ffd166">placa de rede · controladora de disco · USB · áudio · framebuffer · serial…</text>
+  <!-- Syscall line -->
+  <line x1="10" y1="118" x2="670" y2="118" stroke="#39ff7a" stroke-width="2" stroke-dasharray="5,3"/>
+  <rect x="218" y="108" width="244" height="14" fill="#010403" rx="3"/>
+  <text x="340" y="119" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="900" fill="#39ff7a" letter-spacing="1">── INTERFACE DE SYSCALLS ──</text>
+  <!-- User Space -->
+  <rect x="10" y="15" width="660" height="96" fill="rgba(100,210,255,.05)" rx="7" stroke="rgba(100,210,255,.28)" stroke-width="1"/>
+  <text x="340" y="32" text-anchor="middle" font-family="Courier New" font-size="9" font-weight="900" fill="#64d2ff" letter-spacing="2">USER SPACE — Ring 3</text>
+  <!-- Applications -->
+  <rect x="22" y="40" width="175" height="42" fill="rgba(100,210,255,.1)" rx="5" stroke="rgba(100,210,255,.3)" stroke-width="1"/>
+  <text x="109" y="57" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#94e3ff">Aplicações</text>
+  <text x="109" y="70" text-anchor="middle" font-family="Courier New" font-size="7" fill="#94e3ff">curl ssh vim ping ps nmap…</text>
+  <!-- Shell -->
+  <rect x="207" y="40" width="175" height="42" fill="rgba(57,255,122,.08)" rx="5" stroke="rgba(57,255,122,.3)" stroke-width="1"/>
+  <text x="294" y="57" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#39ff7a">Shell</text>
+  <text x="294" y="70" text-anchor="middle" font-family="Courier New" font-size="7" fill="#39ff7a">bash · zsh · fish · dash</text>
+  <!-- Libraries -->
+  <rect x="392" y="40" width="268" height="42" fill="rgba(255,209,102,.07)" rx="5" stroke="rgba(255,209,102,.28)" stroke-width="1"/>
+  <text x="526" y="57" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#ffd166">Bibliotecas de Sistema</text>
+  <text x="526" y="70" text-anchor="middle" font-family="Courier New" font-size="7" fill="#ffd166">glibc · musl · libpthread · OpenSSL…</text>
+  <!-- Arrows -->
+  <line x1="340" y1="91"  x2="340" y2="108" stroke="#39ff7a" stroke-width="1.5" marker-end="url(#arw)"/>
+  <line x1="340" y1="248" x2="340" y2="280" stroke="#39ff7a" stroke-width="1.5" marker-end="url(#arw)"/>
+</svg>
+<figcaption>Fig. 1 — Arquitetura de camadas do Linux. O kernel media todo acesso ao hardware; aplicações nunca acessam hardware diretamente.</figcaption>
+</div>
+
+<h4>Chamadas de sistema relevantes para redes</h4>
+<table class="table">
+<thead><tr><th>Syscall</th><th>O que faz</th><th>Exemplo de uso</th></tr></thead>
+<tbody>
+<tr><td><code>socket()</code></td><td>Cria um socket de rede</td><td>Qualquer aplicação cliente/servidor</td></tr>
+<tr><td><code>bind()</code></td><td>Associa socket a endereço/porta</td><td>Servidor HTTP ouvindo na porta 80</td></tr>
+<tr><td><code>connect()</code></td><td>Inicia conexão TCP</td><td>curl abrindo conexão HTTPS</td></tr>
+<tr><td><code>send()/recv()</code></td><td>Envia/recebe dados</td><td>Transferência de dados em qualquer protocolo</td></tr>
+<tr><td><code>open()</code></td><td>Abre arquivo (retorna file descriptor)</td><td>cat, ls lendo /proc/net/tcp</td></tr>
+<tr><td><code>fork()/exec()</code></td><td>Cria processo filho / substitui imagem</td><td>Shell criando cada comando</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn">
+<strong>Atenção — segurança</strong>
+A separação entre kernel space e user space é a principal barreira de segurança do SO. Vulnerabilidades de <em>privilege escalation</em> geralmente exploram falhas que permitem que código de user space execute com privilégios de Ring 0. Por isso, manter o kernel atualizado é obrigação, não opção.
+</div>
+
+<h4>Comandos explicados</h4>
+<pre class="cmd"><code><span class="tok-prompt">$</span> <span class="tok-cmd">echo</span> <span class="tok-var">$SHELL</span>                          <span class="tok-comment"># Shell padrão configurado na conta</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">ps</span> <span class="tok-opt">-p</span> <span class="tok-var">$$</span>                           <span class="tok-comment"># Processo do shell atual (PID e nome)</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">strace</span> <span class="tok-opt">-c</span> <span class="tok-cmd">ls</span> <span class="tok-op">&gt;</span><span class="tok-path">/dev/null</span> 2&gt;&amp;1       <span class="tok-comment"># Resume syscalls feitas por ls</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">strace</span> <span class="tok-opt">-e</span> trace=network <span class="tok-cmd">curl</span> -s http://1.1.1.1 <span class="tok-op">&gt;</span><span class="tok-path">/dev/null</span> <span class="tok-comment"># Syscalls de rede do curl</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">dmesg</span> <span class="tok-op">|</span> <span class="tok-cmd">tail</span> <span class="tok-opt">-20</span>                  <span class="tok-comment"># Mensagens recentes do kernel</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">cat</span> <span class="tok-path">/proc/version</span>                  <span class="tok-comment"># Versão do kernel e compilador usado</span></code></pre>
+<pre class="output"><code>/bin/bash
+  PID TTY          TIME CMD
+ 1234 pts/0    00:00:00 bash
+
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 28.45    0.000112          11        10           read
+ 24.88    0.000098           8        12         2 openat
+ 18.52    0.000073           6        12           mmap
+ ...
+socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) = 3
+connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=...}, 16)</code></pre>
+
+<div class="activity">
+<h4>Atividade prática exigida</h4>
+<ol>
+  <li>Desenhe o fluxo completo: Usuário → Shell → Programa → Syscall → Kernel → Hardware.</li>
+  <li>Use <code>strace -e trace=network</code> em um comando de rede e identifique a syscall <code>connect()</code>.</li>
+  <li>Compare a saída de <code>echo $SHELL</code> e <code>ps -p $$</code> — eles sempre batem? Por quê?</li>
+  <li>Explique por que <code>dmesg</code> pode exigir privilégios em sistemas modernos.</li>
+</ol>
+<p><strong>Entrega:</strong> relatório Markdown — comando, saída, interpretação e conclusão.</p>
+</div>
+</article>
+
+<!-- M1-A3 -->
+<article class="lesson" id="m1-a3">
+<div class="lesson-head"><span class="lesson-code">M1-A3</span><h3>Aula 1.3 — Hierarquia de diretórios Linux (FHS)</h3></div>
+<p class="objective"><strong>Objetivo:</strong> Localizar configurações, logs, usuários, binários, dispositivos e arquivos virtuais do kernel com segurança e precisão.</p>
+
+<div class="theory">
+<h4>Teoria essencial</h4>
+<ul>
+  <li><strong>FHS — Filesystem Hierarchy Standard:</strong> padrão que define onde cada tipo de arquivo deve residir. Garante previsibilidade entre distros.</li>
+  <li><strong>Raiz única (<code>/</code>):</strong> Linux usa uma árvore única. Discos, partições e dispositivos de rede são <em>montados</em> como subdiretórios — não existem letras de unidade como no Windows.</li>
+  <li><strong>Inode:</strong> estrutura interna que armazena metadados (permissões, dono, timestamps, tamanho, ponteiros para blocos). O <em>nome</em> do arquivo é apenas uma entrada de diretório que aponta para o inode.</li>
+  <li><strong>Sistemas de arquivos virtuais:</strong> <code>/proc</code> e <code>/sys</code> não existem em disco — são gerados pelo kernel em tempo real, expondo estado interno. <code>/dev</code> é gerenciado pelo <code>udev</code>.</li>
+  <li><strong>Implicação para redes:</strong> configurações de interfaces de rede ficam em <code>/etc/network/</code> ou <code>/etc/netplan/</code>; logs em <code>/var/log/</code>; dispositivos de rede em <code>/sys/class/net/</code>.</li>
+</ul>
+</div>
+
+<h4>Mapa visual da hierarquia</h4>
+<div class="svg-wrap">
+<svg viewBox="0 0 960 430" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:960px;display:block;margin:0 auto;">
+  <rect width="960" height="430" fill="#010403" rx="10"/>
+
+  <!-- ROOT -->
+  <rect x="420" y="10" width="120" height="34" fill="rgba(57,255,122,.15)" rx="6" stroke="rgba(57,255,122,.5)" stroke-width="1.5"/>
+  <text x="480" y="33" text-anchor="middle" font-family="Courier New" font-size="13" font-weight="900" fill="#39ff7a">/</text>
+
+  <!-- Root drop + horizontal trunk -->
+  <line x1="480" y1="44" x2="480" y2="58" stroke="#39ff7a" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="48"  y1="58" x2="912" y2="58" stroke="rgba(57,255,122,.35)" stroke-width="1"/>
+
+  <!-- Vertical drops to L1 boxes (centers: 48,144,240,336,432,528,624,720,816,912) -->
+  <line x1="48"  y1="58" x2="48"  y2="68" stroke="rgba(57,255,122,.35)" stroke-width="1"/>
+  <line x1="144" y1="58" x2="144" y2="68" stroke="rgba(57,255,122,.35)" stroke-width="1"/>
+  <line x1="240" y1="58" x2="240" y2="68" stroke="rgba(57,255,122,.35)" stroke-width="1"/>
+  <line x1="336" y1="58" x2="336" y2="68" stroke="rgba(57,255,122,.35)" stroke-width="1"/>
+  <line x1="432" y1="58" x2="432" y2="68" stroke="rgba(57,255,122,.35)" stroke-width="1"/>
+  <line x1="528" y1="58" x2="528" y2="68" stroke="rgba(57,255,122,.35)" stroke-width="1"/>
+  <line x1="624" y1="58" x2="624" y2="68" stroke="rgba(57,255,122,.35)" stroke-width="1"/>
+  <line x1="720" y1="58" x2="720" y2="68" stroke="rgba(57,255,122,.35)" stroke-width="1"/>
+  <line x1="816" y1="58" x2="816" y2="68" stroke="rgba(57,255,122,.35)" stroke-width="1"/>
+  <line x1="912" y1="58" x2="912" y2="68" stroke="rgba(57,255,122,.35)" stroke-width="1"/>
+
+  <!-- ── L1 BOXES (x=center-44, width=88, height=66) ── -->
+  <!-- /bin  center=48  x=4 -->
+  <rect x="4"   y="68" width="88" height="66" fill="rgba(100,210,255,.08)" rx="5" stroke="rgba(100,210,255,.3)"  stroke-width="1"/>
+  <text x="48"  y="88"  text-anchor="middle" font-family="Courier New" font-size="11" font-weight="900" fill="#64d2ff">/bin</text>
+  <text x="48"  y="104" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">Binários</text>
+  <text x="48"  y="128" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">essenciais</text>
+
+  <!-- /boot center=144 x=100 -->
+  <rect x="100" y="68" width="88" height="66" fill="rgba(100,210,255,.08)" rx="5" stroke="rgba(100,210,255,.3)"  stroke-width="1"/>
+  <text x="144" y="88"  text-anchor="middle" font-family="Courier New" font-size="11" font-weight="900" fill="#64d2ff">/boot</text>
+  <text x="144" y="104" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">Kernel e</text>
+  <text x="144" y="120" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">bootloader</text>
+
+  <!-- /dev  center=240 x=196 -->
+  <rect x="196" y="68" width="88" height="66" fill="rgba(255,209,102,.07)" rx="5" stroke="rgba(255,209,102,.28)" stroke-width="1"/>
+  <text x="240" y="88"  text-anchor="middle" font-family="Courier New" font-size="11" font-weight="900" fill="#ffd166">/dev</text>
+  <text x="240" y="104" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">Dispositivos</text>
+  <text x="240" y="120" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">(virtual)</text>
+
+  <!-- /etc  center=336 x=292 ★ -->
+  <rect x="292" y="68" width="88" height="66" fill="rgba(57,255,122,.1)"   rx="5" stroke="rgba(57,255,122,.38)"  stroke-width="1.5"/>
+  <text x="336" y="88"  text-anchor="middle" font-family="Courier New" font-size="11" font-weight="900" fill="#39ff7a">/etc</text>
+  <text x="336" y="104" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">Configs</text>
+  <text x="336" y="120" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">do sistema</text>
+
+  <!-- /home center=432 x=388 -->
+  <rect x="388" y="68" width="88" height="66" fill="rgba(100,210,255,.08)" rx="5" stroke="rgba(100,210,255,.3)"  stroke-width="1"/>
+  <text x="432" y="88"  text-anchor="middle" font-family="Courier New" font-size="11" font-weight="900" fill="#64d2ff">/home</text>
+  <text x="432" y="104" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">Diretórios</text>
+  <text x="432" y="120" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">usuários</text>
+
+  <!-- /proc center=528 x=484 ★ virtual -->
+  <rect x="484" y="68" width="88" height="66" fill="rgba(199,146,234,.1)"  rx="5" stroke="rgba(199,146,234,.38)" stroke-width="1.5"/>
+  <text x="528" y="88"  text-anchor="middle" font-family="Courier New" font-size="11" font-weight="900" fill="#c792ea">/proc</text>
+  <text x="528" y="104" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">Processos</text>
+  <text x="528" y="120" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">(virtual)</text>
+
+  <!-- /sys  center=624 x=580 ★ virtual -->
+  <rect x="580" y="68" width="88" height="66" fill="rgba(199,146,234,.1)"  rx="5" stroke="rgba(199,146,234,.38)" stroke-width="1.5"/>
+  <text x="624" y="88"  text-anchor="middle" font-family="Courier New" font-size="11" font-weight="900" fill="#c792ea">/sys</text>
+  <text x="624" y="104" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">Hardware</text>
+  <text x="624" y="120" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">(virtual)</text>
+
+  <!-- /usr  center=720 x=676 -->
+  <rect x="676" y="68" width="88" height="66" fill="rgba(100,210,255,.08)" rx="5" stroke="rgba(100,210,255,.3)"  stroke-width="1"/>
+  <text x="720" y="88"  text-anchor="middle" font-family="Courier New" font-size="11" font-weight="900" fill="#64d2ff">/usr</text>
+  <text x="720" y="104" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">Programas</text>
+  <text x="720" y="120" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">e libs</text>
+
+  <!-- /var  center=816 x=772 ★ -->
+  <rect x="772" y="68" width="88" height="66" fill="rgba(57,255,122,.1)"   rx="5" stroke="rgba(57,255,122,.38)"  stroke-width="1.5"/>
+  <text x="816" y="88"  text-anchor="middle" font-family="Courier New" font-size="11" font-weight="900" fill="#39ff7a">/var</text>
+  <text x="816" y="104" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">Logs e</text>
+  <text x="816" y="120" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">dados var.</text>
+
+  <!-- /tmp  center=912 x=868 -->
+  <rect x="868" y="68" width="88" height="66" fill="rgba(255,107,107,.07)" rx="5" stroke="rgba(255,107,107,.28)" stroke-width="1"/>
+  <text x="912" y="88"  text-anchor="middle" font-family="Courier New" font-size="11" font-weight="900" fill="#ff6b6b">/tmp</text>
+  <text x="912" y="104" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">Temporários</text>
+  <text x="912" y="120" text-anchor="middle" font-family="Courier New" font-size="10" fill="#8ec9a4">limpos boot</text>
+
+  <!-- ── /etc SUBDIRS branch ── -->
+  <!-- Connector: /etc center=336, bottom of L1=134 -->
+  <line x1="336" y1="134" x2="336" y2="150" stroke="rgba(57,255,122,.4)" stroke-width="1" stroke-dasharray="3,2"/>
+  <!-- Horizontal branch: spans 5 L2 boxes centered at 116,222,328,434,540 -->
+  <line x1="116" y1="150" x2="540" y2="150" stroke="rgba(57,255,122,.3)" stroke-width="1"/>
+  <!-- Drops to L2 -->
+  <line x1="116" y1="150" x2="116" y2="162" stroke="rgba(57,255,122,.3)" stroke-width="1"/>
+  <line x1="222" y1="150" x2="222" y2="162" stroke="rgba(57,255,122,.3)" stroke-width="1"/>
+  <line x1="328" y1="150" x2="328" y2="162" stroke="rgba(57,255,122,.3)" stroke-width="1"/>
+  <line x1="434" y1="150" x2="434" y2="162" stroke="rgba(57,255,122,.3)" stroke-width="1"/>
+  <line x1="540" y1="150" x2="540" y2="162" stroke="rgba(57,255,122,.3)" stroke-width="1"/>
+
+  <!-- L2 /etc boxes (width=96, height=48, x=center-48) -->
+  <rect x="68"  y="162" width="96" height="48" fill="rgba(57,255,122,.07)" rx="4" stroke="rgba(57,255,122,.25)" stroke-width="1"/>
+  <text x="116" y="181" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="700" fill="#39ff7a">passwd</text>
+  <text x="116" y="199" text-anchor="middle" font-family="Courier New" font-size="10" fill="#5a8f6e">shadow · group</text>
+
+  <rect x="174" y="162" width="96" height="48" fill="rgba(57,255,122,.07)" rx="4" stroke="rgba(57,255,122,.25)" stroke-width="1"/>
+  <text x="222" y="181" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="700" fill="#39ff7a">network/</text>
+  <text x="222" y="199" text-anchor="middle" font-family="Courier New" font-size="10" fill="#5a8f6e">netplan/ iface</text>
+
+  <rect x="280" y="162" width="96" height="48" fill="rgba(57,255,122,.07)" rx="4" stroke="rgba(57,255,122,.25)" stroke-width="1"/>
+  <text x="328" y="181" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="700" fill="#39ff7a">ssh/</text>
+  <text x="328" y="199" text-anchor="middle" font-family="Courier New" font-size="10" fill="#5a8f6e">sshd_config</text>
+
+  <rect x="386" y="162" width="96" height="48" fill="rgba(57,255,122,.07)" rx="4" stroke="rgba(57,255,122,.25)" stroke-width="1"/>
+  <text x="434" y="181" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="700" fill="#39ff7a">hosts</text>
+  <text x="434" y="199" text-anchor="middle" font-family="Courier New" font-size="10" fill="#5a8f6e">resolv.conf</text>
+
+  <rect x="492" y="162" width="96" height="48" fill="rgba(57,255,122,.07)" rx="4" stroke="rgba(57,255,122,.25)" stroke-width="1"/>
+  <text x="540" y="181" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="700" fill="#39ff7a">fstab</text>
+  <text x="540" y="199" text-anchor="middle" font-family="Courier New" font-size="10" fill="#5a8f6e">crontab · sysctl</text>
+
+  <!-- ── /var SUBDIRS branch ── -->
+  <!-- Connector: /var center=816, bottom of L1=134 -->
+  <line x1="816" y1="134" x2="816" y2="150" stroke="rgba(57,255,122,.4)" stroke-width="1" stroke-dasharray="3,2"/>
+  <!-- Horizontal branch: 3 L2 boxes centered at 720,816,912 -->
+  <line x1="720" y1="150" x2="912" y2="150" stroke="rgba(57,255,122,.3)" stroke-width="1"/>
+  <line x1="720" y1="150" x2="720" y2="162" stroke="rgba(57,255,122,.3)" stroke-width="1"/>
+  <line x1="816" y1="150" x2="816" y2="162" stroke="rgba(57,255,122,.3)" stroke-width="1"/>
+  <line x1="912" y1="150" x2="912" y2="162" stroke="rgba(57,255,122,.3)" stroke-width="1"/>
+
+  <!-- L2 /var boxes (width=96, height=48) -->
+  <rect x="672" y="162" width="96" height="48" fill="rgba(57,255,122,.07)" rx="4" stroke="rgba(57,255,122,.25)" stroke-width="1"/>
+  <text x="720" y="181" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="700" fill="#39ff7a">log/</text>
+  <text x="720" y="199" text-anchor="middle" font-family="Courier New" font-size="10" fill="#5a8f6e">syslog · auth.log</text>
+
+  <rect x="768" y="162" width="96" height="48" fill="rgba(57,255,122,.07)" rx="4" stroke="rgba(57,255,122,.25)" stroke-width="1"/>
+  <text x="816" y="181" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="700" fill="#39ff7a">cache/</text>
+  <text x="816" y="199" text-anchor="middle" font-family="Courier New" font-size="10" fill="#5a8f6e">apt/ pip/</text>
+
+  <rect x="864" y="162" width="96" height="48" fill="rgba(57,255,122,.07)" rx="4" stroke="rgba(57,255,122,.25)" stroke-width="1"/>
+  <text x="912" y="181" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="700" fill="#39ff7a">spool/</text>
+  <text x="912" y="199" text-anchor="middle" font-family="Courier New" font-size="10" fill="#5a8f6e">mail · cron</text>
+
+  <!-- ── LEGEND ── -->
+  <rect x="10" y="358" width="940" height="62" fill="rgba(1,6,3,.7)" rx="6" stroke="rgba(57,255,122,.12)" stroke-width="1"/>
+  <text x="22" y="375" font-family="Courier New" font-size="11" font-weight="700" fill="#8ec9a4">Legenda:</text>
+  <rect x="90"  y="365" width="12" height="12" fill="rgba(57,255,122,.15)" rx="2" stroke="rgba(57,255,122,.4)"  stroke-width="1"/>
+  <text x="108" y="376" font-family="Courier New" font-size="10" fill="#8ec9a4">Configs/logs (mais usados em administração)</text>
+  <rect x="380" y="365" width="12" height="12" fill="rgba(199,146,234,.12)" rx="2" stroke="rgba(199,146,234,.4)" stroke-width="1"/>
+  <text x="398" y="376" font-family="Courier New" font-size="10" fill="#8ec9a4">Sistema de arquivos virtual (kernel)</text>
+  <rect x="640" y="365" width="12" height="12" fill="rgba(100,210,255,.1)" rx="2" stroke="rgba(100,210,255,.35)" stroke-width="1"/>
+  <text x="658" y="376" font-family="Courier New" font-size="10" fill="#8ec9a4">Binários / dados de sistema</text>
+  <text x="22"  y="408" font-family="Courier New" font-size="10" fill="#5a8f6e">Arquivos virtuais em /proc e /sys não estão em disco — são gerados pelo kernel em tempo real e refletem o estado atual do sistema.</text>
+</svg>
+<figcaption>Fig. 2 — Hierarquia FHS com subdiretórios de /etc e /var mais relevantes para administração de redes.</figcaption>
+</div>
+
+<h4>Comandos explicados</h4>
+<pre class="cmd"><code><span class="tok-prompt">$</span> <span class="tok-cmd">ls</span> <span class="tok-opt">-lah</span> <span class="tok-path">/</span>                          <span class="tok-comment"># Lista raiz com tamanhos legíveis</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">find</span> <span class="tok-path">/etc</span> <span class="tok-opt">-maxdepth</span> 1 <span class="tok-opt">-type</span> f <span class="tok-op">|</span> <span class="tok-cmd">head</span> <span class="tok-comment"># Arquivos diretos em /etc</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">cat</span> <span class="tok-path">/proc/net/if_inet6</span>              <span class="tok-comment"># Interfaces IPv6 via sysfs virtual</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">ls</span> <span class="tok-path">/sys/class/net</span>                   <span class="tok-comment"># Interfaces de rede expostas pelo kernel</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">stat</span> <span class="tok-path">/etc/passwd</span>                    <span class="tok-comment"># Inode, permissões e timestamps de arquivo</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">df</span> <span class="tok-opt">-hT</span>                               <span class="tok-comment"># Sistemas de arquivos montados com tipo</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">mount</span> <span class="tok-op">|</span> <span class="tok-cmd">grep</span> <span class="tok-opt">-E</span> "proc|sys|dev"      <span class="tok-comment"># Confirma que /proc e /sys são virtuais</span></code></pre>
+
+<div class="activity">
+<h4>Atividade prática exigida</h4>
+<ol>
+  <li>Monte uma tabela com 12 diretórios, suas funções e um arquivo de exemplo em cada um.</li>
+  <li>Identifique três arquivos em <code>/etc</code> relacionados a redes e explique cada um.</li>
+  <li>Compare <code>/proc</code> e <code>/sys</code>: qual expõe processos? Qual expõe hardware?</li>
+  <li>Execute <code>stat</code> em dois arquivos e explique cada campo do inode exibido.</li>
+</ol>
+<p><strong>Entrega:</strong> relatório Markdown com comando, saída, interpretação e conclusão.</p>
+</div>
+</article>
+
+<!-- M1-A4 -->
+<article class="lesson" id="m1-a4">
+<div class="lesson-head"><span class="lesson-code">M1-A4</span><h3>Aula 1.4 — Navegação, arquivos, pipes e redirecionamento</h3></div>
+<p class="objective"><strong>Objetivo:</strong> Usar o terminal com autonomia — pipes, redirecionamentos, manipulação de arquivos e documentação interna — sem depender de memorização mecânica.</p>
+
+<div class="theory">
+<h4>Teoria essencial</h4>
+<ul>
+  <li><strong>Caminho absoluto vs relativo:</strong> caminho absoluto começa em <code>/</code> e identifica o arquivo de forma única independentemente do diretório atual. Relativo parte do diretório corrente (<code>pwd</code>).</li>
+  <li><strong>Redirecionamento:</strong> operadores que controlam fluxo de stdin (0), stdout (1) e stderr (2). Fundamentais para automação e scripts de rede.</li>
+  <li><strong>Pipe (<code>|</code>):</strong> encadeia comandos: stdout de um é stdin do próximo. Permite filtrar, ordenar e analisar saídas de comandos sem criar arquivos intermediários.</li>
+  <li><strong>Documentação interna:</strong> <code>man</code>, <code>info</code>, <code>--help</code>, <code>apropos</code> e <code>whatis</code> devem ser a primeira fonte de consulta — não a Internet — para construir autonomia técnica.</li>
+</ul>
+</div>
+
+<h4>Operadores de redirecionamento</h4>
+<table class="table">
+<thead><tr><th>Operador</th><th>Significado</th><th>Exemplo</th></tr></thead>
+<tbody>
+<tr><td><code>&gt;</code></td><td>Redireciona stdout — cria/sobrescreve arquivo</td><td><code>ip addr show &gt; interfaces.txt</code></td></tr>
+<tr><td><code>&gt;&gt;</code></td><td>Redireciona stdout — acrescenta ao arquivo</td><td><code>date &gt;&gt; audit.log</code></td></tr>
+<tr><td><code>2&gt;</code></td><td>Redireciona stderr</td><td><code>find / -name x 2&gt;/dev/null</code></td></tr>
+<tr><td><code>2&gt;&amp;1</code></td><td>Redireciona stderr para stdout</td><td><code>comando &gt; saida.txt 2&gt;&amp;1</code></td></tr>
+<tr><td><code>&lt;</code></td><td>Redireciona stdin de arquivo</td><td><code>sort &lt; lista.txt</code></td></tr>
+<tr><td><code>|</code></td><td>Pipe: stdout → stdin do próximo</td><td><code>ss -tulpen | grep 22</code></td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-tip">
+<strong>Combinações poderosas para redes</strong>
+<code>ss -tulpen | grep LISTEN | awk '{print $5, $7}'</code> — filtra portas em escuta e mostra endereço e processo.<br/>
+<code>cat /var/log/auth.log | grep "Failed" | awk '{print $11}' | sort | uniq -c | sort -rn | head</code> — top IPs com falha de autenticação.
+</div>
+
+<h4>Comandos explicados</h4>
+<pre class="cmd"><code><span class="tok-prompt">$</span> <span class="tok-cmd">pwd</span>                                 <span class="tok-comment"># Diretório corrente (Print Working Directory)</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">ls</span> <span class="tok-opt">-lah</span> <span class="tok-opt">--color=auto</span>              <span class="tok-comment"># Lista com tamanho, ocultos, cor</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">cd</span> <span class="tok-path">/var/log</span> <span class="tok-op">&amp;&amp;</span> <span class="tok-cmd">ls</span>               <span class="tok-comment"># Muda para /var/log e lista se sucesso</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">mkdir</span> <span class="tok-opt">-p</span> lab/{conf,logs,scripts}  <span class="tok-comment"># Cria estrutura de diretórios de uma vez</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">cp</span> <span class="tok-path">/etc/hosts</span> lab/conf/           <span class="tok-comment"># Copia arquivo preservando nome</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">grep</span> <span class="tok-opt">-n</span> "nameserver" <span class="tok-path">/etc/resolv.conf</span> <span class="tok-comment"># Busca com número de linha</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">wc</span> <span class="tok-opt">-l</span> <span class="tok-path">/var/log/syslog</span>              <span class="tok-comment"># Conta linhas do log</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">tail</span> <span class="tok-opt">-f</span> <span class="tok-path">/var/log/syslog</span>            <span class="tok-comment"># Monitora log em tempo real (Ctrl+C para sair)</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">man</span> <span class="tok-cmd">ip</span>                              <span class="tok-comment"># Manual completo do comando ip</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">apropos</span> "network interface"          <span class="tok-comment"># Busca páginas de manual por palavra-chave</span></code></pre>
+
+<div class="callout callout-danger">
+<strong>Cuidado — operações destrutivas</strong>
+<code>rm -rf /caminho/errado</code> não tem confirmação e não tem lixeira. Em servidores, <code>rm</code>, <code>mv</code> e redirecionamento com <code>&gt;</code> podem apagar dados irrecuperáveis. Sempre confira o caminho antes de executar.
+</div>
+
+<div class="activity">
+<h4>Atividade prática exigida</h4>
+<ol>
+  <li>Crie a estrutura <code>~/lab/{conf,logs,scripts}</code> e coloque um arquivo de exemplo em cada pasta.</li>
+  <li>Use um pipe com <code>grep</code>, <code>sort</code> e <code>uniq -c</code> para analisar <code>/var/log/auth.log</code>.</li>
+  <li>Use <code>man ls</code> para descobrir a opção que ordena por data de modificação.</li>
+  <li>Explique a diferença entre <code>2&gt;/dev/null</code> e <code>&gt;/dev/null 2&gt;&amp;1</code>.</li>
+</ol>
+<p><strong>Entrega:</strong> relatório Markdown com comando, saída, interpretação e conclusão.</p>
+</div>
+</article>
+
+<div class="quiz" id="quiz-m1">
+<h3>Avaliação do módulo — Fundamentos Linux</h3>
+<p>10 questões objetivas. Aprovação: 70 % (7/10).</p>
+<div class="quiz-body" data-module="m1"></div>
+<button onclick="gradeQuiz('m1')">Corrigir avaliação</button>
+<div class="result" id="result-m1"></div>
+</div>
+</section>
+
+<!-- ══════════════════ MÓDULO 2 ══════════════════ -->
+<section class="module module-block" id="m2">
+<div class="module-title"><span class="num">Módulo 2</span><h2>Administração Linux</h2></div>
+<p class="lead">Usuários, grupos, permissões, processos, serviços, pacotes, logs e automação com cron — controle total do ambiente Linux.</p>
+<div class="module-map">
+  <a class="mini-card" href="#m2-a1"><strong>Aula 2.1 — Usuários, grupos e identidade</strong><span>UID, GID, /etc/passwd, /etc/shadow e princípio do menor privilégio.</span></a>
+  <a class="mini-card" href="#m2-a2"><strong>Aula 2.2 — Permissões em arquivos</strong><span>rwx, octal, bits especiais (SUID, SGID, sticky), umask e ACLs.</span></a>
+  <a class="mini-card" href="#m2-a3"><strong>Aula 2.3 — Processos e serviços</strong><span>Estados de processo, sinais, systemd, journald e cgroups.</span></a>
+  <a class="mini-card" href="#m2-a4"><strong>Aula 2.4 — Pacotes, logs e cron</strong><span>apt/dnf, logrotate, journalctl e automação de tarefas.</span></a>
+</div>
+
+<!-- M2-A1 -->
+<article class="lesson" id="m2-a1">
+<div class="lesson-head"><span class="lesson-code">M2-A1</span><h3>Aula 2.1 — Usuários, grupos e identidade</h3></div>
+<p class="objective"><strong>Objetivo:</strong> Entender como o Linux representa identidades e como UID/GID afetam acesso a arquivos, processos e serviços.</p>
+
+<div class="theory">
+<h4>Teoria essencial</h4>
+<ul>
+  <li><strong>UID (User ID):</strong> número inteiro que identifica unicamente um usuário no kernel. O kernel trabalha apenas com UIDs; nomes são resolvidos por bibliotecas. UID 0 = root.</li>
+  <li><strong>GID (Group ID):</strong> análogo ao UID para grupos. Um usuário tem um GID primário e pode pertencer a vários grupos suplementares.</li>
+  <li><strong>Contas de serviço (UIDs 1–999):</strong> criadas para daemons (www-data, sshd, nobody). Não têm shell interativo (<code>/usr/sbin/nologin</code>) e não devem ter senha válida.</li>
+  <li><strong>Contas de usuários (UIDs ≥ 1000):</strong> contas humanas com diretório home e shell válido.</li>
+  <li><strong>Princípio do menor privilégio:</strong> cada processo, serviço e usuário deve ter apenas as permissões mínimas necessárias para sua função.</li>
+</ul>
+</div>
+
+<h4>Estrutura dos arquivos de identidade</h4>
+<div class="diagram">
+/etc/passwd  — Contas de usuário (legível por todos)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+usuario : x : UID : GID : GECOS : home : shell
+   │      │    │     │     │       │       │
+   │      │    │     │     │       │       └─ /bin/bash ou /sbin/nologin
+   │      │    │     │     │       └─ /home/usuario
+   │      │    │     │     └─ descrição (nome completo, sala...)
+   │      │    │     └─ GID primário
+   │      │    └─ UID numérico
+   │      └─ 'x' → senha está em /etc/shadow
+   └─ nome de login
+
+/etc/shadow  — Hashes de senha (apenas root)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+usuario : $6$salt$hash : last : min : max : warn : inactive : expire : :
+           └─ $6$ = SHA-512 (recomendado)
+
+/etc/group   — Grupos
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+grupo : x : GID : membro1,membro2</div>
+
+<div class="callout callout-warn">
+<strong>Atenção — /etc/shadow</strong>
+<code>/etc/shadow</code> deve ter permissão 640 ou 000, legível apenas por root (ou grupo shadow). Contém hashes de senha — exposição permite ataque offline de dicionário. Verifique: <code>ls -l /etc/shadow</code> deve mostrar <code>-rw-r-----</code> ou <code>----------</code>.
+</div>
+
+<h4>Comandos explicados</h4>
+<pre class="cmd"><code><span class="tok-prompt">$</span> <span class="tok-cmd">id</span>                                  <span class="tok-comment"># UID, GID primário e todos os grupos</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">id</span> www-data                         <span class="tok-comment"># Identidade de conta de serviço</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">getent</span> passwd <span class="tok-var">$USER</span>                <span class="tok-comment"># Linha de /etc/passwd do usuário atual</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">getent</span> group sudo                   <span class="tok-comment"># Membros do grupo sudo</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">groups</span>                              <span class="tok-comment"># Grupos do usuário atual</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">sudo</span> <span class="tok-opt">-l</span>                             <span class="tok-comment"># Permissões sudo disponíveis para o usuário</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">sudo</span> <span class="tok-cmd">useradd</span> <span class="tok-opt">-m</span> <span class="tok-opt">-s</span> /bin/bash aluno2 <span class="tok-comment"># Cria usuário com home e shell</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">sudo</span> <span class="tok-cmd">usermod</span> <span class="tok-opt">-aG</span> sudo aluno2       <span class="tok-comment"># Adiciona ao grupo sudo (Debian/Ubuntu)</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">sudo</span> <span class="tok-cmd">passwd</span> <span class="tok-opt">-l</span> aluno2              <span class="tok-comment"># Bloqueia conta sem remover</span></code></pre>
+<pre class="output"><code>uid=1000(aluno) gid=1000(aluno) groups=1000(aluno),4(adm),24(cdrom),27(sudo),30(dip)
+
+aluno:x:1000:1000:Aluno de Redes,,,:/home/aluno:/bin/bash
+
+uid=33(www-data) gid=33(www-data) groups=33(www-data)</code></pre>
+
+<div class="activity">
+<h4>Atividade prática exigida</h4>
+<ol>
+  <li>Liste UID, GID e grupos suplementares de sua conta. Identifique grupos privilegiados.</li>
+  <li>Identifique 3 contas de serviço em <code>/etc/passwd</code> e explique o que cada daemon faz.</li>
+  <li>Crie uma conta de laboratório, defina senha e verifique o hash gerado em <code>/etc/shadow</code>.</li>
+  <li>Explique por que pertencer ao grupo <code>sudo</code> ou <code>wheel</code> é equivalente a ter acesso root.</li>
+</ol>
+<p><strong>Entrega:</strong> relatório Markdown com comando, saída, interpretação e conclusão.</p>
+</div>
+</article>
+
+<!-- M2-A2 -->
+<article class="lesson" id="m2-a2">
+<div class="lesson-head"><span class="lesson-code">M2-A2</span><h3>Aula 2.2 — Permissões em arquivos e diretórios</h3></div>
+<p class="objective"><strong>Objetivo:</strong> Dominar rwx, notação octal, bits especiais e entender como permissões se comportam de forma diferente em arquivos e diretórios.</p>
+
+<div class="theory">
+<h4>Teoria essencial</h4>
+<ul>
+  <li><strong>Modelo DAC (Discretionary Access Control):</strong> o dono do arquivo controla quem pode acessá-lo. O kernel avalia: dono → grupo → outros (em ordem, parando na primeira correspondência).</li>
+  <li><strong>Em arquivo:</strong> <code>r</code> = ler conteúdo, <code>w</code> = modificar conteúdo, <code>x</code> = executar como programa.</li>
+  <li><strong>Em diretório:</strong> <code>r</code> = listar nomes dos arquivos, <code>w</code> = criar/remover entradas (mais crítico que em arquivo!), <code>x</code> = traversar o caminho.</li>
+  <li><strong>SUID (4):</strong> executável roda com UID do dono em vez do usuário chamador. Ex: <code>passwd</code> precisa de SUID para escrever em <code>/etc/shadow</code>.</li>
+  <li><strong>SGID (2):</strong> em diretório, novos arquivos herdam o grupo do diretório — útil para colaboração.</li>
+  <li><strong>Sticky bit (1):</strong> em diretório, só o dono pode remover seus próprios arquivos. Ex: <code>/tmp</code>.</li>
+</ul>
+</div>
+
+<h4>Tabela de permissões octais</h4>
+<table class="table">
+<thead><tr><th>Octal</th><th>Binário</th><th>Permissão</th><th>Exemplo de uso</th></tr></thead>
+<tbody>
+<tr><td><strong>7</strong></td><td>111</td><td>rwx</td><td>Dono de diretório de projeto</td></tr>
+<tr><td><strong>6</strong></td><td>110</td><td>rw-</td><td>Arquivo de configuração do dono</td></tr>
+<tr><td><strong>5</strong></td><td>101</td><td>r-x</td><td>Script executável para grupo</td></tr>
+<tr><td><strong>4</strong></td><td>100</td><td>r--</td><td>Arquivo público somente leitura</td></tr>
+<tr><td><strong>3</strong></td><td>011</td><td>-wx</td><td>Raro; diretório de escrita sem listagem</td></tr>
+<tr><td><strong>2</strong></td><td>010</td><td>-w-</td><td>Raro em prática</td></tr>
+<tr><td><strong>1</strong></td><td>001</td><td>--x</td><td>Traversar diretório sem listar</td></tr>
+<tr><td><strong>0</strong></td><td>000</td><td>---</td><td>Sem acesso</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info">
+<strong>Conceito-chave: chmod 750</strong>
+<code>chmod 750 projeto</code> → dono: rwx (7) | grupo: r-x (5) | outros: --- (0)<br/>
+Intepretação: o dono pode tudo; o grupo pode ler e entrar; usuários fora do grupo não veem nada.
+Uso comum: diretório de projeto compartilhado dentro de uma equipe.
+</div>
+
+<h4>Comandos explicados</h4>
+<pre class="cmd"><code><span class="tok-prompt">$</span> <span class="tok-cmd">ls</span> <span class="tok-opt">-l</span> <span class="tok-path">/etc/passwd</span> <span class="tok-path">/etc/shadow</span>       <span class="tok-comment"># Compara permissões dos dois arquivos</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">chmod</span> 750 projeto                    <span class="tok-comment"># Define rwxr-x---</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">chmod</span> <span class="tok-opt">-R</span> 640 projeto/conf/           <span class="tok-comment"># Aplica recursivamente</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">chown</span> aluno:turma projeto            <span class="tok-comment"># Altera dono e grupo</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">chmod</span> g+s projeto/                   <span class="tok-comment"># SGID: novos arquivos herdam grupo</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">chmod</span> +t <span class="tok-path">/tmp/compartilhado</span>        <span class="tok-comment"># Sticky bit: só dono remove seus arquivos</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">umask</span>                                <span class="tok-comment"># Máscara padrão (022 → arquivos 644, dirs 755)</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">find</span> <span class="tok-path">/</span> <span class="tok-opt">-perm</span> <span class="tok-opt">-4000</span> <span class="tok-opt">-type</span> f 2<span class="tok-op">&gt;</span><span class="tok-path">/dev/null</span> <span class="tok-op">|</span> <span class="tok-cmd">head</span> <span class="tok-comment"># Binários SUID no sistema</span></code></pre>
+<pre class="output"><code>-rw-r--r-- 1 root root   2890 Jan 10 08:00 /etc/passwd
+-rw-r----- 1 root shadow 1520 Jan 10 08:00 /etc/shadow
+
+/usr/bin/passwd
+/usr/bin/sudo
+/usr/bin/su
+/usr/bin/newgrp
+/usr/bin/mount</code></pre>
+
+<div class="callout callout-danger">
+<strong>Risco — binários SUID</strong>
+Cada binário SUID mal configurado é um vetor de escalonamento de privilégios. Um invasor com shell limitado pode usar um binário SUID vulnerável para obter root. Mantenha a lista de binários SUID mínima e auditada regularmente.
+</div>
+
+<div class="activity">
+<h4>Atividade prática exigida</h4>
+<ol>
+  <li>Crie <code>empresa/{financeiro,rh,ti}</code> com grupos e permissões coerentes para cada setor.</li>
+  <li>Aplique SGID ao diretório compartilhado e valide que novos arquivos herdam o grupo.</li>
+  <li>Explique em que cenário o sticky bit em <code>/tmp</code> previne problemas entre usuários.</li>
+  <li>Liste binários SUID e justifique quais são necessários e quais deveriam ser auditados.</li>
+</ol>
+<p><strong>Entrega:</strong> relatório Markdown com comando, saída, interpretação e conclusão.</p>
+</div>
+</article>
+
+<!-- M2-A3 -->
+<article class="lesson" id="m2-a3">
+<div class="lesson-head"><span class="lesson-code">M2-A3</span><h3>Aula 2.3 — Processos e serviços</h3></div>
+<p class="objective"><strong>Objetivo:</strong> Analisar processos, estados, sinais e serviços persistentes gerenciados pelo systemd.</p>
+
+<div class="theory">
+<h4>Teoria essencial</h4>
+<ul>
+  <li><strong>Processo:</strong> instância em execução de um programa. Cada processo tem PID único, PPID (pai), UID/GID (segurança) e descritores de arquivo abertos.</li>
+  <li><strong>systemd (PID 1):</strong> init system moderno que gerencia todos os processos de usuário. Substituiu SysV init. Mantém unidades (units): <code>.service</code>, <code>.socket</code>, <code>.timer</code>, <code>.mount</code>, <code>.target</code>.</li>
+  <li><strong>cgroups (Control Groups):</strong> mecanismo do kernel para agrupar processos e limitar uso de CPU, memória, I/O de disco e de rede por grupo. systemd usa cgroups internamente.</li>
+  <li><strong>journald:</strong> daemon que coleta logs de todos os serviços, kernel e sistema de forma estruturada, com suporte a filtros poderosos.</li>
+</ul>
+</div>
+
+<h4>Estados de processo no Linux</h4>
+<div class="svg-wrap">
+<svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto;">
+  <defs>
+    <marker id="pa" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <polygon points="0 0,7 2.5,0 5" fill="#39ff7a"/>
+    </marker>
+    <marker id="pa2" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <polygon points="0 0,7 2.5,0 5" fill="#8ec9a4"/>
+    </marker>
+  </defs>
+  <rect width="680" height="220" fill="#010403" rx="10"/>
+  <!-- Created -->
+  <rect x="20"  y="85" width="90" height="40" fill="rgba(57,255,122,.12)" rx="7" stroke="rgba(57,255,122,.4)" stroke-width="1.5"/>
+  <text x="65"  y="106" text-anchor="middle" font-family="Courier New" font-size="9" font-weight="900" fill="#39ff7a">CRIADO</text>
+  <text x="65"  y="118" text-anchor="middle" font-family="Courier New" font-size="7" fill="#5a8f6e">fork()</text>
+  <!-- Ready -->
+  <rect x="160" y="85" width="90" height="40" fill="rgba(100,210,255,.12)" rx="7" stroke="rgba(100,210,255,.4)" stroke-width="1.5"/>
+  <text x="205" y="106" text-anchor="middle" font-family="Courier New" font-size="9" font-weight="900" fill="#64d2ff">PRONTO</text>
+  <text x="205" y="118" text-anchor="middle" font-family="Courier New" font-size="7" fill="#5a8f6e">aguarda CPU</text>
+  <!-- Running -->
+  <rect x="300" y="85" width="90" height="40" fill="rgba(57,255,122,.2)" rx="7" stroke="rgba(57,255,122,.6)" stroke-width="2"/>
+  <text x="345" y="106" text-anchor="middle" font-family="Courier New" font-size="9" font-weight="900" fill="#39ff7a">RODANDO</text>
+  <text x="345" y="118" text-anchor="middle" font-family="Courier New" font-size="7" fill="#5a8f6e">na CPU (R)</text>
+  <!-- Sleeping -->
+  <rect x="440" y="35" width="110" height="40" fill="rgba(100,210,255,.1)" rx="7" stroke="rgba(100,210,255,.35)" stroke-width="1"/>
+  <text x="495" y="51" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#64d2ff">DORMINDO</text>
+  <text x="495" y="64" text-anchor="middle" font-family="Courier New" font-size="7" fill="#5a8f6e">interruptível S</text>
+  <!-- Unint Sleep -->
+  <rect x="440" y="135" width="110" height="40" fill="rgba(255,209,102,.1)" rx="7" stroke="rgba(255,209,102,.35)" stroke-width="1"/>
+  <text x="495" y="151" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#ffd166">ESPERANDO</text>
+  <text x="495" y="164" text-anchor="middle" font-family="Courier New" font-size="7" fill="#5a8f6e">ininterrupt. D</text>
+  <!-- Stopped -->
+  <rect x="560" y="85" width="90" height="40" fill="rgba(255,209,102,.12)" rx="7" stroke="rgba(255,209,102,.4)" stroke-width="1.5"/>
+  <text x="605" y="101" text-anchor="middle" font-family="Courier New" font-size="9" font-weight="900" fill="#ffd166">PARADO</text>
+  <text x="605" y="116" text-anchor="middle" font-family="Courier New" font-size="7" fill="#5a8f6e">SIGSTOP (T)</text>
+  <!-- Zombie -->
+  <rect x="300" y="160" width="90" height="40" fill="rgba(255,107,107,.12)" rx="7" stroke="rgba(255,107,107,.4)" stroke-width="1.5"/>
+  <text x="345" y="176" text-anchor="middle" font-family="Courier New" font-size="9" font-weight="900" fill="#ff6b6b">ZUMBI</text>
+  <text x="345" y="189" text-anchor="middle" font-family="Courier New" font-size="7" fill="#5a8f6e">sem wait() Z</text>
+  <!-- Arrows -->
+  <line x1="110" y1="105" x2="158" y2="105" stroke="#39ff7a" stroke-width="1.5" marker-end="url(#pa)"/>
+  <line x1="250" y1="105" x2="298" y2="105" stroke="#39ff7a" stroke-width="1.5" marker-end="url(#pa)"/>
+  <line x1="390" y1="95" x2="438" y2="68"  stroke="#8ec9a4" stroke-width="1" marker-end="url(#pa2)"/>
+  <line x1="390" y1="115" x2="438" y2="148" stroke="#8ec9a4" stroke-width="1" marker-end="url(#pa2)"/>
+  <line x1="440" y1="59" x2="345" y2="85"  stroke="#8ec9a4" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#pa2)"/>
+  <line x1="440" y1="155" x2="390" y2="130" stroke="#8ec9a4" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#pa2)"/>
+  <line x1="390" y1="105" x2="558" y2="105" stroke="#ffd166" stroke-width="1" marker-end="url(#pa)"/>
+  <line x1="345" y1="125" x2="345" y2="158" stroke="#ff6b6b" stroke-width="1" marker-end="url(#pa)"/>
+</svg>
+<figcaption>Fig. 3 — Estados de processo no Linux. Processos no estado D (uninterruptible sleep) geralmente aguardam I/O de disco ou rede — importante para diagnóstico de travamentos.</figcaption>
+</div>
+
+<h4>Sinais Unix importantes</h4>
+<table class="sig-table">
+<thead><tr><th>Sinal</th><th>Número</th><th>Comportamento padrão</th><th>Uso típico</th></tr></thead>
+<tbody>
+<tr><td>SIGHUP</td><td class="sig-num">1</td><td>Encerrar (ou recarregar config em daemons)</td><td><code>kill -HUP</code> para recarregar nginx/sshd sem parar</td></tr>
+<tr><td>SIGINT</td><td class="sig-num">2</td><td>Interromper processo</td><td>Ctrl+C no terminal</td></tr>
+<tr><td>SIGTERM</td><td class="sig-num">15</td><td>Encerrar controladamente (pode ser capturado)</td><td>Padrão de <code>kill PID</code> — processo pode limpar</td></tr>
+<tr><td>SIGKILL</td><td class="sig-num">9</td><td>Encerrar imediatamente (não pode ser ignorado)</td><td>Último recurso — processo não pode limpar estado</td></tr>
+<tr><td>SIGSTOP</td><td class="sig-num">19</td><td>Pausar processo (não pode ser ignorado)</td><td>Suspender processo temporariamente</td></tr>
+<tr><td>SIGCONT</td><td class="sig-num">18</td><td>Continuar processo parado</td><td>Retomar processo suspenso por SIGSTOP</td></tr>
+</tbody>
+</table>
+
+<h4>Comandos explicados</h4>
+<pre class="cmd"><code><span class="tok-prompt">$</span> <span class="tok-cmd">ps</span> aux <span class="tok-op">|</span> <span class="tok-cmd">head</span> <span class="tok-opt">-15</span>                 <span class="tok-comment"># Lista processos com usuário, CPU e memória</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">ps</span> <span class="tok-opt">-eo</span> pid,ppid,user,stat,cmd <span class="tok-op">|</span> <span class="tok-cmd">head</span> <span class="tok-comment"># Formato customizado</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">pgrep</span> <span class="tok-opt">-a</span> sshd                      <span class="tok-comment"># PID(s) do processo sshd</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">systemctl</span> status ssh               <span class="tok-comment"># Estado do serviço SSH</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">systemctl</span> <span class="tok-opt">--type=service</span> <span class="tok-opt">--state=running</span> <span class="tok-comment"># Todos os serviços ativos</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">journalctl</span> <span class="tok-opt">-u</span> ssh <span class="tok-opt">--since</span> today    <span class="tok-comment"># Logs do serviço SSH de hoje</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">kill</span> <span class="tok-opt">-TERM</span> 1234                    <span class="tok-comment"># Encerramento controlado (PID 1234)</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">kill</span> <span class="tok-opt">-9</span> 1234                       <span class="tok-comment"># Encerramento forçado — só se -TERM falhar</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">systemctl</span> list-units <span class="tok-opt">--failed</span>      <span class="tok-comment"># Serviços com falha</span></code></pre>
+
+<div class="activity">
+<h4>Atividade prática exigida</h4>
+<ol>
+  <li>Liste todos os processos em estado <code>D</code> (uninterruptible sleep) e explique o que pode causá-los.</li>
+  <li>Escolha um serviço instalado, verifique status, logs e dependências com <code>systemctl show</code>.</li>
+  <li>Explique por que usar <code>kill -9</code> indiscriminadamente é ruim em servidores de banco de dados.</li>
+  <li>Identifique o serviço de rede ativo (ssh, nginx, etc.) e verifique se ele reinicia automaticamente (<code>Restart=</code> na unit).</li>
+</ol>
+<p><strong>Entrega:</strong> relatório Markdown com comando, saída, interpretação e conclusão.</p>
+</div>
+</article>
+
+<!-- M2-A4 -->
+<article class="lesson" id="m2-a4">
+<div class="lesson-head"><span class="lesson-code">M2-A4</span><h3>Aula 2.4 — Pacotes, logs e automação com cron</h3></div>
+<p class="objective"><strong>Objetivo:</strong> Administrar instalação, atualização e diagnóstico de pacotes, interpretar logs e automatizar tarefas periódicas sem quebrar o sistema.</p>
+
+<div class="theory">
+<h4>Teoria essencial</h4>
+<ul>
+  <li><strong>Gerenciador de pacotes:</strong> resolve dependências, verifica integridade (assinatura GPG) e mantém banco de dados local do que está instalado. <code>apt</code> (Debian/Ubuntu) e <code>dnf</code>/<code>yum</code> (RHEL/Fedora) são os principais.</li>
+  <li><strong>Ciclo de atualização:</strong> em servidores de produção, atualizações devem ter janela de manutenção, testes em staging e plano de rollback — não só <code>apt upgrade -y</code>.</li>
+  <li><strong>logrotate:</strong> rotaciona, comprime e expira arquivos de log automaticamente, prevenindo que <code>/var/log</code> encha o disco.</li>
+  <li><strong>cron:</strong> agendador de tarefas. Sintaxe de 5 campos: minuto hora dia-do-mês mês dia-da-semana. <code>systemd timers</code> é a alternativa moderna.</li>
+</ul>
+</div>
+
+<h4>Comparação apt vs dnf</h4>
+<table class="table">
+<thead><tr><th>Operação</th><th>apt (Debian/Ubuntu)</th><th>dnf (RHEL/Fedora)</th></tr></thead>
+<tbody>
+<tr><td>Atualizar índice</td><td><code>apt update</code></td><td><code>dnf check-update</code></td></tr>
+<tr><td>Instalar pacote</td><td><code>apt install NOME</code></td><td><code>dnf install NOME</code></td></tr>
+<tr><td>Remover pacote</td><td><code>apt remove NOME</code></td><td><code>dnf remove NOME</code></td></tr>
+<tr><td>Atualizar sistema</td><td><code>apt upgrade</code></td><td><code>dnf upgrade</code></td></tr>
+<tr><td>Buscar pacote</td><td><code>apt search NOME</code></td><td><code>dnf search NOME</code></td></tr>
+<tr><td>Info do pacote</td><td><code>apt show NOME</code></td><td><code>dnf info NOME</code></td></tr>
+<tr><td>Listar instalados</td><td><code>dpkg -l</code></td><td><code>rpm -qa</code></td></tr>
+<tr><td>Qual pacote tem arquivo</td><td><code>dpkg -S /caminho</code></td><td><code>rpm -qf /caminho</code></td></tr>
+</tbody>
+</table>
+
+<h4>Sintaxe do crontab</h4>
+<div class="diagram">
+┌──── minuto    (0–59)
+│  ┌─── hora      (0–23)
+│  │  ┌── dia do mês (1–31)
+│  │  │  ┌─ mês      (1–12)
+│  │  │  │  ┌ dia da semana (0–7, 0=Dom)
+│  │  │  │  │
+*  *  *  *  *  /comando/a/executar
+
+Exemplos:
+0  2  *  *  *  /usr/bin/rsync -av /dados /backup     # todos os dias 02:00
+*/5 * *  *  *  /usr/local/bin/check_iface.sh         # a cada 5 minutos
+0  0  1  *  *  /usr/bin/apt update && apt upgrade -y # 1º dia do mês 00:00</div>
+
+<h4>Comandos explicados</h4>
+<pre class="cmd"><code><span class="tok-prompt">$</span> <span class="tok-cmd">sudo</span> <span class="tok-cmd">apt</span> update <span class="tok-op">&amp;&amp;</span> <span class="tok-cmd">apt</span> list <span class="tok-opt">--upgradable</span> <span class="tok-comment"># Atualiza índice e lista o que pode ser atualizado</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">dpkg</span> <span class="tok-opt">--verify</span>                        <span class="tok-comment"># Verifica integridade dos pacotes instalados</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">journalctl</span> <span class="tok-opt">-p</span> warning <span class="tok-opt">--since</span> today  <span class="tok-comment"># Avisos e erros desde hoje</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">journalctl</span> <span class="tok-opt">-u</span> ssh <span class="tok-opt">-n</span> 50 <span class="tok-opt">--no-pager</span>  <span class="tok-comment"># Últimas 50 linhas do log SSH</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">du</span> <span class="tok-opt">-sh</span> <span class="tok-path">/var/log</span><span class="tok-path">/*</span> <span class="tok-op">|</span> <span class="tok-cmd">sort</span> <span class="tok-opt">-rh</span> <span class="tok-op">|</span> <span class="tok-cmd">head</span> <span class="tok-comment"># Maiores arquivos de log</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">crontab</span> <span class="tok-opt">-l</span>                           <span class="tok-comment"># Lista crontab do usuário atual</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">crontab</span> <span class="tok-opt">-e</span>                           <span class="tok-comment"># Edita crontab do usuário atual</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">cat</span> <span class="tok-path">/etc/cron.d/</span>*                    <span class="tok-comment"># Crontabs de sistema e de pacotes</span></code></pre>
+
+<div class="callout callout-warn">
+<strong>Atenção — atualização em produção</strong>
+Nunca execute <code>apt upgrade</code> diretamente em servidor de produção sem: (1) testar antes em staging, (2) fazer backup/snapshot, (3) ler o changelog dos pacotes críticos (kernel, bibliotecas SSL, banco de dados), (4) ter plano de rollback definido.
+</div>
+
+<div class="activity">
+<h4>Atividade prática exigida</h4>
+<ol>
+  <li>Liste pacotes atualizáveis e identifique quais são críticos (kernel, openssl, openssh).</li>
+  <li>Crie um crontab que faça backup de <code>/etc</code> toda noite às 03:00 para <code>/backup/etc-AAAA-MM-DD/</code>.</li>
+  <li>Identifique os 5 maiores arquivos de log e proponha política de logrotate para eles.</li>
+  <li>Explique os riscos de atualizar OpenSSL em um servidor SSH ativo.</li>
+</ol>
+<p><strong>Entrega:</strong> relatório Markdown com comando, saída, interpretação e conclusão.</p>
+</div>
+</article>
+
+<div class="quiz" id="quiz-m2">
+<h3>Avaliação do módulo — Administração Linux</h3>
+<p>10 questões objetivas. Aprovação: 70 % (7/10).</p>
+<div class="quiz-body" data-module="m2"></div>
+<button onclick="gradeQuiz('m2')">Corrigir avaliação</button>
+<div class="result" id="result-m2"></div>
+</div>
+</section>
+<!-- MÓDULOS 3, 4 E SEÇÕES NOVAS CONTINUAM NO SCRIPT ABAIXO -->
+</main></div></div>
+
+<script>
+const QUIZZES={
+"m1":[
+["Em uma distribuição GNU/Linux, qual alternativa descreve corretamente a relação entre kernel, shell e distribuição?",["Kernel é o interpretador de comandos; shell acessa o hardware diretamente.","Kernel gerencia recursos; shell interpreta comandos; distribuição integra kernel, ferramentas, pacotes e configuração.","Distribuição substitui o kernel quando há interface gráfica instalada.","Shell é responsável direto por memória, drivers e escalonamento de processos."],1],
+["Qual evidência é mais adequada para identificar a distribuição Linux instalada?",["chmod 755 /etc","cat /etc/os-release","kill -TERM 1","ls /tmp"],1],
+["Por que /proc não deve ser tratado como um diretório comum em disco?",["Porque é uma visão virtual do kernel gerada dinamicamente, sem dados persistentes.","Porque armazena apenas documentos dos usuários.","Porque contém somente pacotes instalados pelo gerenciador.","Porque é exclusivo para arquivos de mídia e fontes."],0],
+["Qual sequência representa corretamente a execução de um comando no Linux?",["Usuário → Shell → Programa → Syscall → Kernel → Hardware","Hardware → navegador → editor de texto → usuário","Usuário → /var → /home → pacote → kernel","DNS → chmod → sudo → arquivo → disco"],0],
+["O que é uma syscall (chamada de sistema) no contexto do Linux?",["Um comando de rede para testar latência entre hosts.","Uma solicitação controlada de um programa em user space para serviços do kernel.","Um script de shell que substitui comandos externos.","Um arquivo de configuração do systemd para serviços."],1],
+["Qual comando mostra as chamadas de sistema realizadas por um programa?",["chmod -R 755","strace -c ls","cat /etc/os-release","systemctl status"],1],
+["Para um engenheiro de redes, qual diretório Linux contém as configurações de interface de rede?",["Somente em /home/usuario","Em /etc (ex: /etc/network/, /etc/netplan/) e em /sys/class/net/","/tmp/interfaces","/boot/grub/"],1],
+["Qual afirmação sobre /sys/class/net está correta?",["É um diretório em disco com arquivos permanentes sobre interfaces de rede.","É um sistema de arquivos virtual que expõe atributos de interfaces de rede gerenciados pelo kernel.","Contém scripts de inicialização de rede do systemd.","Substitui /etc/network/interfaces em todas as distribuições."],1],
+["Qual shell é o padrão mais comum em servidores Linux e scripts de administração?",["fish","zsh","bash","dash"],2],
+["O que acontece quando o shell recebe um comando do usuário?",["Ele acessa o hardware diretamente via driver embutido.","Ele faz fork do processo, usa exec para carregar o binário e o processo filho faz syscalls ao kernel.","Ele ignora o kernel e executa o comando diretamente na RAM.","Ele envia o comando por socket para o systemd processar."],1]
+],
+"m2":[
+["UID e GID são importantes porque:",["Definem identidade de usuário e grupo usada pelo kernel no controle de acesso a arquivos e processos.","Indicam apenas a versão do kernel em uso.","Substituem endereços IP na identificação de hosts.","São parâmetros de otimização de CPU do scheduler."],0],
+["Em diretórios, a permissão x (execute) permite principalmente:",["Executar o diretório como binário ELF.","Traversar o diretório no caminho e acessar entradas conhecidas.","Criptografar automaticamente todos os arquivos dentro.","Impedir que root acesse os arquivos do diretório."],1],
+["Qual interpretação de chmod 750 está correta?",["Dono rwx (7), grupo r-x (5), outros sem acesso (0).","Dono r-- (4), grupo rw- (6), outros rwx (7) — totalmente errado.","Todos os usuários têm rwx completo.","Dono sem acesso, grupo total, outros somente leitura."],0],
+["Por que /etc/shadow deve ser legível apenas por root?",["Porque contém hashes de senhas que podem ser atacados offline se expostos.","Porque é grande demais para usuários normais abrirem.","Porque contém configurações de firewall sensíveis.","Porque o systemd precisa de acesso exclusivo a ele."],0],
+["O que ocorre com novos arquivos criados em diretório com bit SGID ativado?",["Herdam o grupo do diretório, facilitando colaboração entre membros do mesmo grupo.","Ficam com permissão 777 automaticamente.","São criados somente como root.","Ficam imutáveis e não podem ser removidos."],0],
+["Para verificar estado e logs de um serviço systemd, a combinação mais adequada é:",["systemctl status + journalctl -u","touch e mkdir apenas","cat /proc/cpuinfo e chmod","tar e gzip"],0],
+["O que significa um processo no estado Z (zombie)?",["Processo rodando com prioridade máxima consumindo toda a CPU.","Processo finalizado cujo pai ainda não coletou o código de saída com wait().","Processo dormindo aguardando I/O de rede.","Processo parado por SIGSTOP aguardando SIGCONT."],1],
+["Qual a diferença entre SIGTERM e SIGKILL?",["SIGTERM pode ser capturado pelo processo, permitindo limpeza; SIGKILL não pode ser ignorado e termina imediatamente.","SIGTERM é mais forte que SIGKILL e sempre funciona primeiro.","SIGKILL reinicia o processo; SIGTERM apenas o pausa.","São equivalentes, apenas têm números diferentes."],0],
+["Por que atualização de pacotes em servidor deve ser planejada?",["Pode alterar dependências, comportamento de serviços e exigir reinicialização, impactando disponibilidade.","Nunca altera o comportamento do sistema operacional.","Remove todos os logs automaticamente ao concluir.","Impede qualquer vulnerabilidade por si só sem necessidade de testes."],0],
+["O que faz o logrotate no Linux?",["Rotaciona, comprime e expira arquivos de log para evitar que /var/log encha o disco.","Criptografa logs de autenticação para conformidade com LGPD.","Copia logs em tempo real para servidor remoto via syslog.","Converte logs do systemd em formato XML para análise."],0]
+],
+"m3":[
+["Qual comando mostra endereços IP configurados nas interfaces de rede?",["ip addr show","passwd -l","chmod -R 777","journalctl -p err"],0],
+["Se ping para 8.8.8.8 funciona, mas ping para www.unb.br falha com 'Name or service not known', o diagnóstico inicial deve focar em:",["Problema de DNS/resolução de nomes — conectividade IP está funcionando.","Permissão SUID em /bin/ping.","Compactação tar corrompida.","Diretório /home cheio."],0],
+["O comando ss -tulpen é útil para:",["Listar sockets TCP/UDP em escuta com o processo associado e porta.","Criar novos usuários no sistema.","Alterar senha de contas de serviço.","Montar dispositivos de armazenamento externo."],0],
+["Qual informação ip route get 8.8.8.8 fornece?",["Qual rota (interface, gateway) o sistema usaria para chegar a 8.8.8.8.","Quais usuários estão conectados ao sistema.","Quais arquivos têm permissão 777 no sistema.","Qual editor de texto está configurado como padrão."],0],
+["Um troubleshooting de rede criterioso deve validar em ordem:",["Interface → IP → Rota → DNS → Porta → Aplicação","Apenas reinstalação do kernel se houver problema.","Somente aparência e tema do terminal.","Apenas executar rm -rf e reconfigurar."],0],
+["O arquivo /etc/resolv.conf configura:",["Os servidores DNS que o sistema usa para resolver nomes.","As permissões de arquivos temporários em /tmp.","As interfaces de rede com endereços estáticos.","Os usuários com permissão de acesso remoto SSH."],0],
+["Qual afirmação sobre o socket de rede está correta?",["Um socket é identificado pela combinação protocolo + IP local + porta local + IP remoto + porta remota.","Socket é sinônimo de arquivo de configuração de interface.","Porta e socket são termos intercambiáveis sem diferença técnica.","Sockets existem apenas para protocolo UDP."],0],
+["Por que traceroute pode mostrar asteriscos (*) em alguns saltos?",["Porque roteadores podem descartar ou não responder a pacotes TTL-exceeded por política de filtragem.","Porque o comando requer privilégios de root para mostrar todos os saltos.","Porque a rota não tem gateway padrão configurado.","Porque o DNS falhou na resolução dos nomes dos roteadores."],0],
+["Qual comando lista processos que estão ouvindo em portas de rede com seus PIDs?",["ss -tulpen ou lsof -i -P -n","cat /etc/hosts","df -hT","find / -perm -4000"],0],
+["O que diferencia a interface lo (loopback) das interfaces físicas?",["lo é uma interface virtual que aponta para o próprio host (127.0.0.1); nunca trafega dados em rede física.","lo é uma interface de backup ativada quando a física falha.","lo tem endereço MAC como qualquer interface Ethernet.","lo é criada pelo NetworkManager para redes sem fio."],0]
+],
+"m4":[
+["Hardening de servidor Linux significa:",["Reduzir superfície de ataque com configuração segura, menor privilégio e remoção do desnecessário.","Instalar todos os serviços disponíveis para ter redundância.","Apagar logs para liberar espaço em /var.","Abrir todas as portas para facilitar testes de conectividade."],0],
+["Qual fonte é mais adequada para investigar eventos de autenticação em sistemas com systemd?",["journalctl (filtrando por _COMM=sshd ou -u ssh)","mkdir /var/log/novo","echo 'ok' > /etc/passwd","tree /usr/share"],0],
+["No firewall de host com iptables/nftables, a chain INPUT trata:",["Tráfego destinado ao próprio host (pacotes que chegam e são processados localmente).","Arquivos criados no diretório /tmp.","Usuários membros do grupo sudo.","Tamanho máximo de memória RAM utilizada."],0],
+["Uma configuração segura de SSH deve incluir:",["Chaves públicas, PermitRootLogin no, PasswordAuthentication no e logs auditados.","Root com senha simples para facilitar acesso de emergência.","Desativar todo registro de eventos para melhorar performance.","Chave privada compartilhada no repositório Git do projeto."],0],
+["Por que logs de autenticação devem ser preservados e protegidos?",["Permitem correlacionar usuário, horário, origem IP, ação e resultado para investigação de incidentes.","Substituem completamente o uso de firewall.","Criam contas de usuário automaticamente ao crescer.","Impedem qualquer ataque por si só sem outras medidas."],0],
+["Por que binários SUID devem ser revisados periodicamente?",["Um binário SUID vulnerável pode ser explorado para obter privilégios de root a partir de conta limitada.","Binários SUID consomem mais CPU do que binários normais.","SUID impede que o systemd inicie serviços corretamente.","Apenas root pode executar binários SUID."],0],
+["O que faz o fail2ban em um servidor Linux?",["Monitora logs, detecta tentativas repetidas de autenticação e bloqueia IPs ofensores via firewall.","Cria usuários temporários para testes de penetração.","Comprime automaticamente logs maiores que 1 GB.","Substitui o daemon SSH por uma versão mais segura."],0],
+["Por que PermitRootLogin deve ser 'no' em /etc/sshd_config?",["Porque força o uso de contas com nome de usuário + sudo, dificultando ataques de força bruta direcionados ao root.","Porque root não existe em sistemas Linux modernos.","Porque o root não tem chave pública por padrão.","Porque o SSH não suporta autenticação de root tecnicamente."],0],
+["Qual a diferença entre iptables e ufw?",["iptables é o framework de baixo nível; ufw é uma interface simplificada sobre iptables/nftables.","São equivalentes — apenas têm sintaxes diferentes para o mesmo binário.","ufw é mais seguro por usar criptografia; iptables não.","iptables foi removido do Linux e substituído por ufw."],0],
+["Qual vantagem de usar chave pública SSH em vez de senha?",["Elimina a possibilidade de ataque de força bruta online sobre credenciais, pois a autenticação é criptográfica.","Chave pública torna o SSH mais lento, mas mais legível.","Senha é mais segura porque pode ser trocada a qualquer momento.","Chave pública só funciona na mesma sub-rede do servidor."],0]
+]
+};
+</script>
+<!-- Módulos 3 e 4 carregados do arquivo de continuação -->
+<script src="assets/m3m4.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
