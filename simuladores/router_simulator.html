@@ -23,7 +23,7 @@
     --red:#E2574C;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{height:100%;margin:0;padding:0;overflow:hidden;}
   body{
     background:
       radial-gradient(1100px 500px at 15% -10%, rgba(95,212,192,0.10), transparent 60%),
@@ -34,63 +34,74 @@
     font-size:16px;
     -webkit-font-smoothing:antialiased;
   }
-  .app{max-width:1280px;margin:0 auto;padding:36px 24px 50px;}
+  .app{
+    max-width:1520px;margin:0 auto;height:100vh;
+    padding:16px 22px 12px;
+    display:flex;flex-direction:column;gap:12px;
+  }
 
-  header h1{
-    font-size:36px;font-weight:700;margin:0 0 8px;letter-spacing:-0.015em;
+  /* ---------- Top bar: title + protocol + phase tracker ---------- */
+  .topbar{
+    flex:0 0 auto;
+    background:linear-gradient(180deg, var(--panel), var(--panel-2));
+    border:1px solid var(--border);border-radius:14px;
+    padding:12px 22px 14px;
+    box-shadow:0 10px 30px -12px rgba(0,0,0,0.45);
+  }
+  .topbar-row{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:10px;}
+  .topbar-row h1{
+    font-size:23px;font-weight:700;margin:0;letter-spacing:-0.01em;
     background:linear-gradient(90deg, var(--ink) 35%, var(--teal) 100%);
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  header p.sub{
-    color:var(--muted);font-size:17px;line-height:1.6;max-width:720px;margin:0 0 28px;
-  }
+  .topbar-protocol{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);font-weight:500;}
+  .topbar-protocol select{width:auto;}
 
-  /* ---------- Metro / phase tracker ---------- */
-  .metro-wrap{
-    background:linear-gradient(180deg, var(--panel), var(--panel-2));
-    border:1px solid var(--border);border-radius:14px;
-    padding:26px 32px 20px;margin-bottom:26px;
-    box-shadow:0 10px 30px -12px rgba(0,0,0,0.45);
-  }
   .metro{display:flex;align-items:center;justify-content:space-between;position:relative;}
-  .stop{display:flex;flex-direction:column;align-items:center;gap:9px;position:relative;z-index:1;flex:0 0 auto;}
-  .dot{width:18px;height:18px;border-radius:50%;background:var(--panel-2);border:2px solid var(--muted-line);transition:all .25s ease;}
+  .stop{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;z-index:1;flex:0 0 auto;}
+  .dot{width:16px;height:16px;border-radius:50%;background:var(--panel-2);border:2px solid var(--muted-line);transition:all .25s ease;}
   .stop.done .dot{background:var(--teal);border-color:var(--teal);}
-  .stop.active .dot{background:var(--amber);border-color:var(--amber);box-shadow:0 0 0 6px rgba(242,166,90,0.22);}
-  .stop-label{font-size:13.5px;color:var(--muted);text-align:center;max-width:110px;line-height:1.35;font-weight:500;}
+  .stop.active .dot{background:var(--amber);border-color:var(--amber);box-shadow:0 0 0 5px rgba(242,166,90,0.22);}
+  .stop-label{font-size:12.5px;color:var(--muted);text-align:center;max-width:110px;line-height:1.3;font-weight:500;}
   .stop.active .stop-label,.stop.done .stop-label{color:var(--ink);}
-  .seg{flex:1 1 auto;height:2px;background:var(--muted-line);margin:0 -2px;position:relative;top:-18px;transition:background .25s ease;}
+  .seg{flex:1 1 auto;height:2px;background:var(--muted-line);margin:0 -2px;position:relative;top:-16px;transition:background .25s ease;}
   .seg.done{background:var(--teal);}
 
   /* ---------- Workspace ---------- */
-  .workspace{display:grid;grid-template-columns:1fr 320px;gap:20px;}
-  .main-col{display:flex;flex-direction:column;gap:20px;min-width:0;}
+  .workspace{
+    flex:1 1 auto;min-height:0;
+    display:grid;grid-template-columns:1fr 280px;grid-template-rows:minmax(0,1fr);
+    gap:14px;
+  }
   .panel{
     background:var(--panel);border:1px solid var(--border);border-radius:14px;
     box-shadow:0 8px 24px -14px rgba(0,0,0,0.5);
   }
-  .panel h2{font-size:15.5px;font-weight:600;margin:0;padding:14px 18px;border-bottom:1px solid var(--border-soft);color:var(--ink);text-transform:none;}
+  .panel h2{font-size:15px;font-weight:600;margin:0;padding:12px 18px;border-bottom:1px solid var(--border-soft);color:var(--ink);text-transform:none;}
+  .stage-header{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:10px 18px;border-bottom:1px solid var(--border-soft);}
+  .stage-header h2{padding:0;border:none;margin:0;flex:0 0 auto;}
+  .legend-inline{display:flex;align-items:center;flex-wrap:wrap;gap:16px;}
+  .legend-inline .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap;}
+  .legend-inline .legend-dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto;}
 
-  .stage-panel{padding:0;overflow:hidden;}
+  .stage-panel{padding:0;overflow:hidden;display:flex;flex-direction:column;min-height:0;}
   .stage-svg-wrap{
+    flex:1;min-height:0;
     background-image:
       linear-gradient(var(--border-soft) 1px,transparent 1px),
       linear-gradient(90deg,var(--border-soft) 1px,transparent 1px);
     background-size:34px 34px;
     background-color:var(--bg);
+    display:flex;align-items:center;justify-content:center;
   }
-  svg#topology{display:block;width:100%;height:auto;}
+  svg#topology{display:block;width:100%;height:100%;}
   .cost-label{font-family:'IBM Plex Mono',monospace;font-size:13px;fill:var(--ink);}
   .router-label{font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;fill:var(--ink);}
   .badge-label{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;fill:#06231C;}
 
-  .legend{display:flex;flex-wrap:wrap;gap:18px;padding:14px 18px;border-top:1px solid var(--border-soft);}
-  .legend-item{display:flex;align-items:center;gap:7px;font-size:14px;color:var(--muted);}
-  .legend-dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto;}
-
   /* ---------- Sidebar ---------- */
-  .side-col{display:flex;flex-direction:column;gap:16px;}
-  .controls{padding:18px 18px;display:flex;flex-direction:column;gap:13px;}
+  .side-col{display:flex;flex-direction:column;gap:12px;min-height:0;overflow-y:auto;}
+  .controls{padding:16px 16px;display:flex;flex-direction:column;gap:12px;}
   .row{display:flex;gap:10px;}
   button{
     font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:500;
@@ -103,36 +114,49 @@
   button.primary{background:linear-gradient(135deg, var(--teal), #4CC2AE);color:#06231C;border-color:var(--teal);font-weight:700;}
   button.primary:hover:not(:disabled){background:linear-gradient(135deg, #79E0CE, var(--teal));}
   button:disabled{opacity:.4;cursor:not-allowed;}
-  label.field{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:6px;font-weight:500;}
+  label.field{font-size:13.5px;color:var(--muted);display:flex;flex-direction:column;gap:6px;font-weight:500;}
   select,input[type=number]{
-    font-family:'IBM Plex Mono',monospace;font-size:15px;background:var(--panel-2);
+    font-family:'IBM Plex Mono',monospace;font-size:14.5px;background:var(--panel-2);
     color:var(--ink);border:1px solid var(--border);border-radius:9px;padding:9px 10px;
   }
 
-  .inspector{padding:18px 18px;min-height:130px;font-size:15px;}
-  .inspector .muted-txt{color:var(--muted);line-height:1.55;font-size:14.5px;}
-  .inspector .insp-title{font-weight:700;margin-bottom:12px;font-size:16.5px;}
+  .inspector{padding:16px 16px;min-height:110px;font-size:14.5px;flex:1 1 auto;}
+  .inspector .muted-txt{color:var(--muted);line-height:1.55;font-size:14px;}
+  .inspector .insp-title{font-weight:700;margin-bottom:12px;font-size:16px;}
   .insp-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;}
   .status-pill{font-family:'IBM Plex Mono',monospace;font-size:12.5px;padding:4px 10px;border-radius:20px;border:1px solid;}
   .status-up{color:var(--teal);border-color:var(--teal);}
   .status-down{color:var(--red);border-color:var(--red);}
-  .neighbor-line{font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--muted);padding:3px 0;}
+  .neighbor-line{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--muted);padding:3px 0;}
 
-  /* ---------- Tables + log ---------- */
-  .tables-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;}
+
+  /* ---------- Bottom tabs: vetores/LSDB, tabela, log ---------- */
+  .tabs-panel{flex:0 0 auto;height:34vh;min-height:190px;max-height:280px;display:flex;flex-direction:column;overflow:hidden;}
+  .tab-bar{flex:0 0 auto;display:flex;gap:4px;padding:8px 10px 0;border-bottom:1px solid var(--border-soft);}
+  .tab-bar button{
+    flex:none;background:transparent;color:var(--muted);border:1px solid transparent;
+    border-radius:9px 9px 0 0;padding:9px 18px;font-size:14.5px;font-weight:500;
+  }
+  .tab-bar button:hover:not(:disabled){transform:none;border-color:transparent;color:var(--ink);}
+  .tab-bar button.active{background:var(--panel-2);color:var(--ink);border-color:var(--border-soft);border-bottom-color:var(--panel-2);}
+  .tab-content{display:none;flex:1;min-height:0;flex-direction:column;}
+  .tab-content.active{display:flex;}
+  .tab-inner-title{flex:0 0 auto;font-size:15px;font-weight:600;margin:0;padding:12px 18px;color:var(--ink);border-bottom:1px solid var(--border-soft);}
+  .tab-scroll{flex:1;min-height:0;overflow-y:auto;}
+
   table{width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:14.5px;}
   thead th{
-    text-align:left;color:var(--muted);font-weight:600;padding:10px 16px;border-bottom:1px solid var(--border-soft);
+    position:sticky;top:0;background:var(--panel);
+    text-align:left;color:var(--muted);font-weight:600;padding:9px 16px;border-bottom:1px solid var(--border-soft);
     font-size:13px;
   }
-  tbody td{padding:9px 16px;border-bottom:1px solid var(--border-soft);color:var(--ink);}
+  tbody td{padding:8px 16px;border-bottom:1px solid var(--border-soft);color:var(--ink);}
   tbody tr:last-child td{border-bottom:none;}
-  .placeholder-row td{color:var(--muted);font-family:'IBM Plex Sans',sans-serif;font-style:normal;padding:18px 16px;}
+  .placeholder-row td{color:var(--muted);font-family:'IBM Plex Sans',sans-serif;font-style:normal;padding:16px 16px;}
 
-  .log-panel{margin-top:0;}
   .log-body{
-    height:190px;overflow-y:auto;padding:12px 18px;font-family:'IBM Plex Mono',monospace;font-size:14px;
-    line-height:1.75;color:var(--muted);
+    padding:12px 18px;font-family:'IBM Plex Mono',monospace;font-size:14px;
+    line-height:1.7;color:var(--muted);
   }
   .log-body .tag{font-weight:700;padding:0 2px;}
   .tag-hello{color:var(--amber);}
@@ -145,65 +169,61 @@
 
   /* ---------- Footer credit ---------- */
   .footer-credit{
-    margin-top:32px;padding-top:20px;border-top:1px solid var(--border-soft);
-    text-align:center;color:var(--muted);font-size:13.5px;line-height:1.7;letter-spacing:0.01em;
+    flex:0 0 auto;
+    text-align:center;color:var(--muted);font-size:12px;line-height:1.5;letter-spacing:0.01em;
   }
   .footer-credit strong{color:var(--ink);font-weight:600;}
 
-  @media (max-width:880px){
-    .workspace{grid-template-columns:1fr;}
-    .tables-row{grid-template-columns:1fr;}
-    .stop-label{max-width:78px;font-size:11.5px;}
-    header h1{font-size:28px;}
+  @media (max-width:960px){
+    html,body{height:auto;overflow:visible;}
+    .app{height:auto;}
+    .workspace{grid-template-columns:1fr;grid-template-rows:none;}
+    .stage-svg-wrap{min-height:360px;}
+    .side-col{overflow-y:visible;}
+    .tabs-panel{height:auto;max-height:none;}
+    .stop-label{max-width:78px;font-size:11px;}
+    .topbar-row h1{font-size:20px;}
   }
 </style>
 </head>
 
 <body>
 <div class="app">
-  <header>
-    <h1>Simulador Visual de Roteamento</h1>
-    <p class="sub" id="subText">Acompanhe, enlace por enlace, como os roteadores descobrem vizinhos, formam adjacências, inundam LSAs e calculam a árvore de menor custo (SPF) até convergirem para uma tabela de roteamento comum.</p>
-  </header>
-
-  <div class="metro-wrap">
+  <div class="topbar">
+    <div class="topbar-row">
+      <h1>Simulador Visual de Roteamento</h1>
+      <label class="topbar-protocol">Protocolo
+        <select id="protocolSelect">
+          <option value="ospf" selected>OSPF (estado de enlace)</option>
+          <option value="rip">RIPv2 (vetor de distância)</option>
+        </select>
+      </label>
+    </div>
     <div class="metro" id="metro"></div>
   </div>
 
   <div class="workspace">
-    <div class="main-col">
-      <div class="panel stage-panel">
+    <div class="panel stage-panel">
+      <div class="stage-header">
         <h2 id="stageTitle">Topologia — Área 0 (OSPF)</h2>
-        <div class="stage-svg-wrap">
-          <svg id="topology" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
-            <g id="linksGroup"></g>
-            <g id="nodesGroup"></g>
-            <g id="packetsGroup"></g>
-          </svg>
-        </div>
-        <div class="legend">
-          <div class="legend-item"><span class="legend-dot" style="background:var(--muted-line)"></span>Sem adjacência</div>
-          <div class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span><span id="legendAmber">Hello / 2-Way · caminho ou árvore SPF em destaque</span></div>
-          <div class="legend-item"><span class="legend-dot" style="background:var(--teal)"></span><span id="legendTeal">Adjacência Full (fora do caminho destacado)</span></div>
-          <div class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>Falha simulada</div>
-          <div class="legend-item">🖥 PC-A / PC-B — hosts finais</div>
+        <div class="legend-inline">
+          <span class="legend-item"><span class="legend-dot" style="background:var(--muted-line)"></span>sem adjacência</span>
+          <span class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span><span id="legendAmber">Hello/2-Way · caminho SPF</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:var(--teal)"></span><span id="legendTeal">adjacência Full (fora do caminho)</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>falha simulada</span>
         </div>
       </div>
-
-      <div class="panel log-panel">
-        <h2>Registro de eventos</h2>
-        <div class="log-body" id="logBody"></div>
+      <div class="stage-svg-wrap">
+        <svg id="topology" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
+          <g id="linksGroup"></g>
+          <g id="nodesGroup"></g>
+          <g id="packetsGroup"></g>
+        </svg>
       </div>
     </div>
 
     <div class="side-col">
       <div class="panel controls">
-        <label class="field">Protocolo de roteamento
-          <select id="protocolSelect">
-            <option value="ospf" selected>OSPF (estado de enlace)</option>
-            <option value="rip">RIPv2 (vetor de distância)</option>
-          </select>
-        </label>
         <div class="row">
           <button class="primary" id="btnAdvance">Avançar fase</button>
         </div>
@@ -219,14 +239,6 @@
         <label class="field" id="splitHorizonRow" style="display:none;">
           <span style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="splitHorizonCheck" checked style="width:auto;">Split horizon com poison reverse</span>
         </label>
-        <label class="field">Velocidade da animação
-          <select id="speedSelect">
-            <option value="0.5">0.5×</option>
-            <option value="1" selected>1×</option>
-            <option value="2">2×</option>
-            <option value="4">4×</option>
-          </select>
-        </label>
       </div>
 
       <div class="panel inspector" id="inspector">
@@ -235,20 +247,34 @@
     </div>
   </div>
 
-  <div class="tables-row">
-    <div class="panel">
-      <h2 id="lsdbTitle">Base de dados de estado de enlace (LSDB) — R1</h2>
-      <table>
-        <thead id="lsdbThead"><tr><th>Origem</th><th>Seq</th><th>Enlaces anunciados</th></tr></thead>
-        <tbody id="lsdbBody"></tbody>
-      </table>
+  <div class="panel tabs-panel">
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="lsdb" type="button">Vetores / LSDB</button>
+      <button class="tab-btn" data-tab="route" type="button">Tabela de roteamento</button>
+      <button class="tab-btn" data-tab="log" type="button">Log de eventos</button>
     </div>
-    <div class="panel">
-      <h2 id="routeTitle">Tabela de roteamento OSPF — R1</h2>
-      <table>
-        <thead id="routeThead"><tr><th>Destino</th><th>Custo</th><th>Próximo salto</th></tr></thead>
-        <tbody id="routeBody"></tbody>
-      </table>
+    <div class="tab-content active" data-tab-content="lsdb">
+      <h2 id="lsdbTitle" class="tab-inner-title">Base de dados de estado de enlace (LSDB) — R1</h2>
+      <div class="tab-scroll">
+        <table>
+          <thead id="lsdbThead"><tr><th>Origem</th><th>Seq</th><th>Enlaces anunciados</th></tr></thead>
+          <tbody id="lsdbBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tab-content" data-tab-content="route">
+      <h2 id="routeTitle" class="tab-inner-title">Tabela de roteamento OSPF — R1</h2>
+      <div class="tab-scroll">
+        <table>
+          <thead id="routeThead"><tr><th>Destino</th><th>Custo</th><th>Próximo salto</th></tr></thead>
+          <tbody id="routeBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tab-content" data-tab-content="log">
+      <div class="tab-scroll">
+        <div class="log-body" id="logBody"></div>
+      </div>
     </div>
   </div>
 
@@ -310,7 +336,7 @@
   let treeEdges=new Set();
   let spfVisited=new Set();
   let flowEdges=new Set();
-  let speedMultiplier=1;
+  let speedMultiplier=0.3;
 
   let stopLabels=['Down','Hello / 2-Way','Adjacência Full','Inundação de LSA','SPF / Convergido'];
   const stopLabelsOspf=['Down','Hello / 2-Way','Adjacência Full','Inundação de LSA','SPF / Convergido'];
@@ -327,7 +353,6 @@
   const protocolSelect=document.getElementById('protocolSelect');
   const splitHorizonRow=document.getElementById('splitHorizonRow');
   const splitHorizonCheck=document.getElementById('splitHorizonCheck');
-  const speedSelect=document.getElementById('speedSelect');
   const btnAdvance=document.getElementById('btnAdvance');
   const btnReset=document.getElementById('btnReset');
   const btnComm=document.getElementById('btnComm');
@@ -340,7 +365,6 @@
   const lsdbThead=document.getElementById('lsdbThead');
   const routeThead=document.getElementById('routeThead');
   const stageTitle=document.getElementById('stageTitle');
-  const subText=document.getElementById('subText');
   const legendAmber=document.getElementById('legendAmber');
   const legendTeal=document.getElementById('legendTeal');
   const logBody=document.getElementById('logBody');
@@ -385,9 +409,8 @@
       stopLabels=stopLabelsOspf;
       rootSelectLabel.textContent='Raiz da tabela SPF';
       stageTitle.textContent='Topologia — Área 0 (OSPF)';
-      subText.textContent='Acompanhe, enlace por enlace, como os roteadores descobrem vizinhos, formam adjacências, inundam LSAs e calculam a árvore de menor custo (SPF) até convergirem para uma tabela de roteamento comum.';
-      legendAmber.textContent='Hello / 2-Way · caminho ou árvore SPF em destaque';
-      legendTeal.textContent='Adjacência Full (fora do caminho destacado)';
+      legendAmber.textContent='Hello/2-Way · caminho SPF';
+      legendTeal.textContent='adjacência Full (fora do caminho)';
       splitHorizonRow.style.display='none';
       lsdbThead.innerHTML='<tr><th>Origem</th><th>Seq</th><th>Enlaces anunciados</th></tr>';
       routeThead.innerHTML='<tr><th>Destino</th><th>Custo</th><th>Próximo salto</th></tr>';
@@ -395,9 +418,8 @@
       stopLabels=stopLabelsRip;
       rootSelectLabel.textContent='Ver tabela do roteador';
       stageTitle.textContent='Topologia — Rede RIPv2';
-      subText.textContent='Acompanhe, rodada a rodada, como os roteadores RIPv2 trocam vetores de distância (contagem de saltos) com os vizinhos diretos e convergem via Bellman-Ford, com split horizon e poison reverse.';
-      legendAmber.textContent='Troca de vetores · caminho em destaque';
-      legendTeal.textContent='Rota estável (fora do caminho destacado)';
+      legendAmber.textContent='troca de vetores · caminho';
+      legendTeal.textContent='rota estável (fora do caminho)';
       splitHorizonRow.style.display='flex';
       lsdbThead.innerHTML='<tr><th>Vizinho</th><th>Rotas</th><th>Vetor anunciado (destino:métrica)</th></tr>';
       routeThead.innerHTML='<tr><th>Destino</th><th>Métrica (saltos)</th><th>Próximo salto</th></tr>';
@@ -1047,10 +1069,17 @@
     splitHorizonEnabled=splitHorizonCheck.checked;
     log('Split horizon com poison reverse '+(splitHorizonEnabled?'ativado':'desativado')+'.','sys');
   });
-  speedSelect.addEventListener('change',()=>{ speedMultiplier=parseFloat(speedSelect.value); });
   btnAdvance.addEventListener('click', advanceStep);
   btnReset.addEventListener('click', resetSim);
   btnComm.addEventListener('click', ()=>simulateHostCommunication());
+
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const target=btn.getAttribute('data-tab');
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b===btn));
+      document.querySelectorAll('.tab-content').forEach(c=>c.classList.toggle('active', c.getAttribute('data-tab-content')===target));
+    });
+  });
 
   // ---------- Init ----------
   resetSim();
