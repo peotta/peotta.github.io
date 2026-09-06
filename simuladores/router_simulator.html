@@ -560,9 +560,19 @@
       const a=byId(l.a), b=byId(l.b);
       const inTree=treeEdges.has(l.a+'|'+l.b);
       const inFlow=flowEdges.has(l.a+'|'+l.b);
-      const color = inFlow ? 'var(--amber)' : (inTree ? 'var(--amber)' : linkColor(l));
-      const width = (inTree||inFlow) ? 4 : (l.visualState==='full' && l.up ? 3 : 2);
-      const dash = l.up ? (l.visualState==='full' ? '' : '6,5') : '4,6';
+      const highlighted = inTree||inFlow;
+      let color, width, dash;
+      if(!l.up){
+        color='var(--red)'; width=2; dash='4,6';
+      } else if(highlighted){
+        color='var(--amber)'; width=4; dash='';
+      } else if(protocol==='ospf'){
+        color=linkColor(l);
+        width = l.visualState==='full' ? 3 : 2;
+        dash = l.visualState==='full' ? '' : '6,5';
+      } else {
+        color='var(--teal)'; width=3; dash='';
+      }
 
       const hit=elNS('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'transparent','stroke-width':16});
       hit.style.cursor='pointer';
@@ -745,7 +755,8 @@
       const g=buildGraph();
       const neighborLines=(g[selectedRouterId]||[]).map(e=>{
         const lk=findLink(selectedRouterId,e.to);
-        return selectedRouterId+' – '+e.to+' &nbsp; ('+(lk?lk.visualState:'down')+', custo '+e.cost+')';
+        const stateTxt = protocol==='ospf' ? (lk?lk.visualState:'down') : (lk && lk.up ? 'ativo' : 'inativo');
+        return selectedRouterId+' – '+e.to+' &nbsp; ('+stateTxt+', custo '+e.cost+')';
       });
       const descLine = protocol==='ospf' ? 'Definido como raiz da tabela de rotas.' : 'Exibindo a tabela RIP deste roteador.';
       inspector.innerHTML=
@@ -802,7 +813,7 @@
   async function setLinkUp(l, up){
     l.up=up;
     if(!up) l.everFull = l.everFull || l.visualState==='full';
-    l.visualState = up ? 'full' : 'down';
+    l.visualState = (up && protocol==='ospf') ? 'full' : 'down';
     if(selectedLinkId===l.id) renderInspector();
     if(!up){
       log('Falha simulada no enlace '+l.a+'–'+l.b+'.','fail');
