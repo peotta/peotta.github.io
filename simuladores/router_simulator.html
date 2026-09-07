@@ -215,6 +215,7 @@
       </div>
       <div class="stage-svg-wrap">
         <svg id="topology" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
+          <g id="areasGroup"></g>
           <g id="linksGroup"></g>
           <g id="nodesGroup"></g>
           <g id="packetsGroup"></g>
@@ -235,6 +236,12 @@
         </div>
         <label class="field"><span id="rootSelectLabel">Raiz da tabela SPF</span>
           <select id="rootSelect"></select>
+        </label>
+        <label class="field" id="areaModeRow" style="display:none;">Modo de área (OSPF)
+          <select id="areaModeSelect">
+            <option value="single" selected>Área única</option>
+            <option value="multi">Multi-área (9 roteadores)</option>
+          </select>
         </label>
         <label class="field" id="splitHorizonRow" style="display:none;">
           <span style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="splitHorizonCheck" checked style="width:auto;">Split horizon com poison reverse</span>
@@ -294,7 +301,7 @@
   }
 
   // ---------- Topology data ----------
-  const routers=[
+  const routersSingle=[
     {id:'R1',x:130,y:120},
     {id:'R2',x:430,y:60},
     {id:'R3',x:730,y:120},
@@ -302,7 +309,7 @@
     {id:'R5',x:480,y:440},
     {id:'R6',x:760,y:380},
   ];
-  const linksInit=[
+  const linksInitSingle=[
     {id:'L1',a:'R1',b:'R2',cost:10},
     {id:'L2',a:'R1',b:'R4',cost:20},
     {id:'L3',a:'R2',b:'R3',cost:10},
@@ -311,18 +318,58 @@
     {id:'L6',a:'R4',b:'R5',cost:10},
     {id:'L7',a:'R5',b:'R6',cost:20},
   ];
-  let links=[];
-
-  const hosts=[
+  const hostsSingle=[
     {id:'PC-A',attach:'R1',x:45,y:120},
     {id:'PC-B',attach:'R6',x:845,y:430},
   ];
+
+  const routersMulti=[
+    {id:'R1',x:70,y:250,areas:['1']},
+    {id:'R2',x:230,y:150,areas:['1','0'],abr:true},
+    {id:'R3',x:230,y:350,areas:['1','0'],abr:true},
+    {id:'R4',x:480,y:120,areas:['0']},
+    {id:'R5',x:410,y:250,areas:['0']},
+    {id:'R6',x:480,y:380,areas:['0']},
+    {id:'R7',x:830,y:250,areas:['2']},
+    {id:'R8',x:670,y:150,areas:['2','0'],abr:true},
+    {id:'R9',x:670,y:350,areas:['2','0'],abr:true},
+  ];
+  const linksInitMulti=[
+    {id:'MA1',a:'R1',b:'R2',cost:10,area:'1'},
+    {id:'MA2',a:'R1',b:'R3',cost:15,area:'1'},
+    {id:'MA3',a:'R2',b:'R3',cost:10,area:'1'},
+    {id:'MA4',a:'R4',b:'R5',cost:10,area:'0'},
+    {id:'MA5',a:'R5',b:'R6',cost:15,area:'0'},
+    {id:'MA6',a:'R4',b:'R6',cost:20,area:'0'},
+    {id:'MA7',a:'R7',b:'R8',cost:10,area:'2'},
+    {id:'MA8',a:'R7',b:'R9',cost:15,area:'2'},
+    {id:'MA9',a:'R8',b:'R9',cost:10,area:'2'},
+    {id:'MA10',a:'R2',b:'R4',cost:25,area:'0'},
+    {id:'MA11',a:'R3',b:'R6',cost:30,area:'0'},
+    {id:'MA12',a:'R4',b:'R8',cost:20,area:'0'},
+    {id:'MA13',a:'R6',b:'R9',cost:25,area:'0'},
+  ];
+  const hostsMulti=[
+    {id:'PC-A',attach:'R1',x:70,y:435},
+    {id:'PC-B',attach:'R7',x:830,y:435},
+  ];
+  const areaBackgrounds=[
+    {x:10,y:90,w:276,h:316,label:'Área 1',color:'#B48EF0'},
+    {x:354,y:60,w:182,h:376,label:'Área 0 — backbone',color:'#6FB8E8'},
+    {x:614,y:90,w:272,h:316,label:'Área 2',color:'#F0956F'},
+  ];
+
+  let routers=routersSingle;
+  let hosts=hostsSingle;
+  let links=[];
 
   function byId(id){return routers.find(r=>r.id===id);}
   function getNode(id){ return byId(id) || hosts.find(h=>h.id===id); }
 
   // ---------- Runtime state ----------
   let protocol='ospf';        // 'ospf' | 'rip'
+  let areaMode='single';      // 'single' | 'multi' — só relevante quando protocol==='ospf'
+  function multiAreaActive(){ return protocol==='ospf' && areaMode==='multi'; }
   let currentStep=0;          // 0..4  (0=down, 4=convergido)
   let busy=false;
   let rootRouter='R1';
@@ -344,6 +391,7 @@
 
   // ---------- DOM refs ----------
   const svg=document.getElementById('topology');
+  const areasGroup=document.getElementById('areasGroup');
   const linksGroup=document.getElementById('linksGroup');
   const nodesGroup=document.getElementById('nodesGroup');
   const packetsGroup=document.getElementById('packetsGroup');
@@ -351,6 +399,8 @@
   const rootSelect=document.getElementById('rootSelect');
   const rootSelectLabel=document.getElementById('rootSelectLabel');
   const protocolSelect=document.getElementById('protocolSelect');
+  const areaModeRow=document.getElementById('areaModeRow');
+  const areaModeSelect=document.getElementById('areaModeSelect');
   const splitHorizonRow=document.getElementById('splitHorizonRow');
   const splitHorizonCheck=document.getElementById('splitHorizonCheck');
   const btnAdvance=document.getElementById('btnAdvance');
@@ -408,9 +458,10 @@
     if(protocol==='ospf'){
       stopLabels=stopLabelsOspf;
       rootSelectLabel.textContent='Raiz da tabela SPF';
-      stageTitle.textContent='Topologia — Área 0 (OSPF)';
+      stageTitle.textContent = multiAreaActive() ? 'Topologia — Multi-área (OSPF)' : 'Topologia — Área 0 (OSPF)';
       legendAmber.textContent='Hello/2-Way · caminho SPF';
       legendTeal.textContent='adjacência Full (fora do caminho)';
+      areaModeRow.style.display='flex';
       splitHorizonRow.style.display='none';
       lsdbThead.innerHTML='<tr><th>Origem</th><th>Seq</th><th>Enlaces anunciados</th></tr>';
       routeThead.innerHTML='<tr><th>Destino</th><th>Custo</th><th>Próximo salto</th></tr>';
@@ -420,6 +471,7 @@
       stageTitle.textContent='Topologia — Rede RIPv2';
       legendAmber.textContent='troca de vetores · caminho';
       legendTeal.textContent='rota estável (fora do caminho)';
+      areaModeRow.style.display='none';
       splitHorizonRow.style.display='flex';
       lsdbThead.innerHTML='<tr><th>Vizinho</th><th>Rotas</th><th>Vetor anunciado (destino:métrica)</th></tr>';
       routeThead.innerHTML='<tr><th>Destino</th><th>Métrica (saltos)</th><th>Próximo salto</th></tr>';
@@ -619,17 +671,25 @@
       g.style.cursor='pointer';
       g.addEventListener('click',()=>selectRouter(r.id));
       const isRoot=r.id===rootRouter;
+      const isAbr = multiAreaActive() && r.abr;
       const highlighted = isRoot || spfVisited.has(r.id);
       const circle=elNS('circle',{cx:r.x,cy:r.y,r:26});
       circle.style.fill='var(--panel)';
-      circle.style.stroke= highlighted ? 'var(--amber)' : 'var(--ink)';
-      circle.style.strokeWidth= highlighted ? '3px':'1.5px';
+      circle.style.stroke= highlighted ? 'var(--amber)' : (isAbr ? 'var(--teal)' : 'var(--ink)');
+      circle.style.strokeWidth= (highlighted||isAbr) ? '3px':'1.5px';
       const label=elNS('text',{x:r.x,y:r.y+5,'text-anchor':'middle',class:'router-label'});
       label.textContent=r.id;
       g.appendChild(circle); g.appendChild(label);
 
+      if(isAbr){
+        const abrTag=elNS('text',{x:r.x,y:r.y+42,'text-anchor':'middle'});
+        abrTag.style.fontFamily="'IBM Plex Mono',monospace"; abrTag.style.fontSize='10.5px'; abrTag.style.fill='var(--teal)'; abrTag.style.fontWeight='600';
+        abrTag.textContent='ABR';
+        g.appendChild(abrTag);
+      }
+
       const knownCount = protocol==='ospf'
-        ? (currentStep>=3 && lsdbByRouter[r.id] ? lsdbByRouter[r.id].size : null)
+        ? (currentStep>=3 && lsdbByRouter[r.id] ? (multiAreaActive() ? Array.from(lsdbByRouter[r.id].keys()).filter(o=>{ const oo=byId(o); return (oo.areas||[]).some(a=>(r.areas||[]).includes(a)); }).length : lsdbByRouter[r.id].size) : null)
         : (currentStep>=1 && ripTable[r.id] ? ripTable[r.id].size : null);
       if(knownCount!==null){
         const badge=elNS('circle',{cx:r.x+20,cy:r.y-20,r:9});
@@ -702,18 +762,33 @@
   }
 
   function renderLSDBTable(root){
-    lsdbTitle.textContent='Base de dados de estado de enlace (LSDB) — '+root;
+    lsdbTitle.textContent='Base de dados de estado de enlace (LSDB) — '+root+(multiAreaActive()?' (detalhe só da própria área)':'');
     lsdbBody.innerHTML='';
     const db=lsdbByRouter[root];
     if(!db || db.size===0){
       lsdbBody.innerHTML='<tr class="placeholder-row"><td colspan="3">A LSDB será preenchida durante a fase de inundação de LSAs.</td></tr>';
       return;
     }
+    const rObj=byId(root);
+    const rootAreas = rObj.areas || [];
+    let sameAreaGraph=null, sameAreaDist=null;
+    if(multiAreaActive()){
+      sameAreaGraph=graphFromLSDB(root);
+      sameAreaDist=dijkstra(sameAreaGraph, root).dist;
+    }
     Array.from(db.keys()).sort().forEach(owner=>{
       const lsa=db.get(owner);
       const tr=document.createElement('tr');
-      const linksTxt=lsa.links.map(l=>l.to+'('+l.cost+')').join(', ')||'—';
-      tr.innerHTML='<td>'+owner+'</td><td>0x8000000'+lsa.seq+'</td><td>'+linksTxt+'</td>';
+      const ownerObj=byId(owner);
+      const sameArea = !multiAreaActive() || (ownerObj.areas||[]).some(a=>rootAreas.includes(a));
+      if(sameArea){
+        const linksTxt=lsa.links.map(l=>l.to+'('+l.cost+')').join(', ')||'—';
+        tr.innerHTML='<td>'+owner+'</td><td>0x8000000'+lsa.seq+'</td><td>'+linksTxt+'</td>';
+      } else {
+        const d=sameAreaDist[owner];
+        const costTxt = (d!==undefined && d!==Infinity) ? ('resumo (Summary LSA): custo '+d) : 'inalcançável';
+        tr.innerHTML='<td>'+owner+' <span style="color:var(--muted);font-size:11px;">(outra área)</span></td><td>0x8000000'+lsa.seq+'</td><td>'+costTxt+'</td>';
+      }
       lsdbBody.appendChild(tr);
     });
   }
@@ -755,7 +830,7 @@
     if(selectedLinkId){
       const l=links.find(x=>x.id===selectedLinkId);
       inspector.innerHTML=
-        '<div class="insp-title">Enlace '+l.a+' – '+l.b+'</div>'+
+        '<div class="insp-title">Enlace '+l.a+' – '+l.b+(multiAreaActive() && l.area?' <span style="color:var(--muted);font-size:12px;font-weight:400;">(Área '+l.area+')</span>':'')+'</div>'+
         '<div class="insp-row"><span class="muted-txt">Estado</span>'+
         '<span class="status-pill '+(l.up?'status-up':'status-down')+'">'+(l.up?'ATIVO':'INATIVO')+'</span></div>'+
         '<label class="field" style="margin-bottom:10px;">Custo do enlace'+(protocol==='rip'?' (ignorado pelo RIP)':'')+
@@ -1031,25 +1106,55 @@
     busy=false; updatePhaseUI();
   }
 
+  function selectTopology(){
+    if(multiAreaActive()){
+      routers=routersMulti; hosts=hostsMulti;
+      links=linksInitMulti.map(l=>({id:l.id,a:l.a,b:l.b,cost:l.cost,area:l.area,up:true,visualState:'down',everFull:false}));
+    } else {
+      routers=routersSingle; hosts=hostsSingle;
+      links=linksInitSingle.map(l=>({id:l.id,a:l.a,b:l.b,cost:l.cost,up:true,visualState:'down',everFull:false}));
+    }
+    rootRouter='R1';
+  }
+
+  function rebuildRootSelectOptions(){
+    rootSelect.innerHTML='';
+    routers.forEach(r=>{
+      const opt=document.createElement('option');
+      opt.value=r.id; opt.textContent=r.id;
+      rootSelect.appendChild(opt);
+    });
+    rootSelect.value=rootRouter;
+  }
+
+  function renderAreaBackgrounds(){
+    areasGroup.innerHTML='';
+    if(!multiAreaActive()) return;
+    areaBackgrounds.forEach(a=>{
+      const rect=elNS('rect',{x:a.x,y:a.y,width:a.w,height:a.h,rx:16});
+      rect.style.fill='var(--panel-2)'; rect.style.stroke=a.color; rect.style.strokeWidth='2px'; rect.style.strokeDasharray='7,6'; rect.style.strokeOpacity='0.85';
+      const label=elNS('text',{x:a.x+16,y:a.y+24,class:'router-label'});
+      label.style.fontSize='13px'; label.style.fill=a.color;
+      label.textContent=a.label;
+      areasGroup.appendChild(rect); areasGroup.appendChild(label);
+    });
+  }
+
   function resetSim(){
-    links=linksInit.map(l=>({id:l.id,a:l.a,b:l.b,cost:l.cost,up:true,visualState:'down',everFull:false}));
+    selectTopology();
+    rebuildRootSelectOptions();
     currentStep=0; busy=false;
     stepFns = protocol==='ospf' ? stepFnsOspf : stepFnsRip;
     lsdbByRouter={}; ripTable={}; routingTableRows=[]; treeEdges=new Set(); spfVisited=new Set(); flowEdges=new Set();
     selectedLinkId=null; selectedRouterId=null;
     logBody.innerHTML='';
     configureProtocolUI();
-    log('Simulação reiniciada em modo '+(protocol==='ospf'?'OSPF':'RIPv2')+'. Todos os enlaces estão ativos, nenhuma rota aprendida ainda.','sys');
+    renderAreaBackgrounds();
+    log('Simulação reiniciada em modo '+(protocol==='ospf'?('OSPF — '+(multiAreaActive()?'multi-área':'área única')):'RIPv2')+'. Todos os enlaces estão ativos, nenhuma rota aprendida ainda.','sys');
     render(); renderInspector(); renderLeftPanel(rootRouter); renderRoutingTable(); updatePhaseUI();
   }
 
   // ---------- Wire up controls ----------
-  routers.forEach(r=>{
-    const opt=document.createElement('option');
-    opt.value=r.id; opt.textContent=r.id;
-    rootSelect.appendChild(opt);
-  });
-  rootSelect.value=rootRouter;
   rootSelect.addEventListener('change',()=>{
     const val=rootSelect.value;
     if(protocol==='ospf'){
@@ -1063,6 +1168,10 @@
   });
   protocolSelect.addEventListener('change',()=>{
     protocol=protocolSelect.value;
+    resetSim();
+  });
+  areaModeSelect.addEventListener('change',()=>{
+    areaMode=areaModeSelect.value;
     resetSim();
   });
   splitHorizonCheck.addEventListener('change',()=>{
