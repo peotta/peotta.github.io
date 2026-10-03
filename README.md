@@ -73,16 +73,6 @@ peotta.github.io/
 │       ├── latencia-zero-podcast.png
 │       └── ravens-1.webp
 ├── arquivos/                      # 📁 Materiais para download (PDFs e anexos)
-├── .agents/                       # 🤖 Skills e Rules para Antigravity
-│   ├── rules/
-│   │   ├── web-standards.md
-│   │   └── git-workflow.md
-│   └── skills/
-│       ├── publish-page/
-│       ├── create-simulator/
-│       └── site-audit/
-├── AGENTS.md / agentes.md         # Diretrizes de IA para o repositório
-├── robots.txt / sitemap.xml       # SEO e indexadores de busca
 └── README.md                      # Documentação técnica do repositório
 ```
 
