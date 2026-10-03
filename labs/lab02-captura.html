@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -96,7 +96,7 @@
 <canvas id="matrix-rain" aria-hidden="true"></canvas>
 <nav>
   <div class="nav-brand">Prof. Dr. Laerte Peotta de Melo <span>Professor • Pesquisador • Segurança Cibernética • Redes</span></div>
-  <a href="wifi.html">← Todos os Labs</a>
+  <a href="index.html">← Todos os Labs</a>
   <a href="#objetivo">Objetivo</a>
   <a href="#monitor">Monitor Mode</a>
   <a href="#wireshark">Wireshark</a>
@@ -302,12 +302,12 @@ aircrack-ng captura-01.cap
         <div class="lc-label">Índice</div>
         <div class="lc-title">Todos os laboratórios</div>
         <div class="lc-desc">Retornar à página inicial da série de laboratórios.</div>
-        <a class="lc-link" href="wifi.html">← Índice</a>
+        <a class="lc-link" href="index.html">← Índice</a>
       </div>
     </div>
   </section>
 </div>
 
-<footer>Laboratório 02 · Prof. Dr. Laerte Peotta de Melo • <a href="https://peotta.github.io">peotta.github.io</a> • <a href="https://github.com/peotta/lab-wifi" target="_blank">github.com/peotta/lab-wifi ↗</a></footer>
+<footer>Laboratório 02 · Prof. Dr. Laerte Peotta de Melo • <a href="../index.html">peotta.github.io</a> • <a href="https://github.com/peotta/lab-wifi" target="_blank">github.com/peotta/lab-wifi ↗</a></footer>
 <script>(function(){const canvas=document.getElementById("matrix-rain");if(!canvas)return;const ctx=canvas.getContext("2d");const chars="01アイウエオカキクケコサシスセソタチツテトABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*+-/<>{}[]";let width,height,columns,drops,fontSize;function resize(){width=canvas.width=window.innerWidth;height=canvas.height=window.innerHeight;fontSize=Math.max(13,Math.floor(width/105));columns=Math.floor(width/fontSize);drops=Array.from({length:columns},()=>Math.floor(Math.random()*height/fontSize));ctx.font=fontSize+"px Consolas,monospace";}function draw(){ctx.fillStyle="rgba(1,5,3,0.105)";ctx.fillRect(0,0,width,height);ctx.font=fontSize+"px Consolas,monospace";for(let i=0;i<drops.length;i++){const text=chars.charAt(Math.floor(Math.random()*chars.length));const x=i*fontSize;const y=drops[i]*fontSize;ctx.fillStyle=Math.random()>.985?"rgba(220,255,232,.62)":"rgba(57,255,122,.32)";ctx.shadowColor="rgba(57,255,122,.22)";ctx.shadowBlur=7;ctx.fillText(text,x,y);ctx.shadowBlur=0;if(y>height&&Math.random()>.972)drops[i]=0;drops[i]+=1;}requestAnimationFrame(draw);}window.addEventListener("resize",resize);resize();draw();})();</script>
 </body></html>

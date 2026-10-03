@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Portal Principal -->
+  <url>
+    <loc>https://peotta.github.io/</loc>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/index.html</loc>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <!-- Simuladores Interativos de Redes -->
+  <url>
+    <loc>https://peotta.github.io/simuladores/ospf_simulator.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/simuladores/router_simulator.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Laboratórios Práticos de Cibersegurança & Redes -->
+  <url>
+    <loc>https://peotta.github.io/labs/index.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/labs/lab01-reconhecimento.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/labs/lab02-captura.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/labs/lab03-protocolos.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/labs/lab04-ataques.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/labs/lab05-ferramentas.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Planos de Certificação Profissional -->
+  <url>
+    <loc>https://peotta.github.io/certificacoes/ccna.html</loc>
+    <priority>0.85</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/certificacoes/ccna-cybersecurity.html</loc>
+    <priority>0.85</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/certificacoes/ccst.html</loc>
+    <priority>0.85</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/certificacoes/fortinet.html</loc>
+    <priority>0.85</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Guias, Manuais e Projetos -->
+  <url>
+    <loc>https://peotta.github.io/guias/linux.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/guias/index-linux.html</loc>
+    <priority>0.75</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/guias/windows-redes.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/guias/wifi.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/guias/dht22.html</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/guias/dicas.html</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/guias/ravens.html</loc>
+    <priority>0.75</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+</urlset>
