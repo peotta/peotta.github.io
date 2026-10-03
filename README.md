@@ -96,12 +96,4 @@ Acesse em seu navegador: `http://localhost:8000`.
 
 ---
 
-## ⚙️ Publicação e Deploy
 
-O deploy é automático via **GitHub Pages**. Qualquer modificação enviada para o branch `main` é publicada em poucos instantes na URL oficial do site:
-
-```bash
-git add .
-git commit -m "docs: atualizar readme sem travessao longo"
-git push origin main
-```
