@@ -1,4 +1,4 @@
-# 🌐 Prof. Dr. Laerte Peotta de Melo — Portal Acadêmico & Profissional
+# 🌐 Prof. Dr. Laerte Peotta de Melo - Portal Acadêmico & Profissional
 
 Repositório da página institucional e acadêmica do **Prof. Dr. Laerte Peotta de Melo**, hospedada no GitHub Pages.
 
@@ -17,11 +17,11 @@ Este site reúne materiais acadêmicos, tutoriais práticos, guias para certific
   - [Simulador de Roteador e Tabelas IP (LPM/TTL)](simuladores/router_simulator.html)
 - **🧪 Laboratórios Práticos de Cibersegurança:**
   - [Índice Geral de Laboratórios](labs/index.html)
-  - `Lab 01` — [Reconhecimento Passivo com Kismet](labs/lab01-reconhecimento.html)
-  - `Lab 02` — [Captura e Análise de Tráfego com Wireshark](labs/lab02-captura.html)
-  - `Lab 03` — [Protocolos e Handshakes WPA2 / WPA3](labs/lab03-protocolos.html)
-  - `Lab 04` — [Simulação de Ataques e Defesas PMF](labs/lab04-ataques.html)
-  - `Lab 05` — [Arsenal de Ferramentas e Pentest](labs/lab05-ferramentas.html)
+  - `Lab 01` - [Reconhecimento Passivo com Kismet](labs/lab01-reconhecimento.html)
+  - `Lab 02` - [Captura e Análise de Tráfego com Wireshark](labs/lab02-captura.html)
+  - `Lab 03` - [Protocolos e Handshakes WPA2 / WPA3](labs/lab03-protocolos.html)
+  - `Lab 04` - [Simulação de Ataques e Defesas PMF](labs/lab04-ataques.html)
+  - `Lab 05` - [Arsenal de Ferramentas e Pentest](labs/lab05-ferramentas.html)
 - **🎓 Certificações Profissionais:**
   - [Cisco CCNA 200-301](certificacoes/ccna.html)
   - [Cisco CCNA Cybersecurity 200-201](certificacoes/ccna-cybersecurity.html)
@@ -102,6 +102,6 @@ O deploy é automático via **GitHub Pages**. Qualquer modificação enviada par
 
 ```bash
 git add .
-git commit -m "refactor: reorganizacao modular da arquitetura do site"
+git commit -m "docs: atualizar readme sem travessao longo"
 git push origin main
 ```
