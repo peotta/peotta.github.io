@@ -236,17 +236,15 @@ h1{
 pre{margin:0;padding:18px 20px;overflow:auto;color:#dfffdc;font-size:13px;line-height:1.62;max-height:540px}
 code{font-family:"JetBrains Mono","Fira Code",Consolas,"Courier New",monospace}
 
-/* zsh-syntax-highlighting styles (Matrix Theme + Sudo Red) */
-.sh-cmd{color:#48ff8b;font-weight:700;text-shadow:0 0 6px rgba(57,255,20,.4)}   /* arg0, command, builtin: green */
-.sh-sudo{color:#ff6b6b;font-weight:700;text-shadow:0 0 8px rgba(255,107,107,.5)} /* sudo precommand: red */
-.sh-res{color:#ffd166;font-weight:700}                                            /* reserved-word: yellow */
-.sh-flag{color:#7dd3fc}                                                           /* single/double-hyphen-option: cyan suave */
-.sh-str{color:#fef08a}                                                            /* single/double-quoted-argument: yellow */
-.sh-var{color:#38bdf8}                                                            /* dollar-double-quoted: cyan */
-.sh-redir{color:#ffd166;font-weight:bold}                                         /* redirection (>, >>, <): yellow */
-.sh-path{text-decoration:underline;color:#e7ffe7}                                 /* path: underline */
-.sh-comment{color:#62b862;font-style:italic}                                      /* comment: green italic */
-.sh-sep{color:#e29aff;font-weight:bold}                                           /* commandseparator (|, &&): magenta/lilac */
+/* Terminal Command Syntax Highlighting (Matrix Green Palette) */
+.sh-sudo{color:#ff6b6b;font-weight:700;text-shadow:0 0 8px rgba(255,107,107,.5)}
+.sh-cmd{color:#48ff8b;font-weight:700;text-shadow:0 0 6px rgba(57,255,20,.4)}
+.sh-sub{color:#64ffda}
+.sh-flag{color:#ffd166}
+.sh-comment{color:#62b862;font-style:italic}
+.sh-var{color:#fb923c}
+.sh-str{color:#f0fff4}
+.sh-pipe{color:#e29aff;font-weight:bold}
 
 .details-card{
   margin-top:16px;
@@ -327,28 +325,28 @@ td span{color:#aee8ae;font-size:12px}
 <span class="sh-cmd">uname</span> <span class="sh-flag">-a</span>
 
 <span class="sh-comment"># 03. Endereços por interface - Lista interfaces, endereços IPv4/IPv6, MAC address e estado operacional.</span>
-<span class="sh-cmd">ip</span> addr show
-<span class="sh-cmd">ip</span> <span class="sh-flag">-brief</span> addr
+<span class="sh-cmd">ip</span> <span class="sh-sub">addr</span> <span class="sh-sub">show</span>
+<span class="sh-cmd">ip</span> <span class="sh-flag">-brief</span> <span class="sh-sub">addr</span>
 
 <span class="sh-comment"># 04. Estado de enlaces - Mostra interfaces, MTU, flags e estado UP/DOWN.</span>
-<span class="sh-cmd">ip</span> link show
-<span class="sh-cmd">ip</span> <span class="sh-flag">-s</span> link show eth0
+<span class="sh-cmd">ip</span> <span class="sh-sub">link</span> <span class="sh-sub">show</span>
+<span class="sh-cmd">ip</span> <span class="sh-flag">-s</span> <span class="sh-sub">link</span> <span class="sh-sub">show</span> eth0
 
 <span class="sh-comment"># 05. Tabela de rotas - Exibe rota padrão, rotas específicas e próximo salto.</span>
-<span class="sh-cmd">ip</span> route show
-<span class="sh-cmd">ip</span> route get 8.8.8.8
+<span class="sh-cmd">ip</span> <span class="sh-sub">route</span> <span class="sh-sub">show</span>
+<span class="sh-cmd">ip</span> <span class="sh-sub">route</span> <span class="sh-sub">get</span> 8.8.8.8
 
 <span class="sh-comment"># 06. Resumo pelo NetworkManager - Lista dispositivos, conexões e perfis gerenciados pelo NetworkManager.</span>
-<span class="sh-cmd">nmcli</span> device status
-<span class="sh-cmd">nmcli</span> connection show
+<span class="sh-cmd">nmcli</span> <span class="sh-sub">device</span> <span class="sh-sub">status</span>
+<span class="sh-cmd">nmcli</span> <span class="sh-sub">connection</span> <span class="sh-sub">show</span>
 
 <span class="sh-comment"># 07. Características físicas da interface - Mostra velocidade, duplex, autonegociação e estatísticas da NIC.</span>
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">ethtool</span> eth0
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">ethtool</span> <span class="sh-flag">-S</span> eth0
 
 <span class="sh-comment"># 08. Interfaces do kernel - Lista interfaces reconhecidas pelo kernel Linux.</span>
-<span class="sh-cmd">ls</span> <span class="sh-flag">-la</span> <span class="sh-path">/sys/class/net</span>
-<span class="sh-cmd">cat</span> <span class="sh-path">/sys/class/net/eth0/operstate</span></code></pre></div>
+<span class="sh-cmd">ls</span> <span class="sh-flag">-la</span> /sys/class/net
+<span class="sh-cmd">cat</span> /sys/class/net/eth0/operstate</code></pre></div>
       <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="inventário e identificação da rede hostnamectl identificação do host mostra hostname, sistema operacional, kernel e arquitetura. use para documentar servidores e estações antes de iniciar manutenção."><td class="num">01</td><td><b>hostnamectl</b><span>Identificação do host</span></td><td>Mostra hostname, sistema operacional, kernel e arquitetura.</td><td>Use para documentar servidores e estações antes de iniciar manutenção.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede uname kernel e plataforma exibe versão do kernel e informações de arquitetura. útil para compatibilidade de drivers, módulos e troubleshooting."><td class="num">02</td><td><b>uname</b><span>Kernel e plataforma</span></td><td>Exibe versão do kernel e informações de arquitetura.</td><td>Útil para compatibilidade de drivers, módulos e troubleshooting.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede ip addr endereços por interface lista interfaces, endereços ipv4/ipv6, mac address e estado operacional. substitui o antigo ifconfig na maioria das distribuições modernas."><td class="num">03</td><td><b>ip addr</b><span>Endereços por interface</span></td><td>Lista interfaces, endereços IPv4/IPv6, MAC address e estado operacional.</td><td>Substitui o antigo ifconfig na maioria das distribuições modernas.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede ip link estado de enlaces mostra interfaces, mtu, flags e estado up/down. use para validar cabos, links virtuais, vlans e interfaces desativadas."><td class="num">04</td><td><b>ip link</b><span>Estado de enlaces</span></td><td>Mostra interfaces, MTU, flags e estado UP/DOWN.</td><td>Use para validar cabos, links virtuais, VLANs e interfaces desativadas.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede ip route tabela de rotas exibe rota padrão, rotas específicas e próximo salto. primeiro comando para investigar ausência de conectividade fora da sub-rede local."><td class="num">05</td><td><b>ip route</b><span>Tabela de rotas</span></td><td>Exibe rota padrão, rotas específicas e próximo salto.</td><td>Primeiro comando para investigar ausência de conectividade fora da sub-rede local.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede nmcli resumo pelo networkmanager lista dispositivos, conexões e perfis gerenciados pelo networkmanager. muito útil em desktops, notebooks e servidores que usam networkmanager."><td class="num">06</td><td><b>nmcli</b><span>Resumo pelo NetworkManager</span></td><td>Lista dispositivos, conexões e perfis gerenciados pelo NetworkManager.</td><td>Muito útil em desktops, notebooks e servidores que usam NetworkManager.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede ethtool características físicas da interface mostra velocidade, duplex, autonegociação e estatísticas da nic. ajuda a detectar problemas de cabo, duplex mismatch e limitações de velocidade."><td class="num">07</td><td><b>ethtool</b><span>Características físicas da interface</span></td><td>Mostra velocidade, duplex, autonegociação e estatísticas da NIC.</td><td>Ajuda a detectar problemas de cabo, duplex mismatch e limitações de velocidade.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede ls /sys/class/net interfaces do kernel lista interfaces reconhecidas pelo kernel linux. útil quando ferramentas de rede não mostram uma interface esperada."><td class="num">08</td><td><b>ls /sys/class/net</b><span>Interfaces do kernel</span></td><td>Lista interfaces reconhecidas pelo kernel Linux.</td><td>Útil quando ferramentas de rede não mostram uma interface esperada.</td></tr></tbody></table></div>
     </section>
     <section class="section" id="conectividade">
@@ -366,7 +364,7 @@ td span{color:#aee8ae;font-size:12px}
 <span class="sh-cmd">mtr</span> <span class="sh-flag">-rw</span> peotta.github.io
 
 <span class="sh-comment"># 04. Tabela ARP/NDP - Mostra vizinhos da camada 2 conhecidos pelo host.</span>
-<span class="sh-cmd">ip</span> neigh show
+<span class="sh-cmd">ip</span> <span class="sh-sub">neigh</span> <span class="sh-sub">show</span>
 <span class="sh-cmd">arp</span> <span class="sh-flag">-n</span>
 
 <span class="sh-comment"># 05. Teste de aplicação HTTP/HTTPS - Valida conectividade em camada de aplicação, certificados e códigos HTTP.</span>
@@ -390,35 +388,35 @@ telnet 192.168.1.10 25
     <section class="section" id="ip">
       <div class="section-title"><div><span class="section-kicker">🌐 Tema 03</span><h2>Configuração IPv4, IPv6 e Rotas</h2><p>Comandos para configurar endereços, gateways, rotas estáticas e parâmetros de rede.</p></div><button class="copy-section" data-target="code-ip">Copiar bloco</button></div>
       <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-ip.sh</b></div><pre><code id="code-ip"><span class="sh-comment"># 01. Adicionar endereço IP - Configura endereço IPv4/IPv6 temporariamente em uma interface.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> addr add 192.168.10.20/24 dev eth0
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> addr add 2001:db8:10::20/64 dev eth0
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">addr</span> <span class="sh-sub">add</span> 192.168.10.20/24 dev eth0
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">addr</span> <span class="sh-sub">add</span> 2001:db8:10::20/64 dev eth0
 
 <span class="sh-comment"># 02. Ativar ou desativar interface - Coloca a interface em estado UP ou DOWN.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> link set eth0 up
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> link set eth0 down
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">link</span> <span class="sh-sub">set</span> eth0 <span class="sh-sub">up</span>
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">link</span> <span class="sh-sub">set</span> eth0 <span class="sh-sub">down</span>
 
 <span class="sh-comment"># 03. Adicionar rota estática - Cria rota temporária para uma rede ou host específico.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> route add 10.20.0.0/16 via 192.168.1.1
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> route add default via 192.168.1.1
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">route</span> <span class="sh-sub">add</span> 10.20.0.0/16 via 192.168.1.1
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">route</span> <span class="sh-sub">add</span> default via 192.168.1.1
 
 <span class="sh-comment"># 04. Remover rota - Remove rota incorreta ou obsoleta da tabela de roteamento.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> route del 10.20.0.0/16
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> route del default
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">route</span> <span class="sh-sub">del</span> 10.20.0.0/16
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">route</span> <span class="sh-sub">del</span> default
 
 <span class="sh-comment"># 05. Habilitar roteamento no Linux - Permite que o host encaminhe pacotes entre interfaces.</span>
 <span class="sh-sudo">sudo</span> sysctl <span class="sh-flag">-w</span> net.ipv4.ip_forward=1
 <span class="sh-sudo">sudo</span> sysctl <span class="sh-flag">-w</span> net.ipv6.conf.all.forwarding=1
 
 <span class="sh-comment"># 06. Política de roteamento - Exibe ou cria regras de roteamento baseado em origem, marcação ou tabelas.</span>
-<span class="sh-cmd">ip</span> rule show
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> rule add from 192.168.10.0/24 table 100
+<span class="sh-cmd">ip</span> rule <span class="sh-sub">show</span>
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> rule <span class="sh-sub">add</span> from 192.168.10.0/24 table 100
 
 <span class="sh-comment"># 07. Tabela de roteamento alternativa - Gerencia rotas em tabelas específicas.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> route add default via 10.0.0.1 dev eth1 table 100
-<span class="sh-cmd">ip</span> route show table 100
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">route</span> <span class="sh-sub">add</span> default via 10.0.0.1 dev eth1 table 100
+<span class="sh-cmd">ip</span> <span class="sh-sub">route</span> <span class="sh-sub">show</span> table 100
 
 <span class="sh-comment"># 08. Estado de resolução DNS por link - Mostra DNS configurado por interface e domínio de busca.</span>
-<span class="sh-cmd">resolvectl</span> status
+<span class="sh-cmd">resolvectl</span> <span class="sh-sub">status</span>
 <span class="sh-cmd">resolvectl</span> dns eth0 1.1.1.1 8.8.8.8</code></pre></div>
       <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ip addr add adicionar endereço ip configura endereço ipv4/ipv6 temporariamente em uma interface. alterações feitas com ip geralmente não persistem após reboot."><td class="num">01</td><td><b>ip addr add</b><span>Adicionar endereço IP</span></td><td>Configura endereço IPv4/IPv6 temporariamente em uma interface.</td><td>Alterações feitas com ip geralmente não persistem após reboot.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ip link set ativar ou desativar interface coloca a interface em estado up ou down. útil após configuração manual, troubleshooting ou isolamento."><td class="num">02</td><td><b>ip link set</b><span>Ativar ou desativar interface</span></td><td>Coloca a interface em estado UP ou DOWN.</td><td>Útil após configuração manual, troubleshooting ou isolamento.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ip route add adicionar rota estática cria rota temporária para uma rede ou host específico. use para testes rápidos antes de tornar a configuração persistente."><td class="num">03</td><td><b>ip route add</b><span>Adicionar rota estática</span></td><td>Cria rota temporária para uma rede ou host específico.</td><td>Use para testes rápidos antes de tornar a configuração persistente.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ip route del remover rota remove rota incorreta ou obsoleta da tabela de roteamento. confirme a rota antes de remover para evitar perda de acesso remoto."><td class="num">04</td><td><b>ip route del</b><span>Remover rota</span></td><td>Remove rota incorreta ou obsoleta da tabela de roteamento.</td><td>Confirme a rota antes de remover para evitar perda de acesso remoto.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas sysctl forwarding habilitar roteamento no linux permite que o host encaminhe pacotes entre interfaces. necessário para transformar linux em roteador, gateway ou firewall."><td class="num">05</td><td><b>sysctl forwarding</b><span>Habilitar roteamento no Linux</span></td><td>Permite que o host encaminhe pacotes entre interfaces.</td><td>Necessário para transformar Linux em roteador, gateway ou firewall.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ip rule política de roteamento exibe ou cria regras de roteamento baseado em origem, marcação ou tabelas. usado em multihoming, vpns, sd-wan simples e roteamento avançado."><td class="num">06</td><td><b>ip rule</b><span>Política de roteamento</span></td><td>Exibe ou cria regras de roteamento baseado em origem, marcação ou tabelas.</td><td>Usado em multihoming, VPNs, SD-WAN simples e roteamento avançado.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ip route table tabela de roteamento alternativa gerencia rotas em tabelas específicas. combine com ip rule para roteamento por política."><td class="num">07</td><td><b>ip route table</b><span>Tabela de roteamento alternativa</span></td><td>Gerencia rotas em tabelas específicas.</td><td>Combine com ip rule para roteamento por política.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas resolvectl estado de resolução dns por link mostra dns configurado por interface e domínio de busca. muito útil em sistemas com systemd-resolved."><td class="num">08</td><td><b>resolvectl</b><span>Estado de resolução DNS por link</span></td><td>Mostra DNS configurado por interface e domínio de busca.</td><td>Muito útil em sistemas com systemd-resolved.</td></tr></tbody></table></div>
     </section>
@@ -442,7 +440,7 @@ telnet 192.168.1.10 25
 <span class="sh-cmd">nslookup</span> <span class="sh-flag">-type</span>=mx example.com
 
 <span class="sh-comment"># 05. Ver resolvedores configurados - Mostra DNS configurado localmente, quando aplicável.</span>
-<span class="sh-cmd">cat</span> <span class="sh-path">/etc/resolv.conf</span>
+<span class="sh-cmd">cat</span> /etc/resolv.conf
 
 <span class="sh-comment"># 06. Resolução via NSS - Testa a resolução considerando /etc/hosts, DNS e ordem do nsswitch.</span>
 <span class="sh-cmd">getent</span> hosts peotta.github.io
@@ -452,8 +450,8 @@ telnet 192.168.1.10 25
 <span class="sh-cmd">journalctl</span> <span class="sh-flag">-u</span> systemd-resolved <span class="sh-flag">--since</span> <span class="sh-str">&quot;1 hour ago&quot;</span>
 
 <span class="sh-comment"># 08. Administração BIND - Controla e consulta status de servidores BIND.</span>
-<span class="sh-sudo">sudo</span> rndc status
-<span class="sh-sudo">sudo</span> rndc reload</code></pre></div>
+<span class="sh-sudo">sudo</span> rndc <span class="sh-sub">status</span>
+<span class="sh-sudo">sudo</span> rndc <span class="sh-sub">reload</span></code></pre></div>
       <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="dns e resolução de nomes dig consulta dns detalhada consulta registros a, aaaa, mx, ns, txt e exibe detalhes da resposta. ferramenta principal para análise dns profissional."><td class="num">01</td><td><b>dig</b><span>Consulta DNS detalhada</span></td><td>Consulta registros A, AAAA, MX, NS, TXT e exibe detalhes da resposta.</td><td>Ferramenta principal para análise DNS profissional.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes dig @servidor consulta usando dns específico força a consulta em um resolvedor determinado. use para comparar respostas entre dns interno e externo."><td class="num">02</td><td><b>dig @servidor</b><span>Consulta usando DNS específico</span></td><td>Força a consulta em um resolvedor determinado.</td><td>Use para comparar respostas entre DNS interno e externo.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes host consulta dns rápida mostra resolução de nomes de forma simples. bom para checagens rápidas durante troubleshooting."><td class="num">03</td><td><b>host</b><span>Consulta DNS rápida</span></td><td>Mostra resolução de nomes de forma simples.</td><td>Bom para checagens rápidas durante troubleshooting.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes nslookup consulta dns tradicional ferramenta clássica disponível em muitos ambientes. útil por familiaridade, embora dig seja mais completo."><td class="num">04</td><td><b>nslookup</b><span>Consulta DNS tradicional</span></td><td>Ferramenta clássica disponível em muitos ambientes.</td><td>Útil por familiaridade, embora dig seja mais completo.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes resolv.conf ver resolvedores configurados mostra dns configurado localmente, quando aplicável. em sistemas modernos, pode apontar para stub resolver local."><td class="num">05</td><td><b>resolv.conf</b><span>Ver resolvedores configurados</span></td><td>Mostra DNS configurado localmente, quando aplicável.</td><td>Em sistemas modernos, pode apontar para stub resolver local.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes getent hosts resolução via nss testa a resolução considerando /etc/hosts, dns e ordem do nsswitch. mais próximo do comportamento real de muitas aplicações."><td class="num">06</td><td><b>getent hosts</b><span>Resolução via NSS</span></td><td>Testa a resolução considerando /etc/hosts, DNS e ordem do nsswitch.</td><td>Mais próximo do comportamento real de muitas aplicações.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes journalctl dns logs do resolvedor consulta logs do systemd-resolved. ajuda a investigar falhas intermitentes de dns."><td class="num">07</td><td><b>journalctl DNS</b><span>Logs do resolvedor</span></td><td>Consulta logs do systemd-resolved.</td><td>Ajuda a investigar falhas intermitentes de DNS.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes rndc administração bind controla e consulta status de servidores bind. usado em servidores dns autoritativos ou recursivos com bind."><td class="num">08</td><td><b>rndc</b><span>Administração BIND</span></td><td>Controla e consulta status de servidores BIND.</td><td>Usado em servidores DNS autoritativos ou recursivos com BIND.</td></tr></tbody></table></div>
     </section>
     <section class="section" id="portas">
@@ -474,8 +472,8 @@ telnet 192.168.1.10 25
 <span class="sh-sudo">sudo</span> fuser <span class="sh-flag">-k</span> 8080/tcp
 
 <span class="sh-comment"># 05. Estado de serviços - Mostra se um serviço está ativo, falhou ou reiniciando.</span>
-<span class="sh-cmd">systemctl</span> status <span class="sh-cmd">ssh</span>
-<span class="sh-cmd">systemctl</span> status nginx
+<span class="sh-cmd">systemctl</span> <span class="sh-sub">status</span> <span class="sh-cmd">ssh</span>
+<span class="sh-cmd">systemctl</span> <span class="sh-sub">status</span> nginx
 
 <span class="sh-comment"># 06. Logs de serviço - Mostra logs recentes de uma unidade systemd.</span>
 <span class="sh-cmd">journalctl</span> <span class="sh-flag">-u</span> <span class="sh-cmd">ssh</span> <span class="sh-flag">--since</span> today
@@ -492,10 +490,10 @@ nmap <span class="sh-flag">-Pn</span> <span class="sh-flag">-p</span> 1-1000 192
     <section class="section" id="firewall">
       <div class="section-title"><div><span class="section-kicker">🧱 Tema 06</span><h2>Firewall, NAT e Controle de Tráfego</h2><p>Comandos para visualizar e aplicar regras com nftables, iptables, UFW e firewalld.</p></div><button class="copy-section" data-target="code-firewall">Copiar bloco</button></div>
       <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-firewall.sh</b></div><pre><code id="code-firewall"><span class="sh-comment"># 01. Visualizar nftables - Mostra todas as tabelas, cadeias e regras nftables.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">nft</span> list ruleset
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">nft</span> <span class="sh-sub">list</span> ruleset
 
 <span class="sh-comment"># 02. Adicionar regra nftables - Exemplo de liberação de SSH na cadeia input.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">nft</span> add rule inet filter input tcp dport 22 accept
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">nft</span> <span class="sh-sub">add</span> rule inet filter input tcp dport 22 accept
 
 <span class="sh-comment"># 03. Visualizar iptables - Lista regras, contadores e políticas das cadeias.</span>
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">iptables</span> <span class="sh-flag">-L</span> <span class="sh-flag">-n</span> <span class="sh-flag">-v</span>
@@ -505,9 +503,9 @@ nmap <span class="sh-flag">-Pn</span> <span class="sh-flag">-p</span> 1-1000 192
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">iptables</span> <span class="sh-flag">-t</span> nat <span class="sh-flag">-A</span> POSTROUTING <span class="sh-flag">-o</span> eth0 <span class="sh-flag">-j</span> MASQUERADE
 
 <span class="sh-comment"># 05. Firewall simplificado - Mostra estado e regras UFW em Ubuntu e derivados.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ufw</span> status verbose
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ufw</span> <span class="sh-sub">status</span> verbose
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">ufw</span> allow 22/tcp
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ufw</span> enable
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ufw</span> <span class="sh-sub">enable</span>
 
 <span class="sh-comment"># 06. Administração firewalld - Gerencia zonas e serviços em Red Hat, Fedora e derivados.</span>
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">firewall-cmd</span> <span class="sh-flag">--state</span>
@@ -516,8 +514,8 @@ nmap <span class="sh-flag">-Pn</span> <span class="sh-flag">-p</span> 1-1000 192
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">firewall-cmd</span> <span class="sh-flag">--reload</span>
 
 <span class="sh-comment"># 07. Controle de tráfego - Mostra filas, disciplinas e limitação de banda.</span>
-tc qdisc show dev eth0
-<span class="sh-sudo">sudo</span> tc qdisc add dev eth0 root netem delay 50ms
+tc qdisc <span class="sh-sub">show</span> dev eth0
+<span class="sh-sudo">sudo</span> tc qdisc <span class="sh-sub">add</span> dev eth0 root netem delay 50ms
 
 <span class="sh-comment"># 08. Tabela de conexões - Mostra conexões rastreadas pelo kernel.</span>
 <span class="sh-sudo">sudo</span> conntrack <span class="sh-flag">-L</span>
@@ -530,7 +528,7 @@ tc qdisc show dev eth0
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">tcpdump</span> <span class="sh-flag">-i</span> eth0 <span class="sh-flag">-nn</span>
 
 <span class="sh-comment"># 02. Gravar captura - Salva tráfego para análise posterior no Wireshark.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">tcpdump</span> <span class="sh-flag">-i</span> any <span class="sh-flag">-s</span> 0 <span class="sh-flag">-w</span> <span class="sh-path">captura.pcap</span>
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">tcpdump</span> <span class="sh-flag">-i</span> any <span class="sh-flag">-s</span> 0 <span class="sh-flag">-w</span> captura.pcap
 
 <span class="sh-comment"># 03. Filtrar por host, porta e protocolo - Captura apenas tráfego relevante para investigação.</span>
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">tcpdump</span> <span class="sh-flag">-i</span> any <span class="sh-cmd">host</span> 192.168.1.10
@@ -541,8 +539,8 @@ tc qdisc show dev eth0
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">tcpdump</span> <span class="sh-flag">-i</span> eth0 <span class="sh-flag">-w</span> capture-%Y%m%d%H%M%S.pcap <span class="sh-flag">-G</span> 3600 <span class="sh-flag">-W</span> 24
 
 <span class="sh-comment"># 05. Wireshark em linha de comando - Analisa PCAP e extrai campos específicos.</span>
-<span class="sh-cmd">tshark</span> <span class="sh-flag">-r</span> <span class="sh-path">captura.pcap</span> <span class="sh-flag">-q</span> <span class="sh-flag">-z</span> io,phs
-<span class="sh-cmd">tshark</span> <span class="sh-flag">-r</span> <span class="sh-path">captura.pcap</span> <span class="sh-flag">-Y</span> dns
+<span class="sh-cmd">tshark</span> <span class="sh-flag">-r</span> captura.pcap <span class="sh-flag">-q</span> <span class="sh-flag">-z</span> io,phs
+<span class="sh-cmd">tshark</span> <span class="sh-flag">-r</span> captura.pcap <span class="sh-flag">-Y</span> dns
 
 <span class="sh-comment"># 06. Grep para tráfego - Procura padrões textuais em pacotes.</span>
 <span class="sh-sudo">sudo</span> ngrep <span class="sh-flag">-d</span> any <span class="sh-str">&quot;Host:&quot;</span> tcp port 80
@@ -557,37 +555,37 @@ nload eth0</code></pre></div>
     <section class="section" id="switching">
       <div class="section-title"><div><span class="section-kicker">🖧 Tema 08</span><h2>Bridge, VLAN e Switching no Linux</h2><p>Administração de bridges, VLANs e enlaces virtuais em servidores, labs e virtualização.</p></div><button class="copy-section" data-target="code-switching">Copiar bloco</button></div>
       <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-switching.sh</b></div><pre><code id="code-switching"><span class="sh-comment"># 01. Estado de bridge - Mostra portas associadas a bridges Linux.</span>
-<span class="sh-cmd">bridge</span> link show
-<span class="sh-cmd">bridge</span> vlan show
+<span class="sh-cmd">bridge</span> <span class="sh-sub">link</span> <span class="sh-sub">show</span>
+<span class="sh-cmd">bridge</span> vlan <span class="sh-sub">show</span>
 
 <span class="sh-comment"># 02. Criar bridge - Cria bridge virtual e adiciona interface física.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> link add br0 type <span class="sh-cmd">bridge</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> link set eth0 master br0
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> link set br0 up
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">link</span> <span class="sh-sub">add</span> br0 type <span class="sh-cmd">bridge</span>
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">link</span> <span class="sh-sub">set</span> eth0 master br0
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">link</span> <span class="sh-sub">set</span> br0 <span class="sh-sub">up</span>
 
 <span class="sh-comment"># 03. Criar subinterface VLAN - Cria interface VLAN 802.1Q no Linux.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> link add link eth0 name eth0.10 type vlan id 10
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> addr add 192.168.10.2/24 dev eth0.10
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> link set eth0.10 up
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">link</span> <span class="sh-sub">add</span> <span class="sh-sub">link</span> eth0 name eth0.10 type vlan id 10
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">addr</span> <span class="sh-sub">add</span> 192.168.10.2/24 dev eth0.10
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">link</span> <span class="sh-sub">set</span> eth0.10 <span class="sh-sub">up</span>
 
 <span class="sh-comment"># 04. Bridge em sistemas antigos - Ferramenta legada para gerenciar bridges.</span>
-<span class="sh-cmd">brctl</span> show
+<span class="sh-cmd">brctl</span> <span class="sh-sub">show</span>
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">brctl</span> addbr br0
 
 <span class="sh-comment"># 05. Descoberta LLDP - Mostra switch, porta e vizinhos conectados.</span>
-<span class="sh-sudo">sudo</span> lldpcli show neighbors
-<span class="sh-sudo">sudo</span> lldpcli show neighbors details
+<span class="sh-sudo">sudo</span> lldpcli <span class="sh-sub">show</span> neighbors
+<span class="sh-sudo">sudo</span> lldpcli <span class="sh-sub">show</span> neighbors details
 
 <span class="sh-comment"># 06. Namespaces de rede - Cria ambientes de rede isolados para laboratório.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> netns add host1
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> netns exec host1 <span class="sh-cmd">ip</span> addr
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> netns <span class="sh-sub">add</span> host1
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> netns exec host1 <span class="sh-cmd">ip</span> <span class="sh-sub">addr</span>
 
 <span class="sh-comment"># 07. Par virtual Ethernet - Conecta namespaces, containers ou bridges.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> link add veth0 type veth peer name veth1
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> link set veth1 netns host1
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">link</span> <span class="sh-sub">add</span> veth0 type veth peer name veth1
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ip</span> <span class="sh-sub">link</span> <span class="sh-sub">set</span> veth1 netns host1
 
 <span class="sh-comment"># 08. Open vSwitch - Gerencia switches virtuais avançados.</span>
-<span class="sh-sudo">sudo</span> ovs-vsctl show
+<span class="sh-sudo">sudo</span> ovs-vsctl <span class="sh-sub">show</span>
 <span class="sh-sudo">sudo</span> ovs-vsctl add-br br-lab
 <span class="sh-sudo">sudo</span> ovs-vsctl add-port br-lab eth1</code></pre></div>
       <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="bridge, vlan e switching no linux bridge link estado de bridge mostra portas associadas a bridges linux. comum em kvm, containers e laboratórios de redes."><td class="num">01</td><td><b>bridge link</b><span>Estado de bridge</span></td><td>Mostra portas associadas a bridges Linux.</td><td>Comum em KVM, containers e laboratórios de redes.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux ip link add bridge criar bridge cria bridge virtual e adiciona interface física. cuidado para não perder acesso remoto ao mover interface."><td class="num">02</td><td><b>ip link add bridge</b><span>Criar bridge</span></td><td>Cria bridge virtual e adiciona interface física.</td><td>Cuidado para não perder acesso remoto ao mover interface.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux ip link vlan criar subinterface vlan cria interface vlan 802.1q no linux. use quando o servidor recebe trunk de switch."><td class="num">03</td><td><b>ip link vlan</b><span>Criar subinterface VLAN</span></td><td>Cria interface VLAN 802.1Q no Linux.</td><td>Use quando o servidor recebe trunk de switch.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux brctl legado bridge em sistemas antigos ferramenta legada para gerenciar bridges. prefira bridge/ip em sistemas modernos."><td class="num">04</td><td><b>brctl legado</b><span>Bridge em sistemas antigos</span></td><td>Ferramenta legada para gerenciar bridges.</td><td>Prefira bridge/ip em sistemas modernos.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux lldpcli descoberta lldp mostra switch, porta e vizinhos conectados. excelente para documentação física e troubleshooting de cabeamento."><td class="num">05</td><td><b>lldpcli</b><span>Descoberta LLDP</span></td><td>Mostra switch, porta e vizinhos conectados.</td><td>Excelente para documentação física e troubleshooting de cabeamento.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux ip netns namespaces de rede cria ambientes de rede isolados para laboratório. base para simular hosts, roteadores e topologias."><td class="num">06</td><td><b>ip netns</b><span>Namespaces de rede</span></td><td>Cria ambientes de rede isolados para laboratório.</td><td>Base para simular hosts, roteadores e topologias.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux veth pair par virtual ethernet conecta namespaces, containers ou bridges. muito usado em virtualização e simulação de redes."><td class="num">07</td><td><b>veth pair</b><span>Par virtual Ethernet</span></td><td>Conecta namespaces, containers ou bridges.</td><td>Muito usado em virtualização e simulação de redes.</td></tr><tr class="cmd-row" data-search="bridge, vlan e switching no linux ovs-vsctl open vswitch gerencia switches virtuais avançados. útil em sdn, mininet, openstack e laboratórios."><td class="num">08</td><td><b>ovs-vsctl</b><span>Open vSwitch</span></td><td>Gerencia switches virtuais avançados.</td><td>Útil em SDN, Mininet, OpenStack e laboratórios.</td></tr></tbody></table></div>
@@ -598,41 +596,41 @@ nload eth0</code></pre></div>
 <span class="sh-cmd">iw</span> dev
 
 <span class="sh-comment"># 02. Varredura de redes - Mostra SSIDs, BSSIDs, canais, sinal e segurança.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">iw</span> dev wlan0 scan<span class="sh-sep"> | </span>less
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">iw</span> dev wlan0 <span class="sh-sub">scan</span><span class="sh-pipe"> | </span>less
 
 <span class="sh-comment"># 03. Redes Wi-Fi via NetworkManager - Lista redes e permite conexão por perfil.</span>
-<span class="sh-cmd">nmcli</span> device wifi list
-<span class="sh-cmd">nmcli</span> device wifi connect <span class="sh-str">&quot;SSID&quot;</span> password <span class="sh-str">&quot;senha&quot;</span>
+<span class="sh-cmd">nmcli</span> <span class="sh-sub">device</span> wifi <span class="sh-sub">list</span>
+<span class="sh-cmd">nmcli</span> <span class="sh-sub">device</span> wifi <span class="sh-sub">connect</span> <span class="sh-str">&quot;SSID&quot;</span> password <span class="sh-str">&quot;senha&quot;</span>
 
 <span class="sh-comment"># 04. Estado Wi-Fi legado - Mostra parâmetros sem fio em sistemas antigos.</span>
 <span class="sh-cmd">iwconfig</span> wlan0
 
 <span class="sh-comment"># 05. Bloqueios de rádio - Verifica se Wi-Fi/Bluetooth estão bloqueados por software ou hardware.</span>
-<span class="sh-cmd">rfkill</span> list
+<span class="sh-cmd">rfkill</span> <span class="sh-sub">list</span>
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">rfkill</span> unblock wifi
 
 <span class="sh-comment"># 06. Monitor Wi-Fi interativo - Exibe qualidade, sinal, ruído e estatísticas.</span>
 wavemon
 
 <span class="sh-comment"># 07. Ponto de acesso Linux - Verifica logs e estado do hostapd.</span>
-<span class="sh-cmd">systemctl</span> status hostapd
+<span class="sh-cmd">systemctl</span> <span class="sh-sub">status</span> hostapd
 <span class="sh-cmd">journalctl</span> <span class="sh-flag">-u</span> hostapd <span class="sh-flag">-f</span>
 
 <span class="sh-comment"># 08. Domínio regulatório - Mostra ou define país/região para canais permitidos.</span>
-<span class="sh-cmd">iw</span> reg get
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">iw</span> reg set BR</code></pre></div>
+<span class="sh-cmd">iw</span> reg <span class="sh-sub">get</span>
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">iw</span> reg <span class="sh-sub">set</span> BR</code></pre></div>
       <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="wi-fi e interfaces sem fio iw dev interfaces wi-fi lista interfaces sem fio reconhecidas. substitui parte das funções antigas do iwconfig."><td class="num">01</td><td><b>iw dev</b><span>Interfaces Wi-Fi</span></td><td>Lista interfaces sem fio reconhecidas.</td><td>Substitui parte das funções antigas do iwconfig.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio iw scan varredura de redes mostra ssids, bssids, canais, sinal e segurança. pode exigir privilégios administrativos."><td class="num">02</td><td><b>iw scan</b><span>Varredura de redes</span></td><td>Mostra SSIDs, BSSIDs, canais, sinal e segurança.</td><td>Pode exigir privilégios administrativos.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio nmcli wifi redes wi-fi via networkmanager lista redes e permite conexão por perfil. prático em notebooks e laboratórios."><td class="num">03</td><td><b>nmcli wifi</b><span>Redes Wi-Fi via NetworkManager</span></td><td>Lista redes e permite conexão por perfil.</td><td>Prático em notebooks e laboratórios.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio iwconfig legado estado wi-fi legado mostra parâmetros sem fio em sistemas antigos. prefira iw em distribuições modernas."><td class="num">04</td><td><b>iwconfig legado</b><span>Estado Wi-Fi legado</span></td><td>Mostra parâmetros sem fio em sistemas antigos.</td><td>Prefira iw em distribuições modernas.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio rfkill bloqueios de rádio verifica se wi-fi/bluetooth estão bloqueados por software ou hardware. muito útil quando a interface não aparece ativa."><td class="num">05</td><td><b>rfkill</b><span>Bloqueios de rádio</span></td><td>Verifica se Wi-Fi/Bluetooth estão bloqueados por software ou hardware.</td><td>Muito útil quando a interface não aparece ativa.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio wavemon monitor wi-fi interativo exibe qualidade, sinal, ruído e estatísticas. ferramenta visual para diagnóstico de cobertura."><td class="num">06</td><td><b>wavemon</b><span>Monitor Wi-Fi interativo</span></td><td>Exibe qualidade, sinal, ruído e estatísticas.</td><td>Ferramenta visual para diagnóstico de cobertura.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio hostapd status ponto de acesso linux verifica logs e estado do hostapd. usado quando linux atua como ap."><td class="num">07</td><td><b>hostapd status</b><span>Ponto de acesso Linux</span></td><td>Verifica logs e estado do hostapd.</td><td>Usado quando Linux atua como AP.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio iw reg domínio regulatório mostra ou define país/região para canais permitidos. configure corretamente para cumprir limites regulatórios."><td class="num">08</td><td><b>iw reg</b><span>Domínio regulatório</span></td><td>Mostra ou define país/região para canais permitidos.</td><td>Configure corretamente para cumprir limites regulatórios.</td></tr></tbody></table></div>
     </section>
     <section class="section" id="servicos">
       <div class="section-title"><div><span class="section-kicker">🧰 Tema 10</span><h2>Serviços de Rede: SSH, DHCP, Web e NTP</h2><p>Administração e diagnóstico de serviços comuns de infraestrutura.</p></div><button class="copy-section" data-target="code-servicos">Copiar bloco</button></div>
       <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-servicos.sh</b></div><pre><code id="code-servicos"><span class="sh-comment"># 01. Configuração efetiva do SSH - Mostra parâmetros finais do servidor SSH.</span>
-<span class="sh-sudo">sudo</span> sshd <span class="sh-flag">-T</span><span class="sh-sep"> | </span><span class="sh-cmd">grep</span> <span class="sh-flag">-E</span> <span class="sh-str">&quot;permitrootlogin|passwordauthentication|pubkeyauthentication&quot;</span>
+<span class="sh-sudo">sudo</span> sshd <span class="sh-flag">-T</span><span class="sh-pipe"> | </span><span class="sh-cmd">grep</span> <span class="sh-flag">-E</span> <span class="sh-str">&quot;permitrootlogin|passwordauthentication|pubkeyauthentication&quot;</span>
 
 <span class="sh-comment"># 02. Diagnóstico de cliente SSH - Mostra detalhes de autenticação, chave e negociação.</span>
 <span class="sh-cmd">ssh</span> <span class="sh-flag">-vvv</span> usuario@192.168.1.10
 
 <span class="sh-comment"># 03. Cópia remota de arquivos - Transfere arquivos entre hosts por SSH.</span>
-<span class="sh-cmd">scp</span> <span class="sh-path">arquivo.txt</span> usuario@servidor:/tmp/
+<span class="sh-cmd">scp</span> arquivo.txt usuario@servidor:/tmp/
 rsync <span class="sh-flag">-avz</span> ./dados/ usuario@servidor:/backup/dados/
 
 <span class="sh-comment"># 04. Cliente DHCP - Solicita ou renova endereço IP por DHCP.</span>
@@ -640,12 +638,12 @@ rsync <span class="sh-flag">-avz</span> ./dados/ usuario@servidor:/backup/dados/
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">dhclient</span> <span class="sh-flag">-r</span> eth0
 
 <span class="sh-comment"># 05. Logs de DHCP client/server - Localiza eventos de concessão, renovação e falha.</span>
-<span class="sh-cmd">journalctl</span> <span class="sh-flag">-u</span> NetworkManager <span class="sh-flag">--since</span> today<span class="sh-sep"> | </span><span class="sh-cmd">grep</span> <span class="sh-flag">-i</span> dhcp
+<span class="sh-cmd">journalctl</span> <span class="sh-flag">-u</span> NetworkManager <span class="sh-flag">--since</span> today<span class="sh-pipe"> | </span><span class="sh-cmd">grep</span> <span class="sh-flag">-i</span> dhcp
 <span class="sh-cmd">journalctl</span> <span class="sh-flag">-u</span> isc-dhcp-server <span class="sh-flag">-f</span>
 
 <span class="sh-comment"># 06. Serviços Web - Verifica estado dos principais servidores web.</span>
-<span class="sh-cmd">systemctl</span> status nginx
-<span class="sh-cmd">systemctl</span> status apache2
+<span class="sh-cmd">systemctl</span> <span class="sh-sub">status</span> nginx
+<span class="sh-cmd">systemctl</span> <span class="sh-sub">status</span> apache2
 <span class="sh-sudo">sudo</span> nginx <span class="sh-flag">-t</span>
 <span class="sh-sudo">sudo</span> apachectl configtest
 
@@ -654,7 +652,7 @@ chronyc tracking
 chronyc sources <span class="sh-flag">-v</span>
 
 <span class="sh-comment"># 08. Data, hora e NTP - Mostra fuso, horário e sincronização.</span>
-timedatectl status
+timedatectl <span class="sh-sub">status</span>
 <span class="sh-sudo">sudo</span> timedatectl set-ntp true</code></pre></div>
       <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp sshd -t configuração efetiva do ssh mostra parâmetros finais do servidor ssh. útil para validar endurecimento e autenticação."><td class="num">01</td><td><b>sshd -T</b><span>Configuração efetiva do SSH</span></td><td>Mostra parâmetros finais do servidor SSH.</td><td>Útil para validar endurecimento e autenticação.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp ssh verbose diagnóstico de cliente ssh mostra detalhes de autenticação, chave e negociação. use para investigar falhas de login e troca de chaves."><td class="num">02</td><td><b>ssh verbose</b><span>Diagnóstico de cliente SSH</span></td><td>Mostra detalhes de autenticação, chave e negociação.</td><td>Use para investigar falhas de login e troca de chaves.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp scp / rsync cópia remota de arquivos transfere arquivos entre hosts por ssh. rsync é melhor para sincronização incremental."><td class="num">03</td><td><b>scp / rsync</b><span>Cópia remota de arquivos</span></td><td>Transfere arquivos entre hosts por SSH.</td><td>rsync é melhor para sincronização incremental.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp dhclient cliente dhcp solicita ou renova endereço ip por dhcp. útil quando a interface não recebeu ip automaticamente."><td class="num">04</td><td><b>dhclient</b><span>Cliente DHCP</span></td><td>Solicita ou renova endereço IP por DHCP.</td><td>Útil quando a interface não recebeu IP automaticamente.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp journalctl dhcp logs de dhcp client/server localiza eventos de concessão, renovação e falha. o nome do serviço varia por distribuição."><td class="num">05</td><td><b>journalctl DHCP</b><span>Logs de DHCP client/server</span></td><td>Localiza eventos de concessão, renovação e falha.</td><td>O nome do serviço varia por distribuição.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp nginx/apache status serviços web verifica estado dos principais servidores web. use com curl para validar aplicação e porta."><td class="num">06</td><td><b>nginx/apache status</b><span>Serviços Web</span></td><td>Verifica estado dos principais servidores web.</td><td>Use com curl para validar aplicação e porta.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp chronyc ntp/tempo mostra sincronização de tempo via chrony. tempo correto é essencial para logs, tls, kerberos e auditoria."><td class="num">07</td><td><b>chronyc</b><span>NTP/tempo</span></td><td>Mostra sincronização de tempo via chrony.</td><td>Tempo correto é essencial para logs, TLS, Kerberos e auditoria.</td></tr><tr class="cmd-row" data-search="serviços de rede: ssh, dhcp, web e ntp timedatectl data, hora e ntp mostra fuso, horário e sincronização. primeiro comando para validar relógio do sistema."><td class="num">08</td><td><b>timedatectl</b><span>Data, hora e NTP</span></td><td>Mostra fuso, horário e sincronização.</td><td>Primeiro comando para validar relógio do sistema.</td></tr></tbody></table></div>
     </section>
@@ -669,7 +667,7 @@ free <span class="sh-flag">-h</span>
 
 <span class="sh-comment"># 03. Uso de disco - df mostra uso de filesystems; du mostra uso por diretório.</span>
 df <span class="sh-flag">-h</span>
-du <span class="sh-flag">-sh</span> <span class="sh-path">/var/log/*</span><span class="sh-sep"> | </span>sort <span class="sh-flag">-h</span>
+du <span class="sh-flag">-sh</span> /var/log/*<span class="sh-pipe"> | </span>sort <span class="sh-flag">-h</span>
 
 <span class="sh-comment"># 04. I/O de disco - Mostra utilização e espera de dispositivos de bloco.</span>
 iostat <span class="sh-flag">-xz</span> 1 5
@@ -696,81 +694,81 @@ bmon</code></pre></div>
 
 <span class="sh-comment"># 02. Logs do kernel - Mostra mensagens do kernel relacionadas a drivers e rede.</span>
 <span class="sh-cmd">journalctl</span> <span class="sh-flag">-k</span>
-dmesg <span class="sh-flag">-T</span><span class="sh-sep"> | </span>tail <span class="sh-flag">-100</span>
+dmesg <span class="sh-flag">-T</span><span class="sh-pipe"> | </span>tail <span class="sh-flag">-100</span>
 
 <span class="sh-comment"># 03. Autenticação - Mostra tentativas de login, sudo e SSH.</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">grep</span> <span class="sh-flag">-i</span> <span class="sh-str">&quot;failed|accepted|sudo&quot;</span> <span class="sh-path">/var/log/auth.log</span>
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">grep</span> <span class="sh-flag">-i</span> <span class="sh-str">&quot;failed|accepted|sudo&quot;</span> <span class="sh-path">/var/log/secure</span>
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">grep</span> <span class="sh-flag">-i</span> <span class="sh-str">&quot;failed|accepted|sudo&quot;</span> /var/log/auth.log
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">grep</span> <span class="sh-flag">-i</span> <span class="sh-str">&quot;failed|accepted|sudo&quot;</span> /var/log/secure
 
 <span class="sh-comment"># 04. Acompanhamento em tempo real - Segue logs enquanto eventos ocorrem.</span>
-<span class="sh-sudo">sudo</span> tail <span class="sh-flag">-f</span> <span class="sh-path">/var/log/syslog</span>
-<span class="sh-sudo">sudo</span> tail <span class="sh-flag">-f</span> <span class="sh-path">/var/log/messages</span>
+<span class="sh-sudo">sudo</span> tail <span class="sh-flag">-f</span> /var/log/syslog
+<span class="sh-sudo">sudo</span> tail <span class="sh-flag">-f</span> /var/log/messages
 
 <span class="sh-comment"># 05. Filtragem de eventos - Extrai padrões, IPs e contagens de logs.</span>
-<span class="sh-cmd">grep</span> <span class="sh-flag">-Ei</span> <span class="sh-str">&quot;error|fail|denied|timeout&quot;</span> <span class="sh-path">/var/log/syslog</span>
-awk <span class="sh-str">&#x27;{print $1,$2,$3,$5}&#x27;</span> <span class="sh-path">/var/log/syslog</span><span class="sh-sep"> | </span>head
+<span class="sh-cmd">grep</span> <span class="sh-flag">-Ei</span> <span class="sh-str">&quot;error|fail|denied|timeout&quot;</span> /var/log/syslog
+awk <span class="sh-str">&#x27;{print $1,$2,$3,$5}&#x27;</span> /var/log/syslog<span class="sh-pipe"> | </span>head
 
 <span class="sh-comment"># 06. Sessões de usuários - Mostra logins recentes e usuários conectados.</span>
 w
-last <span class="sh-flag">-F</span><span class="sh-sep"> | </span>head <span class="sh-flag">-20</span>
+last <span class="sh-flag">-F</span><span class="sh-pipe"> | </span>head <span class="sh-flag">-20</span>
 
 <span class="sh-comment"># 07. Consulta auditd - Pesquisa eventos do Linux Audit.</span>
 <span class="sh-sudo">sudo</span> ausearch <span class="sh-flag">-m</span> USER_LOGIN <span class="sh-flag">-ts</span> today
 <span class="sh-sudo">sudo</span> ausearch <span class="sh-flag">-k</span> network_changes
 
 <span class="sh-comment"># 08. Rotação de logs - Valida configuração de rotação e compressão.</span>
-<span class="sh-sudo">sudo</span> logrotate <span class="sh-flag">-d</span> <span class="sh-path">/etc/logrotate.conf</span></code></pre></div>
+<span class="sh-sudo">sudo</span> logrotate <span class="sh-flag">-d</span> /etc/logrotate.conf</code></pre></div>
       <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="logs e auditoria operacional journalctl geral logs systemd consulta logs centralizados do sistema. use filtros por unidade, prioridade e período."><td class="num">01</td><td><b>journalctl geral</b><span>Logs systemd</span></td><td>Consulta logs centralizados do sistema.</td><td>Use filtros por unidade, prioridade e período.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional journalctl kernel logs do kernel mostra mensagens do kernel relacionadas a drivers e rede. útil para nics, firmware, link down/up e erros."><td class="num">02</td><td><b>journalctl kernel</b><span>Logs do kernel</span></td><td>Mostra mensagens do kernel relacionadas a drivers e rede.</td><td>Útil para NICs, firmware, link down/up e erros.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional auth logs autenticação mostra tentativas de login, sudo e ssh. o caminho pode variar entre distribuições."><td class="num">03</td><td><b>auth logs</b><span>Autenticação</span></td><td>Mostra tentativas de login, sudo e SSH.</td><td>O caminho pode variar entre distribuições.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional tail -f acompanhamento em tempo real segue logs enquanto eventos ocorrem. use em outra janela durante testes de serviço."><td class="num">04</td><td><b>tail -f</b><span>Acompanhamento em tempo real</span></td><td>Segue logs enquanto eventos ocorrem.</td><td>Use em outra janela durante testes de serviço.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional grep / awk filtragem de eventos extrai padrões, ips e contagens de logs. base para relatórios rápidos de troubleshooting."><td class="num">05</td><td><b>grep / awk</b><span>Filtragem de eventos</span></td><td>Extrai padrões, IPs e contagens de logs.</td><td>Base para relatórios rápidos de troubleshooting.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional last / w sessões de usuários mostra logins recentes e usuários conectados. importante em administração remota e auditoria."><td class="num">06</td><td><b>last / w</b><span>Sessões de usuários</span></td><td>Mostra logins recentes e usuários conectados.</td><td>Importante em administração remota e auditoria.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional ausearch consulta auditd pesquisa eventos do linux audit. usado em ambientes com trilha de auditoria habilitada."><td class="num">07</td><td><b>ausearch</b><span>Consulta auditd</span></td><td>Pesquisa eventos do Linux Audit.</td><td>Usado em ambientes com trilha de auditoria habilitada.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional logrotate rotação de logs valida configuração de rotação e compressão. evita crescimento excessivo de logs."><td class="num">08</td><td><b>logrotate</b><span>Rotação de logs</span></td><td>Valida configuração de rotação e compressão.</td><td>Evita crescimento excessivo de logs.</td></tr></tbody></table></div>
     </section>
     <section class="section" id="automacao">
       <div class="section-title"><div><span class="section-kicker">⚙️ Tema 13</span><h2>Automação, Scripts e Administração Remota</h2><p>Comandos úteis para executar tarefas repetitivas, coletar informações e administrar hosts remotos.</p></div><button class="copy-section" data-target="code-automacao">Copiar bloco</button></div>
       <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-automacao.sh</b></div><pre><code id="code-automacao"><span class="sh-comment"># 01. Executar teste em vários hosts - Percorre uma lista de IPs e testa conectividade.</span>
-<span class="sh-res">for</span> <span class="sh-cmd">ip</span> <span class="sh-res">in</span> 192.168.1.{1..254}; <span class="sh-res">do</span> <span class="sh-cmd">ping</span> <span class="sh-flag">-c1</span> <span class="sh-flag">-W1</span> <span class="sh-var">$ip</span> <span class="sh-redir">&gt;</span>/dev/null<span class="sh-sep"> &amp;&amp; </span><span class="sh-cmd">echo</span> <span class="sh-str">&quot;$ip ativo&quot;</span>; <span class="sh-res">done</span>
+<span class="sh-cmd">for</span> <span class="sh-cmd">ip</span> in 192.168.1.{1..254}; <span class="sh-cmd">do</span> <span class="sh-cmd">ping</span> <span class="sh-flag">-c1</span> <span class="sh-flag">-W1</span> <span class="sh-var">$ip</span> &gt;/dev/null<span class="sh-pipe"> &amp;&amp; </span><span class="sh-cmd">echo</span> <span class="sh-str">&quot;$ip ativo&quot;</span>; <span class="sh-cmd">done</span>
 
 <span class="sh-comment"># 02. Comando remoto com SSH - Executa comando em vários servidores listados em arquivo.</span>
-<span class="sh-res">while</span> <span class="sh-cmd">read</span> <span class="sh-cmd">host</span>; <span class="sh-res">do</span> <span class="sh-cmd">ssh</span> <span class="sh-var">$host</span> <span class="sh-str">&quot;hostname; ip -br addr&quot;</span>; <span class="sh-res">done</span> <span class="sh-redir">&lt;</span> <span class="sh-path">hosts.txt</span>
+<span class="sh-cmd">while</span> read <span class="sh-cmd">host</span>; <span class="sh-cmd">do</span> <span class="sh-cmd">ssh</span> <span class="sh-var">$host</span> <span class="sh-str">&quot;hostname; ip -br addr&quot;</span>; <span class="sh-cmd">done</span> &lt; hosts.txt
 
 <span class="sh-comment"># 03. Teste com Ansible - Valida conectividade e autenticação no inventário.</span>
-<span class="sh-cmd">ansible</span> all <span class="sh-flag">-i</span> <span class="sh-path">hosts.ini</span> <span class="sh-flag">-m</span> <span class="sh-cmd">ping</span>
-<span class="sh-cmd">ansible</span> all <span class="sh-flag">-i</span> <span class="sh-path">hosts.ini</span> <span class="sh-flag">-a</span> <span class="sh-str">&quot;ip -br addr&quot;</span>
+<span class="sh-cmd">ansible</span> all <span class="sh-flag">-i</span> hosts.ini <span class="sh-flag">-m</span> <span class="sh-cmd">ping</span>
+<span class="sh-cmd">ansible</span> all <span class="sh-flag">-i</span> hosts.ini <span class="sh-flag">-a</span> <span class="sh-str">&quot;ip -br addr&quot;</span>
 
 <span class="sh-comment"># 04. Agendamento de tarefas - Edita tarefas recorrentes do usuário.</span>
 <span class="sh-cmd">crontab</span> <span class="sh-flag">-e</span>
 <span class="sh-cmd">crontab</span> <span class="sh-flag">-l</span>
 
 <span class="sh-comment"># 05. Agendamento moderno - Alternativa ao cron com unidades systemd.</span>
-<span class="sh-cmd">systemctl</span> list-timers
-<span class="sh-cmd">systemctl</span> status minha-tarefa.timer
+<span class="sh-cmd">systemctl</span> <span class="sh-sub">list-timers</span>
+<span class="sh-cmd">systemctl</span> <span class="sh-sub">status</span> minha-tarefa.timer
 
 <span class="sh-comment"># 06. Repetir comando - Executa comando em intervalos regulares.</span>
 <span class="sh-cmd">watch</span> <span class="sh-flag">-n</span> 2 <span class="sh-str">&quot;ip -br addr; ip route&quot;</span>
 
 <span class="sh-comment"># 07. Gravar sessão de terminal - Registra comandos e saídas em arquivo.</span>
-<span class="sh-cmd">script</span> <span class="sh-path">administracao-rede.log</span>
+<span class="sh-cmd">script</span> administracao-rede.log
 
 <span class="sh-comment"># 08. Salvar e exibir saída - Mostra saída no terminal e grava em arquivo.</span>
-<span class="sh-cmd">ip</span> addr<span class="sh-sep"> | </span><span class="sh-cmd">tee</span> <span class="sh-path">inventario-ip.txt</span>
-<span class="sh-cmd">ss</span> <span class="sh-flag">-tulpen</span><span class="sh-sep"> | </span><span class="sh-sudo">sudo</span> <span class="sh-cmd">tee</span> <span class="sh-path">portas-abertas.txt</span></code></pre></div>
+<span class="sh-cmd">ip</span> <span class="sh-sub">addr</span><span class="sh-pipe"> | </span><span class="sh-cmd">tee</span> inventario-ip.txt
+<span class="sh-cmd">ss</span> <span class="sh-flag">-tulpen</span><span class="sh-pipe"> | </span><span class="sh-sudo">sudo</span> <span class="sh-cmd">tee</span> portas-abertas.txt</code></pre></div>
       <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="automação, scripts e administração remota for loop hosts executar teste em vários hosts percorre uma lista de ips e testa conectividade. base simples para automação de inventário."><td class="num">01</td><td><b>for loop hosts</b><span>Executar teste em vários hosts</span></td><td>Percorre uma lista de IPs e testa conectividade.</td><td>Base simples para automação de inventário.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota parallel ssh comando remoto com ssh executa comando em vários servidores listados em arquivo. exige chaves ssh e autorização administrativa."><td class="num">02</td><td><b>parallel ssh</b><span>Comando remoto com SSH</span></td><td>Executa comando em vários servidores listados em arquivo.</td><td>Exige chaves SSH e autorização administrativa.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota ansible ping teste com ansible valida conectividade e autenticação no inventário. ideal para administração de múltiplos servidores."><td class="num">03</td><td><b>ansible ping</b><span>Teste com Ansible</span></td><td>Valida conectividade e autenticação no inventário.</td><td>Ideal para administração de múltiplos servidores.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota cron agendamento de tarefas edita tarefas recorrentes do usuário. use para coletas periódicas e scripts de manutenção."><td class="num">04</td><td><b>cron</b><span>Agendamento de tarefas</span></td><td>Edita tarefas recorrentes do usuário.</td><td>Use para coletas periódicas e scripts de manutenção.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota systemd timer agendamento moderno alternativa ao cron com unidades systemd. boa escolha para serviços e automações robustas."><td class="num">05</td><td><b>systemd timer</b><span>Agendamento moderno</span></td><td>Alternativa ao cron com unidades systemd.</td><td>Boa escolha para serviços e automações robustas.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota watch repetir comando executa comando em intervalos regulares. excelente para acompanhar mudanças durante troubleshooting."><td class="num">06</td><td><b>watch</b><span>Repetir comando</span></td><td>Executa comando em intervalos regulares.</td><td>Excelente para acompanhar mudanças durante troubleshooting.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota script gravar sessão de terminal registra comandos e saídas em arquivo. útil para documentação de laboratório e auditoria."><td class="num">07</td><td><b>script</b><span>Gravar sessão de terminal</span></td><td>Registra comandos e saídas em arquivo.</td><td>Útil para documentação de laboratório e auditoria.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota tee salvar e exibir saída mostra saída no terminal e grava em arquivo. prático em coletas de evidência e relatórios."><td class="num">08</td><td><b>tee</b><span>Salvar e exibir saída</span></td><td>Mostra saída no terminal e grava em arquivo.</td><td>Prático em coletas de evidência e relatórios.</td></tr></tbody></table></div>
     </section>
     <section class="section" id="troubleshooting">
       <div class="section-title"><div><span class="section-kicker">🛠️ Tema 14</span><h2>Fluxos Rápidos de Troubleshooting</h2><p>Sequências recomendadas para problemas comuns de rede.</p></div><button class="copy-section" data-target="code-troubleshooting">Copiar bloco</button></div>
       <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-troubleshooting.sh</b></div><pre><code id="code-troubleshooting"><span class="sh-comment"># 01. Diagnóstico quando host não recebe endereço - Verifica link, DHCP e logs.</span>
-<span class="sh-cmd">ip</span> link show
-<span class="sh-cmd">ip</span> <span class="sh-flag">-br</span> addr
+<span class="sh-cmd">ip</span> <span class="sh-sub">link</span> <span class="sh-sub">show</span>
+<span class="sh-cmd">ip</span> <span class="sh-flag">-br</span> <span class="sh-sub">addr</span>
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">dhclient</span> <span class="sh-flag">-v</span> eth0
 <span class="sh-cmd">journalctl</span> <span class="sh-flag">-u</span> NetworkManager <span class="sh-flag">--since</span> <span class="sh-str">&quot;30 min ago&quot;</span>
 
 <span class="sh-comment"># 02. Diagnóstico de acesso externo - Valida IP, rota, DNS e HTTP.</span>
-<span class="sh-cmd">ip</span> route
+<span class="sh-cmd">ip</span> <span class="sh-sub">route</span>
 <span class="sh-cmd">ping</span> <span class="sh-flag">-c</span> 4 8.8.8.8
 <span class="sh-cmd">dig</span> peotta.github.io
 <span class="sh-cmd">curl</span> <span class="sh-flag">-I</span> https://peotta.github.io
 
 <span class="sh-comment"># 03. Diagnóstico de serviço - Confirma serviço, porta local, firewall e teste remoto.</span>
-<span class="sh-cmd">systemctl</span> status nginx
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">ss</span> <span class="sh-flag">-tulpen</span><span class="sh-sep"> | </span><span class="sh-cmd">grep</span> :80
-<span class="sh-sudo">sudo</span> <span class="sh-cmd">firewall-cmd</span> <span class="sh-flag">--list-all</span> || <span class="sh-sudo">sudo</span> <span class="sh-cmd">ufw</span> status
+<span class="sh-cmd">systemctl</span> <span class="sh-sub">status</span> nginx
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">ss</span> <span class="sh-flag">-tulpen</span><span class="sh-pipe"> | </span><span class="sh-cmd">grep</span> :80
+<span class="sh-sudo">sudo</span> <span class="sh-cmd">firewall-cmd</span> <span class="sh-flag">--list-all</span> || <span class="sh-sudo">sudo</span> <span class="sh-cmd">ufw</span> <span class="sh-sub">status</span>
 <span class="sh-cmd">nc</span> <span class="sh-flag">-vz</span> servidor 80
 
 <span class="sh-comment"># 04. Diagnóstico de performance de rede - Mede rota, perda, banda e consumo por processo.</span>
@@ -783,27 +781,27 @@ last <span class="sh-flag">-F</span><span class="sh-sep"> | </span>head <span cl
 <span class="sh-cmd">getent</span> hosts peotta.github.io
 <span class="sh-cmd">dig</span> peotta.github.io
 <span class="sh-cmd">dig</span> @8.8.8.8 peotta.github.io
-<span class="sh-cmd">resolvectl</span> status
+<span class="sh-cmd">resolvectl</span> <span class="sh-sub">status</span>
 
 <span class="sh-comment"># 06. Link oscilando - Procura eventos de link e erros físicos.</span>
-<span class="sh-cmd">journalctl</span> <span class="sh-flag">-k</span><span class="sh-sep"> | </span><span class="sh-cmd">grep</span> <span class="sh-flag">-Ei</span> <span class="sh-str">&quot;link is down|link is up|eth0|enp&quot;</span>
+<span class="sh-cmd">journalctl</span> <span class="sh-flag">-k</span><span class="sh-pipe"> | </span><span class="sh-cmd">grep</span> <span class="sh-flag">-Ei</span> <span class="sh-str">&quot;link is down|link is up|eth0|enp&quot;</span>
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">ethtool</span> eth0
 <span class="sh-sudo">sudo</span> <span class="sh-cmd">ethtool</span> <span class="sh-flag">-S</span> eth0
 
 <span class="sh-comment"># 07. Detecção básica - Verifica ARP e mensagens do kernel.</span>
-<span class="sh-cmd">ip</span> neigh show
+<span class="sh-cmd">ip</span> <span class="sh-sub">neigh</span> <span class="sh-sub">show</span>
 <span class="sh-cmd">arping</span> <span class="sh-flag">-D</span> <span class="sh-flag">-I</span> eth0 192.168.1.20
-<span class="sh-cmd">journalctl</span> <span class="sh-flag">-k</span><span class="sh-sep"> | </span><span class="sh-cmd">grep</span> <span class="sh-flag">-i</span> duplicate
+<span class="sh-cmd">journalctl</span> <span class="sh-flag">-k</span><span class="sh-pipe"> | </span><span class="sh-cmd">grep</span> <span class="sh-flag">-i</span> duplicate
 
 <span class="sh-comment"># 08. Relatório rápido - Gera arquivos com estado de rede para análise posterior.</span>
 <span class="sh-cmd">mkdir</span> <span class="sh-flag">-p</span> coleta-rede
-<span class="sh-cmd">ip</span> addr <span class="sh-redir">&gt;</span> coleta-rede/ip-addr.txt
-<span class="sh-cmd">ip</span> route <span class="sh-redir">&gt;</span> coleta-rede/ip-route.txt
-<span class="sh-cmd">ss</span> <span class="sh-flag">-tulpen</span> <span class="sh-redir">&gt;</span> coleta-rede/portas.txt
-<span class="sh-cmd">journalctl</span> <span class="sh-flag">--since</span> <span class="sh-str">&quot;1 hour ago&quot;</span> <span class="sh-redir">&gt;</span> coleta-rede/logs.txt</code></pre></div>
+<span class="sh-cmd">ip</span> <span class="sh-sub">addr</span><span class="sh-pipe"> &gt; </span>coleta-rede/ip-addr.txt
+<span class="sh-cmd">ip</span> <span class="sh-sub">route</span><span class="sh-pipe"> &gt; </span>coleta-rede/ip-route.txt
+<span class="sh-cmd">ss</span> <span class="sh-flag">-tulpen</span><span class="sh-pipe"> &gt; </span>coleta-rede/portas.txt
+<span class="sh-cmd">journalctl</span> <span class="sh-flag">--since</span> <span class="sh-str">&quot;1 hour ago&quot;</span><span class="sh-pipe"> &gt; </span>coleta-rede/logs.txt</code></pre></div>
       <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting sem ip diagnóstico quando host não recebe endereço verifica link, dhcp e logs. siga a ordem para separar problema físico, dhcp ou configuração."><td class="num">01</td><td><b>Sem IP</b><span>Diagnóstico quando host não recebe endereço</span></td><td>Verifica link, DHCP e logs.</td><td>Siga a ordem para separar problema físico, DHCP ou configuração.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting sem internet diagnóstico de acesso externo valida ip, rota, dns e http. ajuda a diferenciar problema local, gateway, dns ou aplicação."><td class="num">02</td><td><b>Sem Internet</b><span>Diagnóstico de acesso externo</span></td><td>Valida IP, rota, DNS e HTTP.</td><td>Ajuda a diferenciar problema local, gateway, DNS ou aplicação.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting porta inacessível diagnóstico de serviço confirma serviço, porta local, firewall e teste remoto. útil para ssh, web, banco e apis internas."><td class="num">03</td><td><b>Porta inacessível</b><span>Diagnóstico de serviço</span></td><td>Confirma serviço, porta local, firewall e teste remoto.</td><td>Útil para SSH, web, banco e APIs internas.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting lentidão diagnóstico de performance de rede mede rota, perda, banda e consumo por processo. combine medições em horários diferentes."><td class="num">04</td><td><b>Lentidão</b><span>Diagnóstico de performance de rede</span></td><td>Mede rota, perda, banda e consumo por processo.</td><td>Combine medições em horários diferentes.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting problema de dns diagnóstico de resolução compara resolução local, nss e servidores externos. mostra se a falha é no resolvedor local ou no dns autoritativo."><td class="num">05</td><td><b>Problema de DNS</b><span>Diagnóstico de resolução</span></td><td>Compara resolução local, NSS e servidores externos.</td><td>Mostra se a falha é no resolvedor local ou no DNS autoritativo.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting interface flapping link oscilando procura eventos de link e erros físicos. pode indicar cabo, porta de switch, driver ou energia."><td class="num">06</td><td><b>Interface flapping</b><span>Link oscilando</span></td><td>Procura eventos de link e erros físicos.</td><td>Pode indicar cabo, porta de switch, driver ou energia.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting conflito de ip detecção básica verifica arp e mensagens do kernel. conflitos podem causar perda intermitente de conexão."><td class="num">07</td><td><b>Conflito de IP</b><span>Detecção básica</span></td><td>Verifica ARP e mensagens do kernel.</td><td>Conflitos podem causar perda intermitente de conexão.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting checklist de coleta relatório rápido gera arquivos com estado de rede para análise posterior. use antes de alterar configurações em produção."><td class="num">08</td><td><b>Checklist de coleta</b><span>Relatório rápido</span></td><td>Gera arquivos com estado de rede para análise posterior.</td><td>Use antes de alterar configurações em produção.</td></tr></tbody></table></div>
     </section>
-    <footer class="footer">Prof. Dr. Laerte Peotta de Melo • <a href="../index.html" style="color:var(--matrix);text-decoration:none;">peotta.github.io</a> • <a href="windows-redes.html" style="color:var(--matrix);text-decoration:none;">Guia Windows</a> • Linux Terminal / Bash / Zsh</footer>
+    <footer class="footer">Prof. Dr. Laerte Peotta de Melo • <a href="../index.html" style="color:var(--matrix);text-decoration:none;">peotta.github.io</a> • <a href="windows-redes.html" style="color:var(--matrix);text-decoration:none;">Guia Windows</a> • Linux Terminal / Bash / Shell</footer>
   </main>
 </div>
 <script>
