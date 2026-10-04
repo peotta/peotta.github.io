@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="author" content="Prof. Dr. Laerte Peotta de Melo">
-<meta name="description" content="Comandos Windows para administração de redes de computadores, organizados por tema — cmd, PowerShell e ferramentas nativas.">
 <title>Comandos Windows para Administração de Redes | Prof. Dr. Laerte Peotta de Melo</title>
+<meta name="description" content="Guia em estilo Matrix com comandos Windows para administração de redes de computadores, cmd, PowerShell e troubleshooting.">
 <style>
 :root{
   --bg:#000500;
@@ -142,7 +141,7 @@ a{color:inherit}
   box-shadow:var(--shadow);
 }
 .hero:before{
-  content:"root@linux:~# _";
+  content:"PS C:\\> _";
   display:block;
   width:100%;
   margin:6px 0 26px;
@@ -154,7 +153,7 @@ a{color:inherit}
   text-shadow:0 0 10px rgba(57,255,20,.72);
 }
 .hero:after{
-  content:"01101001 01110000 00100000 01110010 01101111 01110101 01110100 01100101";
+  content:"01101001 01110000 01100011 01101111 01101110 01100110 01101001 01100111";
   position:absolute;
   right:22px;top:18px;
   max-width:420px;
@@ -271,196 +270,133 @@ td span{color:#aee8ae;font-size:12px}
 </style>
 </head>
 <body>
-
-
 <div class="layout">
-
-<!-- ═══════════════════════════════════════════════════════════
-     SIDEBAR
-═══════════════════════════════════════════════════════════ -->
-<aside class="sidebar">
-  
+  <aside class="sidebar">
     <div class="brand"><div class="logo">LP</div><div><h1>Prof. Dr. Laerte Peotta de Melo</h1><p>peotta.github.io • Administração de Redes Windows</p></div></div>
     <input id="search" class="search" placeholder="Buscar comando, tema ou aplicação...">
-
-    <div class="sb-name">Prof. Dr. Laerte Peotta de Melo</div>
-    <div class="sb-sub">peotta.github.io • Administração de Redes</div>
-  </div>
-
-  <div class="toc-title">Navegação Matrix</div>
-  <nav class="toc">
-  <a href="../index.html" class="nav-brand" style="margin-right:15px;text-decoration:none;">← Início</a>
-    <a href="#inventario"><span>🧭 Inventário e Identificação</span><em>08</em></a>
-    <a href="#conectividade"><span>📡 Conectividade e Diagnóstico</span><em>08</em></a>
-    <a href="#ip"><span>🌐 Configuração IP e Rotas</span><em>08</em></a>
-    <a href="#dns"><span>🔎 DNS e Resolução de Nomes</span><em>08</em></a>
-    <a href="#portas"><span>🔌 Portas e Serviços</span><em>08</em></a>
-    <a href="#firewall"><span>🧱 Firewall e Segurança</span><em>08</em></a>
-    <a href="#captura"><span>📦 Captura de Pacotes</span><em>08</em></a>
-    <a href="#wifi"><span>📶 Wi-Fi e Interfaces Sem Fio</span><em>08</em></a>
-    <a href="#compartilhamento"><span>🖧 Compartilhamento e AD</span><em>08</em></a>
-    <a href="#servicos"><span>🧰 Serviços e Processos</span><em>08</em></a>
-    <a href="#monitoramento"><span>📊 Monitoramento e Performance</span><em>08</em></a>
-    <a href="#logs"><span>📜 Logs e Auditoria</span><em>08</em></a>
-    <a href="#automacao"><span>⚙️ Automação e PowerShell</span><em>08</em></a>
-    <a href="#troubleshooting"><span>🛠️ Fluxos de Troubleshooting</span><em>08</em></a>
-  </nav>
-
-  
-</aside>
-
-<!-- ═══════════════════════════════════════════════════════════
-     HEADER
-═══════════════════════════════════════════════════════════ -->
-
-
-<!-- ═══════════════════════════════════════════════════════════
-     MAIN
-═══════════════════════════════════════════════════════════ -->
-<main>
-
-
+    <div class="toc-title">Navegação Matrix</div>
+    <nav class="toc">
+      <a href="../index.html" class="nav-brand" style="margin-right:15px;text-decoration:none;">← Início</a>
+      <a href="#inventario"><span>🧭 Inventário e Identificação da Rede</span><em>08</em></a>
+      <a href="#conectividade"><span>📡 Conectividade e Diagnóstico Básico</span><em>08</em></a>
+      <a href="#ip"><span>🌐 Configuração IPv4, IPv6 e Rotas</span><em>08</em></a>
+      <a href="#dns"><span>🔎 DNS e Resolução de Nomes</span><em>08</em></a>
+      <a href="#portas"><span>🔌 Portas, Sockets e Serviços em Escuta</span><em>08</em></a>
+      <a href="#firewall"><span>🧱 Firewall e Segurança de Rede</span><em>08</em></a>
+      <a href="#captura"><span>📦 Captura e Análise de Pacotes</span><em>08</em></a>
+      <a href="#wifi"><span>📶 Wi-Fi e Interfaces Sem Fio</span><em>08</em></a>
+      <a href="#compartilhamento"><span>🖧 Compartilhamento, SMB e Active Directory</span><em>08</em></a>
+      <a href="#servicos"><span>🧰 Serviços de Rede, Agendamento e Processos</span><em>08</em></a>
+      <a href="#monitoramento"><span>📊 Monitoramento, Performance e Capacidade</span><em>08</em></a>
+      <a href="#logs"><span>📜 Logs e Auditoria Operacional</span><em>08</em></a>
+      <a href="#automacao"><span>⚙️ Automação, Scripts e Administração Remota</span><em>08</em></a>
+      <a href="#troubleshooting"><span>🛠️ Fluxos Rápidos de Troubleshooting</span><em>06</em></a>
+    </nav>
+  </aside>
+  <main class="main">
     <section class="hero">
       <span class="eyebrow">Windows • Redes • Operação • Troubleshooting</span>
       <h1>Comandos Windows para Administração de Redes</h1>
       <div class="note"><b>Boa prática:</b> comandos de consulta podem ser usados livremente em laboratórios. Comandos que alteram IP, rotas, firewall, interfaces, serviços ou políticas devem ser testados antes e aplicados com controle de mudança. Comandos marcados com <strong>[Admin]</strong> requerem prompt elevado.</div>
     </section>
-
-
-<!-- ══════════════════════════════════════════
-     TEMA 01 — INVENTÁRIO
-══════════════════════════════════════════ -->
-<section class="section" id="inventario">
-  <div class="section-title"><div><span class="section-kicker">🧭 Tema 01</span><h2>Inventário e Identificação da Rede</h2><p>Comandos para descobrir interfaces, endereços, MACs, rotas, gateways, nomes e estado geral da conectividade no Windows.</p></div><button class="copy-section" data-target="code-01">Copiar bloco</button></div>
-
-  <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-inventario.ps1 / .bat</b></div><pre><code id="code-inventario"># 01. Identificação do host — hostname, SO, BIOS e domínio.
+    <section class="section" id="inventario">
+      <div class="section-title"><div><span class="section-kicker">🧭 Tema 01</span><h2>Inventário e Identificação da Rede</h2><p>Comandos para descobrir interfaces, endereços, MACs, rotas, gateways, nomes e estado geral da conectividade no Windows.</p></div><button class="copy-section" data-target="code-inventario">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-inventario.ps1 / .bat</b></div><pre><code id="code-inventario"># 01. Identificação do host - hostname, SO, BIOS e domínio.
 systeminfo
 Get-ComputerInfo | Select-Object CsName,OsName,OsVersion,CsDomain
 
-# 02. Endereços por interface — IPs, MACs, gateway e DNS de cada adaptador.
+# 02. Endereços por interface - IPs, MACs, gateway e DNS de cada adaptador.
 ipconfig /all
 Get-NetIPAddress | Select-Object InterfaceAlias,IPAddress,PrefixLength,AddressFamily
 
-# 03. Estado de enlaces — interfaces, status, velocidade e MTU.
+# 03. Estado de enlaces - interfaces, status, velocidade e MTU.
 Get-NetAdapter | Select-Object Name,Status,LinkSpeed,MacAddress,MTU
 
-# 04. Tabela de rotas — rota padrão e rotas específicas.
+# 04. Tabela de rotas - rota padrão e rotas específicas.
 route print
 Get-NetRoute | Sort-Object RouteMetric | Format-Table -AutoSize
 
-# 05. Resumo de adaptadores de rede — todos os adaptadores e estados.
+# 05. Resumo de adaptadores de rede - todos os adaptadores e estados.
 Get-NetAdapter | Format-Table Name,InterfaceDescription,Status,LinkSpeed
 
-# 06. Características físicas — driver, velocidade e fabricante da NIC.
-Get-NetAdapterAdvancedProperty -Name "Ethernet"
+# 06. Características físicas - driver, velocidade e fabricante da NIC.
+Get-NetAdapterAdvancedProperty -Name &quot;Ethernet&quot;
 Get-WmiObject Win32_NetworkAdapter | Where-Object{$_.NetEnabled} | Select-Object Name,Speed,MACAddress
 
-# 07. Informações de hardware — inventário completo de rede via WMI.
+# 07. Informações de hardware - inventário completo de rede via WMI.
 Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object{$_.IPEnabled} | Select-Object Description,IPAddress,DefaultIPGateway,DNSServerSearchOrder
 
-# 08. Interfaces do sistema — listar adaptadores e GUIDs.
+# 08. Interfaces do sistema - listar adaptadores e GUIDs.
 Get-NetIPInterface | Select-Object InterfaceAlias,AddressFamily,ConnectionState,NlMtu</code></pre></div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody>
-    <tr class="cmd-row" data-search="systeminfo identificação do host mostra hostname, so, bios, domínio e hotfixes. use para documentar estações e servidores antes de iniciar manutenção."><td class="num">01</td><td><b>systeminfo</b><span>Identificação do host</span></td><td>Mostra hostname, SO, BIOS, domínio e hotfixes.</td><td>Use para documentar estações e servidores antes de iniciar manutenção.</td></tr>
-    <tr class="cmd-row" data-search="ipconfig /all endereços por interface lista ips, macs, gateway, dns e estado dhcp. primeiro comando para inventário de rede e troubleshooting de ip."><td class="num">02</td><td><b>ipconfig /all</b><span>Endereços por interface</span></td><td>Lista IPs, MACs, gateway, DNS e estado DHCP.</td><td>Primeiro comando para inventário de rede e troubleshooting de IP.</td></tr>
-    <tr class="cmd-row" data-search="get-netadapter estado de enlaces mostra interfaces, status operacional e velocidade. use para validar cabos, links virtuais e adaptadores desativados."><td class="num">03</td><td><b>Get-NetAdapter</b><span>Estado de enlaces</span></td><td>Mostra interfaces, status operacional e velocidade.</td><td>Use para validar cabos, links virtuais e adaptadores desativados.</td></tr>
-    <tr class="cmd-row" data-search="route print tabela de rotas exibe rota padrão, rotas específicas e métricas. primeiro comando para investigar ausência de conectividade fora da sub-rede."><td class="num">04</td><td><b>route print</b><span>Tabela de rotas</span></td><td>Exibe rota padrão, rotas específicas e métricas.</td><td>Primeiro comando para investigar ausência de conectividade fora da sub-rede.</td></tr>
-    <tr class="cmd-row" data-search="get-netadapter resumo de adaptadores lista todos os adaptadores e estados powershell. mais detalhado que ipconfig — inclui adaptadores virtuais e vpn."><td class="num">05</td><td><b>Get-NetAdapter</b><span>Resumo de adaptadores</span></td><td>Lista todos os adaptadores e estados PowerShell.</td><td>Mais detalhado que ipconfig — inclui adaptadores virtuais e VPN.</td></tr>
-    <tr class="cmd-row" data-search="get-netadapteradvancedproperty características físicas exibe propriedades avançadas da nic. útil para detectar duplex mismatch, offloading e configurações de driver."><td class="num">06</td><td><b>Get-NetAdapterAdvancedProperty</b><span>Características físicas</span></td><td>Exibe propriedades avançadas da NIC.</td><td>Útil para detectar duplex mismatch, offloading e configurações de driver.</td></tr>
-    <tr class="cmd-row" data-search="get-wmiobject win32_networkadapterconfiguration inventário via wmi retorna configuração completa de ip via wmi/cim. ideal para inventário remoto e scripts de auditoria automática."><td class="num">07</td><td><b>Get-WmiObject Win32_NetworkAdapterConfiguration</b><span>Inventário via WMI</span></td><td>Retorna configuração completa de IP via WMI/CIM.</td><td>Ideal para inventário remoto e scripts de auditoria automática.</td></tr>
-    <tr class="cmd-row" data-search="get-netipinterface interfaces do sistema lista todas as interfaces ip com estado de conexão. inclui adaptadores virtuais, loopback e tunelamentos."><td class="num">08</td><td><b>Get-NetIPInterface</b><span>Interfaces do sistema</span></td><td>Lista todas as interfaces IP com estado de conexão.</td><td>Inclui adaptadores virtuais, loopback e tunelamentos.</td></tr>
-  </tbody></table></div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TEMA 02 — CONECTIVIDADE
-══════════════════════════════════════════ -->
-<section class="section" id="conectividade">
-  <div class="section-title"><div><span class="section-kicker">📡 Tema 02</span><h2>Conectividade e Diagnóstico Básico</h2><p>Testes essenciais para validar alcance, latência, perda de pacotes e caminho de rede no Windows.</p></div><button class="copy-section" data-target="code-02">Copiar bloco</button></div>
-
-  <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-conectividade.ps1</b></div><pre><code id="code-conectividade"># 01. Teste ICMP de alcance — verifica se um host responde e mede latência.
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="inventário e identificação da rede systeminfo identificação do host mostra hostname, so, bios, domínio e hotfixes. use para documentar estações e servidores antes de iniciar manutenção."><td class="num">01</td><td><b>systeminfo</b><span>Identificação do host</span></td><td>Mostra hostname, SO, BIOS, domínio e hotfixes.</td><td>Use para documentar estações e servidores antes de iniciar manutenção.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede ipconfig /all endereços por interface lista ips, macs, gateway, dns e estado dhcp. primeiro comando para inventário de rede e troubleshooting de ip."><td class="num">02</td><td><b>ipconfig /all</b><span>Endereços por interface</span></td><td>Lista IPs, MACs, gateway, DNS e estado DHCP.</td><td>Primeiro comando para inventário de rede e troubleshooting de IP.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede get-netadapter estado de enlaces mostra interfaces, status operacional e velocidade. use para validar cabos, links virtuais e adaptadores desativados."><td class="num">03</td><td><b>Get-NetAdapter</b><span>Estado de enlaces</span></td><td>Mostra interfaces, status operacional e velocidade.</td><td>Use para validar cabos, links virtuais e adaptadores desativados.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede route print tabela de rotas exibe rota padrão, rotas específicas e métricas. primeiro comando para investigar ausência de conectividade fora da sub-rede."><td class="num">04</td><td><b>route print</b><span>Tabela de rotas</span></td><td>Exibe rota padrão, rotas específicas e métricas.</td><td>Primeiro comando para investigar ausência de conectividade fora da sub-rede.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede get-netadapter resumo de adaptadores lista todos os adaptadores e estados powershell. mais detalhado que ipconfig - inclui adaptadores virtuais e vpn."><td class="num">05</td><td><b>Get-NetAdapter</b><span>Resumo de adaptadores</span></td><td>Lista todos os adaptadores e estados PowerShell.</td><td>Mais detalhado que ipconfig - inclui adaptadores virtuais e VPN.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede get-netadapteradvancedproperty características físicas exibe propriedades avançadas da nic. útil para detectar duplex mismatch, offloading e configurações de driver."><td class="num">06</td><td><b>Get-NetAdapterAdvancedProperty</b><span>Características físicas</span></td><td>Exibe propriedades avançadas da NIC.</td><td>Útil para detectar duplex mismatch, offloading e configurações de driver.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede get-wmiobject win32_networkadapterconfiguration inventário via wmi retorna configuração completa de ip via wmi/cim. ideal para inventário remoto e scripts de auditoria automática."><td class="num">07</td><td><b>Get-WmiObject Win32_NetworkAdapterConfiguration</b><span>Inventário via WMI</span></td><td>Retorna configuração completa de IP via WMI/CIM.</td><td>Ideal para inventário remoto e scripts de auditoria automática.</td></tr><tr class="cmd-row" data-search="inventário e identificação da rede get-netipinterface interfaces do sistema lista todas as interfaces ip com estado de conexão. inclui adaptadores virtuais, loopback e tunelamentos."><td class="num">08</td><td><b>Get-NetIPInterface</b><span>Interfaces do sistema</span></td><td>Lista todas as interfaces IP com estado de conexão.</td><td>Inclui adaptadores virtuais, loopback e tunelamentos.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="conectividade">
+      <div class="section-title"><div><span class="section-kicker">📡 Tema 02</span><h2>Conectividade e Diagnóstico Básico</h2><p>Testes essenciais para validar alcance, latência, perda de pacotes e caminho de rede no Windows.</p></div><button class="copy-section" data-target="code-conectividade">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-conectividade.ps1</b></div><pre><code id="code-conectividade"># 01. Teste ICMP de alcance - verifica se um host responde e mede latência.
 ping 8.8.8.8
 ping -n 4 peotta.github.io
 Test-Connection -ComputerName 8.8.8.8 -Count 4
 
-# 02. Caminho até o destino — mostra saltos percorridos e onde ocorre perda.
+# 02. Caminho até o destino - mostra saltos percorridos e onde ocorre perda.
 tracert 8.8.8.8
 tracert peotta.github.io
 Test-NetConnection -ComputerName 8.8.8.8 -TraceRoute
 
-# 03. Diagnóstico TCP de porta — verifica se uma porta TCP está aberta.
+# 03. Diagnóstico TCP de porta - verifica se uma porta TCP está aberta.
 Test-NetConnection -ComputerName 192.168.1.10 -Port 443
 Test-NetConnection -ComputerName smtp.gmail.com -Port 25 -InformationLevel Detailed
 
-# 04. Tabela ARP — mostra vizinhos da camada 2 conhecidos pelo host.
+# 04. Tabela ARP - mostra vizinhos da camada 2 conhecidos pelo host.
 arp -a
 Get-NetNeighbor | Select-Object InterfaceAlias,IPAddress,LinkLayerAddress,State
 
-# 05. Teste HTTP/HTTPS — valida conectividade em camada de aplicação.
+# 05. Teste HTTP/HTTPS - valida conectividade em camada de aplicação.
 Invoke-WebRequest -Uri https://peotta.github.io -UseBasicParsing | Select-Object StatusCode
 curl.exe -I https://peotta.github.io
 
-# 06. Resolução de nome e alcance simultâneos — diagnóstico completo.
+# 06. Resolução de nome e alcance simultâneos - diagnóstico completo.
 Resolve-DnsName peotta.github.io | Select-Object Name,Type,IPAddress
 Test-NetConnection -ComputerName peotta.github.io -Port 80
 
-# 07. Medição de banda — iperf3 para Windows (requer instalação).
+# 07. Medição de banda - iperf3 para Windows (requer instalação).
 # Servidor: iperf3 -s
 iperf3 -c 192.168.1.10 -P 4
 iperf3 -c 192.168.1.10 -u -b 100M
 
-# 08. Diagnóstico de rede completo — relatório automático do Windows.
+# 08. Diagnóstico de rede completo - relatório automático do Windows.
 Get-NetConnectionProfile
 netsh interface ip show config</code></pre></div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody>
-    <tr class="cmd-row" data-search="ping / test-connection teste icmp de alcance verifica alcance e mede rtt para um destino. use test-connection em scripts powershell — retorna objetos, não texto."><td class="num">01</td><td><b>ping / Test-Connection</b><span>Teste ICMP de alcance</span></td><td>Verifica alcance e mede RTT para um destino.</td><td>Use Test-Connection em scripts PowerShell — retorna objetos, não texto.</td></tr>
-    <tr class="cmd-row" data-search="tracert / test-netconnection -traceroute caminho até destino mostra saltos e onde ocorre perda ou alta latência. tracert usa icmp ttl — pode ser bloqueado por firewalls intermediários."><td class="num">02</td><td><b>tracert / Test-NetConnection -TraceRoute</b><span>Caminho até destino</span></td><td>Mostra saltos e onde ocorre perda ou alta latência.</td><td>tracert usa ICMP TTL — pode ser bloqueado por firewalls intermediários.</td></tr>
-    <tr class="cmd-row" data-search="test-netconnection -port diagnóstico tcp testa se uma porta tcp está aberta e acessível. equivalente ao nc -vz do linux. excelente para validar serviços."><td class="num">03</td><td><b>Test-NetConnection -Port</b><span>Diagnóstico TCP</span></td><td>Testa se uma porta TCP está aberta e acessível.</td><td>Equivalente ao nc -vz do Linux. Excelente para validar serviços.</td></tr>
-    <tr class="cmd-row" data-search="arp -a / get-netneighbor tabela arp mostra vizinhos l2 com seus macs resolvidos. use para investigar conflitos de ip e gateway inacessível."><td class="num">04</td><td><b>arp -a / Get-NetNeighbor</b><span>Tabela ARP</span></td><td>Mostra vizinhos L2 com seus MACs resolvidos.</td><td>Use para investigar conflitos de IP e gateway inacessível.</td></tr>
-    <tr class="cmd-row" data-search="invoke-webrequest / curl.exe teste http/https valida conectividade em camada de aplicação web. mais preciso que ping quando o serviço é http/https."><td class="num">05</td><td><b>Invoke-WebRequest / curl.exe</b><span>Teste HTTP/HTTPS</span></td><td>Valida conectividade em camada de aplicação web.</td><td>Mais preciso que ping quando o serviço é HTTP/HTTPS.</td></tr>
-    <tr class="cmd-row" data-search="resolve-dnsname + test-netconnection diagnóstico completo combina resolução dns e teste de porta em sequência. use para validar serviços externos em uma única sessão."><td class="num">06</td><td><b>Resolve-DnsName + Test-NetConnection</b><span>Diagnóstico completo</span></td><td>Combina resolução DNS e teste de porta em sequência.</td><td>Use para validar serviços externos em uma única sessão.</td></tr>
-    <tr class="cmd-row" data-search="iperf3 medição de banda mede vazão tcp/udp real entre dois pontos. baixar em github.com/ar51an/iperf3-win-builds para windows."><td class="num">07</td><td><b>iperf3</b><span>Medição de banda</span></td><td>Mede vazão TCP/UDP real entre dois pontos.</td><td>Baixar em github.com/ar51an/iperf3-win-builds para Windows.</td></tr>
-    <tr class="cmd-row" data-search="get-netconnectionprofile perfil de rede mostra tipo de rede (pública/privada/domínio). importante pois o perfil afeta as regras de firewall aplicadas."><td class="num">08</td><td><b>Get-NetConnectionProfile</b><span>Perfil de rede</span></td><td>Mostra tipo de rede (pública/privada/domínio).</td><td>Importante pois o perfil afeta as regras de firewall aplicadas.</td></tr>
-  </tbody></table></div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TEMA 03 — IP E ROTAS
-══════════════════════════════════════════ -->
-<section class="section" id="ip">
-  <div class="section-title"><div><span class="section-kicker">🌐 Tema 03</span><h2>Configuração IPv4, IPv6 e Rotas</h2><p>Comandos para configurar endereços IP, gateways, rotas estáticas e parâmetros de rede via netsh e PowerShell.</p></div><button class="copy-section" data-target="code-03">Copiar bloco</button></div>
-
-  <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-ip.ps1 [Admin]</b></div><pre><code id="code-ip"># 01. Configurar IP estático — define endereço, máscara e gateway [Admin].
-New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 192.168.10.20 -PrefixLength 24 -DefaultGateway 192.168.10.1
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="conectividade e diagnóstico básico ping / test-connection teste icmp de alcance verifica alcance e mede rtt para um destino. use test-connection em scripts powershell - retorna objetos, não texto."><td class="num">01</td><td><b>ping / Test-Connection</b><span>Teste ICMP de alcance</span></td><td>Verifica alcance e mede RTT para um destino.</td><td>Use Test-Connection em scripts PowerShell - retorna objetos, não texto.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico tracert / test-netconnection -traceroute caminho até destino mostra saltos e onde ocorre perda ou alta latência. tracert usa icmp ttl - pode ser bloqueado por firewalls intermediários."><td class="num">02</td><td><b>tracert / Test-NetConnection -TraceRoute</b><span>Caminho até destino</span></td><td>Mostra saltos e onde ocorre perda ou alta latência.</td><td>tracert usa ICMP TTL - pode ser bloqueado por firewalls intermediários.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico test-netconnection -port diagnóstico tcp testa se uma porta tcp está aberta e acessível. equivalente ao nc -vz do linux. excelente para validar serviços."><td class="num">03</td><td><b>Test-NetConnection -Port</b><span>Diagnóstico TCP</span></td><td>Testa se uma porta TCP está aberta e acessível.</td><td>Equivalente ao nc -vz do Linux. Excelente para validar serviços.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico arp -a / get-netneighbor tabela arp mostra vizinhos l2 com seus macs resolvidos. use para investigar conflitos de ip e gateway inacessível."><td class="num">04</td><td><b>arp -a / Get-NetNeighbor</b><span>Tabela ARP</span></td><td>Mostra vizinhos L2 com seus MACs resolvidos.</td><td>Use para investigar conflitos de IP e gateway inacessível.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico invoke-webrequest / curl.exe teste http/https valida conectividade em camada de aplicação web. mais preciso que ping quando o serviço é http/https."><td class="num">05</td><td><b>Invoke-WebRequest / curl.exe</b><span>Teste HTTP/HTTPS</span></td><td>Valida conectividade em camada de aplicação web.</td><td>Mais preciso que ping quando o serviço é HTTP/HTTPS.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico resolve-dnsname + test-netconnection diagnóstico completo combina resolução dns e teste de porta em sequência. use para validar serviços externos em uma única sessão."><td class="num">06</td><td><b>Resolve-DnsName + Test-NetConnection</b><span>Diagnóstico completo</span></td><td>Combina resolução DNS e teste de porta em sequência.</td><td>Use para validar serviços externos em uma única sessão.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico iperf3 medição de banda mede vazão tcp/udp real entre dois pontos. baixar em github.com/ar51an/iperf3-win-builds para windows."><td class="num">07</td><td><b>iperf3</b><span>Medição de banda</span></td><td>Mede vazão TCP/UDP real entre dois pontos.</td><td>Baixar em github.com/ar51an/iperf3-win-builds para Windows.</td></tr><tr class="cmd-row" data-search="conectividade e diagnóstico básico get-netconnectionprofile perfil de rede mostra tipo de rede (pública/privada/domínio). importante pois o perfil afeta as regras de firewall aplicadas."><td class="num">08</td><td><b>Get-NetConnectionProfile</b><span>Perfil de rede</span></td><td>Mostra tipo de rede (pública/privada/domínio).</td><td>Importante pois o perfil afeta as regras de firewall aplicadas.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="ip">
+      <div class="section-title"><div><span class="section-kicker">🌐 Tema 03</span><h2>Configuração IPv4, IPv6 e Rotas</h2><p>Comandos para configurar endereços IP, gateways, rotas estáticas e parâmetros de rede via netsh e PowerShell.</p></div><button class="copy-section" data-target="code-ip">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-ip.ps1 [Admin]</b></div><pre><code id="code-ip"># 01. Configurar IP estático - define endereço, máscara e gateway [Admin].
+New-NetIPAddress -InterfaceAlias &quot;Ethernet&quot; -IPAddress 192.168.10.20 -PrefixLength 24 -DefaultGateway 192.168.10.1
 # via netsh (legado):
-netsh interface ip set address "Ethernet" static 192.168.10.20 255.255.255.0 192.168.10.1
+netsh interface ip set address &quot;Ethernet&quot; static 192.168.10.20 255.255.255.0 192.168.10.1
 
-# 02. Ativar DHCP — remove IP estático e solicita via DHCP [Admin].
-Set-NetIPInterface -InterfaceAlias "Ethernet" -Dhcp Enabled
-netsh interface ip set address "Ethernet" dhcp
+# 02. Ativar DHCP - remove IP estático e solicita via DHCP [Admin].
+Set-NetIPInterface -InterfaceAlias &quot;Ethernet&quot; -Dhcp Enabled
+netsh interface ip set address &quot;Ethernet&quot; dhcp
 
 # 03. Configurar DNS manualmente [Admin].
-Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses ("8.8.8.8","1.1.1.1")
-netsh interface ip set dns "Ethernet" static 8.8.8.8
+Set-DnsClientServerAddress -InterfaceAlias &quot;Ethernet&quot; -ServerAddresses (&quot;8.8.8.8&quot;,&quot;1.1.1.1&quot;)
+netsh interface ip set dns &quot;Ethernet&quot; static 8.8.8.8
 
-# 04. Adicionar rota estática — cria rota para rede específica [Admin].
+# 04. Adicionar rota estática - cria rota para rede específica [Admin].
 route add 10.20.0.0 mask 255.255.0.0 192.168.1.1
-New-NetRoute -DestinationPrefix "10.20.0.0/16" -NextHop "192.168.1.1" -InterfaceAlias "Ethernet"
+New-NetRoute -DestinationPrefix &quot;10.20.0.0/16&quot; -NextHop &quot;192.168.1.1&quot; -InterfaceAlias &quot;Ethernet&quot;
 
-# 05. Remover rota — remove rota incorreta da tabela [Admin].
+# 05. Remover rota - remove rota incorreta da tabela [Admin].
 route delete 10.20.0.0
-Remove-NetRoute -DestinationPrefix "10.20.0.0/16" -Confirm:$false
+Remove-NetRoute -DestinationPrefix &quot;10.20.0.0/16&quot; -Confirm:$false
 
-# 06. Configurar IPv6 — adicionar endereço IPv6 estático [Admin].
-New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress "2001:db8:10::20" -PrefixLength 64
-netsh interface ipv6 add address "Ethernet" 2001:db8:10::20/64
+# 06. Configurar IPv6 - adicionar endereço IPv6 estático [Admin].
+New-NetIPAddress -InterfaceAlias &quot;Ethernet&quot; -IPAddress &quot;2001:db8:10::20&quot; -PrefixLength 64
+netsh interface ipv6 add address &quot;Ethernet&quot; 2001:db8:10::20/64
 
-# 07. Habilitar roteamento IP no Windows — transforma a máquina em roteador [Admin].
-Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "IPEnableRouter" -Value 1
+# 07. Habilitar roteamento IP no Windows - transforma a máquina em roteador [Admin].
+Set-ItemProperty -Path &quot;HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters&quot; -Name &quot;IPEnableRouter&quot; -Value 1
 netsh interface ipv4 set global forwarding=enabled
 
 # 08. Liberar e renovar endereço DHCP.
@@ -468,221 +404,148 @@ ipconfig /release
 ipconfig /renew
 ipconfig /release6 # IPv6
 ipconfig /renew6</code></pre></div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody>
-    <tr class="cmd-row" data-search="new-netipaddress configurar ip estático define endereço, prefixo e gateway permanentemente. alterações via powershell persistem após reinício."><td class="num">01</td><td><b>New-NetIPAddress</b><span>Configurar IP estático</span></td><td>Define endereço, prefixo e gateway permanentemente.</td><td>Alterações via PowerShell persistem após reinício.</td></tr>
-    <tr class="cmd-row" data-search="set-netipinterface -dhcp ativar dhcp remove configuração estática e usa dhcp. útil ao migrar de estático para dinâmico sem reconfiguração manual."><td class="num">02</td><td><b>Set-NetIPInterface -Dhcp</b><span>Ativar DHCP</span></td><td>Remove configuração estática e usa DHCP.</td><td>Útil ao migrar de estático para dinâmico sem reconfiguração manual.</td></tr>
-    <tr class="cmd-row" data-search="set-dnsclientserveraddress configurar dns define servidores dns por interface. alteração persistente — preferível ao netsh em ambientes modernos."><td class="num">03</td><td><b>Set-DnsClientServerAddress</b><span>Configurar DNS</span></td><td>Define servidores DNS por interface.</td><td>Alteração persistente — preferível ao netsh em ambientes modernos.</td></tr>
-    <tr class="cmd-row" data-search="route add / new-netroute adicionar rota estática cria rota para rede ou host específico. route add sem -p não persiste após reinício. use new-netroute para persistência."><td class="num">04</td><td><b>route add / New-NetRoute</b><span>Adicionar rota estática</span></td><td>Cria rota para rede ou host específico.</td><td>route add sem -p não persiste após reinício. Use New-NetRoute para persistência.</td></tr>
-    <tr class="cmd-row" data-search="route delete / remove-netroute remover rota remove rota incorreta da tabela de roteamento. confirme a rota antes de remover para evitar perda de acesso remoto."><td class="num">05</td><td><b>route delete / Remove-NetRoute</b><span>Remover rota</span></td><td>Remove rota incorreta da tabela de roteamento.</td><td>Confirme a rota antes de remover para evitar perda de acesso remoto.</td></tr>
-    <tr class="cmd-row" data-search="new-netipaddress (ipv6) configurar ipv6 adiciona endereço ipv6 estático à interface. use prefixo /64 para endereços unicast de site."><td class="num">06</td><td><b>New-NetIPAddress (IPv6)</b><span>Configurar IPv6</span></td><td>Adiciona endereço IPv6 estático à interface.</td><td>Use prefixo /64 para endereços unicast de site.</td></tr>
-    <tr class="cmd-row" data-search="ipenablerouter habilitar roteamento ativa encaminhamento de pacotes entre interfaces. necessário para usar windows como roteador, nat ou gateway de vpn."><td class="num">07</td><td><b>IPEnableRouter</b><span>Habilitar roteamento</span></td><td>Ativa encaminhamento de pacotes entre interfaces.</td><td>Necessário para usar Windows como roteador, NAT ou gateway de VPN.</td></tr>
-    <tr class="cmd-row" data-search="ipconfig /release /renew renovar dhcp libera ip atual e solicita novo lease ao servidor. use após alterações no servidor dhcp ou em problemas de endereçamento."><td class="num">08</td><td><b>ipconfig /release /renew</b><span>Renovar DHCP</span></td><td>Libera IP atual e solicita novo lease ao servidor.</td><td>Use após alterações no servidor DHCP ou em problemas de endereçamento.</td></tr>
-  </tbody></table></div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TEMA 04 — DNS
-══════════════════════════════════════════ -->
-<section class="section" id="dns">
-  <div class="section-title"><div><span class="section-kicker">🔎 Tema 04</span><h2>DNS e Resolução de Nomes</h2><p>Ferramentas para consultar registros DNS, testar resolução e diagnosticar falhas de nomes no Windows.</p></div><button class="copy-section" data-target="code-04">Copiar bloco</button></div>
-
-  <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-dns.ps1</b></div><pre><code id="code-dns"># 01. Consulta DNS detalhada — resolve nomes e exibe registros A, AAAA, MX, NS, TXT.
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas new-netipaddress configurar ip estático define endereço, prefixo e gateway permanentemente. alterações via powershell persistem após reinício."><td class="num">01</td><td><b>New-NetIPAddress</b><span>Configurar IP estático</span></td><td>Define endereço, prefixo e gateway permanentemente.</td><td>Alterações via PowerShell persistem após reinício.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas set-netipinterface -dhcp ativar dhcp remove configuração estática e usa dhcp. útil ao migrar de estático para dinâmico sem reconfiguração manual."><td class="num">02</td><td><b>Set-NetIPInterface -Dhcp</b><span>Ativar DHCP</span></td><td>Remove configuração estática e usa DHCP.</td><td>Útil ao migrar de estático para dinâmico sem reconfiguração manual.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas set-dnsclientserveraddress configurar dns define servidores dns por interface. alteração persistente - preferível ao netsh em ambientes modernos."><td class="num">03</td><td><b>Set-DnsClientServerAddress</b><span>Configurar DNS</span></td><td>Define servidores DNS por interface.</td><td>Alteração persistente - preferível ao netsh em ambientes modernos.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas route add / new-netroute adicionar rota estática cria rota para rede ou host específico. route add sem -p não persiste após reinício. use new-netroute para persistência."><td class="num">04</td><td><b>route add / New-NetRoute</b><span>Adicionar rota estática</span></td><td>Cria rota para rede ou host específico.</td><td>route add sem -p não persiste após reinício. Use New-NetRoute para persistência.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas route delete / remove-netroute remover rota remove rota incorreta da tabela de roteamento. confirme a rota antes de remover para evitar perda de acesso remoto."><td class="num">05</td><td><b>route delete / Remove-NetRoute</b><span>Remover rota</span></td><td>Remove rota incorreta da tabela de roteamento.</td><td>Confirme a rota antes de remover para evitar perda de acesso remoto.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas new-netipaddress (ipv6) configurar ipv6 adiciona endereço ipv6 estático à interface. use prefixo /64 para endereços unicast de site."><td class="num">06</td><td><b>New-NetIPAddress (IPv6)</b><span>Configurar IPv6</span></td><td>Adiciona endereço IPv6 estático à interface.</td><td>Use prefixo /64 para endereços unicast de site.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ipenablerouter habilitar roteamento ativa encaminhamento de pacotes entre interfaces. necessário para usar windows como roteador, nat ou gateway de vpn."><td class="num">07</td><td><b>IPEnableRouter</b><span>Habilitar roteamento</span></td><td>Ativa encaminhamento de pacotes entre interfaces.</td><td>Necessário para usar Windows como roteador, NAT ou gateway de VPN.</td></tr><tr class="cmd-row" data-search="configuração ipv4, ipv6 e rotas ipconfig /release /renew renovar dhcp libera ip atual e solicita novo lease ao servidor. use após alterações no servidor dhcp ou em problemas de endereçamento."><td class="num">08</td><td><b>ipconfig /release /renew</b><span>Renovar DHCP</span></td><td>Libera IP atual e solicita novo lease ao servidor.</td><td>Use após alterações no servidor DHCP ou em problemas de endereçamento.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="dns">
+      <div class="section-title"><div><span class="section-kicker">🔎 Tema 04</span><h2>DNS e Resolução de Nomes</h2><p>Ferramentas para consultar registros DNS, testar resolução e diagnosticar falhas de nomes no Windows.</p></div><button class="copy-section" data-target="code-dns">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-dns.ps1</b></div><pre><code id="code-dns"># 01. Consulta DNS detalhada - resolve nomes e exibe registros A, AAAA, MX, NS, TXT.
 Resolve-DnsName peotta.github.io
 Resolve-DnsName peotta.github.io -Type MX
 Resolve-DnsName peotta.github.io -Type AAAA
 
-# 02. Consulta em DNS específico — força resolução por servidor determinado.
+# 02. Consulta em DNS específico - força resolução por servidor determinado.
 Resolve-DnsName peotta.github.io -Server 8.8.8.8
 Resolve-DnsName example.com -Server 1.1.1.1 -Type MX
 
-# 03. nslookup — ferramenta clássica disponível no cmd e PowerShell.
+# 03. nslookup - ferramenta clássica disponível no cmd e PowerShell.
 nslookup peotta.github.io
 nslookup -type=mx example.com
 nslookup peotta.github.io 8.8.8.8
 
 # 04. Ver DNS configurado por interface.
 Get-DnsClientServerAddress | Format-Table InterfaceAlias,ServerAddresses
-ipconfig /all | findstr "DNS Servers"
+ipconfig /all | findstr &quot;DNS Servers&quot;
 
-# 05. Cache DNS local — listar e limpar entradas em cache.
+# 05. Cache DNS local - listar e limpar entradas em cache.
 Get-DnsClientCache | Select-Object Entry,RecordType,Data
 ipconfig /displaydns | more
 ipconfig /flushdns          # [Admin] limpar cache DNS
-Clear-DnsClientCache       # PowerShell — limpar cache
+Clear-DnsClientCache       # PowerShell - limpar cache
 
-# 06. Arquivo hosts — resolução local que precede DNS.
+# 06. Arquivo hosts - resolução local que precede DNS.
 notepad C:\Windows\System32\drivers\etc\hosts
-Get-Content C:\Windows\System32\drivers\etc\hosts | Where-Object{$_ -notmatch '^#' -and $_.Trim()}
+Get-Content C:\Windows\System32\drivers\etc\hosts | Where-Object{$_ -notmatch &#x27;^#&#x27; -and $_.Trim()}
 
-# 07. Diagnóstico DNS no Windows Server — verificar serviço DNS local.
+# 07. Diagnóstico DNS no Windows Server - verificar serviço DNS local.
 Get-Service DNS
 Get-DnsServer                              # [Admin, módulo DNS Server]
-Get-DnsServerResourceRecord -ZoneName "exemplo.com.br" -RRType A
+Get-DnsServerResourceRecord -ZoneName &quot;exemplo.com.br&quot; -RRType A
 
-# 08. Teste de resolução reversa — PTR a partir de IP.
+# 08. Teste de resolução reversa - PTR a partir de IP.
 Resolve-DnsName 8.8.8.8 -Type PTR
 nslookup 8.8.8.8</code></pre></div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody>
-    <tr class="cmd-row" data-search="resolve-dnsname consulta dns detalhada resolve qualquer tipo de registro dns via powershell. ferramenta principal para análise dns em ambientes windows modernos."><td class="num">01</td><td><b>Resolve-DnsName</b><span>Consulta DNS detalhada</span></td><td>Resolve qualquer tipo de registro DNS via PowerShell.</td><td>Ferramenta principal para análise DNS em ambientes Windows modernos.</td></tr>
-    <tr class="cmd-row" data-search="resolve-dnsname -server dns específico força consulta em um resolvedor determinado. use para comparar respostas entre dns interno e externo."><td class="num">02</td><td><b>Resolve-DnsName -Server</b><span>DNS específico</span></td><td>Força consulta em um resolvedor determinado.</td><td>Use para comparar respostas entre DNS interno e externo.</td></tr>
-    <tr class="cmd-row" data-search="nslookup consulta dns clássica ferramenta interativa disponível no cmd desde windows nt. útil por familiaridade — resolve-dnsname é mais completo em ps."><td class="num">03</td><td><b>nslookup</b><span>Consulta DNS clássica</span></td><td>Ferramenta interativa disponível no cmd desde Windows NT.</td><td>Útil por familiaridade — Resolve-DnsName é mais completo em PS.</td></tr>
-    <tr class="cmd-row" data-search="get-dnsclientserveraddress dns por interface mostra servidores dns configurados por adaptador. importante verificar por interface — redes diferentes podem ter dns diferentes."><td class="num">04</td><td><b>Get-DnsClientServerAddress</b><span>DNS por interface</span></td><td>Mostra servidores DNS configurados por adaptador.</td><td>Importante verificar por interface — redes diferentes podem ter DNS diferentes.</td></tr>
-    <tr class="cmd-row" data-search="ipconfig /flushdns limpar cache dns remove entradas em cache que podem estar obsoletas. use após alterações em dns, mudança de ip ou erros de resolução."><td class="num">05</td><td><b>ipconfig /flushdns</b><span>Limpar cache DNS</span></td><td>Remove entradas em cache que podem estar obsoletas.</td><td>Use após alterações em DNS, mudança de IP ou erros de resolução.</td></tr>
-    <tr class="cmd-row" data-search="hosts arquivo hosts local resolução local que tem precedência sobre dns. útil em labs para simular hostnames sem servidor dns."><td class="num">06</td><td><b>hosts</b><span>Arquivo hosts local</span></td><td>Resolução local que tem precedência sobre DNS.</td><td>Útil em labs para simular hostnames sem servidor DNS.</td></tr>
-    <tr class="cmd-row" data-search="get-dnsserver dns server local gerencia servidor dns instalado no windows server. requer módulo rsat-dns-server ou windows server com função dns."><td class="num">07</td><td><b>Get-DnsServer</b><span>DNS Server local</span></td><td>Gerencia servidor DNS instalado no Windows Server.</td><td>Requer módulo RSAT-DNS-Server ou Windows Server com função DNS.</td></tr>
-    <tr class="cmd-row" data-search="resolve-dnsname -type ptr resolução reversa resolve ip para nome via registro ptr. útil para validar configuração de reverse dns em logs de servidor."><td class="num">08</td><td><b>Resolve-DnsName -Type PTR</b><span>Resolução reversa</span></td><td>Resolve IP para nome via registro PTR.</td><td>Útil para validar configuração de reverse DNS em logs de servidor.</td></tr>
-  </tbody></table></div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TEMA 05 — PORTAS E SERVIÇOS
-══════════════════════════════════════════ -->
-<section class="section" id="portas">
-  <div class="section-title"><div><span class="section-kicker">🔌 Tema 05</span><h2>Portas, Sockets e Serviços em Escuta</h2><p>Identificação de portas abertas, conexões ativas e processos associados no Windows.</p></div><button class="copy-section" data-target="code-05">Copiar bloco</button></div>
-
-  <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-portas.ps1</b></div><pre><code id="code-portas"># 01. Portas abertas com processo — lista TCP/UDP em escuta com PID e executável.
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="dns e resolução de nomes resolve-dnsname consulta dns detalhada resolve qualquer tipo de registro dns via powershell. ferramenta principal para análise dns em ambientes windows modernos."><td class="num">01</td><td><b>Resolve-DnsName</b><span>Consulta DNS detalhada</span></td><td>Resolve qualquer tipo de registro DNS via PowerShell.</td><td>Ferramenta principal para análise DNS em ambientes Windows modernos.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes resolve-dnsname -server dns específico força consulta em um resolvedor determinado. use para comparar respostas entre dns interno e externo."><td class="num">02</td><td><b>Resolve-DnsName -Server</b><span>DNS específico</span></td><td>Força consulta em um resolvedor determinado.</td><td>Use para comparar respostas entre DNS interno e externo.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes nslookup consulta dns clássica ferramenta interativa disponível no cmd desde windows nt. útil por familiaridade - resolve-dnsname é mais completo em ps."><td class="num">03</td><td><b>nslookup</b><span>Consulta DNS clássica</span></td><td>Ferramenta interativa disponível no cmd desde Windows NT.</td><td>Útil por familiaridade - Resolve-DnsName é mais completo em PS.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes get-dnsclientserveraddress dns por interface mostra servidores dns configurados por adaptador. importante verificar por interface - redes diferentes podem ter dns diferentes."><td class="num">04</td><td><b>Get-DnsClientServerAddress</b><span>DNS por interface</span></td><td>Mostra servidores DNS configurados por adaptador.</td><td>Importante verificar por interface - redes diferentes podem ter DNS diferentes.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes ipconfig /flushdns limpar cache dns remove entradas em cache que podem estar obsoletas. use após alterações em dns, mudança de ip ou erros de resolução."><td class="num">05</td><td><b>ipconfig /flushdns</b><span>Limpar cache DNS</span></td><td>Remove entradas em cache que podem estar obsoletas.</td><td>Use após alterações em DNS, mudança de IP ou erros de resolução.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes hosts arquivo hosts local resolução local que tem precedência sobre dns. útil em labs para simular hostnames sem servidor dns."><td class="num">06</td><td><b>hosts</b><span>Arquivo hosts local</span></td><td>Resolução local que tem precedência sobre DNS.</td><td>Útil em labs para simular hostnames sem servidor DNS.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes get-dnsserver dns server local gerencia servidor dns instalado no windows server. requer módulo rsat-dns-server ou windows server com função dns."><td class="num">07</td><td><b>Get-DnsServer</b><span>DNS Server local</span></td><td>Gerencia servidor DNS instalado no Windows Server.</td><td>Requer módulo RSAT-DNS-Server ou Windows Server com função DNS.</td></tr><tr class="cmd-row" data-search="dns e resolução de nomes resolve-dnsname -type ptr resolução reversa resolve ip para nome via registro ptr. útil para validar configuração de reverse dns em logs de servidor."><td class="num">08</td><td><b>Resolve-DnsName -Type PTR</b><span>Resolução reversa</span></td><td>Resolve IP para nome via registro PTR.</td><td>Útil para validar configuração de reverse DNS em logs de servidor.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="portas">
+      <div class="section-title"><div><span class="section-kicker">🔌 Tema 05</span><h2>Portas, Sockets e Serviços em Escuta</h2><p>Identificação de portas abertas, conexões ativas e processos associados no Windows.</p></div><button class="copy-section" data-target="code-portas">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-portas.ps1</b></div><pre><code id="code-portas"># 01. Portas abertas com processo - lista TCP/UDP em escuta com PID e executável.
 netstat -ano
 Get-NetTCPConnection -State Listen | Select-Object LocalAddress,LocalPort,State,OwningProcess
 
-# 02. Identificar processo dono de porta — cruza PID com nome do processo.
+# 02. Identificar processo dono de porta - cruza PID com nome do processo.
 netstat -ano | findstr :443
 Get-Process -Id ((Get-NetTCPConnection -LocalPort 443 -ErrorAction SilentlyContinue).OwningProcess)
 
-# 03. Conexões estabelecidas — mostra conexões ativas e endpoints remotos.
+# 03. Conexões estabelecidas - mostra conexões ativas e endpoints remotos.
 netstat -an | findstr ESTABLISHED
 Get-NetTCPConnection -State Established | Select-Object LocalAddress,LocalPort,RemoteAddress,RemotePort,OwningProcess
 
-# 04. Estatísticas TCP/UDP — contadores de segmentos, erros e retransmissões.
+# 04. Estatísticas TCP/UDP - contadores de segmentos, erros e retransmissões.
 netstat -s -p tcp
 netstat -s -p udp
 Get-NetTCPSetting
 
-# 05. Estado de serviços Windows — status de serviços de rede.
-Get-Service | Where-Object{$_.Status -eq 'Running'} | Select-Object DisplayName,Name,Status
-Get-Service -Name "W32Time","WinRM","DHCP","DNS"
+# 05. Estado de serviços Windows - status de serviços de rede.
+Get-Service | Where-Object{$_.Status -eq &#x27;Running&#x27;} | Select-Object DisplayName,Name,Status
+Get-Service -Name &quot;W32Time&quot;,&quot;WinRM&quot;,&quot;DHCP&quot;,&quot;DNS&quot;
 
 # 06. Iniciar, parar e reiniciar serviços [Admin].
-Start-Service "WinRM"
-Stop-Service "Spooler"
-Restart-Service "W32Time"
+Start-Service &quot;WinRM&quot;
+Stop-Service &quot;Spooler&quot;
+Restart-Service &quot;W32Time&quot;
 sc start wuauserv
 
-# 07. Varredura de portas locais autorizada — via PowerShell ou nmap.
+# 07. Varredura de portas locais autorizada - via PowerShell ou nmap.
 1..1024 | ForEach-Object {
     $t=New-Object Net.Sockets.TcpClient
-    Try{$t.Connect("127.0.0.1",$_);Write-Host "Porta $_: ABERTA";}Catch{}
+    Try{$t.Connect(&quot;127.0.0.1&quot;,$_);Write-Host &quot;Porta $_: ABERTA&quot;;}Catch{}
     $t.Close()}
 nmap -sV 127.0.0.1                             # requer nmap for Windows
 
 # 08. Monitoramento contínuo de conexões.
 while($true){Get-NetTCPConnection -State Established | Measure-Object; Start-Sleep 2}</code></pre></div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody>
-    <tr class="cmd-row" data-search="netstat -ano / get-nettcpconnection portas abertas lista portas tcp/udp em escuta com pid. essencial para auditoria de superfície de ataque e troubleshooting."><td class="num">01</td><td><b>netstat -ano / Get-NetTCPConnection</b><span>Portas abertas</span></td><td>Lista portas TCP/UDP em escuta com PID.</td><td>Essencial para auditoria de superfície de ataque e troubleshooting.</td></tr>
-    <tr class="cmd-row" data-search="get-process + get-nettcpconnection processo por porta identifica qual processo está usando determinada porta. equivalente ao lsof -i do linux."><td class="num">02</td><td><b>Get-Process + Get-NetTCPConnection</b><span>Processo por porta</span></td><td>Identifica qual processo está usando determinada porta.</td><td>Equivalente ao lsof -i do Linux.</td></tr>
-    <tr class="cmd-row" data-search="get-nettcpconnection -state established conexões ativas mostra todas as conexões estabelecidas com endpoints. útil para identificar comunicações inesperadas ou persistência de malware."><td class="num">03</td><td><b>Get-NetTCPConnection -State Established</b><span>Conexões ativas</span></td><td>Mostra todas as conexões estabelecidas com endpoints.</td><td>Útil para identificar comunicações inesperadas ou persistência de malware.</td></tr>
-    <tr class="cmd-row" data-search="netstat -s estatísticas tcp/udp contadores de segmentos, erros e retransmissões. use para identificar degradação de rede por retransmissões excessivas."><td class="num">04</td><td><b>netstat -s</b><span>Estatísticas TCP/UDP</span></td><td>Contadores de segmentos, erros e retransmissões.</td><td>Use para identificar degradação de rede por retransmissões excessivas.</td></tr>
-    <tr class="cmd-row" data-search="get-service estado de serviços lista todos os serviços e seus estados. primeiro passo para diagnosticar serviços de rede parados."><td class="num">05</td><td><b>Get-Service</b><span>Estado de serviços</span></td><td>Lista todos os serviços e seus estados.</td><td>Primeiro passo para diagnosticar serviços de rede parados.</td></tr>
-    <tr class="cmd-row" data-search="start/stop/restart-service controlar serviços inicia, para e reinicia serviços windows. use em scripts de manutenção e automação de deployment."><td class="num">06</td><td><b>Start/Stop/Restart-Service</b><span>Controlar serviços</span></td><td>Inicia, para e reinicia serviços Windows.</td><td>Use em scripts de manutenção e automação de deployment.</td></tr>
-    <tr class="cmd-row" data-search="powershell port scan / nmap varredura local descobre portas abertas no host ou rede local. somente em ambientes próprios ou com autorização explícita."><td class="num">07</td><td><b>PowerShell port scan / nmap</b><span>Varredura local</span></td><td>Descobre portas abertas no host ou rede local.</td><td>Somente em ambientes próprios ou com autorização explícita.</td></tr>
-    <tr class="cmd-row" data-search="loop get-nettcpconnection monitoramento contínuo acompanha abertura e fechamento de conexões. útil durante testes de aplicação e análise de comportamento de rede."><td class="num">08</td><td><b>Loop Get-NetTCPConnection</b><span>Monitoramento contínuo</span></td><td>Acompanha abertura e fechamento de conexões.</td><td>Útil durante testes de aplicação e análise de comportamento de rede.</td></tr>
-  </tbody></table></div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TEMA 06 — FIREWALL
-══════════════════════════════════════════ -->
-<section class="section" id="firewall">
-  <div class="section-title"><div><span class="section-kicker">🧱 Tema 06</span><h2>Firewall e Segurança de Rede</h2><p>Gerenciamento do Windows Firewall (Defender Firewall) via PowerShell e netsh, além de IPSec e controle de tráfego.</p></div><button class="copy-section" data-target="code-06">Copiar bloco</button></div>
-
-  <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-firewall.ps1 [Admin]</b></div><pre><code id="code-firewall"># 01. Estado do Firewall — perfis Domínio, Privado e Público [Admin].
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="portas, sockets e serviços em escuta netstat -ano / get-nettcpconnection portas abertas lista portas tcp/udp em escuta com pid. essencial para auditoria de superfície de ataque e troubleshooting."><td class="num">01</td><td><b>netstat -ano / Get-NetTCPConnection</b><span>Portas abertas</span></td><td>Lista portas TCP/UDP em escuta com PID.</td><td>Essencial para auditoria de superfície de ataque e troubleshooting.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta get-process + get-nettcpconnection processo por porta identifica qual processo está usando determinada porta. equivalente ao lsof -i do linux."><td class="num">02</td><td><b>Get-Process + Get-NetTCPConnection</b><span>Processo por porta</span></td><td>Identifica qual processo está usando determinada porta.</td><td>Equivalente ao lsof -i do Linux.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta get-nettcpconnection -state established conexões ativas mostra todas as conexões estabelecidas com endpoints. útil para identificar comunicações inesperadas ou persistência de malware."><td class="num">03</td><td><b>Get-NetTCPConnection -State Established</b><span>Conexões ativas</span></td><td>Mostra todas as conexões estabelecidas com endpoints.</td><td>Útil para identificar comunicações inesperadas ou persistência de malware.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta netstat -s estatísticas tcp/udp contadores de segmentos, erros e retransmissões. use para identificar degradação de rede por retransmissões excessivas."><td class="num">04</td><td><b>netstat -s</b><span>Estatísticas TCP/UDP</span></td><td>Contadores de segmentos, erros e retransmissões.</td><td>Use para identificar degradação de rede por retransmissões excessivas.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta get-service estado de serviços lista todos os serviços e seus estados. primeiro passo para diagnosticar serviços de rede parados."><td class="num">05</td><td><b>Get-Service</b><span>Estado de serviços</span></td><td>Lista todos os serviços e seus estados.</td><td>Primeiro passo para diagnosticar serviços de rede parados.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta start/stop/restart-service controlar serviços inicia, para e reinicia serviços windows. use em scripts de manutenção e automação de deployment."><td class="num">06</td><td><b>Start/Stop/Restart-Service</b><span>Controlar serviços</span></td><td>Inicia, para e reinicia serviços Windows.</td><td>Use em scripts de manutenção e automação de deployment.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta powershell port scan / nmap varredura local descobre portas abertas no host ou rede local. somente em ambientes próprios ou com autorização explícita."><td class="num">07</td><td><b>PowerShell port scan / nmap</b><span>Varredura local</span></td><td>Descobre portas abertas no host ou rede local.</td><td>Somente em ambientes próprios ou com autorização explícita.</td></tr><tr class="cmd-row" data-search="portas, sockets e serviços em escuta loop get-nettcpconnection monitoramento contínuo acompanha abertura e fechamento de conexões. útil durante testes de aplicação e análise de comportamento de rede."><td class="num">08</td><td><b>Loop Get-NetTCPConnection</b><span>Monitoramento contínuo</span></td><td>Acompanha abertura e fechamento de conexões.</td><td>Útil durante testes de aplicação e análise de comportamento de rede.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="firewall">
+      <div class="section-title"><div><span class="section-kicker">🧱 Tema 06</span><h2>Firewall e Segurança de Rede</h2><p>Gerenciamento do Windows Firewall (Defender Firewall) via PowerShell e netsh, além de IPSec e controle de tráfego.</p></div><button class="copy-section" data-target="code-firewall">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-firewall.ps1 [Admin]</b></div><pre><code id="code-firewall"># 01. Estado do Firewall - perfis Domínio, Privado e Público [Admin].
 Get-NetFirewallProfile | Select-Object Name,Enabled,DefaultInboundAction,DefaultOutboundAction
 netsh advfirewall show allprofiles
 
 # 02. Listar regras de entrada e saída.
-Get-NetFirewallRule | Where-Object{$_.Enabled -eq 'True'} | Select-Object DisplayName,Direction,Action,Profile
+Get-NetFirewallRule | Where-Object{$_.Enabled -eq &#x27;True&#x27;} | Select-Object DisplayName,Direction,Action,Profile
 Get-NetFirewallRule -Direction Inbound -Action Allow | Format-Table DisplayName,Enabled
 
-# 03. Criar regra de entrada — liberar porta específica [Admin].
-New-NetFirewallRule -DisplayName "Permitir RDP 3389" -Direction Inbound -Protocol TCP -LocalPort 3389 -Action Allow
-netsh advfirewall firewall add rule name="SSH Entrada" protocol=TCP dir=in localport=22 action=allow
+# 03. Criar regra de entrada - liberar porta específica [Admin].
+New-NetFirewallRule -DisplayName &quot;Permitir RDP 3389&quot; -Direction Inbound -Protocol TCP -LocalPort 3389 -Action Allow
+netsh advfirewall firewall add rule name=&quot;SSH Entrada&quot; protocol=TCP dir=in localport=22 action=allow
 
-# 04. Criar regra de saída — bloquear saída para destino [Admin].
-New-NetFirewallRule -DisplayName "Bloquear porta 23 saída" -Direction Outbound -Protocol TCP -RemotePort 23 -Action Block
+# 04. Criar regra de saída - bloquear saída para destino [Admin].
+New-NetFirewallRule -DisplayName &quot;Bloquear porta 23 saída&quot; -Direction Outbound -Protocol TCP -RemotePort 23 -Action Block
 
 # 05. Remover regra existente [Admin].
-Remove-NetFirewallRule -DisplayName "Permitir RDP 3389"
-netsh advfirewall firewall delete rule name="SSH Entrada"
+Remove-NetFirewallRule -DisplayName &quot;Permitir RDP 3389&quot;
+netsh advfirewall firewall delete rule name=&quot;SSH Entrada&quot;
 
 # 06. Habilitar/desabilitar Firewall por perfil [Admin].
 Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
 netsh advfirewall set allprofiles state on
 netsh advfirewall set publicprofile state off  # desabilitar só o perfil público
 
-# 07. Windows Defender — estado e varredura rápida [Admin].
+# 07. Windows Defender - estado e varredura rápida [Admin].
 Get-MpComputerStatus | Select-Object AntivirusEnabled,RealTimeProtectionEnabled,AMProductVersion
 Start-MpScan -ScanType QuickScan
 
-# 08. IPSec — políticas de segurança de tráfego.
+# 08. IPSec - políticas de segurança de tráfego.
 netsh ipsec static show all
-Get-NetIPsecRule | Select-Object DisplayName,Enabled,Mode</code></pre>
-    </div>
-  </div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody>
-    <tr class="cmd-row" data-search="get-netfirewallprofile estado do firewall mostra estado e política padrão de cada perfil. o perfil ativo muda conforme tipo de rede — verifique antes de aplicar regras."><td class="num">01</td><td><b>Get-NetFirewallProfile</b><span>Estado do Firewall</span></td><td>Mostra estado e política padrão de cada perfil.</td><td>O perfil ativo muda conforme tipo de rede — verifique antes de aplicar regras.</td></tr>
-    <tr class="cmd-row" data-search="get-netfirewallrule listar regras lista todas as regras ativas com direção e ação. use -direction e -action para filtrar e auditar regras específicas."><td class="num">02</td><td><b>Get-NetFirewallRule</b><span>Listar regras</span></td><td>Lista todas as regras ativas com direção e ação.</td><td>Use -Direction e -Action para filtrar e auditar regras específicas.</td></tr>
-    <tr class="cmd-row" data-search="new-netfirewallrule (inbound) regra de entrada cria regra para permitir ou bloquear tráfego entrante. especifique -profile para limitar o escopo ao perfil correto."><td class="num">03</td><td><b>New-NetFirewallRule (Inbound)</b><span>Regra de entrada</span></td><td>Cria regra para permitir ou bloquear tráfego entrante.</td><td>Especifique -Profile para limitar o escopo ao perfil correto.</td></tr>
-    <tr class="cmd-row" data-search="new-netfirewallrule (outbound) regra de saída controla tráfego saindo da máquina. útil para bloquear protocolos inseguros como telnet e ftp."><td class="num">04</td><td><b>New-NetFirewallRule (Outbound)</b><span>Regra de saída</span></td><td>Controla tráfego saindo da máquina.</td><td>Útil para bloquear protocolos inseguros como Telnet e FTP.</td></tr>
-    <tr class="cmd-row" data-search="remove-netfirewallrule remover regra remove regra por nome ou identificador. verifique o displayname exato antes de remover — nomes podem ser similares."><td class="num">05</td><td><b>Remove-NetFirewallRule</b><span>Remover regra</span></td><td>Remove regra por nome ou identificador.</td><td>Verifique o DisplayName exato antes de remover — nomes podem ser similares.</td></tr>
-    <tr class="cmd-row" data-search="set-netfirewallprofile -enabled habilitar/desabilitar controla estado do firewall por perfil. nunca desabilitar em produção — use regras permissivas se necessário."><td class="num">06</td><td><b>Set-NetFirewallProfile -Enabled</b><span>Habilitar/Desabilitar</span></td><td>Controla estado do firewall por perfil.</td><td>Nunca desabilitar em produção — use regras permissivas se necessário.</td></tr>
-    <tr class="cmd-row" data-search="get-mpcomputerstatus windows defender verifica estado do antivírus e proteção em tempo real. use em scripts de conformidade e inventário de segurança."><td class="num">07</td><td><b>Get-MpComputerStatus</b><span>Windows Defender</span></td><td>Verifica estado do antivírus e proteção em tempo real.</td><td>Use em scripts de conformidade e inventário de segurança.</td></tr>
-    <tr class="cmd-row" data-search="get-netipsecrule ipsec lista políticas de ipsec configuradas no sistema. relevante em ambientes corporativos com autenticação mútua de hosts."><td class="num">08</td><td><b>Get-NetIPsecRule</b><span>IPSec</span></td><td>Lista políticas de IPSec configuradas no sistema.</td><td>Relevante em ambientes corporativos com autenticação mútua de hosts.</td></tr>
-  </tbody></table></div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TEMA 07 — CAPTURA
-══════════════════════════════════════════ -->
-<section class="section" id="captura">
-  <div class="section-title"><div>📦 Tema 07<h2>Captura e Análise de Pacotes</h2><p>Ferramentas nativas e externas para captura de tráfego, geração de PCAP e análise de protocolos no Windows.</p></div><button class="copy-section" data-target="code-07">Copiar bloco</button></div>
-
-  <div class="code-block">
-    <div class="code-top">
-      <div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
-      comandos-captura.ps1 [Admin]
-      PS · Admin
-      <button class="copy-btn" onclick="copyBlock(this)">Copiar bloco</button>
-    </div>
-    <div class="code-body"><code># 01. Captura nativa com netsh (ETW) — gera .etl convertível para PCAP [Admin].
+Get-NetIPsecRule | Select-Object DisplayName,Enabled,Mode</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="firewall e segurança de rede get-netfirewallprofile estado do firewall mostra estado e política padrão de cada perfil. o perfil ativo muda conforme tipo de rede - verifique antes de aplicar regras."><td class="num">01</td><td><b>Get-NetFirewallProfile</b><span>Estado do Firewall</span></td><td>Mostra estado e política padrão de cada perfil.</td><td>O perfil ativo muda conforme tipo de rede - verifique antes de aplicar regras.</td></tr><tr class="cmd-row" data-search="firewall e segurança de rede get-netfirewallrule listar regras lista todas as regras ativas com direção e ação. use -direction e -action para filtrar e auditar regras específicas."><td class="num">02</td><td><b>Get-NetFirewallRule</b><span>Listar regras</span></td><td>Lista todas as regras ativas com direção e ação.</td><td>Use -Direction e -Action para filtrar e auditar regras específicas.</td></tr><tr class="cmd-row" data-search="firewall e segurança de rede new-netfirewallrule (inbound) regra de entrada cria regra para permitir ou bloquear tráfego entrante. especifique -profile para limitar o escopo ao perfil correto."><td class="num">03</td><td><b>New-NetFirewallRule (Inbound)</b><span>Regra de entrada</span></td><td>Cria regra para permitir ou bloquear tráfego entrante.</td><td>Especifique -Profile para limitar o escopo ao perfil correto.</td></tr><tr class="cmd-row" data-search="firewall e segurança de rede new-netfirewallrule (outbound) regra de saída controla tráfego saindo da máquina. útil para bloquear protocolos inseguros como telnet e ftp."><td class="num">04</td><td><b>New-NetFirewallRule (Outbound)</b><span>Regra de saída</span></td><td>Controla tráfego saindo da máquina.</td><td>Útil para bloquear protocolos inseguros como Telnet e FTP.</td></tr><tr class="cmd-row" data-search="firewall e segurança de rede remove-netfirewallrule remover regra remove regra por nome ou identificador. verifique o displayname exato antes de remover - nomes podem ser similares."><td class="num">05</td><td><b>Remove-NetFirewallRule</b><span>Remover regra</span></td><td>Remove regra por nome ou identificador.</td><td>Verifique o DisplayName exato antes de remover - nomes podem ser similares.</td></tr><tr class="cmd-row" data-search="firewall e segurança de rede set-netfirewallprofile -enabled habilitar/desabilitar controla estado do firewall por perfil. nunca desabilitar em produção - use regras permissivas se necessário."><td class="num">06</td><td><b>Set-NetFirewallProfile -Enabled</b><span>Habilitar/Desabilitar</span></td><td>Controla estado do firewall por perfil.</td><td>Nunca desabilitar em produção - use regras permissivas se necessário.</td></tr><tr class="cmd-row" data-search="firewall e segurança de rede get-mpcomputerstatus windows defender verifica estado do antivírus e proteção em tempo real. use em scripts de conformidade e inventário de segurança."><td class="num">07</td><td><b>Get-MpComputerStatus</b><span>Windows Defender</span></td><td>Verifica estado do antivírus e proteção em tempo real.</td><td>Use em scripts de conformidade e inventário de segurança.</td></tr><tr class="cmd-row" data-search="firewall e segurança de rede get-netipsecrule ipsec lista políticas de ipsec configuradas no sistema. relevante em ambientes corporativos com autenticação mútua de hosts."><td class="num">08</td><td><b>Get-NetIPsecRule</b><span>IPSec</span></td><td>Lista políticas de IPSec configuradas no sistema.</td><td>Relevante em ambientes corporativos com autenticação mútua de hosts.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="captura">
+      <div class="section-title"><div><span class="section-kicker">📦 Tema 07</span><h2>Captura e Análise de Pacotes</h2><p>Ferramentas nativas e externas para captura de tráfego, geração de PCAP e análise de protocolos no Windows.</p></div><button class="copy-section" data-target="code-captura">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-captura.ps1 [Admin]</b></div><pre><code id="code-captura"># 01. Captura nativa com netsh (ETW) - gera .etl convertível para PCAP [Admin].
 netsh trace start capture=yes tracefile=C:\captura.etl maxsize=500
 # (reproduzir o problema)
 netsh trace stop
 
-# 02. Converter .etl para .pcap — requer etl2pcapng (github.com/microsoft/etl2pcapng).
+# 02. Converter .etl para .pcap - requer etl2pcapng (github.com/microsoft/etl2pcapng).
 etl2pcapng.exe C:\captura.etl C:\captura.pcap
 
 # 03. Captura com PowerShell (Windows 10 2018+) [Admin].
-New-NetEventSession -Name "Lab" -LocalFilePath "C:\lab.etl" -CaptureMode SaveToFile
-Add-NetEventPacketCaptureProvider -SessionName "Lab" -Level 4 -CaptureType BothPhysicalAndSwitch
-Start-NetEventSession "Lab"
+New-NetEventSession -Name &quot;Lab&quot; -LocalFilePath &quot;C:\lab.etl&quot; -CaptureMode SaveToFile
+Add-NetEventPacketCaptureProvider -SessionName &quot;Lab&quot; -Level 4 -CaptureType BothPhysicalAndSwitch
+Start-NetEventSession &quot;Lab&quot;
 # (reproduzir o problema)
-Stop-NetEventSession "Lab"
-Remove-NetEventSession "Lab"
+Stop-NetEventSession &quot;Lab&quot;
+Remove-NetEventSession &quot;Lab&quot;
 
-# 04. Wireshark para Windows — captura e análise com interface gráfica.
-# Download: wireshark.org — instala npcap automaticamente
+# 04. Wireshark para Windows - captura e análise com interface gráfica.
+# Download: wireshark.org - instala npcap automaticamente
 # Linha de comando (tshark):
-tshark -i "Ethernet" -w C:\captura.pcap
-tshark -r C:\captura.pcap -Y "dns" -T fields -e dns.qry.name
+tshark -i &quot;Ethernet&quot; -w C:\captura.pcap
+tshark -r C:\captura.pcap -Y &quot;dns&quot; -T fields -e dns.qry.name
 
-# 05. Filtros Wireshark úteis para Windows — aplicar em display filter.
+# 05. Filtros Wireshark úteis para Windows - aplicar em display filter.
 # ARP:       arp
 # DNS:       dns
 # EAPOL:     eapol
@@ -692,7 +555,7 @@ tshark -r C:\captura.pcap -Y "dns" -T fields -e dns.qry.name
 # HTTP:      http
 # TCP RST:   tcp.flags.reset==1
 
-# 06. pktmon — capturador nativo moderno (Windows 10 2004+) [Admin].
+# 06. pktmon - capturador nativo moderno (Windows 10 2004+) [Admin].
 pktmon start --capture --file C:\pktmon.etl
 # (reproduzir o problema)
 pktmon stop
@@ -700,95 +563,63 @@ pktmon pcapng C:\pktmon.etl -o C:\pktmon.pcap   # converter para pcap
 pktmon filter add -p 443                          # filtrar apenas porta 443
 
 # 07. Monitoramento de banda por interface [Admin].
-Get-NetAdapterStatistics -Name "Ethernet" | Select-Object ReceivedBytes,SentBytes
-while($true){Get-NetAdapterStatistics "Ethernet" | Select-Object ReceivedBytes,SentBytes; Start-Sleep 2}
+Get-NetAdapterStatistics -Name &quot;Ethernet&quot; | Select-Object ReceivedBytes,SentBytes
+while($true){Get-NetAdapterStatistics &quot;Ethernet&quot; | Select-Object ReceivedBytes,SentBytes; Start-Sleep 2}
 
-# 08. Análise de tráfego por processo — requer sysinternals TCPView ou Process Monitor.
+# 08. Análise de tráfego por processo - requer sysinternals TCPView ou Process Monitor.
 # TCPView:      live.sysinternals.com/Tcpview.exe
 # Process Monitor: live.sysinternals.com/Procmon.exe
 # NetworkMon:   microsoft.com/en-us/download/details.aspx?id=4865</code></pre></div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody>
-    <tr class="cmd-row" data-search="netsh trace start captura etw nativa captura tráfego em formato etl sem instalar nada. disponível em todos os windows 7+ — ideal para ambientes sem wireshark."><td class="num">01</td><td><b>netsh trace start</b><span>Captura ETW nativa</span></td><td>Captura tráfego em formato ETL sem instalar nada.</td><td>Disponível em todos os Windows 7+ — ideal para ambientes sem Wireshark.</td></tr>
-    <tr class="cmd-row" data-search="etl2pcapng converter etl → pcap converte captura nativa para formato pcap do wireshark. ferramenta oficial microsoft — download em github.com/microsoft/etl2pcapng."><td class="num">02</td><td><b>etl2pcapng</b><span>Converter ETL → PCAP</span></td><td>Converte captura nativa para formato PCAP do Wireshark.</td><td>Ferramenta oficial Microsoft — download em github.com/microsoft/etl2pcapng.</td></tr>
-    <tr class="cmd-row" data-search="new-neteventsession captura powershell sessão de captura etw completa via powershell. permite captura em servidores headless sem interface gráfica."><td class="num">03</td><td><b>New-NetEventSession</b><span>Captura PowerShell</span></td><td>Sessão de captura ETW completa via PowerShell.</td><td>Permite captura em servidores headless sem interface gráfica.</td></tr>
-    <tr class="cmd-row" data-search="tshark wireshark cli análise de pcap e captura em linha de comando. instale wireshark — tshark é incluído automaticamente."><td class="num">04</td><td><b>tshark</b><span>Wireshark CLI</span></td><td>Análise de PCAP e captura em linha de comando.</td><td>Instale Wireshark — tshark é incluído automaticamente.</td></tr>
-    <tr class="cmd-row" data-search="filtros wireshark display filters filtros específicos para protocolos windows (smb, kerberos). smb2 é essencial em ambientes windows — inclui file server e ad."><td class="num">05</td><td><b>Filtros Wireshark</b><span>Display filters</span></td><td>Filtros específicos para protocolos Windows (SMB, Kerberos).</td><td>smb2 é essencial em ambientes Windows — inclui File Server e AD.</td></tr>
-    <tr class="cmd-row" data-search="pktmon capturador moderno captura e filtra tráfego nativa com saída em pcap. disponível a partir do windows 10 2004 — nativo, sem instalação adicional."><td class="num">06</td><td><b>pktmon</b><span>Capturador moderno</span></td><td>Captura e filtra tráfego nativa com saída em PCAP.</td><td>Disponível a partir do Windows 10 2004 — nativo, sem instalação adicional.</td></tr>
-    <tr class="cmd-row" data-search="get-netadapterstatistics banda por interface mostra bytes enviados/recebidos por adaptador. use em loop para monitorar taxa de transferência em tempo real."><td class="num">07</td><td><b>Get-NetAdapterStatistics</b><span>Banda por interface</span></td><td>Mostra bytes enviados/recebidos por adaptador.</td><td>Use em loop para monitorar taxa de transferência em tempo real.</td></tr>
-    <tr class="cmd-row" data-search="tcpview / process monitor sysinternals visualização gráfica de conexões por processo. ferramentas gratuitas microsoft — essenciais para troubleshooting avançado."><td class="num">08</td><td><b>TCPView / Process Monitor</b><span>Sysinternals</span></td><td>Visualização gráfica de conexões por processo.</td><td>Ferramentas gratuitas Microsoft — essenciais para troubleshooting avançado.</td></tr>
-  </tbody></table></div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TEMA 08 — WI-FI
-══════════════════════════════════════════ -->
-<section class="section" id="wifi">
-  <div class="section-title"><div><span class="section-kicker">📶 Tema 08</span><h2>Wi-Fi e Interfaces Sem Fio</h2><p>Gerenciamento de interfaces wireless, redes salvas, perfis e diagnóstico de conectividade sem fio no Windows.</p></div><button class="copy-section" data-target="code-08">Copiar bloco</button></div>
-
-  <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-wifi.ps1</b></div><pre><code id="code-wifi"># 01. Listar redes Wi-Fi visíveis — escanear SSIDs próximos.
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="captura e análise de pacotes netsh trace start captura etw nativa captura tráfego em formato etl sem instalar nada. disponível em todos os windows 7+ - ideal para ambientes sem wireshark."><td class="num">01</td><td><b>netsh trace start</b><span>Captura ETW nativa</span></td><td>Captura tráfego em formato ETL sem instalar nada.</td><td>Disponível em todos os Windows 7+ - ideal para ambientes sem Wireshark.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes etl2pcapng converter etl → pcap converte captura nativa para formato pcap do wireshark. ferramenta oficial microsoft - download em github.com/microsoft/etl2pcapng."><td class="num">02</td><td><b>etl2pcapng</b><span>Converter ETL → PCAP</span></td><td>Converte captura nativa para formato PCAP do Wireshark.</td><td>Ferramenta oficial Microsoft - download em github.com/microsoft/etl2pcapng.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes new-neteventsession captura powershell sessão de captura etw completa via powershell. permite captura em servidores headless sem interface gráfica."><td class="num">03</td><td><b>New-NetEventSession</b><span>Captura PowerShell</span></td><td>Sessão de captura ETW completa via PowerShell.</td><td>Permite captura em servidores headless sem interface gráfica.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes tshark wireshark cli análise de pcap e captura em linha de comando. instale wireshark - tshark é incluído automaticamente."><td class="num">04</td><td><b>tshark</b><span>Wireshark CLI</span></td><td>Análise de PCAP e captura em linha de comando.</td><td>Instale Wireshark - tshark é incluído automaticamente.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes filtros wireshark display filters filtros específicos para protocolos windows (smb, kerberos). smb2 é essencial em ambientes windows - inclui file server e ad."><td class="num">05</td><td><b>Filtros Wireshark</b><span>Display filters</span></td><td>Filtros específicos para protocolos Windows (SMB, Kerberos).</td><td>smb2 é essencial em ambientes Windows - inclui File Server e AD.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes pktmon capturador moderno captura e filtra tráfego nativa com saída em pcap. disponível a partir do windows 10 2004 - nativo, sem instalação adicional."><td class="num">06</td><td><b>pktmon</b><span>Capturador moderno</span></td><td>Captura e filtra tráfego nativa com saída em PCAP.</td><td>Disponível a partir do Windows 10 2004 - nativo, sem instalação adicional.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes get-netadapterstatistics banda por interface mostra bytes enviados/recebidos por adaptador. use em loop para monitorar taxa de transferência em tempo real."><td class="num">07</td><td><b>Get-NetAdapterStatistics</b><span>Banda por interface</span></td><td>Mostra bytes enviados/recebidos por adaptador.</td><td>Use em loop para monitorar taxa de transferência em tempo real.</td></tr><tr class="cmd-row" data-search="captura e análise de pacotes tcpview / process monitor sysinternals visualização gráfica de conexões por processo. ferramentas gratuitas microsoft - essenciais para troubleshooting avançado."><td class="num">08</td><td><b>TCPView / Process Monitor</b><span>Sysinternals</span></td><td>Visualização gráfica de conexões por processo.</td><td>Ferramentas gratuitas Microsoft - essenciais para troubleshooting avançado.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="wifi">
+      <div class="section-title"><div><span class="section-kicker">📶 Tema 08</span><h2>Wi-Fi e Interfaces Sem Fio</h2><p>Gerenciamento de interfaces wireless, redes salvas, perfis e diagnóstico de conectividade sem fio no Windows.</p></div><button class="copy-section" data-target="code-wifi">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-wifi.ps1</b></div><pre><code id="code-wifi"># 01. Listar redes Wi-Fi visíveis - escanear SSIDs próximos.
 netsh wlan show networks mode=bssid
-Get-NetAdapter -Name "Wi-Fi" | Select-Object Status,LinkSpeed
+Get-NetAdapter -Name &quot;Wi-Fi&quot; | Select-Object Status,LinkSpeed
 
-# 02. Estado da interface Wi-Fi — informações de conexão atual.
+# 02. Estado da interface Wi-Fi - informações de conexão atual.
 netsh wlan show interfaces
-Get-NetConnectionProfile | Where-Object{$_.InterfaceAlias -like "*Wi*"}
+Get-NetConnectionProfile | Where-Object{$_.InterfaceAlias -like &quot;*Wi*&quot;}
 
-# 03. Listar perfis salvos — todas as redes Wi-Fi conhecidas.
+# 03. Listar perfis salvos - todas as redes Wi-Fi conhecidas.
 netsh wlan show profiles
 Get-WifiProfile  # módulo WiFiProfileManagement (opcional)
 
 # 04. Ver senha de rede salva [Admin].
-netsh wlan show profile name="NomeDaRede" key=clear
-# Campo "Conteúdo da chave" exibe a senha em texto claro
+netsh wlan show profile name=&quot;NomeDaRede&quot; key=clear
+# Campo &quot;Conteúdo da chave&quot; exibe a senha em texto claro
 
 # 05. Conectar e desconectar de redes Wi-Fi.
-netsh wlan connect name="NomeDaRede"
+netsh wlan connect name=&quot;NomeDaRede&quot;
 netsh wlan disconnect
 
 # 06. Exportar e importar perfis Wi-Fi [Admin].
-netsh wlan export profile name="NomeDaRede" folder=C:\Perfis\
-netsh wlan add profile filename="C:\Perfis\NomeDaRede.xml"
+netsh wlan export profile name=&quot;NomeDaRede&quot; folder=C:\Perfis\
+netsh wlan add profile filename=&quot;C:\Perfis\NomeDaRede.xml&quot;
 
 # 07. Criar ponto de acesso (Hosted Network) [Admin].
-netsh wlan set hostednetwork mode=allow ssid="LabHotspot" key="Senha12345!"
+netsh wlan set hostednetwork mode=allow ssid=&quot;LabHotspot&quot; key=&quot;Senha12345!&quot;
 netsh wlan start hostednetwork
 netsh wlan stop hostednetwork
 netsh wlan show hostednetwork
 
-# 08. Relatório de diagnóstico Wi-Fi — histórico de conexões [Admin].
+# 08. Relatório de diagnóstico Wi-Fi - histórico de conexões [Admin].
 netsh wlan show wlanreport
 # Relatório HTML em: C:\ProgramData\Microsoft\Windows\WlanReport\wlan-report-latest.html
-Start-Process "C:\ProgramData\Microsoft\Windows\WlanReport\wlan-report-latest.html"</code></pre></div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody>
-    <tr class="cmd-row" data-search="netsh wlan show networks escanear redes lista ssids, bssids, protocolos e sinal de redes próximas. use mode=bssid para ver todos os aps incluindo multi-bssid."><td class="num">01</td><td><b>netsh wlan show networks</b><span>Escanear redes</span></td><td>Lista SSIDs, BSSIDs, protocolos e sinal de redes próximas.</td><td>Use mode=bssid para ver todos os APs incluindo multi-BSSID.</td></tr>
-    <tr class="cmd-row" data-search="netsh wlan show interfaces estado wi-fi mostra ssid conectado, bssid, canal, sinal e autenticação. inclui força do sinal em % — útil para diagnóstico de desconexões."><td class="num">02</td><td><b>netsh wlan show interfaces</b><span>Estado Wi-Fi</span></td><td>Mostra SSID conectado, BSSID, canal, sinal e autenticação.</td><td>Inclui força do sinal em % — útil para diagnóstico de desconexões.</td></tr>
-    <tr class="cmd-row" data-search="netsh wlan show profiles redes salvas lista todos os perfis de redes wi-fi armazenados. use para auditoria de redes conhecidas e limpeza de perfis antigos."><td class="num">03</td><td><b>netsh wlan show profiles</b><span>Redes salvas</span></td><td>Lista todos os perfis de redes Wi-Fi armazenados.</td><td>Use para auditoria de redes conhecidas e limpeza de perfis antigos.</td></tr>
-    <tr class="cmd-row" data-search="netsh wlan show profile key=clear ver senha salva exibe a senha armazenada de um perfil wi-fi. requer admin. use para recuperar senhas sem acessar o roteador."><td class="num">04</td><td><b>netsh wlan show profile key=clear</b><span>Ver senha salva</span></td><td>Exibe a senha armazenada de um perfil Wi-Fi.</td><td>Requer admin. Use para recuperar senhas sem acessar o roteador.</td></tr>
-    <tr class="cmd-row" data-search="netsh wlan connect/disconnect gerenciar conexão conecta a uma rede salva ou desconecta a atual. útil em scripts de automação de conexão por horário ou condição."><td class="num">05</td><td><b>netsh wlan connect/disconnect</b><span>Gerenciar conexão</span></td><td>Conecta a uma rede salva ou desconecta a atual.</td><td>Útil em scripts de automação de conexão por horário ou condição.</td></tr>
-    <tr class="cmd-row" data-search="netsh wlan export/add profile backup de perfis exporta configuração de rede para xml e reimporta. use para migrar perfis de rede entre máquinas ou fazer backup."><td class="num">06</td><td><b>netsh wlan export/add profile</b><span>Backup de perfis</span></td><td>Exporta configuração de rede para XML e reimporta.</td><td>Use para migrar perfis de rede entre máquinas ou fazer backup.</td></tr>
-    <tr class="cmd-row" data-search="netsh wlan hostednetwork ponto de acesso cria um ap virtual compartilhando a conexão. substituído pelo mobile hotspot no windows 10/11 — ainda funciona no server."><td class="num">07</td><td><b>netsh wlan hostednetwork</b><span>Ponto de acesso</span></td><td>Cria um AP virtual compartilhando a conexão.</td><td>Substituído pelo Mobile Hotspot no Windows 10/11 — ainda funciona no Server.</td></tr>
-    <tr class="cmd-row" data-search="netsh wlan show wlanreport relatório wi-fi gera relatório html com histórico de conexões e falhas. excelente para diagnosticar desconexões intermitentes com dados históricos."><td class="num">08</td><td><b>netsh wlan show wlanreport</b><span>Relatório Wi-Fi</span></td><td>Gera relatório HTML com histórico de conexões e falhas.</td><td>Excelente para diagnosticar desconexões intermitentes com dados históricos.</td></tr>
-  </tbody></table></div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TEMA 09 — COMPARTILHAMENTO E AD
-══════════════════════════════════════════ -->
-<section class="section" id="compartilhamento">
-  <div class="section-title"><div><span class="section-kicker">🖧 Tema 09</span><h2>Compartilhamento, SMB e Active Directory</h2><p>Gerenciamento de compartilhamentos de rede, recursos SMB, sessões e integração com Active Directory.</p></div><button class="copy-section" data-target="code-09">Copiar bloco</button></div>
-
-  <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-compartilhamento.ps1</b></div><pre><code id="code-compartilhamento"># 01. Listar compartilhamentos locais.
+Start-Process &quot;C:\ProgramData\Microsoft\Windows\WlanReport\wlan-report-latest.html&quot;</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="wi-fi e interfaces sem fio netsh wlan show networks escanear redes lista ssids, bssids, protocolos e sinal de redes próximas. use mode=bssid para ver todos os aps incluindo multi-bssid."><td class="num">01</td><td><b>netsh wlan show networks</b><span>Escanear redes</span></td><td>Lista SSIDs, BSSIDs, protocolos e sinal de redes próximas.</td><td>Use mode=bssid para ver todos os APs incluindo multi-BSSID.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio netsh wlan show interfaces estado wi-fi mostra ssid conectado, bssid, canal, sinal e autenticação. inclui força do sinal em % - útil para diagnóstico de desconexões."><td class="num">02</td><td><b>netsh wlan show interfaces</b><span>Estado Wi-Fi</span></td><td>Mostra SSID conectado, BSSID, canal, sinal e autenticação.</td><td>Inclui força do sinal em % - útil para diagnóstico de desconexões.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio netsh wlan show profiles redes salvas lista todos os perfis de redes wi-fi armazenados. use para auditoria de redes conhecidas e limpeza de perfis antigos."><td class="num">03</td><td><b>netsh wlan show profiles</b><span>Redes salvas</span></td><td>Lista todos os perfis de redes Wi-Fi armazenados.</td><td>Use para auditoria de redes conhecidas e limpeza de perfis antigos.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio netsh wlan show profile key=clear ver senha salva exibe a senha armazenada de um perfil wi-fi. requer admin. use para recuperar senhas sem acessar o roteador."><td class="num">04</td><td><b>netsh wlan show profile key=clear</b><span>Ver senha salva</span></td><td>Exibe a senha armazenada de um perfil Wi-Fi.</td><td>Requer admin. Use para recuperar senhas sem acessar o roteador.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio netsh wlan connect/disconnect gerenciar conexão conecta a uma rede salva ou desconecta a atual. útil em scripts de automação de conexão por horário ou condição."><td class="num">05</td><td><b>netsh wlan connect/disconnect</b><span>Gerenciar conexão</span></td><td>Conecta a uma rede salva ou desconecta a atual.</td><td>Útil em scripts de automação de conexão por horário ou condição.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio netsh wlan export/add profile backup de perfis exporta configuração de rede para xml e reimporta. use para migrar perfis de rede entre máquinas ou fazer backup."><td class="num">06</td><td><b>netsh wlan export/add profile</b><span>Backup de perfis</span></td><td>Exporta configuração de rede para XML e reimporta.</td><td>Use para migrar perfis de rede entre máquinas ou fazer backup.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio netsh wlan hostednetwork ponto de acesso cria um ap virtual compartilhando a conexão. substituído pelo mobile hotspot no windows 10/11 - ainda funciona no server."><td class="num">07</td><td><b>netsh wlan hostednetwork</b><span>Ponto de acesso</span></td><td>Cria um AP virtual compartilhando a conexão.</td><td>Substituído pelo Mobile Hotspot no Windows 10/11 - ainda funciona no Server.</td></tr><tr class="cmd-row" data-search="wi-fi e interfaces sem fio netsh wlan show wlanreport relatório wi-fi gera relatório html com histórico de conexões e falhas. excelente para diagnosticar desconexões intermitentes com dados históricos."><td class="num">08</td><td><b>netsh wlan show wlanreport</b><span>Relatório Wi-Fi</span></td><td>Gera relatório HTML com histórico de conexões e falhas.</td><td>Excelente para diagnosticar desconexões intermitentes com dados históricos.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="compartilhamento">
+      <div class="section-title"><div><span class="section-kicker">🖧 Tema 09</span><h2>Compartilhamento, SMB e Active Directory</h2><p>Gerenciamento de compartilhamentos de rede, recursos SMB, sessões e integração com Active Directory.</p></div><button class="copy-section" data-target="code-compartilhamento">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-compartilhamento.ps1</b></div><pre><code id="code-compartilhamento"># 01. Listar compartilhamentos locais.
 net share
 Get-SmbShare | Select-Object Name,Path,Description
 
 # 02. Criar e remover compartilhamento [Admin].
 net share LabShare=C:\Lab /grant:Everyone,FULL
-New-SmbShare -Name "LabShare" -Path "C:\Lab" -FullAccess "Everyone"
-Remove-SmbShare -Name "LabShare" -Force
+New-SmbShare -Name &quot;LabShare&quot; -Path &quot;C:\Lab&quot; -FullAccess &quot;Everyone&quot;
+Remove-SmbShare -Name &quot;LabShare&quot; -Force
 
 # 03. Listar sessões e conexões SMB abertas [Admin].
 net session
@@ -797,7 +628,7 @@ Get-SmbConnection
 
 # 04. Mapear unidade de rede.
 net use Z: \\servidor\LabShare /persistent:yes
-New-PSDrive -Name Z -PSProvider FileSystem -Root "\\servidor\LabShare" -Persist
+New-PSDrive -Name Z -PSProvider FileSystem -Root &quot;\\servidor\LabShare&quot; -Persist
 
 # 05. Informações de domínio e controlador de domínio.
 nltest /dsgetdc:dominio.com.br
@@ -807,9 +638,9 @@ Get-ADDomainController -Filter *   # módulo RSAT Active Directory
 # 06. Usuários e grupos do AD [requer RSAT].
 Get-ADUser -Filter * | Select-Object Name,SamAccountName,Enabled
 Get-ADGroup -Filter * | Select-Object Name,GroupCategory
-Get-ADGroupMember -Identity "Domain Admins"
+Get-ADGroupMember -Identity &quot;Domain Admins&quot;
 
-# 07. GPO — listar e forçar atualização de políticas.
+# 07. GPO - listar e forçar atualização de políticas.
 gpresult /r
 gpresult /h C:\relatorio-gpo.html
 gpupdate /force
@@ -817,28 +648,12 @@ gpupdate /force
 # 08. Informações de autenticação Kerberos.
 klist                      # listar tickets Kerberos
 klist purge                # remover tickets expirados
-Get-WinEvent -LogName Security -FilterXPath "*[System[EventID=4769]]" -MaxEvents 10</code></pre></div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody>
-    <tr class="cmd-row" data-search="net share / get-smbshare listar compartilhamentos lista recursos compartilhados localmente via smb. inclui compartilhamentos administrativos (c$, ipc$, admin$)."><td class="num">01</td><td><b>net share / Get-SmbShare</b><span>Listar compartilhamentos</span></td><td>Lista recursos compartilhados localmente via SMB.</td><td>Inclui compartilhamentos administrativos (C$, IPC$, ADMIN$).</td></tr>
-    <tr class="cmd-row" data-search="new-smbshare criar compartilhamento cria compartilhamento com permissões definidas. defina permissões ntfs e de compartilhamento separadamente."><td class="num">02</td><td><b>New-SmbShare</b><span>Criar compartilhamento</span></td><td>Cria compartilhamento com permissões definidas.</td><td>Defina permissões NTFS e de compartilhamento separadamente.</td></tr>
-    <tr class="cmd-row" data-search="get-smbsession sessões abertas lista usuários e computadores conectados via smb. use para auditoria de acesso a compartilhamentos e encerrar sessões."><td class="num">03</td><td><b>Get-SmbSession</b><span>Sessões abertas</span></td><td>Lista usuários e computadores conectados via SMB.</td><td>Use para auditoria de acesso a compartilhamentos e encerrar sessões.</td></tr>
-    <tr class="cmd-row" data-search="net use / new-psdrive mapear unidade conecta unidade de rede mapeada a letra local. use -persist para manter após logoff. exige autenticação no destino."><td class="num">04</td><td><b>net use / New-PSDrive</b><span>Mapear unidade</span></td><td>Conecta unidade de rede mapeada a letra local.</td><td>Use -Persist para manter após logoff. Exige autenticação no destino.</td></tr>
-    <tr class="cmd-row" data-search="nltest / get-addomaincontroller controlador de domínio localiza e lista dcs do domínio. use nltest /dsgetdc quando há suspeita de falha de autenticação."><td class="num">05</td><td><b>nltest / Get-ADDomainController</b><span>Controlador de domínio</span></td><td>Localiza e lista DCs do domínio.</td><td>Use nltest /dsgetdc quando há suspeita de falha de autenticação.</td></tr>
-    <tr class="cmd-row" data-search="get-aduser / get-adgroup objetos do ad consulta usuários e grupos do active directory. requer módulo rsat-ad-powershell — instalável via rsat."><td class="num">06</td><td><b>Get-ADUser / Get-ADGroup</b><span>Objetos do AD</span></td><td>Consulta usuários e grupos do Active Directory.</td><td>Requer módulo RSAT-AD-PowerShell — instalável via RSAT.</td></tr>
-    <tr class="cmd-row" data-search="gpresult / gpupdate políticas de grupo exibe gpos aplicadas e força atualização de políticas. gpresult /h gera relatório html muito mais legível que /r."><td class="num">07</td><td><b>gpresult / gpupdate</b><span>Políticas de grupo</span></td><td>Exibe GPOs aplicadas e força atualização de políticas.</td><td>gpresult /h gera relatório HTML muito mais legível que /r.</td></tr>
-    <tr class="cmd-row" data-search="klist tickets kerberos lista e gerencia tickets de autenticação kerberos. use klist purge quando houver erros de autenticação após mudança de senha."><td class="num">08</td><td><b>klist</b><span>Tickets Kerberos</span></td><td>Lista e gerencia tickets de autenticação Kerberos.</td><td>Use klist purge quando houver erros de autenticação após mudança de senha.</td></tr>
-  </tbody></table></div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TEMA 10 — SERVIÇOS E PROCESSOS
-══════════════════════════════════════════ -->
-<section class="section" id="servicos">
-  <div class="section-title"><div><span class="section-kicker">🧰 Tema 10</span><h2>Serviços de Rede, Agendamento e Processos</h2><p>Gestão de serviços, tarefas agendadas, WinRM, SSH nativo e administração remota no Windows.</p></div><button class="copy-section" data-target="code-10">Copiar bloco</button></div>
-
-  <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-servicos.ps1</b></div><pre><code id="code-servicos"># 01. WinRM — habilitar gerenciamento remoto PowerShell [Admin].
+Get-WinEvent -LogName Security -FilterXPath &quot;*[System[EventID=4769]]&quot; -MaxEvents 10</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="compartilhamento, smb e active directory net share / get-smbshare listar compartilhamentos lista recursos compartilhados localmente via smb. inclui compartilhamentos administrativos (c$, ipc$, admin$)."><td class="num">01</td><td><b>net share / Get-SmbShare</b><span>Listar compartilhamentos</span></td><td>Lista recursos compartilhados localmente via SMB.</td><td>Inclui compartilhamentos administrativos (C$, IPC$, ADMIN$).</td></tr><tr class="cmd-row" data-search="compartilhamento, smb e active directory new-smbshare criar compartilhamento cria compartilhamento com permissões definidas. defina permissões ntfs e de compartilhamento separadamente."><td class="num">02</td><td><b>New-SmbShare</b><span>Criar compartilhamento</span></td><td>Cria compartilhamento com permissões definidas.</td><td>Defina permissões NTFS e de compartilhamento separadamente.</td></tr><tr class="cmd-row" data-search="compartilhamento, smb e active directory get-smbsession sessões abertas lista usuários e computadores conectados via smb. use para auditoria de acesso a compartilhamentos e encerrar sessões."><td class="num">03</td><td><b>Get-SmbSession</b><span>Sessões abertas</span></td><td>Lista usuários e computadores conectados via SMB.</td><td>Use para auditoria de acesso a compartilhamentos e encerrar sessões.</td></tr><tr class="cmd-row" data-search="compartilhamento, smb e active directory net use / new-psdrive mapear unidade conecta unidade de rede mapeada a letra local. use -persist para manter após logoff. exige autenticação no destino."><td class="num">04</td><td><b>net use / New-PSDrive</b><span>Mapear unidade</span></td><td>Conecta unidade de rede mapeada a letra local.</td><td>Use -Persist para manter após logoff. Exige autenticação no destino.</td></tr><tr class="cmd-row" data-search="compartilhamento, smb e active directory nltest / get-addomaincontroller controlador de domínio localiza e lista dcs do domínio. use nltest /dsgetdc quando há suspeita de falha de autenticação."><td class="num">05</td><td><b>nltest / Get-ADDomainController</b><span>Controlador de domínio</span></td><td>Localiza e lista DCs do domínio.</td><td>Use nltest /dsgetdc quando há suspeita de falha de autenticação.</td></tr><tr class="cmd-row" data-search="compartilhamento, smb e active directory get-aduser / get-adgroup objetos do ad consulta usuários e grupos do active directory. requer módulo rsat-ad-powershell - instalável via rsat."><td class="num">06</td><td><b>Get-ADUser / Get-ADGroup</b><span>Objetos do AD</span></td><td>Consulta usuários e grupos do Active Directory.</td><td>Requer módulo RSAT-AD-PowerShell - instalável via RSAT.</td></tr><tr class="cmd-row" data-search="compartilhamento, smb e active directory gpresult / gpupdate políticas de grupo exibe gpos aplicadas e força atualização de políticas. gpresult /h gera relatório html muito mais legível que /r."><td class="num">07</td><td><b>gpresult / gpupdate</b><span>Políticas de grupo</span></td><td>Exibe GPOs aplicadas e força atualização de políticas.</td><td>gpresult /h gera relatório HTML muito mais legível que /r.</td></tr><tr class="cmd-row" data-search="compartilhamento, smb e active directory klist tickets kerberos lista e gerencia tickets de autenticação kerberos. use klist purge quando houver erros de autenticação após mudança de senha."><td class="num">08</td><td><b>klist</b><span>Tickets Kerberos</span></td><td>Lista e gerencia tickets de autenticação Kerberos.</td><td>Use klist purge quando houver erros de autenticação após mudança de senha.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="servicos">
+      <div class="section-title"><div><span class="section-kicker">🧰 Tema 10</span><h2>Serviços de Rede, Agendamento e Processos</h2><p>Gestão de serviços, tarefas agendadas, WinRM, SSH nativo e administração remota no Windows.</p></div><button class="copy-section" data-target="code-servicos">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-servicos.ps1</b></div><pre><code id="code-servicos"># 01. WinRM - habilitar gerenciamento remoto PowerShell [Admin].
 Enable-PSRemoting -Force
 winrm quickconfig
 Test-WSMan -ComputerName servidor01
@@ -856,166 +671,118 @@ ssh usuario@192.168.1.10
 # 04. DHCP Server no Windows Server [Admin].
 Get-DhcpServerv4Scope
 Get-DhcpServerv4Lease -ScopeId 192.168.1.0
-Add-DhcpServerv4Reservation -ScopeId 192.168.1.0 -IPAddress 192.168.1.50 -ClientId "AA:BB:CC:DD:EE:FF" -Description "Impressora"
+Add-DhcpServerv4Reservation -ScopeId 192.168.1.0 -IPAddress 192.168.1.50 -ClientId &quot;AA:BB:CC:DD:EE:FF&quot; -Description &quot;Impressora&quot;
 
-# 05. NTP — sincronização de hora.
+# 05. NTP - sincronização de hora.
 w32tm /query /status
 w32tm /config /manualpeerlist:a.ntp.br /syncfromflags:manual /reliable:yes /update
 Restart-Service w32time
 
-# 06. IIS — servidor web nativo do Windows [Admin].
+# 06. IIS - servidor web nativo do Windows [Admin].
 Get-WebSite                        # listar sites IIS
-Start-WebSite -Name "Default Web Site"
-Get-WebBinding -Name "Default Web Site"
+Start-WebSite -Name &quot;Default Web Site&quot;
+Get-WebBinding -Name &quot;Default Web Site&quot;
 iisreset                             # reiniciar IIS
 
-# 07. Tarefas agendadas — listar e criar.
-Get-ScheduledTask | Where-Object{$_.State -eq 'Ready'} | Select-Object TaskName,TaskPath
-Register-ScheduledTask -TaskName "BackupRede" -Trigger (New-ScheduledTaskTrigger -Daily -At "02:00") -Action (New-ScheduledTaskAction -Execute "robocopy.exe" -Argument "C:\Dados \\srv\backup /MIR")
+# 07. Tarefas agendadas - listar e criar.
+Get-ScheduledTask | Where-Object{$_.State -eq &#x27;Ready&#x27;} | Select-Object TaskName,TaskPath
+Register-ScheduledTask -TaskName &quot;BackupRede&quot; -Trigger (New-ScheduledTaskTrigger -Daily -At &quot;02:00&quot;) -Action (New-ScheduledTaskAction -Execute &quot;robocopy.exe&quot; -Argument &quot;C:\Dados \\srv\backup /MIR&quot;)
 
-# 08. RDP — habilitar acesso remoto [Admin].
-Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
-Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+# 08. RDP - habilitar acesso remoto [Admin].
+Set-ItemProperty -Path &#x27;HKLM:\System\CurrentControlSet\Control\Terminal Server&#x27; -Name &quot;fDenyTSConnections&quot; -Value 0
+Enable-NetFirewallRule -DisplayGroup &quot;Remote Desktop&quot;
 mstsc /v:192.168.1.10</code></pre></div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody>
-    <tr class="cmd-row" data-search="enable-psremoting winrm habilita gerenciamento remoto via powershell. necessário antes de usar invoke-command ou enter-pssession."><td class="num">01</td><td><b>Enable-PSRemoting</b><span>WinRM</span></td><td>Habilita gerenciamento remoto via PowerShell.</td><td>Necessário antes de usar Invoke-Command ou Enter-PSSession.</td></tr>
-    <tr class="cmd-row" data-search="invoke-command / enter-pssession sessão remota executa comandos ou abre shell interativo em host remoto. equivalente ao ssh com powershell como shell."><td class="num">02</td><td><b>Invoke-Command / Enter-PSSession</b><span>Sessão remota</span></td><td>Executa comandos ou abre shell interativo em host remoto.</td><td>Equivalente ao SSH com PowerShell como shell.</td></tr>
-    <tr class="cmd-row" data-search="openssh server ssh nativo instala e ativa servidor ssh nativo do windows. disponível desde windows 10 1809 — preferível ao winrm em ambientes heterogêneos."><td class="num">03</td><td><b>OpenSSH Server</b><span>SSH nativo</span></td><td>Instala e ativa servidor SSH nativo do Windows.</td><td>Disponível desde Windows 10 1809 — preferível ao WinRM em ambientes heterogêneos.</td></tr>
-    <tr class="cmd-row" data-search="get-dhcpserverv4lease dhcp server lista leases e reservas do servidor dhcp windows. requer papel dhcp server instalado no windows server."><td class="num">04</td><td><b>Get-DhcpServerv4Lease</b><span>DHCP Server</span></td><td>Lista leases e reservas do servidor DHCP Windows.</td><td>Requer papel DHCP Server instalado no Windows Server.</td></tr>
-    <tr class="cmd-row" data-search="w32tm ntp configura e verifica sincronização de horário ntp. hora correta é crítica para kerberos — desvio maior que 5 min bloqueia autenticação."><td class="num">05</td><td><b>w32tm</b><span>NTP</span></td><td>Configura e verifica sincronização de horário NTP.</td><td>Hora correta é crítica para Kerberos — desvio maior que 5 min bloqueia autenticação.</td></tr>
-    <tr class="cmd-row" data-search="get-website / iisreset iis gerencia sites e pools de aplicações do iis. requer módulo webadministration — importar com import-module webadministration."><td class="num">06</td><td><b>Get-WebSite / iisreset</b><span>IIS</span></td><td>Gerencia sites e pools de aplicações do IIS.</td><td>Requer módulo WebAdministration — importar com Import-Module WebAdministration.</td></tr>
-    <tr class="cmd-row" data-search="register-scheduledtask tarefas agendadas cria tarefas automáticas via powershell. prefira powershell ao schtasks.exe para tarefas complexas."><td class="num">07</td><td><b>Register-ScheduledTask</b><span>Tarefas agendadas</span></td><td>Cria tarefas automáticas via PowerShell.</td><td>Prefira PowerShell ao schtasks.exe para tarefas complexas.</td></tr>
-    <tr class="cmd-row" data-search="mstsc / rdp acesso remoto rdp habilita e abre sessões de área de trabalho remota. use network level authentication (nla) obrigatório em produção."><td class="num">08</td><td><b>mstsc / RDP</b><span>Acesso remoto RDP</span></td><td>Habilita e abre sessões de Área de Trabalho Remota.</td><td>Use Network Level Authentication (NLA) obrigatório em produção.</td></tr>
-  </tbody></table></div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TEMA 11 — MONITORAMENTO
-══════════════════════════════════════════ -->
-<section class="section" id="monitoramento">
-  <div class="section-title"><div><span class="section-kicker">📊 Tema 11</span><h2>Monitoramento, Performance e Capacidade</h2><p>Coleta de métricas de CPU, memória, disco e rede; contadores de desempenho e monitoramento em tempo real.</p></div><button class="copy-section" data-target="code-11">Copiar bloco</button></div>
-
-  <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-monitoramento.ps1</b></div><pre><code id="code-monitoramento"># 01. CPU, memória e processos — resumo de uso de recursos.
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="serviços de rede, agendamento e processos enable-psremoting winrm habilita gerenciamento remoto via powershell. necessário antes de usar invoke-command ou enter-pssession."><td class="num">01</td><td><b>Enable-PSRemoting</b><span>WinRM</span></td><td>Habilita gerenciamento remoto via PowerShell.</td><td>Necessário antes de usar Invoke-Command ou Enter-PSSession.</td></tr><tr class="cmd-row" data-search="serviços de rede, agendamento e processos invoke-command / enter-pssession sessão remota executa comandos ou abre shell interativo em host remoto. equivalente ao ssh com powershell como shell."><td class="num">02</td><td><b>Invoke-Command / Enter-PSSession</b><span>Sessão remota</span></td><td>Executa comandos ou abre shell interativo em host remoto.</td><td>Equivalente ao SSH com PowerShell como shell.</td></tr><tr class="cmd-row" data-search="serviços de rede, agendamento e processos openssh server ssh nativo instala e ativa servidor ssh nativo do windows. disponível desde windows 10 1809 - preferível ao winrm em ambientes heterogêneos."><td class="num">03</td><td><b>OpenSSH Server</b><span>SSH nativo</span></td><td>Instala e ativa servidor SSH nativo do Windows.</td><td>Disponível desde Windows 10 1809 - preferível ao WinRM em ambientes heterogêneos.</td></tr><tr class="cmd-row" data-search="serviços de rede, agendamento e processos get-dhcpserverv4lease dhcp server lista leases e reservas do servidor dhcp windows. requer papel dhcp server instalado no windows server."><td class="num">04</td><td><b>Get-DhcpServerv4Lease</b><span>DHCP Server</span></td><td>Lista leases e reservas do servidor DHCP Windows.</td><td>Requer papel DHCP Server instalado no Windows Server.</td></tr><tr class="cmd-row" data-search="serviços de rede, agendamento e processos w32tm ntp configura e verifica sincronização de horário ntp. hora correta é crítica para kerberos - desvio maior que 5 min bloqueia autenticação."><td class="num">05</td><td><b>w32tm</b><span>NTP</span></td><td>Configura e verifica sincronização de horário NTP.</td><td>Hora correta é crítica para Kerberos - desvio maior que 5 min bloqueia autenticação.</td></tr><tr class="cmd-row" data-search="serviços de rede, agendamento e processos get-website / iisreset iis gerencia sites e pools de aplicações do iis. requer módulo webadministration - importar com import-module webadministration."><td class="num">06</td><td><b>Get-WebSite / iisreset</b><span>IIS</span></td><td>Gerencia sites e pools de aplicações do IIS.</td><td>Requer módulo WebAdministration - importar com Import-Module WebAdministration.</td></tr><tr class="cmd-row" data-search="serviços de rede, agendamento e processos register-scheduledtask tarefas agendadas cria tarefas automáticas via powershell. prefira powershell ao schtasks.exe para tarefas complexas."><td class="num">07</td><td><b>Register-ScheduledTask</b><span>Tarefas agendadas</span></td><td>Cria tarefas automáticas via PowerShell.</td><td>Prefira PowerShell ao schtasks.exe para tarefas complexas.</td></tr><tr class="cmd-row" data-search="serviços de rede, agendamento e processos mstsc / rdp acesso remoto rdp habilita e abre sessões de área de trabalho remota. use network level authentication (nla) obrigatório em produção."><td class="num">08</td><td><b>mstsc / RDP</b><span>Acesso remoto RDP</span></td><td>Habilita e abre sessões de Área de Trabalho Remota.</td><td>Use Network Level Authentication (NLA) obrigatório em produção.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="monitoramento">
+      <div class="section-title"><div><span class="section-kicker">📊 Tema 11</span><h2>Monitoramento, Performance e Capacidade</h2><p>Coleta de métricas de CPU, memória, disco e rede; contadores de desempenho e monitoramento em tempo real.</p></div><button class="copy-section" data-target="code-monitoramento">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-monitoramento.ps1</b></div><pre><code id="code-monitoramento"># 01. CPU, memória e processos - resumo de uso de recursos.
 Get-Process | Sort-Object CPU -Descending | Select-Object -First 10 Name,CPU,WorkingSet
 Get-WmiObject Win32_OperatingSystem | Select-Object FreePhysicalMemory,TotalVisibleMemorySize
 
-# 02. Desempenho de rede — bytes enviados/recebidos por adaptador.
-Get-Counter "\Network Interface(*)\Bytes Total/sec"
-Get-Counter "\Network Interface(*)\Packets Received Errors"
+# 02. Desempenho de rede - bytes enviados/recebidos por adaptador.
+Get-Counter &quot;\Network Interface(*)\Bytes Total/sec&quot;
+Get-Counter &quot;\Network Interface(*)\Packets Received Errors&quot;
 
-# 03. Uso de disco — espaço livre por volume.
+# 03. Uso de disco - espaço livre por volume.
 Get-PSDrive -PSProvider FileSystem | Select-Object Name,Used,Free
 Get-Volume | Select-Object DriveLetter,FileSystem,Size,SizeRemaining
 
-# 04. Contadores de Performance — via perfmon ou PowerShell.
-Get-Counter -Counter "\Processor(_Total)\% Processor Time" -Continuous -SampleInterval 2
-Get-Counter "\TCPv4\Connections Established"
+# 04. Contadores de Performance - via perfmon ou PowerShell.
+Get-Counter -Counter &quot;\Processor(_Total)\% Processor Time&quot; -Continuous -SampleInterval 2
+Get-Counter &quot;\TCPv4\Connections Established&quot;
 
-# 05. Monitor de banda por processo — via Get-NetAdapterStatistics.
+# 05. Monitor de banda por processo - via Get-NetAdapterStatistics.
 Get-NetAdapterStatistics | Select-Object Name,ReceivedBytes,SentBytes,ReceivedUnicastPackets
 
-# 06. Resource Monitor — abrir monitor de recursos gráfico.
+# 06. Resource Monitor - abrir monitor de recursos gráfico.
 resmon.exe
 # Ou via perfmon:
 perfmon.exe
 
-# 07. Relatório de saúde do sistema — coleta automática [Admin].
+# 07. Relatório de saúde do sistema - coleta automática [Admin].
 Get-Counter -ListSet * | Select-Object CounterSetName | Sort-Object CounterSetName
 # Exportar métricas para CSV:
-Get-Counter "\Network Interface(*)\Bytes Total/sec" -MaxSamples 60 | Export-Counter -Path C:\metricas.csv -FileFormat CSV
+Get-Counter &quot;\Network Interface(*)\Bytes Total/sec&quot; -MaxSamples 60 | Export-Counter -Path C:\metricas.csv -FileFormat CSV
 
 # 08. Uptime e informações de sistema.
-Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object LastBootUpTime,@{N='Uptime';E={(Get-Date)-$_.LastBootUpTime}}
+Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object LastBootUpTime,@{N=&#x27;Uptime&#x27;;E={(Get-Date)-$_.LastBootUpTime}}
 (Get-Date) - (gcim Win32_OperatingSystem).LastBootUpTime</code></pre></div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody>
-    <tr class="cmd-row" data-search="get-process | sort cpu top processos lista processos ordenados por uso de cpu/memória. equivalente ao top/htop do linux — use em investigações de alta carga."><td class="num">01</td><td><b>Get-Process | Sort CPU</b><span>Top processos</span></td><td>Lista processos ordenados por uso de CPU/memória.</td><td>Equivalente ao top/htop do Linux — use em investigações de alta carga.</td></tr>
-    <tr class="cmd-row" data-search="get-counter network interface bytes por interface taxa de transferência em bytes/seg por adaptador. use -continuous para monitoramento contínuo com interval definido."><td class="num">02</td><td><b>Get-Counter Network Interface</b><span>Bytes por interface</span></td><td>Taxa de transferência em bytes/seg por adaptador.</td><td>Use -Continuous para monitoramento contínuo com interval definido.</td></tr>
-    <tr class="cmd-row" data-search="get-volume uso de disco espaço usado e livre em todos os volumes. crie alerta quando sizeremaining cair abaixo de 10%."><td class="num">03</td><td><b>Get-Volume</b><span>Uso de disco</span></td><td>Espaço usado e livre em todos os volumes.</td><td>Crie alerta quando SizeRemaining cair abaixo de 10%.</td></tr>
-    <tr class="cmd-row" data-search="get-counter tcpv4 connections conexões tcp número de conexões tcp ativas no sistema. monitore para detectar sobrecarga ou ataques de conexão."><td class="num">04</td><td><b>Get-Counter TCPv4 Connections</b><span>Conexões TCP</span></td><td>Número de conexões TCP ativas no sistema.</td><td>Monitore para detectar sobrecarga ou ataques de conexão.</td></tr>
-    <tr class="cmd-row" data-search="get-netadapterstatistics estatísticas nic pacotes e bytes por adaptador de rede. compare receivedunicastpackets antes e depois de um teste."><td class="num">05</td><td><b>Get-NetAdapterStatistics</b><span>Estatísticas NIC</span></td><td>Pacotes e bytes por adaptador de rede.</td><td>Compare ReceivedUnicastPackets antes e depois de um teste.</td></tr>
-    <tr class="cmd-row" data-search="resmon / perfmon monitor gráfico visualização gráfica de cpu, memória, disco e rede. resmon.exe mostra uso por processo — excelente para diagnóstico visual."><td class="num">06</td><td><b>resmon / perfmon</b><span>Monitor gráfico</span></td><td>Visualização gráfica de CPU, memória, disco e rede.</td><td>resmon.exe mostra uso por processo — excelente para diagnóstico visual.</td></tr>
-    <tr class="cmd-row" data-search="export-counter exportar métricas salva contadores em csv ou blg para análise posterior. use para baseline de desempenho antes e após alterações."><td class="num">07</td><td><b>Export-Counter</b><span>Exportar métricas</span></td><td>Salva contadores em CSV ou BLG para análise posterior.</td><td>Use para baseline de desempenho antes e após alterações.</td></tr>
-    <tr class="cmd-row" data-search="get-ciminstance win32_operatingsystem uptime mostra data do último boot e tempo online. use para verificar se reinicializações inesperadas ocorreram."><td class="num">08</td><td><b>Get-CimInstance Win32_OperatingSystem</b><span>Uptime</span></td><td>Mostra data do último boot e tempo online.</td><td>Use para verificar se reinicializações inesperadas ocorreram.</td></tr>
-  </tbody></table></div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TEMA 12 — LOGS E AUDITORIA
-══════════════════════════════════════════ -->
-<section class="section" id="logs">
-  <div class="section-title"><div><span class="section-kicker">📜 Tema 12</span><h2>Logs e Auditoria Operacional</h2><p>Consulta ao Windows Event Log, logs de segurança, auditoria de autenticação e eventos críticos do sistema.</p></div><button class="copy-section" data-target="code-12">Copiar bloco</button></div>
-
-  <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-logs.ps1</b></div><pre><code id="code-logs"># 01. Listar logs disponíveis — canais de log do sistema.
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="monitoramento, performance e capacidade get-process | sort cpu top processos lista processos ordenados por uso de cpu/memória. equivalente ao top/htop do linux - use em investigações de alta carga."><td class="num">01</td><td><b>Get-Process | Sort CPU</b><span>Top processos</span></td><td>Lista processos ordenados por uso de CPU/memória.</td><td>Equivalente ao top/htop do Linux - use em investigações de alta carga.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade get-counter network interface bytes por interface taxa de transferência em bytes/seg por adaptador. use -continuous para monitoramento contínuo com interval definido."><td class="num">02</td><td><b>Get-Counter Network Interface</b><span>Bytes por interface</span></td><td>Taxa de transferência em bytes/seg por adaptador.</td><td>Use -Continuous para monitoramento contínuo com interval definido.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade get-volume uso de disco espaço usado e livre em todos os volumes. crie alerta quando sizeremaining cair abaixo de 10%."><td class="num">03</td><td><b>Get-Volume</b><span>Uso de disco</span></td><td>Espaço usado e livre em todos os volumes.</td><td>Crie alerta quando SizeRemaining cair abaixo de 10%.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade get-counter tcpv4 connections conexões tcp número de conexões tcp ativas no sistema. monitore para detectar sobrecarga ou ataques de conexão."><td class="num">04</td><td><b>Get-Counter TCPv4 Connections</b><span>Conexões TCP</span></td><td>Número de conexões TCP ativas no sistema.</td><td>Monitore para detectar sobrecarga ou ataques de conexão.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade get-netadapterstatistics estatísticas nic pacotes e bytes por adaptador de rede. compare receivedunicastpackets antes e depois de um teste."><td class="num">05</td><td><b>Get-NetAdapterStatistics</b><span>Estatísticas NIC</span></td><td>Pacotes e bytes por adaptador de rede.</td><td>Compare ReceivedUnicastPackets antes e depois de um teste.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade resmon / perfmon monitor gráfico visualização gráfica de cpu, memória, disco e rede. resmon.exe mostra uso por processo - excelente para diagnóstico visual."><td class="num">06</td><td><b>resmon / perfmon</b><span>Monitor gráfico</span></td><td>Visualização gráfica de CPU, memória, disco e rede.</td><td>resmon.exe mostra uso por processo - excelente para diagnóstico visual.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade export-counter exportar métricas salva contadores em csv ou blg para análise posterior. use para baseline de desempenho antes e após alterações."><td class="num">07</td><td><b>Export-Counter</b><span>Exportar métricas</span></td><td>Salva contadores em CSV ou BLG para análise posterior.</td><td>Use para baseline de desempenho antes e após alterações.</td></tr><tr class="cmd-row" data-search="monitoramento, performance e capacidade get-ciminstance win32_operatingsystem uptime mostra data do último boot e tempo online. use para verificar se reinicializações inesperadas ocorreram."><td class="num">08</td><td><b>Get-CimInstance Win32_OperatingSystem</b><span>Uptime</span></td><td>Mostra data do último boot e tempo online.</td><td>Use para verificar se reinicializações inesperadas ocorreram.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="logs">
+      <div class="section-title"><div><span class="section-kicker">📜 Tema 12</span><h2>Logs e Auditoria Operacional</h2><p>Consulta ao Windows Event Log, logs de segurança, auditoria de autenticação e eventos críticos do sistema.</p></div><button class="copy-section" data-target="code-logs">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-logs.ps1</b></div><pre><code id="code-logs"># 01. Listar logs disponíveis - canais de log do sistema.
 Get-WinEvent -ListLog * | Select-Object LogName,RecordCount,IsEnabled | Sort-Object RecordCount -Descending | Select-Object -First 20
 
-# 02. Erros do sistema — log System, últimas 24 horas.
+# 02. Erros do sistema - log System, últimas 24 horas.
 Get-WinEvent -LogName System -MaxEvents 50 | Where-Object{$_.Level -le 2} | Select-Object TimeCreated,Id,Message
 eventvwr.msc                # abrir Visualizador de Eventos gráfico
 
-# 03. Log de Segurança — eventos de autenticação [Admin].
+# 03. Log de Segurança - eventos de autenticação [Admin].
 Get-WinEvent -LogName Security -MaxEvents 100 | Where-Object{$_.Id -in 4624,4625,4634,4647,4648} | Select-Object TimeCreated,Id,Message
 
-<span class="cm"># Eventos de segurança mais importantes:
+# Eventos de segurança mais importantes:
 # 4624 = Logon bem-sucedido
 # 4625 = Falha de logon
 # 4634 = Logoff
 # 4648 = Logon com credenciais explícitas
 # 4740 = Conta bloqueada
 # 4769 = Solicitação de ticket Kerberos (TGS)
-# 7045 = Novo serviço instalado</span>
+# 7045 = Novo serviço instalado
 
-# 04. Falhas de logon — identificar tentativas de acesso.
-Get-WinEvent -LogName Security -FilterXPath "*[System[EventID=4625]]" -MaxEvents 20 | Select-Object TimeCreated,Message
+# 04. Falhas de logon - identificar tentativas de acesso.
+Get-WinEvent -LogName Security -FilterXPath &quot;*[System[EventID=4625]]&quot; -MaxEvents 20 | Select-Object TimeCreated,Message
 
-# 05. Log de aplicações — erros de software.
+# 05. Log de aplicações - erros de software.
 Get-WinEvent -LogName Application -MaxEvents 30 | Where-Object{$_.Level -le 2} | Select-Object TimeCreated,ProviderName,Id,Message
 
-# 06. Eventos de rede — firewall e conexões.
-Get-WinEvent -LogName "Microsoft-Windows-Windows Firewall With Advanced Security/Firewall" -MaxEvents 20
+# 06. Eventos de rede - firewall e conexões.
+Get-WinEvent -LogName &quot;Microsoft-Windows-Windows Firewall With Advanced Security/Firewall&quot; -MaxEvents 20
 
 # 07. Exportar log para CSV para análise.
 Get-WinEvent -LogName Security -MaxEvents 500 | Where-Object{$_.Id -eq 4625} | Export-Csv C:\falhas-logon.csv -NoTypeInformation
 
-# 08. Limpar log de eventos [Admin] — usar com cautela.
+# 08. Limpar log de eventos [Admin] - usar com cautela.
 Clear-EventLog -LogName Application
 wevtutil cl System   # limpar log do sistema</code></pre></div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody>
-    <tr class="cmd-row" data-search="get-winevent -listlog listar logs descobre todos os canais de log disponíveis. use para encontrar logs de aplicações específicas e serviços do windows."><td class="num">01</td><td><b>Get-WinEvent -ListLog</b><span>Listar logs</span></td><td>Descobre todos os canais de log disponíveis.</td><td>Use para encontrar logs de aplicações específicas e serviços do Windows.</td></tr>
-    <tr class="cmd-row" data-search="get-winevent -logname system log do sistema erros e avisos do sistema operacional. filtre por level ≤ 2 para ver apenas erros e críticos."><td class="num">02</td><td><b>Get-WinEvent -LogName System</b><span>Log do sistema</span></td><td>Erros e avisos do sistema operacional.</td><td>Filtre por Level ≤ 2 para ver apenas erros e críticos.</td></tr>
-    <tr class="cmd-row" data-search="get-winevent -logname security log de segurança eventos de autenticação, logon e auditoria. monitorar ids 4625 e 4740 para detectar ataques de força bruta."><td class="num">03</td><td><b>Get-WinEvent -LogName Security</b><span>Log de segurança</span></td><td>Eventos de autenticação, logon e auditoria.</td><td>Monitorar IDs 4625 e 4740 para detectar ataques de força bruta.</td></tr>
-    <tr class="cmd-row" data-search="eventid 4625 falhas de logon registra cada tentativa de logon falha com origem. use xpath filter para consultas eficientes em logs grandes."><td class="num">04</td><td><b>EventID 4625</b><span>Falhas de logon</span></td><td>Registra cada tentativa de logon falha com origem.</td><td>Use XPath filter para consultas eficientes em logs grandes.</td></tr>
-    <tr class="cmd-row" data-search="get-winevent -logname application log de aplicações erros de software e serviços instalados. primeiro lugar para verificar após crash de aplicação ou serviço."><td class="num">05</td><td><b>Get-WinEvent -LogName Application</b><span>Log de aplicações</span></td><td>Erros de software e serviços instalados.</td><td>Primeiro lugar para verificar após crash de aplicação ou serviço.</td></tr>
-    <tr class="cmd-row" data-search="log do firewall eventos de rede registra mudanças de regras e bloqueios do firewall. habilitar auditoria do firewall via gpo para logs de conexão."><td class="num">06</td><td><b>Log do Firewall</b><span>Eventos de rede</span></td><td>Registra mudanças de regras e bloqueios do firewall.</td><td>Habilitar auditoria do firewall via GPO para logs de conexão.</td></tr>
-    <tr class="cmd-row" data-search="export-csv exportar para análise salva eventos em csv para análise em excel ou siem. use para relatórios periódicos de segurança e conformidade."><td class="num">07</td><td><b>Export-Csv</b><span>Exportar para análise</span></td><td>Salva eventos em CSV para análise em Excel ou SIEM.</td><td>Use para relatórios periódicos de segurança e conformidade.</td></tr>
-    <tr class="cmd-row" data-search="clear-eventlog limpar log remove entradas do log — use com cautela em produção. exporte antes de limpar. em auditoria, considerar implicações legais."><td class="num">08</td><td><b>Clear-EventLog</b><span>Limpar log</span></td><td>Remove entradas do log — use com cautela em produção.</td><td>Exporte antes de limpar. Em auditoria, considerar implicações legais.</td></tr>
-  </tbody></table></div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TEMA 13 — AUTOMAÇÃO
-══════════════════════════════════════════ -->
-<section class="section" id="automacao">
-  <div class="section-title"><div><span class="section-kicker">⚙️ Tema 13</span><h2>Automação, Scripts e Administração Remota</h2><p>Padrões de automação com PowerShell, execução remota em massa, inventário automático e integração com ferramentas de gestão.</p></div><button class="copy-section" data-target="code-13">Copiar bloco</button></div>
-
-  <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-automacao.ps1</b></div><pre><code id="code-automacao"># 01. Execução remota em múltiplos hosts simultaneamente.
-$hosts = @("srv01","srv02","srv03")
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="logs e auditoria operacional get-winevent -listlog listar logs descobre todos os canais de log disponíveis. use para encontrar logs de aplicações específicas e serviços do windows."><td class="num">01</td><td><b>Get-WinEvent -ListLog</b><span>Listar logs</span></td><td>Descobre todos os canais de log disponíveis.</td><td>Use para encontrar logs de aplicações específicas e serviços do Windows.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional get-winevent -logname system log do sistema erros e avisos do sistema operacional. filtre por level ≤ 2 para ver apenas erros e críticos."><td class="num">02</td><td><b>Get-WinEvent -LogName System</b><span>Log do sistema</span></td><td>Erros e avisos do sistema operacional.</td><td>Filtre por Level ≤ 2 para ver apenas erros e críticos.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional get-winevent -logname security log de segurança eventos de autenticação, logon e auditoria. monitorar ids 4625 e 4740 para detectar ataques de força bruta."><td class="num">03</td><td><b>Get-WinEvent -LogName Security</b><span>Log de segurança</span></td><td>Eventos de autenticação, logon e auditoria.</td><td>Monitorar IDs 4625 e 4740 para detectar ataques de força bruta.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional eventid 4625 falhas de logon registra cada tentativa de logon falha com origem. use xpath filter para consultas eficientes em logs grandes."><td class="num">04</td><td><b>EventID 4625</b><span>Falhas de logon</span></td><td>Registra cada tentativa de logon falha com origem.</td><td>Use XPath filter para consultas eficientes em logs grandes.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional get-winevent -logname application log de aplicações erros de software e serviços instalados. primeiro lugar para verificar após crash de aplicação ou serviço."><td class="num">05</td><td><b>Get-WinEvent -LogName Application</b><span>Log de aplicações</span></td><td>Erros de software e serviços instalados.</td><td>Primeiro lugar para verificar após crash de aplicação ou serviço.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional log do firewall eventos de rede registra mudanças de regras e bloqueios do firewall. habilitar auditoria do firewall via gpo para logs de conexão."><td class="num">06</td><td><b>Log do Firewall</b><span>Eventos de rede</span></td><td>Registra mudanças de regras e bloqueios do firewall.</td><td>Habilitar auditoria do firewall via GPO para logs de conexão.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional export-csv exportar para análise salva eventos em csv para análise em excel ou siem. use para relatórios periódicos de segurança e conformidade."><td class="num">07</td><td><b>Export-Csv</b><span>Exportar para análise</span></td><td>Salva eventos em CSV para análise em Excel ou SIEM.</td><td>Use para relatórios periódicos de segurança e conformidade.</td></tr><tr class="cmd-row" data-search="logs e auditoria operacional clear-eventlog limpar log remove entradas do log - use com cautela em produção. exporte antes de limpar. em auditoria, considerar implicações legais."><td class="num">08</td><td><b>Clear-EventLog</b><span>Limpar log</span></td><td>Remove entradas do log - use com cautela em produção.</td><td>Exporte antes de limpar. Em auditoria, considerar implicações legais.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="automacao">
+      <div class="section-title"><div><span class="section-kicker">⚙️ Tema 13</span><h2>Automação, Scripts e Administração Remota</h2><p>Padrões de automação com PowerShell, execução remota em massa, inventário automático e integração com ferramentas de gestão.</p></div><button class="copy-section" data-target="code-automacao">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>comandos-automacao.ps1</b></div><pre><code id="code-automacao"># 01. Execução remota em múltiplos hosts simultaneamente.
+$hosts = @(&quot;srv01&quot;,&quot;srv02&quot;,&quot;srv03&quot;)
 Invoke-Command -ComputerName $hosts -ScriptBlock {
     [PSCustomObject]@{
         Host  = $env:COMPUTERNAME
-        IP    = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object{$_.PrefixOrigin -ne 'WellKnown'}).IPAddress
+        IP    = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object{$_.PrefixOrigin -ne &#x27;WellKnown&#x27;}).IPAddress
         Uptime= ((Get-Date)-(gcim Win32_OperatingSystem).LastBootUpTime).Days
     }
 }
 
-# 02. Inventário automático de rede — coletar IPs e status de vários hosts.
+# 02. Inventário automático de rede - coletar IPs e status de vários hosts.
 $rede = 1..254 | ForEach-Object -Parallel {
-    $ip = "192.168.1.$_"
+    $ip = &quot;192.168.1.$_&quot;
     if(Test-Connection $ip -Count 1 -Quiet){
         [PSCustomObject]@{IP=$ip;DNS=(Resolve-DnsName $ip -ErrorAction SilentlyContinue).NameHost}
     }
@@ -1027,98 +794,82 @@ Invoke-Command -ComputerName $hosts -ScriptBlock {
     Get-Service WinRM,W32Time,DNS -ErrorAction SilentlyContinue
 } | Select-Object MachineName,DisplayName,Status
 
-# 04. Backup de configuração de rede — exportar configuração completa.
-netsh dump | Out-File "C:\backup-rede-$(Get-Date -Format 'yyyyMMdd').txt"
-Get-NetIPAddress | Export-Csv "C:\backup-ip.csv"
-Get-NetRoute | Export-Csv "C:\backup-rotas.csv"
+# 04. Backup de configuração de rede - exportar configuração completa.
+netsh dump | Out-File &quot;C:\backup-rede-$(Get-Date -Format &#x27;yyyyMMdd&#x27;).txt&quot;
+Get-NetIPAddress | Export-Csv &quot;C:\backup-ip.csv&quot;
+Get-NetRoute | Export-Csv &quot;C:\backup-rotas.csv&quot;
 
 # 05. Relatório HTML de inventário de rede.
-Get-NetAdapter | ConvertTo-Html -Title "Inventário de Rede" -PreContent "<h2>Adaptadores</h2>" |
-  Out-File "C:\relatorio-rede.html"
-Start-Process "C:\relatorio-rede.html"
+Get-NetAdapter | ConvertTo-Html -Title &quot;Inventário de Rede&quot; -PreContent &quot;&lt;h2&gt;Adaptadores&lt;/h2&gt;&quot; |
+  Out-File &quot;C:\relatorio-rede.html&quot;
+Start-Process &quot;C:\relatorio-rede.html&quot;
 
-# 06. Monitorar disponibilidade e alertar — loop com notificação.
+# 06. Monitorar disponibilidade e alertar - loop com notificação.
 $hosts | ForEach-Object {
     if(!(Test-Connection $_ -Count 1 -Quiet)){
-        Write-Warning "HOST INACESSÍVEL: $_ em $(Get-Date)"
+        Write-Warning &quot;HOST INACESSÍVEL: $_ em $(Get-Date)&quot;
         # Enviar email ou chamar API de alerta aqui
     }
 }
 
-# 07. PowerShell Remoting em massa — aplicar patch de configuração.
+# 07. PowerShell Remoting em massa - aplicar patch de configuração.
 Invoke-Command -ComputerName $hosts -ScriptBlock {
-    Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses "8.8.8.8","1.1.1.1"
-    "DNS atualizado em $env:COMPUTERNAME"
+    Set-DnsClientServerAddress -InterfaceAlias &quot;Ethernet&quot; -ServerAddresses &quot;8.8.8.8&quot;,&quot;1.1.1.1&quot;
+    &quot;DNS atualizado em $env:COMPUTERNAME&quot;
 }
 
 # 08. Configurar política de execução e importar módulos de rede.
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 Import-Module NetTCPIP, DnsClient, NetAdapter
-Get-Module -ListAvailable | Where-Object{$_.Name -like "Net*"}</code></pre></div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody>
-    <tr class="cmd-row" data-search="invoke-command -computername execução remota em massa executa bloco de código em múltiplos hosts simultaneamente. use -asjob para rodar em background e coletar resultados depois."><td class="num">01</td><td><b>Invoke-Command -ComputerName</b><span>Execução remota em massa</span></td><td>Executa bloco de código em múltiplos hosts simultaneamente.</td><td>Use -AsJob para rodar em background e coletar resultados depois.</td></tr>
-    <tr class="cmd-row" data-search="foreach-object -parallel inventário paralelo varre sub-rede em paralelo com throttlelimit controlado. ps 7+ requerido para -parallel. use jobs em ps 5.1."><td class="num">02</td><td><b>ForEach-Object -Parallel</b><span>Inventário paralelo</span></td><td>Varre sub-rede em paralelo com ThrottleLimit controlado.</td><td>PS 7+ requerido para -Parallel. Use jobs em PS 5.1.</td></tr>
-    <tr class="cmd-row" data-search="invoke-command + get-service status de serviços verifica serviços em lista de servidores de uma vez. excelente para verificações de pré-manutenção e health checks."><td class="num">03</td><td><b>Invoke-Command + Get-Service</b><span>Status de serviços</span></td><td>Verifica serviços em lista de servidores de uma vez.</td><td>Excelente para verificações de pré-manutenção e health checks.</td></tr>
-    <tr class="cmd-row" data-search="netsh dump backup de configuração exporta toda a configuração de rede para arquivo. execute antes de qualquer mudança de rede para rollback."><td class="num">04</td><td><b>netsh dump</b><span>Backup de configuração</span></td><td>Exporta toda a configuração de rede para arquivo.</td><td>Execute antes de qualquer mudança de rede para rollback.</td></tr>
-    <tr class="cmd-row" data-search="convertto-html relatório html gera relatório web a partir de objetos powershell. combine com css para relatórios profissionais de inventário."><td class="num">05</td><td><b>ConvertTo-Html</b><span>Relatório HTML</span></td><td>Gera relatório web a partir de objetos PowerShell.</td><td>Combine com CSS para relatórios profissionais de inventário.</td></tr>
-    <tr class="cmd-row" data-search="test-connection em loop monitoramento básico verifica disponibilidade de hosts periodicamente. para monitoramento simples — em produção use ferramentas dedicadas."><td class="num">06</td><td><b>Test-Connection em loop</b><span>Monitoramento básico</span></td><td>Verifica disponibilidade de hosts periodicamente.</td><td>Para monitoramento simples — em produção use ferramentas dedicadas.</td></tr>
-    <tr class="cmd-row" data-search="invoke-command + set-dns aplicar configuração aplica configuração de dns em toda a lista de hosts. modelo de script de remediação em massa para incidentes de dns."><td class="num">07</td><td><b>Invoke-Command + Set-Dns</b><span>Aplicar configuração</span></td><td>Aplica configuração de DNS em toda a lista de hosts.</td><td>Modelo de script de remediação em massa para incidentes de DNS.</td></tr>
-    <tr class="cmd-row" data-search="set-executionpolicy + import-module preparar ambiente configura política de execução e carrega módulos de rede. remotesigned é o equilíbrio entre segurança e usabilidade."><td class="num">08</td><td><b>Set-ExecutionPolicy + Import-Module</b><span>Preparar ambiente</span></td><td>Configura política de execução e carrega módulos de rede.</td><td>RemoteSigned é o equilíbrio entre segurança e usabilidade.</td></tr>
-  </tbody></table></div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TEMA 14 — TROUBLESHOOTING
-══════════════════════════════════════════ -->
-<section class="section" id="troubleshooting">
-  <div class="section-title"><div><span class="section-kicker">🛠️ Tema 14</span><h2>Fluxos Rápidos de Troubleshooting</h2><p>Sequências de diagnóstico para os cenários mais comuns de falha de rede no Windows, do mais simples ao mais específico.</p></div><button class="copy-section" data-target="code-14">Copiar bloco</button></div>
-
-  <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>troubleshooting-windows.ps1</b></div><pre><code id="troubleshooting-windows">## FLUXO 1 — Sem conectividade à Internet
+Get-Module -ListAvailable | Where-Object{$_.Name -like &quot;Net*&quot;}</code></pre></div>
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Comando</th><th>Finalidade</th><th>Aplicação prática</th></tr></thead><tbody><tr class="cmd-row" data-search="automação, scripts e administração remota invoke-command -computername execução remota em massa executa bloco de código em múltiplos hosts simultaneamente. use -asjob para rodar em background e coletar resultados depois."><td class="num">01</td><td><b>Invoke-Command -ComputerName</b><span>Execução remota em massa</span></td><td>Executa bloco de código em múltiplos hosts simultaneamente.</td><td>Use -AsJob para rodar em background e coletar resultados depois.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota foreach-object -parallel inventário paralelo varre sub-rede em paralelo com throttlelimit controlado. ps 7+ requerido para -parallel. use jobs em ps 5.1."><td class="num">02</td><td><b>ForEach-Object -Parallel</b><span>Inventário paralelo</span></td><td>Varre sub-rede em paralelo com ThrottleLimit controlado.</td><td>PS 7+ requerido para -Parallel. Use jobs em PS 5.1.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota invoke-command + get-service status de serviços verifica serviços em lista de servidores de uma vez. excelente para verificações de pré-manutenção e health checks."><td class="num">03</td><td><b>Invoke-Command + Get-Service</b><span>Status de serviços</span></td><td>Verifica serviços em lista de servidores de uma vez.</td><td>Excelente para verificações de pré-manutenção e health checks.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota netsh dump backup de configuração exporta toda a configuração de rede para arquivo. execute antes de qualquer mudança de rede para rollback."><td class="num">04</td><td><b>netsh dump</b><span>Backup de configuração</span></td><td>Exporta toda a configuração de rede para arquivo.</td><td>Execute antes de qualquer mudança de rede para rollback.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota convertto-html relatório html gera relatório web a partir de objetos powershell. combine com css para relatórios profissionais de inventário."><td class="num">05</td><td><b>ConvertTo-Html</b><span>Relatório HTML</span></td><td>Gera relatório web a partir de objetos PowerShell.</td><td>Combine com CSS para relatórios profissionais de inventário.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota test-connection em loop monitoramento básico verifica disponibilidade de hosts periodicamente. para monitoramento simples - em produção use ferramentas dedicadas."><td class="num">06</td><td><b>Test-Connection em loop</b><span>Monitoramento básico</span></td><td>Verifica disponibilidade de hosts periodicamente.</td><td>Para monitoramento simples - em produção use ferramentas dedicadas.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota invoke-command + set-dns aplicar configuração aplica configuração de dns em toda a lista de hosts. modelo de script de remediação em massa para incidentes de dns."><td class="num">07</td><td><b>Invoke-Command + Set-Dns</b><span>Aplicar configuração</span></td><td>Aplica configuração de DNS em toda a lista de hosts.</td><td>Modelo de script de remediação em massa para incidentes de DNS.</td></tr><tr class="cmd-row" data-search="automação, scripts e administração remota set-executionpolicy + import-module preparar ambiente configura política de execução e carrega módulos de rede. remotesigned é o equilíbrio entre segurança e usabilidade."><td class="num">08</td><td><b>Set-ExecutionPolicy + Import-Module</b><span>Preparar ambiente</span></td><td>Configura política de execução e carrega módulos de rede.</td><td>RemoteSigned é o equilíbrio entre segurança e usabilidade.</td></tr></tbody></table></div>
+    </section>
+    <section class="section" id="troubleshooting">
+      <div class="section-title"><div><span class="section-kicker">🛠️ Tema 14</span><h2>Fluxos Rápidos de Troubleshooting</h2><p>Sequências de diagnóstico para os cenários mais comuns de falha de rede no Windows, do mais simples ao mais específico.</p></div><button class="copy-section" data-target="code-troubleshooting">Copiar bloco</button></div>
+      <div class="terminal"><div class="bar"><span></span><span></span><span></span><b>troubleshooting-windows.ps1</b></div><pre><code id="code-troubleshooting">## FLUXO 1 - Sem conectividade à Internet
 ipconfig /all                      # 1. Verificar IP, gateway e DNS configurados
 ping 127.0.0.1                     # 2. Stack TCP/IP local funciona?
 ping 192.168.1.1                   # 3. Gateway responde? (substituir pelo seu gateway)
 ping 8.8.8.8                       # 4. Internet responde (IP direto, sem DNS)?
 ping google.com                    # 5. DNS resolve? Se 4 OK e 5 não, problema de DNS
 ipconfig /flushdns                 # 6. Limpar cache DNS corrompido
-netsh winsock reset                # 7. [Admin] Reset Winsock — problemas de stack
+netsh winsock reset                # 7. [Admin] Reset Winsock - problemas de stack
 netsh int ip reset                 # 8. [Admin] Reset configuração IP
-ipconfig /release && ipconfig /renew   # 9. Renovar DHCP
+ipconfig /release &amp;&amp; ipconfig /renew   # 9. Renovar DHCP
 
-## FLUXO 2 — DNS não resolve
+## FLUXO 2 - DNS não resolve
 nslookup google.com                # 1. Testar DNS padrão
-nslookup google.com 8.8.8.8       # 2. Testar com Google DNS — se funcionar, DNS local com problema
+nslookup google.com 8.8.8.8       # 2. Testar com Google DNS - se funcionar, DNS local com problema
 ipconfig /flushdns                 # 3. Limpar cache
 Get-DnsClientServerAddress        # 4. Verificar DNS configurado por interface
-Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses "8.8.8.8"  # 5. [Admin] Forçar DNS externo
+Set-DnsClientServerAddress -InterfaceAlias &quot;Ethernet&quot; -ServerAddresses &quot;8.8.8.8&quot;  # 5. [Admin] Forçar DNS externo
 Resolve-DnsName google.com -Server 8.8.8.8   # 6. Validar após mudança
 
-## FLUXO 3 — Serviço não acessível na rede
+## FLUXO 3 - Serviço não acessível na rede
 Test-NetConnection -ComputerName 192.168.1.10 -Port 443   # 1. Porta TCP acessível?
 netstat -ano | findstr :443        # 2. Serviço está em escuta?
-Get-NetFirewallRule | Where-Object{$_.LocalPort -eq '443'}   # 3. Regra de firewall existe?
-Get-Service -Name "W3SVC"         # 4. Serviço está rodando?
+Get-NetFirewallRule | Where-Object{$_.LocalPort -eq &#x27;443&#x27;}   # 3. Regra de firewall existe?
+Get-Service -Name &quot;W3SVC&quot;         # 4. Serviço está rodando?
 ping 192.168.1.10                  # 5. Host responde ICMP?
 tracert 192.168.1.10              # 6. Qual salto está bloqueando?
 
-## FLUXO 4 — Lentidão e alta latência
-Get-Counter "\Network Interface(*)\Bytes Total/sec"   # 1. Saturação de interface?
+## FLUXO 4 - Lentidão e alta latência
+Get-Counter &quot;\Network Interface(*)\Bytes Total/sec&quot;   # 1. Saturação de interface?
 netstat -ano | findstr ESTABLISHED | Measure-Object   # 2. Muitas conexões?
 Get-Process | Sort-Object CPU -Desc | Select-Object -First 5   # 3. Processo consumindo CPU?
 pathping 8.8.8.8                   # 4. Perda em algum salto?
-Get-NetAdapterStatistics -Name "Ethernet"   # 5. Erros de pacote na interface?
+Get-NetAdapterStatistics -Name &quot;Ethernet&quot;   # 5. Erros de pacote na interface?
 
-## FLUXO 5 — Autenticação AD falhando
+## FLUXO 5 - Autenticação AD falhando
 nltest /sc_verify:dominio.com.br   # 1. Canal seguro com DC OK?
 klist                              # 2. Tickets Kerberos presentes?
 klist purge                        # 3. Limpar tickets expirados
-w32tm /query /status               # 4. Hora sincronizada? (desvio >5min bloqueia Kerberos)
+w32tm /query /status               # 4. Hora sincronizada? (desvio &gt;5min bloqueia Kerberos)
 w32tm /resync                      # 5. Forçar sincronização
-Get-WinEvent -LogName Security -FilterXPath "*[System[EventID=4740]]" -MaxEvents 10   # 6. Conta bloqueada?
+Get-WinEvent -LogName Security -FilterXPath &quot;*[System[EventID=4740]]&quot; -MaxEvents 10   # 6. Conta bloqueada?
 ping dominio.com.br                # 7. DC acessível?
 
-## FLUXO 6 — Reset completo de configuração de rede [Admin]
+## FLUXO 6 - Reset completo de configuração de rede [Admin]
 netsh winsock reset
 netsh int ip reset C:\resetlog.txt
 netsh advfirewall reset
@@ -1126,60 +877,31 @@ ipconfig /release
 ipconfig /flushdns
 ipconfig /renew
 Restart-Computer -Force           # reinicialização necessária após reset</code></pre></div>
-
-  <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead>
-    <tr><th>#</th><th>Fluxo</th><th>Cenário</th><th>Diagnóstico inicial</th></tr>
-    <tr class="cmd-row" data-search="sem internet sem conectividade máquina não acessa a internet. seguir pilha: loopback → gateway → ip externo → dns. isolar a camada com falha."><td class="num">01</td><td><b>Sem Internet</b><span>Sem conectividade</span></td><td>Máquina não acessa a Internet.</td><td>Seguir pilha: loopback → gateway → IP externo → DNS. Isolar a camada com falha.</td></tr>
-    <tr class="cmd-row" data-search="dns não resolve resolução de nomes aplicações não resolvem nomes mas ip direto funciona. testar com dns externo (8.8.8.8). se funcionar, problema é no dns configurado."><td class="num">02</td><td><b>DNS não resolve</b><span>Resolução de nomes</span></td><td>Aplicações não resolvem nomes mas IP direto funciona.</td><td>Testar com DNS externo (8.8.8.8). Se funcionar, problema é no DNS configurado.</td></tr>
-    <tr class="cmd-row" data-search="serviço inacessível porta tcp bloqueada não consegue conectar em serviço remoto. verificar se serviço escuta, firewall permite e rota existe."><td class="num">03</td><td><b>Serviço inacessível</b><span>Porta TCP bloqueada</span></td><td>Não consegue conectar em serviço remoto.</td><td>Verificar se serviço escuta, firewall permite e rota existe.</td></tr>
-    <tr class="cmd-row" data-search="lentidão de rede alta latência conexão lenta ou timeouts intermitentes. verificar saturação de link, erros de nic e perda por salto com pathping."><td class="num">04</td><td><b>Lentidão de rede</b><span>Alta latência</span></td><td>Conexão lenta ou timeouts intermitentes.</td><td>Verificar saturação de link, erros de NIC e perda por salto com pathping.</td></tr>
-    <tr class="cmd-row" data-search="autenticação ad kerberos / ldap login no domínio falha ou acesso a recursos negado. verificar canal seguro, hora sincronizada e tickets kerberos."><td class="num">05</td><td><b>Autenticação AD</b><span>Kerberos / LDAP</span></td><td>Login no domínio falha ou acesso a recursos negado.</td><td>Verificar canal seguro, hora sincronizada e tickets Kerberos.</td></tr>
-    <tr class="cmd-row" data-search="reset de rede último recurso configuração corrompida após mudanças ou malware. resetar winsock, ip e firewall. reinicialização necessária após o reset."><td class="num">06</td><td><b>Reset de rede</b><span>Último recurso</span></td><td>Configuração corrompida após mudanças ou malware.</td><td>Resetar Winsock, IP e firewall. Reinicialização necessária após o reset.</td></tr>
-  </tbody></table></div>
-</section>
-
-</main>
-
-<!-- ═══════════════════════════════════════════════════════════
-     FOOTER
-═══════════════════════════════════════════════════════════ -->
-<footer>
-  <strong style="color:var(--muted)">Prof. Dr. Laerte Peotta de Melo</strong> •
-  <a href="https://peotta.github.io">peotta.github.io</a> •
-  <a href="https://peotta.github.io/linux.html">Versão Linux</a> •
-  Windows 10 / 11 / Server 2019 / 2022 • cmd · PowerShell · netsh · WinRM
-</footer>
-
-</div><!-- /wrap -->
-
+      <div class="details-card"><h3>Mapa rápido de uso</h3><table><thead><tr><th>#</th><th>Fluxo</th><th>Cenário</th><th>Diagnóstico inicial</th></tr></thead><tbody><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting sem internet sem conectividade máquina não acessa a internet. seguir pilha: loopback → gateway → ip externo → dns. isolar a camada com falha."><td class="num">01</td><td><b>Sem Internet</b><span>Sem conectividade</span></td><td>Máquina não acessa a Internet.</td><td>Seguir pilha: loopback → gateway → IP externo → DNS. Isolar a camada com falha.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting dns não resolve resolução de nomes aplicações não resolvem nomes mas ip direto funciona. testar com dns externo (8.8.8.8). se funcionar, problema é no dns configurado."><td class="num">02</td><td><b>DNS não resolve</b><span>Resolução de nomes</span></td><td>Aplicações não resolvem nomes mas IP direto funciona.</td><td>Testar com DNS externo (8.8.8.8). Se funcionar, problema é no DNS configurado.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting serviço inacessível porta tcp bloqueada não consegue conectar em serviço remoto. verificar se serviço escuta, firewall permite e rota existe."><td class="num">03</td><td><b>Serviço inacessível</b><span>Porta TCP bloqueada</span></td><td>Não consegue conectar em serviço remoto.</td><td>Verificar se serviço escuta, firewall permite e rota existe.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting lentidão de rede alta latência conexão lenta ou timeouts intermitentes. verificar saturação de link, erros de nic e perda por salto com pathping."><td class="num">04</td><td><b>Lentidão de rede</b><span>Alta latência</span></td><td>Conexão lenta ou timeouts intermitentes.</td><td>Verificar saturação de link, erros de NIC e perda por salto com pathping.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting autenticação ad kerberos / ldap login no domínio falha ou acesso a recursos negado. verificar canal seguro, hora sincronizada e tickets kerberos."><td class="num">05</td><td><b>Autenticação AD</b><span>Kerberos / LDAP</span></td><td>Login no domínio falha ou acesso a recursos negado.</td><td>Verificar canal seguro, hora sincronizada e tickets Kerberos.</td></tr><tr class="cmd-row" data-search="fluxos rápidos de troubleshooting reset de rede último recurso configuração corrompida após mudanças ou malware. resetar winsock, ip e firewall. reinicialização necessária após o reset."><td class="num">06</td><td><b>Reset de rede</b><span>Último recurso</span></td><td>Configuração corrompida após mudanças ou malware.</td><td>Resetar Winsock, IP e firewall. Reinicialização necessária após o reset.</td></tr></tbody></table></div>
+    </section>
+    <footer class="footer">Prof. Dr. Laerte Peotta de Melo • <a href="../index.html" style="color:var(--matrix);text-decoration:none;">peotta.github.io</a> • <a href="linux.html" style="color:var(--matrix);text-decoration:none;">Guia Linux</a> • Windows 10 / 11 / Server</footer>
+  </main>
+</div>
 <script>
-/* ── COPIAR BLOCO ── */
-function copyBlock(btn){
-  const code=btn.closest('.code-block').querySelector('code').innerText;
-  navigator.clipboard.writeText(code).then(()=>{
-    const orig=btn.textContent;
-    btn.textContent='✓ Copiado';
-    btn.classList.add('copied');
-    setTimeout(()=>{btn.textContent=orig;btn.classList.remove('copied');},2000);
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+  const q=search.value.trim().toLowerCase();
+  document.querySelectorAll('.section').forEach(sec=>{
+    const text=sec.innerText.toLowerCase();
+    sec.classList.toggle('hidden', q && !text.includes(q));
   });
-}
-
-/* ── SIDEBAR ACTIVE STATE ── */
-(function(){
-  const items=document.querySelectorAll('.sb-item');
-  const secs=document.querySelectorAll('.tema');
-  const obs=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        const id=e.target.id;
-        items.forEach(a=>{
-          a.classList.toggle('active',a.getAttribute('href')==='#'+id);
-        });
-      }
-    });
-  },{threshold:.25,rootMargin:'-60px 0px -60% 0px'});
-  secs.forEach(s=>obs.observe(s));
-})();
+  document.querySelectorAll('.cmd-row').forEach(row=>{
+    row.classList.toggle('hidden', q && !row.dataset.search.includes(q));
+  });
+});
+document.querySelectorAll('.copy-section').forEach(btn=>btn.addEventListener('click',()=>{
+  const code=document.getElementById(btn.dataset.target).innerText;
+  navigator.clipboard.writeText(code);
+  const old=btn.textContent; btn.textContent='Bloco copiado'; setTimeout(()=>btn.textContent=old,1300);
+}));
+const links=[...document.querySelectorAll('.toc a')];
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));}})},{rootMargin:'-35% 0px -60% 0px'});
+document.querySelectorAll('.section').forEach(s=>obs.observe(s));
 </script>
 </body>
 </html>
