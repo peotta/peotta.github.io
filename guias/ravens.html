@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RAVENS - Research Group on Advanced Vulnerability Exploration and Network Security</title>
   <meta name="description" content="Página do Ravens Research Group on Advanced Vulnerability Exploration and Network Security, com laboratórios de redes, segurança, criptografia, DNS e SMTP." />
+  <link rel="canonical" href="https://peotta.github.io/guias/ravens.html" />
+  <meta property="og:title" content="RAVENS - Research Group on Advanced Vulnerability Exploration and Network Security" />
+  <meta property="og:description" content="Página do Ravens Research Group on Advanced Vulnerability Exploration and Network Security, com laboratórios de redes, segurança, criptografia, DNS e SMTP." />
+  <meta property="og:url" content="https://peotta.github.io/guias/ravens.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://peotta.github.io/arquivos/Ravens-logo.png" />
   <style>
     :root {
       --bg: #010301;
@@ -334,16 +340,7 @@
       color: var(--muted);
     }
 
-    .code-box {
-      background: rgba(0,0,0,0.28);
-      border: 1px solid rgba(72,255,139,0.12);
-      border-radius: 14px;
-      padding: 0.95rem;
-      color: #dffff0;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      margin-top: 0.9rem;
-    }
+
 
     .lab-card {
       display: flex;
@@ -360,7 +357,60 @@
       margin-top: auto;
     }
 
-    footer { padding: 2.5rem 0 4rem; color: var(--muted); text-align: center; position: relative; z-index: 1; }
+    .code-box {
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(72,255,139,0.12);
+      border-radius: 14px;
+      padding: 0.95rem;
+      color: #dffff0;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      margin-top: 0.9rem;
+      position: relative;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .code-box:hover {
+      border-color: rgba(72,255,139,0.35);
+      background: rgba(0,0,0,0.42);
+    }
+
+    .code-box-tip {
+      font-size: 0.74rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+      display: inline-block;
+      letter-spacing: 0.04em;
+    }
+
+    footer { padding: 2.8rem 0 4rem; color: var(--muted); text-align: center; position: relative; z-index: 1; }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .footer-links a {
+      color: var(--text);
+      font-size: 0.88rem;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+
+    .footer-note {
+      font-size: 0.84rem;
+      color: rgba(145, 202, 164, 0.75);
+      margin-top: 0.45rem;
+    }
 
     @media (max-width: 1100px) {
       .grid-3, .lab-grid, .summary-grid { grid-template-columns: repeat(2, 1fr); }
@@ -368,7 +418,21 @@
 
     @media (max-width: 980px) {
       .hero-main, .grid-2, .grid-3, .lab-grid, .summary-grid { grid-template-columns: 1fr; }
-      .menu { display: none; }
+      .menu {
+        display: flex;
+        gap: 0.45rem;
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 0.35rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .menu::-webkit-scrollbar { display: none; }
+      .menu a {
+        white-space: nowrap;
+        font-size: 0.78rem;
+        padding: 0.45rem 0.65rem;
+      }
       .hero-grid { padding: 3rem 1rem 1rem; }
       .hero-grid::after { display: none; }
     }
@@ -419,10 +483,10 @@
         </div>
       </div>
       <div class="summary-grid">
-        <div class="summary-item"><strong>Cibersegurança</strong><span>Estudo de ameaças, vulnerabilidades, defesa e resposta.</span></div>
-        <div class="summary-item"><strong>Redes</strong><span>Experimentos com protocolos, DNS, SMTP e tráfego de rede.</span></div>
-        <div class="summary-item"><strong>Criptografia</strong><span>Laboratórios com OpenSSL, AES, RSA, chaves e certificados.</span></div>
-        <div class="summary-item"><strong>Ambiente Kali</strong><span>Roteiros para instalação do Kali Linux e Metasploitable2 no VirtualBox.</span></div>
+        <div class="summary-item"><strong>Cibersegurança e PQC</strong><span>Estudo de ameaças, defesa e criptografia pós-quântica (Kyber, NIST).</span></div>
+        <div class="summary-item"><strong>Redes e Emulação</strong><span>Experimentos com PNetLab, topologias, DNS, SMTP e tráfego seguro.</span></div>
+        <div class="summary-item"><strong>Criptografia Aplicada</strong><span>Laboratórios com OpenSSL, AES-GCM, RSA, curvas elípticas e TLS 1.3.</span></div>
+        <div class="summary-item"><strong>Ambientes de Teste</strong><span>Roteiros de Kali Linux, Metasploitable2 e práticas de ataque e defesa.</span></div>
       </div>
     </div>
   </header>
@@ -495,8 +559,9 @@
               <li>Escolha o roteiro desejado.</li>
               <li>Registre evidências, comandos, saídas, chaves, certificados e prints.</li>
             </ol>
-            <div class="code-box">git clone https://github.com/peotta/ravens.git
+            <div class="code-box" onclick="copyCommand(this, 'git clone https://github.com/peotta/ravens.git && cd ravens')">git clone https://github.com/peotta/ravens.git
 cd ravens</div>
+            <span class="code-box-tip">Clique no bloco acima para copiar o comando</span>
             <div class="button-row">
               <a class="button button-primary" href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer">Acessar GitHub</a>
             </div>
@@ -511,7 +576,8 @@ cd ravens</div>
               <li>Conta Google com autenticação em dois fatores e senha de app para o laboratório SMTP.</li>
               <li>Para os laboratórios de segurança ofensiva, instalar uma máquina Kali Linux conforme o roteiro indicado no Lab Kali 01.</li>
             </ul>
-            <div class="code-box">sudo apt update && sudo apt install -y openssl dnsutils python3</div>
+            <div class="code-box" onclick="copyCommand(this, 'sudo apt update && sudo apt install -y openssl dnsutils python3')">sudo apt update && sudo apt install -y openssl dnsutils python3</div>
+            <span class="code-box-tip">Clique no bloco acima para copiar o comando</span>
             <div class="button-row">
               <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/Kali/01%20Roteiro%20de%20instala%C3%A7%C3%A3o%20Kali%20Linux.md" target="_blank" rel="noreferrer">Pré-requisito - Instalar Kali Linux</a>
             </div>
@@ -544,35 +610,51 @@ cd ravens</div>
           </article>
 
           <article class="lab-card">
-            <h3>Lab 1 - Enviando e-mail via SMTP do Google</h3>
-            <p class="muted">Compreensão do fluxo SMTP autenticado com STARTTLS e boas práticas no uso do Gmail.</p>
-            <p class="muted">Conteúdos: senha de app, handshake TLS, cabeçalhos SMTP, envio automatizado e autenticação.</p>
-            <div class="lab-meta">SMTP - Gmail - STARTTLS</div>
-            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/Lab1%3ALaborat%C3%B3rio%3A%20Enviando%20e-mail%20via%20SMTP%20do%20Google.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
+            <h3>Lab - PNetLab: Plataforma de Emulação de Redes</h3>
+            <p class="muted">Guia essencial de instalação e uso do PNetLab para virtualização de redes e cibersegurança com suporte a múltiplos fabricantes.</p>
+            <p class="muted">Conteúdos: virtualização KVM/QEMU, suporte a imagens Cisco, Fortinet, Mikrotik e Linux, simulação de ataques e incidentes de segurança.</p>
+            <div class="lab-meta">PNetLab - Virtualização - Redes - Emulação</div>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/labs/lab-pnetLab.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
+          </article>
+
+          <article class="lab-card">
+            <h3>Lab - Criptografia Pós-Quântica com OQS-OpenSSL</h3>
+            <p class="muted">Operações práticas de criptografia pós-quântica (PQC) com OQS-OpenSSL e assinaturas digitais modernas.</p>
+            <p class="muted">Conteúdos: algoritmos NIST PQC, KEM Kyber, assinaturas Dilithium e SPHINCS+, sessões TLS 1.3 híbridas (Kyber + ECC) e certificados.</p>
+            <div class="lab-meta">PQC - Kyber - OQS-OpenSSL - TLS 1.3 - NIST</div>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/labs/lab-quantico.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
           </article>
 
           <article class="lab-card">
             <h3>Lab - Criptografia Simétrica</h3>
-            <p class="muted">Uso prático de AES e modos de operação como CBC e GCM.</p>
-            <p class="muted">Conteúdos: geração de chaves, IV, PBKDF2, padding, integridade e riscos de reutilização de IV.</p>
+            <p class="muted">Uso prático de algoritmos simétricos como AES e modos de operação como CBC e GCM.</p>
+            <p class="muted">Conteúdos: geração de chaves, IV, PBKDF2, padding, integridade e riscos de reutilização de IV com OpenSSL.</p>
             <div class="lab-meta">AES - CBC - GCM - OpenSSL</div>
-            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/Lab%3A%20Criptografia%20Sim%C3%A9trica.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/labs/lab-simetrico.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
           </article>
 
           <article class="lab-card">
             <h3>Lab - Criptografia Assimétrica com OpenSSL</h3>
-            <p class="muted">Aplicação de RSA e curvas elípticas em geração de chaves, assinatura e certificados.</p>
-            <p class="muted">Conteúdos: genpkey, assinatura, verificação, CSR e certificado autoassinado.</p>
+            <p class="muted">Aplicação de RSA e curvas elípticas em geração de chaves, assinatura digital e certificados.</p>
+            <p class="muted">Conteúdos: genpkey, assinatura, verificação, CSR e certificado autoassinado com OpenSSL 3.x.</p>
             <div class="lab-meta">RSA - ECC - CSR - Certificados</div>
-            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/Laborat%C3%B3rio%20Criptografia%20Assim%C3%A9trica%20com%20OpenSSL.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/labs/lab-assimetrico.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
           </article>
 
           <article class="lab-card">
             <h3>Lab - DNS</h3>
-            <p class="muted">Compreensão da resolução de nomes, registros DNS e práticas seguras.</p>
-            <p class="muted">Conteúdos: dig, TTL, DNSSEC, CAA, zone transfer e riscos de amplification.</p>
+            <p class="muted">Compreensão da resolução de nomes, registros DNS e práticas seguras de infraestrutura.</p>
+            <p class="muted">Conteúdos: dig, TTL, DNSSEC, CAA, transferência de zona e análise de riscos de amplificação.</p>
             <div class="lab-meta">DNS - dig - DNSSEC - CAA</div>
-            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/Lab%3ADNS.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/labs/lab-dns.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
+          </article>
+
+          <article class="lab-card">
+            <h3>Lab 1 - Enviando e-mail via SMTP do Google</h3>
+            <p class="muted">Compreensão do fluxo SMTP autenticado com STARTTLS e boas práticas no uso de correio eletrônico seguro.</p>
+            <p class="muted">Conteúdos: senhas de aplicativo, handshake TLS, cabeçalhos SMTP, envio automatizado e autenticação.</p>
+            <div class="lab-meta">SMTP - Gmail - STARTTLS - Python</div>
+            <a class="button button-secondary" href="https://github.com/peotta/ravens/blob/main/labs/lab-smtp.md" target="_blank" rel="noreferrer">Abrir laboratório</a>
           </article>
         </div>
       </div>
@@ -633,11 +715,35 @@ cd ravens</div>
 
   <footer>
     <div class="container">
+      <div class="footer-links">
+        <a href="../index.html">Página principal</a>
+        <a href="linux.html">Guia de Comandos Linux</a>
+        <a href="windows-redes.html">Guia de Redes Windows</a>
+        <a href="https://github.com/peotta/ravens" target="_blank" rel="noreferrer">Repositório GitHub</a>
+      </div>
       <p>Prof. Dr. Laerte Peotta de Melo - Ravens Research Group on Advanced Vulnerability Exploration and Network Security.</p>
+      <p class="footer-note">Universidade de Brasília (UnB) - Faculdade UnB Gama (FGA)</p>
     </div>
   </footer>
 
   <script>
+    function copyCommand(el, text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          let tip = el.nextElementSibling;
+          if (tip && tip.classList.contains('code-box-tip')) {
+            const original = tip.textContent;
+            tip.textContent = 'Comando copiado para a área de transferência!';
+            tip.style.color = '#48ff8b';
+            setTimeout(() => {
+              tip.textContent = original;
+              tip.style.color = '';
+            }, 2200);
+          }
+        });
+      }
+    }
+
     const matrixCanvas = document.getElementById('matrixRainCanvas');
     const matrixCtx = matrixCanvas.getContext('2d');
     const matrixAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789RAVENSCYBERSECURITYNETWORKSVULNERABILITYEXPLORATIONDNSAESRSAOPENSSLTLSCTITHREATHUNTINGSMTP';
