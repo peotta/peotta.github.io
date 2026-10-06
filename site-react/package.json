@@ -1,0 +1,22 @@
+{
+  "name": "peotta-site-react",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Versao React do portal academico do Prof. Dr. Laerte Peotta de Melo",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/publish.mjs",
+    "preview": "vite preview",
+    "optimize-images": "node scripts/optimize-images.mjs"
+  },
+  "dependencies": {
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
+    "sharp": "^0.35.5",
+    "vite": "^8.3.2"
+  }
+}
