@@ -11,7 +11,7 @@ export const strings = {
     skip: 'Pular para o conteúdo',
     nav: { about: 'Sobre', work: 'Atuação', content: 'Conteúdos', ravens: 'RAVENS', podcast: 'Podcast', contact: 'Contato', menu: 'Abrir menu', close: 'Fechar menu', search: 'Buscar' },
     hero: {
-      subtitle: 'Professor e pesquisador em segurança cibernética e redes na Universidade de Brasília',
+      subtitle: 'Professor e pesquisador em segurança cibernética e redes de comunicação na Universidade de Brasília',
       text: 'Professor, pesquisador e profissional com atuação em <strong>Cibersegurança</strong>, <strong>Engenharia de Redes</strong>, <strong>Ciência da Computação</strong>, <strong>crimes cibernéticos</strong>, <strong>forense digital</strong> e <strong>Segurança do Sistema Financeiro</strong>. Mestre e Doutor em Engenharia Elétrica, articula ensino, pesquisa aplicada e produção de materiais acadêmicos e técnicos voltados à formação e ao desenvolvimento profissional.',
       cta: 'Explorar conteúdos',
       photoAlt: 'Foto de perfil do Prof. Dr. Laerte Peotta de Melo',
@@ -101,7 +101,7 @@ export const strings = {
     skip: 'Skip to content',
     nav: { about: 'About', work: 'Expertise', content: 'Content', ravens: 'RAVENS', podcast: 'Podcast', contact: 'Contact', menu: 'Open menu', close: 'Close menu', search: 'Search' },
     hero: {
-      subtitle: 'Professor and researcher in cybersecurity and networks at the University of Brasília',
+      subtitle: 'Professor and researcher in cybersecurity and communication networks at the University of Brasília',
       text: 'Professor, researcher, and professional working in <strong>Cybersecurity</strong>, <strong>Network Engineering</strong>, <strong>Computer Science</strong>, <strong>cybercrime</strong>, <strong>digital forensics</strong>, and <strong>Financial System Security</strong>. Holding both M.Sc. and Ph.D. degrees in Electrical Engineering, he connects teaching, applied research, and the development of academic and technical materials aimed at education and professional growth.',
       cta: 'Explore content',
       photoAlt: 'Profile photo of Prof. Dr. Laerte Peotta de Melo',
@@ -191,7 +191,7 @@ export const strings = {
     skip: 'Saltar al contenido',
     nav: { about: 'Sobre', work: 'Actuación', content: 'Contenidos', ravens: 'RAVENS', podcast: 'Podcast', contact: 'Contacto', menu: 'Abrir menú', close: 'Cerrar menú', search: 'Buscar' },
     hero: {
-      subtitle: 'Profesor e investigador en ciberseguridad y redes en la Universidad de Brasilia',
+      subtitle: 'Profesor e investigador en ciberseguridad y redes de comunicación en la Universidad de Brasilia',
       text: 'Profesor, investigador y profesional con actuación en <strong>Ciberseguridad</strong>, <strong>Ingeniería de Redes</strong>, <strong>Ciencias de la Computación</strong>, <strong>ciberdelitos</strong>, <strong>forense digital</strong> y <strong>Seguridad del Sistema Financiero</strong>. Magíster y Doctor en Ingeniería Eléctrica, articula docencia, investigación aplicada y producción de materiales académicos y técnicos orientados a la formación y al desarrollo profesional.',
       cta: 'Explorar contenidos',
       photoAlt: 'Foto de perfil del Prof. Dr. Laerte Peotta de Melo',
