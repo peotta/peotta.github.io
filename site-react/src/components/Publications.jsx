@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { awards, publications, registrations, toBibtex } from '../publicacoes.js';
 import { normalize } from './Catalog.jsx';
 
-const TYPES = ['all', 'journal', 'conference'];
+const TYPES = ['all', 'journal', 'conference', 'chapter'];
 
 // Destaca o nome do professor na lista de autores.
 function Authors({ list }) {
@@ -46,6 +46,7 @@ export function PublicationList({ t }) {
       all: publications.length,
       journal: publications.filter((p) => p.type === 'journal').length,
       conference: publications.filter((p) => p.type === 'conference').length,
+      chapter: publications.filter((p) => p.type === 'chapter').length,
     }),
     [],
   );
@@ -54,7 +55,7 @@ export function PublicationList({ t }) {
     const terms = normalize(query.trim()).split(/\s+/).filter(Boolean);
     const list = publications.filter((p) => {
       if (type !== 'all' && p.type !== type) return false;
-      const hay = normalize([p.title, p.venue, p.details ?? '', ...p.authors, String(p.year)].join(' '));
+      const hay = normalize([p.title, p.venue, p.details ?? '', p.publisher ?? '', ...p.authors, String(p.year)].join(' '));
       return terms.every((term) => hay.includes(term));
     });
     const groups = new Map();
@@ -125,13 +126,20 @@ export function PublicationList({ t }) {
                   <p className="pub-title">{p.title}</p>
                   <Authors list={p.authors} />
                   <p className="pub-venue">
+                    {p.editors && `In: ${p.editors.join('; ')} (${t.pubs.eds}). `}
                     <em>{p.venue}</em>
+                    {p.publisher ? `. ${p.publisher}` : ''}
                     {p.details ? `, ${p.details}` : ''}, {p.year}
                   </p>
                   <p className="pub-links">
                     {p.pdf && (
                       <a className="pub-action" href={p.pdf} target="_blank" rel="noreferrer">
                         PDF
+                      </a>
+                    )}
+                    {p.amazon && (
+                      <a className="pub-action" href={p.amazon} target="_blank" rel="noreferrer">
+                        {t.pubs.amazon} <span aria-hidden="true">↗</span>
                       </a>
                     )}
                     {p.doi && (

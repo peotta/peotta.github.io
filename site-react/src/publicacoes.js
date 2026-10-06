@@ -1,6 +1,7 @@
 // Producao cientifica. Dados extraidos dos proprios PDFs (autores, veiculo, ano, DOI).
 // Para incluir um trabalho novo, acrescente uma entrada e coloque o PDF em /arquivos/publicacoes/.
-// type: 'journal' (periodico) ou 'conference' (congresso).
+// type: 'journal' (periodico), 'conference' (congresso) ou 'chapter' (capitulo de livro;
+// sem PDF, com link para o livro na Amazon).
 
 const PDF = '/arquivos/publicacoes/';
 
@@ -162,6 +163,32 @@ export const publications = [
     doi: '10.1109/WCNPS53648.2021.9626270',
     pdf: `${PDF}2021-preventing-apt-zero-trust-iot.pdf`,
   },
+  {
+    id: 'malware360-2026-cap6',
+    type: 'chapter',
+    year: 2026,
+    title: 'Phishing como Vetor de Malware: Detecção de URLs Utilizando PU Learning e Métricas de Divergência de Distribuições',
+    authors: ['Pedro Henrique Friedrich Ramos', 'Bernardo Tomasi', 'Davi Ribeiro', 'Ruibin Mei', 'Yago Yudi Furuta', 'João Pincovscy', 'Laerte Peotta', 'André R. A. Grégio'],
+    venue: 'Malware 360º: Evolução, Técnicas e Investigação de Programas Maliciosos',
+    editors: ['Guilherme Gueiros', 'Emerson Wendt'],
+    publisher: 'Editora Mizuno',
+    details: 'cap. 6, p. 131',
+    isbn: '9788577899258',
+    amazon: 'https://www.amazon.com.br/dp/857789925X',
+  },
+  {
+    id: 'ransomware360-2024-cap2',
+    type: 'chapter',
+    year: 2024,
+    title: 'Novas Ameaças aos Sistemas de Saúde Mundiais',
+    authors: ['Laerte Peotta de Melo', 'Roberto Buery Silva'],
+    venue: 'Ransomware 360°: Abordagens Multidisciplinares da Extorsão Criptoviral',
+    editors: ['Guilherme Gueiros', 'Emerson Wendt'],
+    publisher: 'Editora Mizuno',
+    details: 'cap. 2, p. 43',
+    isbn: '9786555269642',
+    amazon: 'https://www.amazon.com.br/dp/6555269642',
+  },
 ];
 
 export const awards = [
@@ -220,13 +247,17 @@ export const registrations = [
 // Gera uma referencia BibTeX simples para o botao "Citar".
 export function toBibtex(p) {
   const key = `${(p.authors[0] || 'peotta').split(' ').pop().normalize('NFD').replace(/[^A-Za-z]/g, '').toLowerCase()}${p.year}${p.id.split('-').pop()}`;
+  const entry = { journal: 'article', conference: 'inproceedings', chapter: 'incollection' }[p.type];
   const fields = [
     ['title', p.title],
     ['author', p.authors.join(' and ')],
     [p.type === 'journal' ? 'journal' : 'booktitle', p.venue],
+    p.editors && ['editor', p.editors.join(' and ')],
+    p.publisher && ['publisher', p.publisher],
     ['year', String(p.year)],
+    p.isbn && ['isbn', p.isbn],
     p.doi && ['doi', p.doi],
   ].filter(Boolean);
   const body = fields.map(([k, v]) => `  ${k} = {${v}}`).join(',\n');
-  return `@${p.type === 'journal' ? 'article' : 'inproceedings'}{${key},\n${body}\n}`;
+  return `@${entry}{${key},\n${body}\n}`;
 }
