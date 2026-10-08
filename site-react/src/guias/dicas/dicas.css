@@ -64,10 +64,20 @@
   align-items: start;
 }
 
+.guide-body {
+  min-width: 0;
+}
+
+/* O sumário tem rolagem própria quando é mais alto que a janela. */
 .guide-toc {
   position: sticky;
   top: 88px;
-  padding-top: 0.4rem;
+  max-height: calc(100vh - 104px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.4rem 0.4rem 1rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--card-border) transparent;
 }
 
 .toc-title {
@@ -223,40 +233,25 @@ h4 {
   margin: 0.45rem 0 0 1.2rem;
 }
 
-.term-list,
-.abbr-list {
+.term-list {
   display: grid;
   gap: 0.75rem;
   margin: 0;
 }
 
-.term-list dt,
-.abbr-list dt {
+.term-list dt {
   font-weight: 700;
   color: var(--text-strong);
 }
 
-.term-list dd,
-.abbr-list dd {
+.term-list dd {
   margin: 0.1rem 0 0;
   color: var(--muted);
   font-size: 0.95rem;
 }
 
-.abbr-list div {
-  display: grid;
-  grid-template-columns: 4.5rem 1fr;
-  align-items: baseline;
-}
 
-.abbr-list dt {
-  font-family: var(--mono);
-  color: var(--primary);
-}
 
-.abbr-list dd {
-  margin: 0;
-}
 
 .tag-cloud-sm li {
   padding: 0.3rem 0.7rem;
@@ -448,246 +443,6 @@ table.tabela-ibge thead th {
   color: var(--primary);
 }
 
-/* ---------- Roteiro ---------- */
-.roadmap {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem;
-  counter-reset: step;
-}
-
-.roadmap li {
-  counter-increment: step;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0.15rem 0.85rem;
-  padding: 1rem 1.1rem;
-  border-radius: 16px;
-  background: var(--card);
-  border: 1px solid var(--card-border-soft);
-}
-
-.roadmap li::before {
-  content: counter(step, decimal-leading-zero);
-  grid-row: span 2;
-  font-family: var(--mono);
-  font-weight: 700;
-  color: var(--primary);
-}
-
-.roadmap strong {
-  color: var(--text-strong);
-}
-
-.roadmap span {
-  color: var(--muted);
-  font-size: 0.93rem;
-}
-
-/* ---------- Verificador de resumo ---------- */
-.checker {
-  margin-top: 1rem;
-  border-color: var(--card-border);
-}
-
-.checker-head {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 0.75rem;
-}
-
-.checker-head h3 {
-  margin-bottom: 0.2rem;
-}
-
-.checker-head .muted {
-  font-size: 0.88rem;
-}
-
-.checker-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.tipo-group {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.6rem;
-  margin: 1rem 0 0;
-  padding: 0;
-  border: 0;
-}
-
-.tipo-group legend {
-  margin-bottom: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-
-.tipo-group label {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 0.7rem 0.85rem;
-  border-radius: 14px;
-  border: 1px solid var(--card-border-soft);
-  background: rgba(4, 18, 9, 0.6);
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: var(--text);
-  transition: border-color 0.2s ease, background 0.2s ease;
-}
-
-.tipo-group label:hover {
-  border-color: var(--card-border);
-}
-
-.tipo-group label.is-active {
-  border-color: var(--primary);
-  background: rgba(72, 255, 139, 0.07);
-}
-
-.tipo-group input {
-  position: absolute;
-  opacity: 0;
-}
-
-.tipo-group label:has(input:focus-visible) {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-.tipo-group small {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  color: var(--muted);
-}
-
-.checker-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  gap: 1.25rem;
-  margin-top: 1rem;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-}
-
-.field label {
-  margin-bottom: 0.35rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-strong);
-}
-
-.field textarea,
-.field input {
-  width: 100%;
-  padding: 0.75rem 0.85rem;
-  border-radius: 12px;
-  border: 1px solid var(--card-border-soft);
-  background: rgba(0, 0, 0, 0.35);
-  color: var(--text);
-  font: inherit;
-  font-size: 0.93rem;
-  resize: vertical;
-}
-
-.field textarea:focus,
-.field input:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: var(--glow);
-}
-
-.field textarea::placeholder,
-.field input::placeholder {
-  color: rgba(145, 202, 164, 0.6);
-}
-
-.meter {
-  position: relative;
-  height: 6px;
-  margin-top: 0.6rem;
-  border-radius: 999px;
-  background: rgba(145, 202, 164, 0.15);
-  overflow: hidden;
-}
-
-.meter span {
-  position: absolute;
-  inset: 0;
-  transform-origin: left;
-  background: #ffb478;
-  transition: transform 0.2s ease;
-}
-
-.meter span.is-ok {
-  background: var(--primary);
-}
-
-.meter i {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--text-strong);
-  opacity: 0.6;
-}
-
-.meter-label {
-  margin: 0.35rem 0 1rem;
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  color: var(--muted);
-}
-
-.meter-label strong {
-  color: var(--text-strong);
-}
-
-.check-results {
-  display: grid;
-  align-content: start;
-  gap: 0.55rem;
-  font-size: 0.9rem;
-}
-
-.check-results li {
-  display: flex;
-  gap: 0.6rem;
-  align-items: flex-start;
-  padding: 0.6rem 0.75rem;
-  border-radius: 12px;
-  border: 1px solid var(--card-border-soft);
-  background: rgba(4, 18, 9, 0.6);
-  color: var(--text);
-}
-
-.check-icon {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  font-weight: 700;
-}
-
-.check-results .is-ok .check-icon { color: #021006; background: var(--primary); }
-.check-results .is-warn { border-color: rgba(255, 180, 120, 0.3); }
-.check-results .is-warn .check-icon { color: #1a0d02; background: #ffb478; }
-.check-results .is-info .check-icon { color: #021006; background: var(--accent); }
-.check-results .is-pending { color: var(--muted); }
-.check-results .is-pending .check-icon { color: var(--muted); border: 1px solid var(--card-border); }
-
-
 /* ---------- Disciplinas ---------- */
 .disc-codes {
   display: flex;
@@ -853,7 +608,7 @@ table.tabela-ibge thead th {
   margin-top: 0.7rem;
 }
 
-.overleaf-steps {
+.step-list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -862,7 +617,7 @@ table.tabela-ibge thead th {
   counter-reset: ol;
 }
 
-.overleaf-steps li {
+.step-list li {
   counter-increment: ol;
   display: grid;
   grid-template-columns: 1.9rem 1fr;
@@ -873,7 +628,7 @@ table.tabela-ibge thead th {
   background: rgba(0, 0, 0, 0.25);
 }
 
-.overleaf-steps li::before {
+.step-list li::before {
   content: counter(ol);
   grid-row: span 2;
   display: grid;
@@ -887,14 +642,97 @@ table.tabela-ibge thead th {
   background: var(--primary);
 }
 
-.overleaf-steps strong {
+.step-list strong {
   color: var(--text-strong);
   font-size: 0.95rem;
 }
 
-.overleaf-steps span {
+.step-list span {
   color: var(--muted);
   font-size: 0.88rem;
+}
+
+
+/* ---------- Matrícula e avaliação ---------- */
+.card h4 {
+  margin-top: 0;
+}
+
+.card h4.subhead {
+  padding-top: 0.6rem;
+}
+
+.doc-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.doc-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  background: rgba(4, 18, 9, 0.6);
+  font-size: 0.88rem;
+  color: var(--text);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.doc-links a:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.callout a {
+  color: var(--primary);
+  border-bottom: 1px dashed var(--card-border);
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 1rem;
+  border-left: 2px solid var(--card-border);
+  display: grid;
+  gap: 0.9rem;
+}
+
+.timeline li {
+  position: relative;
+  display: grid;
+  gap: 0.1rem;
+}
+
+.timeline li::before {
+  content: '';
+  position: absolute;
+  left: calc(-1rem - 6px);
+  top: 0.45rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 0 3px var(--bg-soft);
+}
+
+.timeline strong {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--primary);
+}
+
+.timeline span {
+  color: var(--muted);
+  font-size: 0.93rem;
+}
+
+table .row-group th {
+  color: var(--primary);
+  font-size: 0.85rem;
+  background: rgba(72, 255, 139, 0.06);
 }
 
 /* ---------- Responsivo ---------- */
@@ -906,7 +744,7 @@ table.tabela-ibge thead th {
   }
 
   .guide-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .guide-toc {
@@ -918,15 +756,19 @@ table.tabela-ibge thead th {
   .guide-hero .hero-grid,
   .g2,
   .g3,
-  .roadmap,
-  .tipo-group,
-  .checker-grid,
   .overleaf-cta {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
 @media (max-width: 640px) {
+  th,
+  td {
+    padding: 0.5rem 0.55rem;
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+  }
+
   .phase-banner {
     grid-template-columns: 1fr;
   }

@@ -30,6 +30,12 @@ export function useActiveSection(ids) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= line) current = id;
       }
+      // No fim da pagina, as ultimas secoes nao alcancam a linha; ativa a ultima.
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+      if (atBottom) {
+        const last = [...ids].reverse().find((id) => document.getElementById(id));
+        if (last) current = last;
+      }
       setActive(current);
     };
     onScroll();

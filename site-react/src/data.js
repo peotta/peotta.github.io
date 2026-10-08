@@ -274,9 +274,9 @@ export const resources = [
       es: 'Proyecto Final de Grado 1 y 2',
     },
     text: {
-      pt: 'ENE0358 (PFG 1) e ENE0360/ENE0458 (PFG 2): da proposta ao texto final, com estrutura, redação, citações e referências conforme a ABNT.',
-      en: 'ENE0358 (PFG 1) and ENE0360/ENE0458 (PFG 2): from proposal to final text, with structure, writing, citations, and references following ABNT standards.',
-      es: 'ENE0358 (PFG 1) y ENE0360/ENE0458 (PFG 2): de la propuesta al texto final, con estructura, redacción, citas y referencias según la ABNT.',
+      pt: 'ENE0358 (PFG 1) e ENE0360/ENE0458 (PFG 2): matrícula, avaliação, etapas do relatório, defesa e normas ABNT.',
+      en: 'ENE0358 (PFG 1) and ENE0360/ENE0458 (PFG 2): enrollment, assessment, report stages, defense, and ABNT standards.',
+      es: 'ENE0358 (PFG 1) y ENE0360/ENE0458 (PFG 2): matrícula, evaluación, etapas del informe, defensa y normas ABNT.',
     },
     tags: ['TCC', 'ABNT', 'ENE0360', 'ENE0458'],
   },

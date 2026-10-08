@@ -1,9 +1,8 @@
 import { Callout, Card, CodeBox, DashList, Example, GuideSection } from './ui.jsx';
-import VerificadorResumo from './VerificadorResumo.jsx';
 
 export function Orientacoes() {
   return (
-    <GuideSection id="orientacoes" title="Orientações gerais">
+    <GuideSection id="orientacoes" title="Redação" lead="Regras de escrita que valem para os relatórios do PFG 1 e do PFG 2.">
       <div className="g2">
         <Card title="Diretrizes principais">
           <DashList
@@ -15,10 +14,6 @@ export function Orientacoes() {
               'Nas referências, prefira o DOI a links longos; quando não houver DOI, mantenha a URL completa da fonte.',
             ]}
           />
-          <Callout>
-            Também é possível incluir uma lista de abreviaturas e siglas como elemento pré-textual opcional, em ordem alfabética e com o
-            significado por extenso, conforme a NBR 14724:2024.
-          </Callout>
         </Card>
         <Card title="Boas práticas e cuidados">
           <div className="g2 g2-tight">
@@ -43,13 +38,23 @@ export function Orientacoes() {
           </div>
         </Card>
       </div>
+      <Card title="Abertura de nova seção">
+        <p className="muted">
+          Sempre que uma nova seção for iniciada, recomenda-se inserir um pequeno texto introdutório explicando o que será tratado ali. Isso
+          melhora a fluidez e orienta o leitor.
+        </p>
+        <Example>
+          Nesta seção são apresentados os principais conceitos e fundamentos necessários para a compreensão do problema investigado,
+          servindo como base para a discussão teórica desenvolvida nas seções seguintes.
+        </Example>
+      </Card>
     </GuideSection>
   );
 }
 
 export function Estrutura() {
   return (
-    <GuideSection id="estrutura" title="Estrutura do trabalho" lead="Elementos pré-textuais, textuais e pós-textuais conforme a NBR 14724:2024.">
+    <GuideSection id="estrutura" title="Estrutura do documento" lead="Elementos pré-textuais, textuais e pós-textuais conforme a NBR 14724:2024.">
       <div className="g3">
         <Card title="Pré-textuais">
           <DashList
@@ -95,17 +100,17 @@ export function Estrutura() {
           <Callout>Pela NBR 14724:2024, as referências usadas apenas em um apêndice devem constar no próprio apêndice.</Callout>
         </Card>
       </div>
-      <p className="note">
-        Em artigos científicos (NBR 6022:2018), a estrutura é mais enxuta: título, autoria, resumo e palavras-chave, resumo em língua
-        estrangeira, seções textuais e referências.
-      </p>
     </GuideSection>
   );
 }
 
 export function Resumo() {
   return (
-    <GuideSection id="resumo" title="Resumo e resumo em língua estrangeira">
+    <GuideSection
+      id="resumo"
+      title="Resumo e resumo em língua estrangeira"
+      lead="Escreva o resumo por último, quando resultados e conclusões já estiverem definidos."
+    >
       <div className="g2">
         <Card title="Resumo">
           <p className="muted">
@@ -118,7 +123,6 @@ export function Resumo() {
               'Texto do tipo informativo, em parágrafo único.',
               'Palavras-chave logo abaixo do resumo, precedidas de "Palavras-chave:", separadas por ponto e vírgula e finalizadas por ponto.',
               'Palavras-chave com iniciais minúsculas, exceto nomes próprios e nomes científicos.',
-              'Quando publicado separadamente do documento, deve ser precedido da referência do trabalho (NBR 6023:2018).',
             ]}
           />
           <ul className="tag-cloud tag-cloud-sm" aria-label="Elementos do resumo">
@@ -127,30 +131,13 @@ export function Resumo() {
             ))}
           </ul>
         </Card>
-        <Card title="Extensão (NBR 6028:2021)">
-          <table className="quadro compact">
-            <caption className="sr-only">Extensão do resumo por tipo de documento</caption>
-            <thead>
-              <tr>
-                <th>Tipo de documento</th>
-                <th className="num">Palavras</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Trabalhos acadêmicos (TCC, dissertação, tese) e relatórios</td>
-                <td className="num">150 a 500</td>
-              </tr>
-              <tr>
-                <td>Artigos de periódicos</td>
-                <td className="num">100 a 250</td>
-              </tr>
-              <tr>
-                <td>Documentos curtos (comunicações, eventos)</td>
-                <td className="num">50 a 100</td>
-              </tr>
-            </tbody>
-          </table>
+        <Card title="Extensão e idioma">
+          <DashList
+            items={[
+              'Entre 150 e 500 palavras, conforme a NBR 6028:2021 para trabalhos acadêmicos.',
+              'Relatório redigido em inglês: incluir também um resumo estendido em português (regulamento do PFG).',
+            ]}
+          />
           <h3 className="subhead">Resumo em língua estrangeira</h3>
           <DashList
             items={[
@@ -171,10 +158,12 @@ export function Resumo() {
               firewalls tradicionais, expondo dados sensíveis de forma crítica. <mark>[Objetivo]</mark> Este trabalho propõe um algoritmo de
               detecção de anomalias baseado em comportamento de rede para identificar exfiltração de dados em tempo real.{' '}
               <mark>[Metodologia]</mark> A metodologia envolveu a simulação de ataques de Command &amp; Control (C2) em um ambiente
-              controlado utilizando Kali Linux e monitoramento via logs do Zeek/Bro. <mark>[Resultados]</mark> Os testes demonstraram uma
+              controlado utilizando Kali Linux e monitoramento via logs do Zeek/Bro. Foram avaliados três cenários de tráfego (HTTP,
+              HTTPS e DNS), comparando o modelo proposto com um sistema de detecção baseado em assinaturas. <mark>[Resultados]</mark> Os testes demonstraram uma
               taxa de detecção de 94% para tráfego criptografado, com uma redução de 15% no overhead de processamento em relação a
-              assinaturas estáticas. <mark>[Conclusão]</mark> Conclui-se que a abordagem fortalece a camada de detecção precoce, sendo
-              essencial para a implementação de uma arquitetura Zero Trust.
+              assinaturas estáticas. Os falsos positivos permaneceram abaixo de 3% em todos os cenários. <mark>[Conclusão]</mark> Conclui-se
+              que a abordagem fortalece a camada de detecção precoce, sendo essencial para a implementação de uma arquitetura Zero Trust.
+              Como trabalhos futuros, sugere-se validar o modelo em redes de produção e com maior diversidade de ataques.
             </p>
             <p>
               <strong>Palavras-chave:</strong> exfiltração de dados; segurança em nuvem; detecção de anomalias; Command and Control (C2);
@@ -190,9 +179,11 @@ export function Resumo() {
               traditional firewalls, critically exposing sensitive data. <mark>[Objective]</mark> This study proposes an anomaly detection
               algorithm based on network behavior to identify data exfiltration in real time. <mark>[Methodology]</mark> The methodology
               involved simulating Command and Control (C2) attacks in a controlled environment using Kali Linux, with monitoring through
-              Zeek/Bro logs. <mark>[Results]</mark> Tests showed a 94% detection rate for encrypted traffic, with a 15% reduction in
-              processing overhead compared to static signatures. <mark>[Conclusion]</mark> The approach strengthens the early detection
-              layer and is essential for implementing a Zero Trust architecture.
+              Zeek/Bro logs. Three traffic scenarios (HTTP, HTTPS, and DNS) were evaluated, comparing the proposed model with a
+              signature-based detection system. <mark>[Results]</mark> Tests showed a 94% detection rate for encrypted traffic, with a 15% reduction in
+              processing overhead compared to static signatures. False positives remained below 3% in all scenarios.{' '}
+              <mark>[Conclusion]</mark> The approach strengthens the early detection layer and is essential for implementing a Zero Trust
+              architecture. As future work, the model should be validated in production networks and against a wider variety of attacks.
             </p>
             <p>
               <strong>Keywords:</strong> data exfiltration; cloud security; anomaly detection; Command and Control (C2); Zero Trust
@@ -201,17 +192,13 @@ export function Resumo() {
           </Example>
         </Card>
       </div>
-
-      <div id="verificador">
-        <VerificadorResumo />
-      </div>
     </GuideSection>
   );
 }
 
 export function Introducao() {
   return (
-    <GuideSection id="introducao" title="Introdução, objetivo, justificativa e organização">
+    <GuideSection id="introducao" title="Introdução e objetivos" lead="A introdução reúne tema, problema, objetivos, justificativa e a organização do relatório.">
       <div className="g2">
         <Card title="Introdução">
           <p className="muted">A introdução situa o leitor no tema e apresenta de maneira clara a proposta do trabalho.</p>
@@ -230,10 +217,10 @@ export function Introducao() {
         </Card>
         <Card title="Exemplo de abertura">
           <Example>
-            Segurança da informação tornou-se elemento central na proteção de ativos digitais em organizações públicas e privadas. Nesse
-            contexto, o aumento de incidentes cibernéticos evidencia a necessidade de investigar mecanismos mais eficazes de prevenção e
-            resposta. O presente trabalho delimita-se à análise de controles de segurança aplicados a ambientes corporativos, buscando
-            compreender sua efetividade diante de ameaças contemporâneas.
+            A migração de serviços para infraestruturas híbridas ampliou a superfície de ataque das organizações. Nesse contexto, ataques
+            de movimentação lateral e de exfiltração de dados passaram a contornar firewalls tradicionais, muitas vezes ocultos em tráfego
+            criptografado. O presente trabalho delimita-se à detecção de exfiltração de dados em redes corporativas híbridas, investigando
+            se a análise do comportamento do tráfego permite identificar esses ataques em tempo real.
           </Example>
         </Card>
       </div>
@@ -242,9 +229,8 @@ export function Introducao() {
         <Card title="Objetivo">
           <p className="muted">Apresenta a finalidade geral do trabalho, isto é, o ponto a que a pesquisa pretende chegar.</p>
           <Example>
-            O objetivo deste trabalho é apresentar um estudo de caso comparativo entre os três principais modelos de melhores práticas
-            adotadas em desenvolvimento de software, analisando-os sob o aspecto de segurança da informação com base nas normas ISO 27001 e
-            ISO 27002.
+            O objetivo deste trabalho é propor e avaliar um algoritmo de detecção de anomalias, baseado no comportamento do tráfego de
+            rede, capaz de identificar exfiltração de dados em tempo real em infraestruturas híbridas.
           </Example>
           <CodeBox label="modelos de frase">
             {'O objetivo deste trabalho é analisar...\nO objetivo deste trabalho é comparar...\nO objetivo deste trabalho é propor...'}
@@ -253,10 +239,10 @@ export function Introducao() {
         <Card title="Objetivos específicos">
           <DashList
             items={[
-              'Identificar os principais controles de segurança aplicados ao contexto estudado.',
-              'Comparar modelos ou abordagens existentes.',
-              'Avaliar vantagens, limitações e aplicabilidade.',
-              'Propor recomendações com base nos resultados obtidos.',
+              'Levantar as técnicas de exfiltração e de Command and Control (C2) descritas na literatura.',
+              'Montar um ambiente controlado de testes com tráfego legítimo e malicioso.',
+              'Implementar o algoritmo e compará-lo a um sistema de detecção baseado em assinaturas.',
+              'Avaliar taxa de detecção, falsos positivos e overhead de processamento.',
             ]}
           />
           <h3 className="subhead">Justificativa</h3>
@@ -265,8 +251,9 @@ export function Introducao() {
             viabilidade da pesquisa.
           </p>
           <Example>
-            Justifica-se a escolha do tema pela crescente incidência de ataques cibernéticos em ambientes corporativos, bem como pela
-            necessidade de compreender quais práticas de segurança se mostram mais eficazes na mitigação desses riscos.
+            Justifica-se a escolha do tema pela crescente incidência de exfiltração de dados em ambientes corporativos e pela limitação dos
+            sistemas baseados em assinaturas diante de tráfego criptografado. O estudo contribui com um método de detecção avaliado em
+            cenários reproduzíveis, útil a equipes de segurança de redes.
           </Example>
         </Card>
       </div>
@@ -293,8 +280,8 @@ export function Fundamentos() {
             mínima antes do aprofundamento teórico e analítico.
           </p>
           <Example>
-            Em um trabalho sobre redes de computadores, esta seção pode apresentar conceitos como protocolo, roteamento, firewall, IDS/IPS,
-            autenticação, confidencialidade, integridade e disponibilidade.
+            No trabalho de exemplo, esta seção apresenta conceitos como exfiltração de dados, movimentação lateral, Command and Control
+            (C2), IDS/IPS, detecção por assinatura e por anomalia e arquitetura Zero Trust.
           </Example>
         </Card>
         <Card title="Referencial teórico">
@@ -319,10 +306,10 @@ export function Fundamentos() {
       </div>
       <Card title="Exemplo de abordagem crítica">
         <Example>
-          Estudos recentes indicam diferentes abordagens para o problema investigado. Enquanto Autor A enfatiza o papel dos controles
-          preventivos, Autor B destaca a importância do monitoramento contínuo. Já Autor C amplia a discussão ao defender uma integração
-          entre governança, tecnologia e resposta a incidentes. Tais perspectivas revelam que o fenômeno não pode ser analisado de forma
-          isolada.
+          Estudos recentes divergem sobre a melhor forma de detectar exfiltração de dados. Enquanto Autor A defende sistemas baseados em
+          assinaturas pela baixa taxa de falsos positivos, Autor B mostra que esses sistemas falham diante de tráfego criptografado. Já Autor
+          C propõe abordagens híbridas, que combinam assinaturas e análise de comportamento. Tais perspectivas indicam que nenhuma técnica
+          isolada resolve o problema.
         </Example>
       </Card>
     </GuideSection>
@@ -352,10 +339,10 @@ export function Metodologia() {
         </Card>
         <Card title="Exemplo">
           <Example>
-            A pesquisa foi realizada entre março e junho de 2025, em ambiente controlado de laboratório. Foram utilizados três servidores
-            virtuais com sistemas Linux, configurados para simular tráfego legítimo e malicioso em rede corporativa. A coleta dos dados foi
-            feita por meio de ferramentas de monitoramento e registros de eventos. Em seguida, aplicou-se análise comparativa dos resultados
-            obtidos.
+            A pesquisa foi realizada em ambiente controlado de laboratório. A topologia, apresentada na Figura 1, reúne três servidores
+            virtuais Linux, um firewall e um sensor Zeek. Foram gerados tráfego legítimo e ataques de Command and Control (C2) com Kali
+            Linux, em três cenários (HTTP, HTTPS e DNS). O algoritmo proposto e um sistema baseado em assinaturas foram comparados quanto à
+            taxa de detecção, aos falsos positivos e ao overhead de processamento.
           </Example>
         </Card>
       </div>
@@ -427,11 +414,10 @@ export function Conclusao() {
       </div>
       <Card title="Exemplo de conclusão">
         <Example>
-          Conclui-se que os mecanismos analisados apresentam níveis distintos de eficácia conforme o contexto de aplicação. Os resultados
-          evidenciaram que abordagens integradas tendem a oferecer maior robustez diante de ameaças complexas. O objetivo proposto foi
-          alcançado, uma vez que se tornou possível comparar os modelos selecionados e identificar suas contribuições e limitações. Como
-          desdobramento futuro, recomenda-se ampliar a investigação para cenários com maior diversidade tecnológica e amostras mais
-          abrangentes.
+          Conclui-se que a análise do comportamento do tráfego permitiu detectar exfiltração de dados com taxa de 94% em tráfego
+          criptografado, superando o sistema baseado em assinaturas e mantendo os falsos positivos abaixo de 3%. O objetivo proposto foi
+          alcançado, uma vez que o algoritmo foi implementado e avaliado nos três cenários definidos. Como limitação, os testes ocorreram em
+          ambiente controlado; como trabalho futuro, recomenda-se validar o modelo em redes de produção e com maior diversidade de ataques.
         </Example>
       </Card>
     </GuideSection>
@@ -464,9 +450,9 @@ export function Ilustracoes() {
           />
           <figure className="figure-demo">
             <figcaption>
-              <strong>Figura 1</strong> - Arquitetura simplificada de rede segura
+              <strong>Figura 1</strong> - Topologia do ambiente de testes
             </figcaption>
-            <svg viewBox="0 0 320 90" role="img" aria-label="Diagrama: Internet, firewall e rede interna conectados em sequência">
+            <svg viewBox="0 0 320 90" role="img" aria-label="Diagrama: Internet, firewall e rede interna com sensor Zeek, conectados em sequência">
               <g fill="none" stroke="currentColor" strokeWidth="1.5">
                 <rect x="8" y="28" width="80" height="34" rx="8" />
                 <rect x="120" y="28" width="80" height="34" rx="8" />
@@ -476,7 +462,7 @@ export function Ilustracoes() {
               <g fill="currentColor" fontSize="11" textAnchor="middle" fontFamily="JetBrains Mono, monospace">
                 <text x="48" y="49">Internet</text>
                 <text x="160" y="49">Firewall</text>
-                <text x="272" y="49">LAN</text>
+                <text x="272" y="49">LAN + Zeek</text>
               </g>
             </svg>
             <p className="table-note">
@@ -489,29 +475,29 @@ export function Ilustracoes() {
       <div className="g2">
         <Card title="Exemplo de quadro (dados textuais)">
           <table className="quadro">
-            <caption>Quadro 1 - Comparação entre mecanismos de autenticação</caption>
+            <caption>Quadro 1 - Comparação entre abordagens de detecção</caption>
             <thead>
               <tr>
-                <th>Mecanismo</th>
+                <th>Abordagem</th>
                 <th>Vantagem</th>
                 <th>Limitação</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Senha</td>
-                <td>Simplicidade</td>
-                <td>Baixa resistência a ataques</td>
+                <td>Assinatura</td>
+                <td>Baixa taxa de falsos positivos</td>
+                <td>Não detecta ataques desconhecidos</td>
               </tr>
               <tr>
-                <td>Token</td>
-                <td>Maior segurança</td>
-                <td>Dependência de dispositivo</td>
+                <td>Anomalia</td>
+                <td>Detecta ataques desconhecidos</td>
+                <td>Mais falsos positivos</td>
               </tr>
               <tr>
-                <td>Biometria</td>
-                <td>Facilidade de uso</td>
-                <td>Questões de privacidade</td>
+                <td>Híbrida</td>
+                <td>Combina as duas abordagens</td>
+                <td>Maior complexidade de implantação</td>
               </tr>
             </tbody>
           </table>
@@ -550,44 +536,6 @@ export function Ilustracoes() {
           <p className="table-note">
             <strong>Fonte:</strong> elaborado pelo próprio autor (2026).
           </p>
-        </Card>
-      </div>
-    </GuideSection>
-  );
-}
-
-export function Abreviaturas() {
-  return (
-    <GuideSection id="abreviaturas" title="Nova seção, abreviaturas e siglas">
-      <div className="g2">
-        <Card title="Abertura de nova seção">
-          <p className="muted">
-            Sempre que uma nova seção for iniciada, recomenda-se inserir um pequeno texto introdutório explicando o que será tratado ali. Isso
-            melhora a fluidez e orienta o leitor.
-          </p>
-          <Example>
-            Nesta seção são apresentados os principais conceitos e fundamentos necessários para a compreensão do problema investigado,
-            servindo como base para a discussão teórica desenvolvida nas seções seguintes.
-          </Example>
-        </Card>
-        <Card title="Abreviaturas e siglas">
-          <p className="muted">
-            Lista pré-textual opcional (NBR 14724:2024), em ordem alfabética e com o significado por extenso. No texto, a sigla aparece por
-            extenso na primeira ocorrência, seguida da sigla entre parênteses.
-          </p>
-          <dl className="abbr-list">
-            {[
-              ['ABNT', 'Associação Brasileira de Normas Técnicas'],
-              ['IDS', 'Intrusion Detection System'],
-              ['ISO', 'International Organization for Standardization'],
-              ['TCC', 'Trabalho de Conclusão de Curso'],
-            ].map(([sigla, nome]) => (
-              <div key={sigla}>
-                <dt>{sigla}</dt>
-                <dd>{nome}</dd>
-              </div>
-            ))}
-          </dl>
         </Card>
       </div>
     </GuideSection>
@@ -641,10 +589,10 @@ export function Citacoes() {
       <Card title="Exemplos aplicados">
         <div className="g3 g-flat">
           <CodeBox label="direta curta">
-            {'Para Silva (2020, p. 25), "a segurança da informação depende de controles técnicos e administrativos".'}
+            {'Para Silva (2020, p. 25), "a exfiltração de dados raramente é detectada apenas por regras de firewall".'}
           </CodeBox>
           <CodeBox label="indireta">
-            {'Controles preventivos reduzem a superfície de ataque, mas não substituem o monitoramento contínuo (Souza; Lima; Costa, 2022).'}
+            {'Sistemas baseados em assinaturas têm dificuldade em detectar ataques ocultos em tráfego criptografado (Souza; Lima; Costa, 2022).'}
           </CodeBox>
           <CodeBox label="quatro ou mais autores">
             {'Abordagens baseadas em comportamento apresentaram menor taxa de falsos positivos (Almeida et al., 2024).'}
@@ -698,33 +646,6 @@ export function Referencias() {
           </CodeBox>
         </Card>
       </div>
-    </GuideSection>
-  );
-}
-
-const ROTEIRO = [
-  ['Resumo', 'Tema, objetivo, método, resultados e conclusões. De 150 a 500 palavras em TCC e de 100 a 250 em artigos, com palavras-chave separadas por ponto e vírgula.'],
-  ['Resumo em língua estrangeira', 'Tradução do resumo, com palavras-chave traduzidas (Keywords) e mesma formatação do resumo em português.'],
-  ['Introdução', 'Tema, problema, objetivos, justificativa, metodologia e organização do trabalho.'],
-  ['Fundamentos e Conceitos', 'Definições e conceitos essenciais para entendimento do tema.'],
-  ['Referencial Teórico', 'Análise crítica da literatura relevante e do estado da arte.'],
-  ['Metodologia', 'Materiais, métodos e procedimentos, com detalhamento suficiente para reprodução.'],
-  ['Resultados e discussão', 'Dados obtidos, interpretados à luz do referencial teórico, na ordem dos objetivos.'],
-  ['Conclusão', 'Retoma objetivos e resultados, sintetiza as conclusões e sugere trabalhos futuros, sem informações novas.'],
-  ['Citações e referências', 'Citações conforme a NBR 10520:2023, como (Silva, 2024, p. 10), e lista de obras conforme a NBR 6023:2018.'],
-];
-
-export function Roteiro() {
-  return (
-    <GuideSection id="roteiro" title="Roteiro resumido">
-      <ol className="roadmap">
-        {ROTEIRO.map(([titulo, texto]) => (
-          <li key={titulo}>
-            <strong>{titulo}</strong>
-            <span>{texto}</span>
-          </li>
-        ))}
-      </ol>
     </GuideSection>
   );
 }

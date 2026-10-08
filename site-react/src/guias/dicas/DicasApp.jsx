@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { readStorage, writeStorage, useActiveSection, useScrollProgress, useTypewriter } from '../../hooks.js';
 import MatrixRain from '../../components/MatrixRain.jsx';
 import {
-  Abreviaturas,
   Citacoes,
   Conclusao,
   Estrutura,
@@ -14,33 +13,32 @@ import {
   Referencias,
   Resultados,
   Resumo,
-  Roteiro,
 } from './Secoes.jsx';
-import { ETAPAS, Etapa, VisaoGeral } from './Disciplinas.jsx';
+import { DISCIPLINAS, ETAPAS, Etapa, OverleafCta, VisaoGeral } from './Disciplinas.jsx';
+import { Avaliacao, Matricula } from './Regras.jsx';
+import { Defesa, RelatorioPfg1, TemaOrientacao } from './Etapas.jsx';
 
-// Sumário agrupado: visão geral, uma etapa por disciplina e as normas comuns.
+// Sumário agrupado: visão geral, regras, uma etapa por disciplina e normas comuns.
 const TOC = [
-  {
-    id: 'topo',
-    label: 'Visão geral',
-    secoes: [
-      { id: 'disciplinas', label: 'As disciplinas' },
-      { id: 'overleaf', label: 'Template no Overleaf' },
-      { id: 'orientacoes', label: 'Orientações gerais' },
-    ],
-  },
-  ...ETAPAS.map((e) => ({ id: e.id, label: e.curto === 'Normas' ? e.titulo : `${e.curto}: ${e.foco.toLowerCase()}`, secoes: e.secoes })),
+  { id: 'topo', label: 'Visão geral', secoes: [{ id: 'disciplinas', label: 'As disciplinas' }] },
+  ...ETAPAS.map((e) => ({
+    id: e.id,
+    label: e.id.startsWith('pfg') ? `${e.curto}: ${e.foco.toLowerCase()}` : e.titulo,
+    secoes: e.secoes,
+  })),
 ];
 
 const SECTION_IDS = TOC.flatMap((g) => g.secoes.map((s) => s.id));
-const NORMAS = ['NBR 14724:2024', 'NBR 10520:2023', 'NBR 6023:2018', 'NBR 6028:2021', 'NBR 6022:2018'];
+const NORMAS = ['NBR 14724:2024', 'NBR 10520:2023', 'NBR 6023:2018', 'NBR 6028:2021'];
 
 function TocLinks({ active, onNavigate }) {
   return TOC.map((g) => (
     <div key={g.id} className="toc-group">
-      <a className="toc-group-label" href={`#${g.id}`} onClick={onNavigate}>
-        {g.label}
-      </a>
+      {g.label && (
+        <a className="toc-group-label" href={`#${g.id}`} onClick={onNavigate}>
+          {g.label}
+        </a>
+      )}
       {g.secoes.map((s) => (
         <a
           key={s.id}
@@ -129,24 +127,24 @@ function Hero() {
             </span>
           </div>
           <p className="hero-text">
-            Material de apoio às disciplinas de Projeto Final de Graduação: da proposta ao texto final, com estrutura, redação, citações e
-            referências conforme as normas ABNT vigentes.
+            Material de apoio às disciplinas de Projeto Final de Graduação: regras de matrícula e avaliação, orientações para cada etapa e
+            normas para os relatórios, conforme a ABNT.
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#pfg1">
-              PFG 1: proposta
+            <a className="button button-primary" href="#matricula">
+              Como se matricular
             </a>
-            <a className="button button-primary" href="#pfg2">
-              PFG 2: texto final
+            <a className="button button-ghost" href="#pfg1">
+              PFG 1
             </a>
-            <a className="button button-ghost" href="#verificador">
-              Verificar meu resumo
+            <a className="button button-ghost" href="#pfg2">
+              PFG 2
             </a>
           </div>
         </div>
 
         <dl className="card hero-summary">
-          {ETAPAS.slice(0, 2).map((e) => (
+          {DISCIPLINAS.map((e) => (
             <div key={e.id}>
               <dt>
                 <span className="disc-codes">
@@ -175,6 +173,18 @@ export default function DicasApp() {
     writeStorage('site-motion', on ? 'on' : 'off');
   };
 
+  // Mantem o item ativo visivel no sumario lateral, que tem rolagem propria.
+  const tocRef = useRef(null);
+  useEffect(() => {
+    const toc = tocRef.current;
+    const link = toc?.querySelector('a.is-active');
+    if (!toc || !link) return;
+    const top = link.getBoundingClientRect().top - toc.getBoundingClientRect().top + toc.scrollTop;
+    if (top < toc.scrollTop + 40 || top > toc.scrollTop + toc.clientHeight - 60) {
+      toc.scrollTo({ top: top - toc.clientHeight / 3 });
+    }
+  }, [active]);
+
   // O navegador tenta rolar para a ancora antes do React renderizar; repete apos o render.
   useEffect(() => {
     const key = decodeURIComponent(location.hash.slice(1));
@@ -191,7 +201,7 @@ export default function DicasApp() {
       <main id="conteudo-guia">
         <Hero />
         <div className="container guide-layout">
-          <aside className="guide-toc" aria-label="Nesta página">
+          <aside ref={tocRef} className="guide-toc" aria-label="Nesta página">
             <p className="toc-title">Nesta página</p>
             <nav>
               <TocLinks active={active} />
@@ -199,25 +209,32 @@ export default function DicasApp() {
           </aside>
           <div className="guide-body">
             <VisaoGeral />
-            <Orientacoes />
+
+            <Etapa id="regras" />
+            <Matricula />
+            <Avaliacao />
+            <OverleafCta />
+            <Estrutura />
 
             <Etapa id="pfg1" />
+            <TemaOrientacao />
             <Introducao />
             <Fundamentos />
             <Metodologia />
+            <RelatorioPfg1 />
 
             <Etapa id="pfg2" />
             <Resultados />
             <Conclusao />
             <Resumo />
-            <Ilustracoes />
-            <Estrutura />
+            <Defesa />
 
             <Etapa id="normas" />
+            <Orientacoes />
+            <Ilustracoes />
             <Citacoes />
             <Referencias />
-            <Abreviaturas />
-            <Roteiro />
+
           </div>
         </div>
       </main>
