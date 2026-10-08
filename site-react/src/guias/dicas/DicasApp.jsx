@@ -136,7 +136,7 @@ function Hero() {
               Verificar meu resumo
             </a>
             <a className="button button-ghost" href="#citacoes">
-              O que mudou nas citações
+              Como citar
             </a>
             <a className="button button-ghost" href="#roteiro">
               Roteiro resumido
@@ -217,7 +217,6 @@ export default function DicasApp() {
               <span className="switch-track" aria-hidden="true" />
               Animação de fundo
             </label>
-            <a href="/guias/dicas-classico.html">Versão clássica</a>
             <a href="#topo">Topo ↑</a>
           </div>
         </div>

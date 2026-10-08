@@ -367,44 +367,6 @@ mark {
   border-color: var(--primary);
 }
 
-.diff {
-  display: grid;
-  gap: 0.35rem;
-  padding: 0.8rem;
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.32);
-  border: 1px solid var(--card-border-soft);
-}
-
-.diff-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.9rem;
-}
-
-.diff-row span {
-  flex: none;
-  width: 3.2rem;
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  color: var(--muted);
-}
-
-.diff-row.is-old code {
-  color: #ffb478;
-  text-decoration: line-through;
-  text-decoration-color: rgba(255, 180, 120, 0.5);
-}
-
-.diff-row.is-new code {
-  color: var(--primary);
-}
-
-.diff-row.is-new + .diff-row.is-old {
-  margin-top: 0.45rem;
-}
-
 /* ---------- Tabelas e figura ---------- */
 table {
   width: 100%;
@@ -761,10 +723,5 @@ table.tabela-ibge thead th {
 
   .back-link span {
     font-size: 1rem;
-  }
-
-  .diff-row {
-    flex-wrap: wrap;
-    gap: 0.2rem 0.75rem;
   }
 }

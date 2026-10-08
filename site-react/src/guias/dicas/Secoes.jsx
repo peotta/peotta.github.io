@@ -563,34 +563,17 @@ export function Citacoes() {
     <GuideSection
       id="citacoes"
       title="Citações (NBR 10520:2023)"
-      lead="A principal mudança está na grafia da autoria: o sobrenome passa a ser escrito em letras maiúsculas e minúsculas também dentro dos parênteses."
+      lead="Toda citação indica autoria e ano; nas citações diretas, também a página."
     >
       <div className="g2">
-        <Card title="O que mudou em 2023">
-          <div className="diff">
-            <div className="diff-row is-old">
-              <span>2002</span>
-              <code>(SILVA, 2020, p. 15)</code>
-            </div>
-            <div className="diff-row is-new">
-              <span>2023</span>
-              <code>(Silva, 2020, p. 15)</code>
-            </div>
-            <div className="diff-row is-old">
-              <span>2002</span>
-              <code>(SOUZA; LIMA; COSTA, 2022)</code>
-            </div>
-            <div className="diff-row is-new">
-              <span>2023</span>
-              <code>(Souza; Lima; Costa, 2022)</code>
-            </div>
-          </div>
+        <Card title="Indicação de autoria">
+          <CodeBox label="formato">{'(Sobrenome, ano, p. X)\nSegundo Sobrenome (ano, p. X)...'}</CodeBox>
           <DashList
             items={[
+              'Sobrenome com apenas a inicial maiúscula, dentro e fora dos parênteses: (Silva, 2020, p. 15) ou Segundo Silva (2020, p. 15).',
               'Entidades: nome completo ou sigla, em maiúsculas e minúsculas; siglas em maiúsculas, como (ABNT, 2023) ou (Organização das Nações Unidas, 2023).',
-              'Até três autores: todos, separados por ponto e vírgula.',
+              'Até três autores: todos, separados por ponto e vírgula, como (Souza; Lima; Costa, 2022).',
               'Quatro ou mais autores: pode-se indicar o primeiro seguido de et al., como (Silva et al., 2024).',
-              'Fora dos parênteses, a grafia não muda: Segundo Silva (2020, p. 15)...',
             ]}
           />
         </Card>
