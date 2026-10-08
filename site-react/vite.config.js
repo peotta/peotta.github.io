@@ -28,6 +28,8 @@ function serveLegacySite() {
       server.middlewares.use((req, res, next) => {
         const url = decodeURIComponent((req.url || '').split('?')[0]);
         if (!legacyDirs.some((dir) => url.startsWith(dir))) return next();
+        // Paginas que tambem sao entradas do Vite (ex.: guias/dicas.html) ficam com o Vite.
+        if (url.endsWith('.html') && fs.existsSync(path.join(here, url))) return next();
         const file = path.join(repoRoot, url);
         if (!file.startsWith(repoRoot) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) return next();
         res.setHeader('Content-Type', mime[path.extname(file).toLowerCase()] || 'application/octet-stream');
@@ -38,7 +40,7 @@ function serveLegacySite() {
 }
 
 // O build vai para dist/ (ignorado pelo git). Depois, scripts/publish.mjs copia
-// index.html para a raiz do repositorio e os bundles para assets/react/.
+// as paginas HTML para a raiz do repositorio e os bundles para assets/react/.
 export default defineConfig({
   base: '/',
   plugins: [react(), serveLegacySite()],
@@ -46,5 +48,11 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     assetsDir: 'assets/react',
+    rollupOptions: {
+      input: {
+        main: path.resolve(here, 'index.html'),
+        dicas: path.resolve(here, 'guias/dicas.html'),
+      },
+    },
   },
 });
