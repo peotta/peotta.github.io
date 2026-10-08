@@ -25,6 +25,7 @@ const TOC = [
     label: 'Visão geral',
     secoes: [
       { id: 'disciplinas', label: 'As disciplinas' },
+      { id: 'overleaf', label: 'Template no Overleaf' },
       { id: 'orientacoes', label: 'Orientações gerais' },
     ],
   },

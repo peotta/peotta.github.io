@@ -1,5 +1,8 @@
 import { GuideSection } from './ui.jsx';
 
+const OVERLEAF_URL =
+  'https://www.overleaf.com/latex/templates/unbtex-a-class-for-bachelor-master-and-doctoral-thesis-at-the-university-of-brasilia-unb/rfsxjkzprztc';
+
 // Divisão do material entre as duas disciplinas; as normas valem para ambas.
 export const ETAPAS = [
   {
@@ -80,6 +83,7 @@ export function VisaoGeral() {
           </article>
         ))}
       </div>
+      <OverleafCta />
       <p className="note">
         Citações, referências e demais normas valem para as duas disciplinas e estão reunidas em <a href="#normas">Normas e formatação</a>.
       </p>
@@ -96,5 +100,42 @@ export function Etapa({ id }) {
       <p className="phase-title">{e.titulo}</p>
       <p className="phase-foco">{e.foco}</p>
     </header>
+  );
+}
+
+// Chamada para escrever o trabalho no Overleaf com a classe UnBTeX.
+function OverleafCta() {
+  return (
+    <aside id="overleaf" className="card overleaf-cta" aria-labelledby="overleaf-title">
+      <div className="overleaf-copy">
+        <p className="overleaf-kicker">LaTeX / Overleaf</p>
+        <h3 id="overleaf-title">Escreva o projeto no Overleaf com o template UnBTeX</h3>
+        <p className="muted">
+          O UnBTeX é uma classe LaTeX para trabalhos de conclusão de curso, dissertações e teses da UnB, baseada no abnTeX. Capa, folha de
+          rosto, resumos, listas, sumário e referências já seguem o padrão ABNT, e o texto pode ser editado on-line junto com o orientador.
+        </p>
+        <a className="button button-primary" href={OVERLEAF_URL} target="_blank" rel="noreferrer">
+          Abrir template UnBTeX no Overleaf <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+      <ol className="overleaf-steps">
+        <li>
+          <strong>Crie o projeto</strong>
+          <span>Abra o template e use a opção Open as Template (é preciso ter conta gratuita no Overleaf).</span>
+        </li>
+        <li>
+          <strong>Preencha os dados</strong>
+          <span>Título, autoria, orientação, curso e data no arquivo principal.</span>
+        </li>
+        <li>
+          <strong>Escreva por seções</strong>
+          <span>Use este guia para o conteúdo de cada seção e para citações e referências.</span>
+        </li>
+        <li>
+          <strong>Compile e revise</strong>
+          <span>Gere o PDF com pdfLaTeX e BibTeX e confirme com o orientador as exigências da coordenação.</span>
+        </li>
+      </ol>
+    </aside>
   );
 }
