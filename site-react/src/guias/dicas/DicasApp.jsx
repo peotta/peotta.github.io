@@ -5,53 +5,53 @@ import {
   Abreviaturas,
   Citacoes,
   Conclusao,
-  Desenvolvimento,
   Estrutura,
   Fundamentos,
   Ilustracoes,
   Introducao,
+  Metodologia,
   Orientacoes,
   Referencias,
+  Resultados,
   Resumo,
   Roteiro,
 } from './Secoes.jsx';
+import { ETAPAS, Etapa, VisaoGeral } from './Disciplinas.jsx';
 
+// Sumário agrupado: visão geral, uma etapa por disciplina e as normas comuns.
 const TOC = [
-  { id: 'orientacoes', label: 'Orientações gerais' },
-  { id: 'estrutura', label: 'Estrutura' },
-  { id: 'resumo', label: 'Resumo' },
-  { id: 'introducao', label: 'Introdução' },
-  { id: 'fundamentos', label: 'Referencial teórico' },
-  { id: 'desenvolvimento', label: 'Desenvolvimento' },
-  { id: 'conclusao', label: 'Conclusão' },
-  { id: 'ilustracoes', label: 'Figuras e tabelas' },
-  { id: 'abreviaturas', label: 'Abreviaturas' },
-  { id: 'citacoes', label: 'Citações' },
-  { id: 'referencias', label: 'Referências' },
-  { id: 'roteiro', label: 'Roteiro resumido' },
+  {
+    id: 'topo',
+    label: 'Visão geral',
+    secoes: [
+      { id: 'disciplinas', label: 'As disciplinas' },
+      { id: 'orientacoes', label: 'Orientações gerais' },
+    ],
+  },
+  ...ETAPAS.map((e) => ({ id: e.id, label: e.curto === 'Normas' ? e.titulo : `${e.curto}: ${e.foco.toLowerCase()}`, secoes: e.secoes })),
 ];
 
-const SECTION_IDS = TOC.map((s) => s.id);
+const SECTION_IDS = TOC.flatMap((g) => g.secoes.map((s) => s.id));
 const NORMAS = ['NBR 14724:2024', 'NBR 10520:2023', 'NBR 6023:2018', 'NBR 6028:2021', 'NBR 6022:2018'];
 
-const RESUMO_HERO = [
-  ['Redação', 'Terceira pessoa, voz ativa e linguagem impessoal.'],
-  ['Organização', 'Seções numeradas (NBR 6024) e introdução breve em cada seção.'],
-  ['Resumo', '150 a 500 palavras em TCC; 100 a 250 em artigos.'],
-  ['Citações', 'Sobrenome em maiúsculas e minúsculas: (Silva, 2024).'],
-];
-
 function TocLinks({ active, onNavigate }) {
-  return TOC.map((s) => (
-    <a
-      key={s.id}
-      href={`#${s.id}`}
-      className={active === s.id ? 'is-active' : undefined}
-      aria-current={active === s.id ? 'true' : undefined}
-      onClick={onNavigate}
-    >
-      {s.label}
-    </a>
+  return TOC.map((g) => (
+    <div key={g.id} className="toc-group">
+      <a className="toc-group-label" href={`#${g.id}`} onClick={onNavigate}>
+        {g.label}
+      </a>
+      {g.secoes.map((s) => (
+        <a
+          key={s.id}
+          href={`#${s.id}`}
+          className={active === s.id ? 'is-active' : undefined}
+          aria-current={active === s.id ? 'true' : undefined}
+          onClick={onNavigate}
+        >
+          {s.label}
+        </a>
+      ))}
+    </div>
   ));
 }
 
@@ -80,11 +80,11 @@ function Header({ active, progress }) {
           <span className="brand-mark" aria-hidden="true">LP</span>
           <span className="brand-text">
             <span className="brand-name">Laerte Peotta</span>
-            <span className="brand-sub">guias / escrita acadêmica</span>
+            <span className="brand-sub">disciplinas / projeto final</span>
           </span>
         </a>
 
-        <nav id="menu-guia" className={`menu${open ? ' is-open' : ''}`} aria-label="Seções do guia">
+        <nav id="menu-guia" className={`menu${open ? ' is-open' : ''}`} aria-label="Seções da disciplina">
           <TocLinks active={active} onNavigate={() => setOpen(false)} />
         </nav>
 
@@ -117,8 +117,8 @@ function Hero() {
     <section className="hero guide-hero" id="topo" aria-labelledby="guia-title">
       <div className="container hero-grid">
         <div className="hero-copy">
-          <p className="eyebrow">Escrita acadêmica / TCC / artigo científico</p>
-          <h1 id="guia-title">Guia para Escrita de TCC ou Artigo Científico</h1>
+          <p className="eyebrow">Disciplinas de graduação / UnB</p>
+          <h1 id="guia-title">Projeto Final de Graduação 1 e 2</h1>
           <div className="terminal-line" aria-label={`Normas vigentes: ${NORMAS.join(', ')}`}>
             <span className="prompt" aria-hidden="true">abnt:~$</span>
             <span className="cmd" aria-hidden="true">normas --vigentes</span>
@@ -128,27 +128,34 @@ function Hero() {
             </span>
           </div>
           <p className="hero-text">
-            Consulta rápida sobre estrutura acadêmica, redação, resumo, citações, figuras, tabelas e referências, atualizada conforme as
-            normas ABNT vigentes.
+            Material de apoio às disciplinas de Projeto Final de Graduação: da proposta ao texto final, com estrutura, redação, citações e
+            referências conforme as normas ABNT vigentes.
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#verificador">
+            <a className="button button-primary" href="#pfg1">
+              PFG 1: proposta
+            </a>
+            <a className="button button-primary" href="#pfg2">
+              PFG 2: texto final
+            </a>
+            <a className="button button-ghost" href="#verificador">
               Verificar meu resumo
-            </a>
-            <a className="button button-ghost" href="#citacoes">
-              Como citar
-            </a>
-            <a className="button button-ghost" href="#roteiro">
-              Roteiro resumido
             </a>
           </div>
         </div>
 
         <dl className="card hero-summary">
-          {RESUMO_HERO.map(([titulo, texto]) => (
-            <div key={titulo}>
-              <dt>{titulo}</dt>
-              <dd>{texto}</dd>
+          {ETAPAS.slice(0, 2).map((e) => (
+            <div key={e.id}>
+              <dt>
+                <span className="disc-codes">
+                  {e.codigos.map((c) => (
+                    <code key={c}>{c}</code>
+                  ))}
+                </span>
+                {e.titulo}
+              </dt>
+              <dd>{e.foco}</dd>
             </div>
           ))}
         </dl>
@@ -190,17 +197,25 @@ export default function DicasApp() {
             </nav>
           </aside>
           <div className="guide-body">
+            <VisaoGeral />
             <Orientacoes />
-            <Estrutura />
-            <Resumo />
+
+            <Etapa id="pfg1" />
             <Introducao />
             <Fundamentos />
-            <Desenvolvimento />
+            <Metodologia />
+
+            <Etapa id="pfg2" />
+            <Resultados />
             <Conclusao />
+            <Resumo />
             <Ilustracoes />
-            <Abreviaturas />
+            <Estrutura />
+
+            <Etapa id="normas" />
             <Citacoes />
             <Referencias />
+            <Abreviaturas />
             <Roteiro />
           </div>
         </div>
@@ -208,8 +223,8 @@ export default function DicasApp() {
       <footer className="site-footer">
         <div className="container footer-inner">
           <p>
-            <span className="prompt">©</span> {new Date().getFullYear()} Prof. Dr. Laerte Peotta de Melo - guia de apoio à escrita
-            acadêmica.
+            <span className="prompt">©</span> {new Date().getFullYear()} Prof. Dr. Laerte Peotta de Melo - Projeto Final de Graduação 1 e
+            2.
           </p>
           <div className="footer-links">
             <label className="switch">

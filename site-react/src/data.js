@@ -261,18 +261,24 @@ export const resources = [
     tags: ['Windows', 'PowerShell', 'CLI'],
   },
   {
-    id: 'guide-tcc',
-    categories: ['labs'],
+    id: 'ene0358',
+    code: 'ENE0358',
+    unb: true,
+    categories: ['disciplines'],
     href: '/guias/dicas.html',
     cta: cta.read,
-    meta: { pt: 'Material de apoio', en: 'Support material', es: 'Material de apoyo' },
-    title: { pt: 'Guia - Como escrever um artigo ou TCC', en: 'Guide - How to write a paper or thesis', es: 'Guía - Cómo escribir un artículo o TFG' },
-    text: {
-      pt: 'Material de apoio para organização, escrita e desenvolvimento de trabalhos acadêmicos.',
-      en: 'Support material for organizing, writing, and developing academic work.',
-      es: 'Material de apoyo para la organización, redacción y desarrollo de trabajos académicos.',
+    meta: unbGrad,
+    title: {
+      pt: 'Projeto Final de Graduação 1 e 2',
+      en: 'Undergraduate Final Project 1 and 2',
+      es: 'Proyecto Final de Grado 1 y 2',
     },
-    tags: ['TCC', 'Escrita'],
+    text: {
+      pt: 'ENE0358 (PFG 1) e ENE0360/ENE0458 (PFG 2): da proposta ao texto final, com estrutura, redação, citações e referências conforme a ABNT.',
+      en: 'ENE0358 (PFG 1) and ENE0360/ENE0458 (PFG 2): from proposal to final text, with structure, writing, citations, and references following ABNT standards.',
+      es: 'ENE0358 (PFG 1) y ENE0360/ENE0458 (PFG 2): de la propuesta al texto final, con estructura, redacción, citas y referencias según la ABNT.',
+    },
+    tags: ['TCC', 'ABNT', 'ENE0360', 'ENE0458'],
   },
   {
     id: 'sim-router',

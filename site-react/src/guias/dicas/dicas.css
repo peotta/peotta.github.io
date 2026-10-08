@@ -687,6 +687,135 @@ table.tabela-ibge thead th {
 .check-results .is-pending { color: var(--muted); }
 .check-results .is-pending .check-icon { color: var(--muted); border: 1px solid var(--card-border); }
 
+
+/* ---------- Disciplinas ---------- */
+.disc-codes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.disc-codes code {
+  padding: 0.12rem 0.5rem;
+  border-radius: 7px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #021006;
+  background: var(--primary);
+}
+
+.hero-summary dt .disc-codes {
+  margin-bottom: 0.35rem;
+}
+
+.disc-card {
+  border-color: var(--card-border);
+}
+
+.disc-card h3 {
+  margin-top: 0.85rem;
+  margin-bottom: 0;
+}
+
+.disc-foco {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--primary);
+}
+
+.disc-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0.85rem 0 0;
+  border-top: 1px solid var(--card-border-soft);
+  counter-reset: step;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.disc-steps li {
+  counter-increment: step;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.disc-steps li::before {
+  content: counter(step);
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.disc-steps a {
+  color: var(--text);
+  border-bottom: 1px dashed var(--card-border);
+}
+
+.disc-steps a:hover,
+.note a {
+  color: var(--primary);
+}
+
+.note a {
+  border-bottom: 1px dashed var(--card-border);
+}
+
+.phase-banner {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.2rem 1rem;
+  margin-top: 2.5rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-border);
+  background:
+    linear-gradient(90deg, rgba(72, 255, 139, 0.12), rgba(72, 255, 139, 0.02) 70%),
+    var(--card);
+}
+
+.phase-banner .disc-codes {
+  grid-row: span 2;
+  flex-direction: column;
+}
+
+.phase-title {
+  font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+  font-weight: 800;
+  color: var(--text-strong);
+  line-height: 1.2;
+}
+
+.phase-foco {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--primary);
+}
+
+.toc-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.toc-group + .toc-group {
+  margin-top: 0.75rem;
+}
+
+.guide-toc .toc-group-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-strong);
+}
+
+.guide-header .menu .toc-group-label {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
 /* ---------- Responsivo ---------- */
 @media (max-width: 1024px) {
   .guide-header .menu {
@@ -716,6 +845,15 @@ table.tabela-ibge thead th {
 }
 
 @media (max-width: 640px) {
+  .phase-banner {
+    grid-template-columns: 1fr;
+  }
+
+  .phase-banner .disc-codes {
+    grid-row: auto;
+    flex-direction: row;
+  }
+
   .back-link {
     font-size: 0;
     gap: 0;

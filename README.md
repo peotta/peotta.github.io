@@ -32,7 +32,7 @@ Este site reúne materiais acadêmicos, tutoriais práticos, guias para certific
   - [Windows & Redes](guias/windows-redes.html)
   - [Segurança em Redes Wi-Fi](guias/wifi.html)
   - [Monitoramento IoT (DHT22)](guias/dht22.html)
-  - [Dicas de Escrita Acadêmica / TCC](guias/dicas.html)
+  - [Projeto Final de Graduação 1 e 2 (ENE0358 / ENE0360 / ENE0458)](guias/dicas.html)
   - [Grupo de Pesquisa RAVENS](guias/ravens.html)
 
 ---

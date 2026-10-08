@@ -329,12 +329,12 @@ export function Fundamentos() {
   );
 }
 
-export function Desenvolvimento() {
+export function Metodologia() {
   return (
     <GuideSection
-      id="desenvolvimento"
-      title="Desenvolvimento: metodologia e resultados"
-      lead="Parte central do trabalho. Recomenda-se dividi-la em Metodologia (como a pesquisa foi conduzida) e Resultados e Discussão (o que foi encontrado e como se relaciona com a literatura)."
+      id="metodologia"
+      title="Metodologia"
+      lead="Descreve como a pesquisa será conduzida, com detalhamento suficiente para que outro pesquisador possa reproduzi-la ou conferir os dados."
     >
       <div className="g2">
         <Card title="O que pode compor a metodologia">
@@ -350,11 +350,7 @@ export function Desenvolvimento() {
             ]}
           />
         </Card>
-        <Card title="Reprodutibilidade">
-          <p className="muted">
-            Quadros, tabelas, gráficos e figuras podem ser utilizados. As informações devem permitir que outro pesquisador reproduza a
-            pesquisa ou confira os dados.
-          </p>
+        <Card title="Exemplo">
           <Example>
             A pesquisa foi realizada entre março e junho de 2025, em ambiente controlado de laboratório. Foram utilizados três servidores
             virtuais com sistemas Linux, configurados para simular tráfego legítimo e malicioso em rede corporativa. A coleta dos dados foi
@@ -363,6 +359,46 @@ export function Desenvolvimento() {
           </Example>
         </Card>
       </div>
+    </GuideSection>
+  );
+}
+
+export function Resultados() {
+  return (
+    <GuideSection
+      id="resultados"
+      title="Resultados e discussão"
+      lead="Parte central do texto final: apresenta o que foi obtido com a metodologia e interpreta esses dados à luz do referencial teórico."
+    >
+      <div className="g2">
+        <Card title="Como apresentar">
+          <DashList
+            items={[
+              'Seguir a ordem dos objetivos específicos definidos na introdução.',
+              'Apoiar os dados em quadros, tabelas, gráficos e figuras, sempre citados no texto.',
+              'Separar o que foi medido ou observado da interpretação feita pelo autor.',
+              'Informar condições, parâmetros e configurações que permitam conferir os dados.',
+            ]}
+          />
+        </Card>
+        <Card title="Como discutir">
+          <DashList
+            items={[
+              'Comparar os resultados com os trabalhos apresentados no referencial teórico.',
+              'Explicar resultados inesperados ou divergentes da literatura.',
+              'Reconhecer as limitações do estudo e o efeito delas sobre os resultados.',
+              'Indicar se cada objetivo específico foi atendido.',
+            ]}
+          />
+        </Card>
+      </div>
+      <Card title="Exemplo">
+        <Example>
+          A Tabela 1 mostra que a taxa de detecção foi maior no tráfego HTTP (97,2%) do que no tráfego DNS (89,5%). Esse comportamento é
+          compatível com o observado por Autor A, que atribui a menor taxa em DNS ao volume reduzido de dados por consulta. Ressalta-se,
+          porém, que os testes foram realizados em ambiente controlado, o que limita a generalização dos resultados para redes em produção.
+        </Example>
+      </Card>
     </GuideSection>
   );
 }
@@ -672,7 +708,8 @@ const ROTEIRO = [
   ['Introdução', 'Tema, problema, objetivos, justificativa, metodologia e organização do trabalho.'],
   ['Fundamentos e Conceitos', 'Definições e conceitos essenciais para entendimento do tema.'],
   ['Referencial Teórico', 'Análise crítica da literatura relevante e do estado da arte.'],
-  ['Metodologia, resultados e discussão', 'Materiais, métodos, análise e resultados, com detalhamento suficiente para reprodução.'],
+  ['Metodologia', 'Materiais, métodos e procedimentos, com detalhamento suficiente para reprodução.'],
+  ['Resultados e discussão', 'Dados obtidos, interpretados à luz do referencial teórico, na ordem dos objetivos.'],
   ['Conclusão', 'Retoma objetivos e resultados, sintetiza as conclusões e sugere trabalhos futuros, sem informações novas.'],
   ['Citações e referências', 'Citações conforme a NBR 10520:2023, como (Silva, 2024, p. 10), e lista de obras conforme a NBR 6023:2018.'],
 ];
