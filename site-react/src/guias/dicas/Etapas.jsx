@@ -1,4 +1,4 @@
-import { Callout, Card, DashList, Example, GuideSection } from './ui.jsx';
+import { Callout, Card, DashList, Example, GuideSection } from '../shared/ui.jsx';
 
 export function TemaOrientacao() {
   return (

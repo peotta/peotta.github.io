@@ -217,6 +217,30 @@ export const resources = [
     tags: ['Protocolos'],
   },
   {
+    id: 'ppee-orientacao',
+    code: 'PPEE',
+    unb: true,
+    categories: ['disciplines'],
+    href: '/orientacao/mestrado-ppee.html',
+    cta: cta.guide,
+    meta: {
+      pt: 'Mestrado Profissional em Engenharia Elétrica (PPEE/UnB)',
+      en: 'Professional Master’s in Electrical Engineering (PPEE/UnB)',
+      es: 'Maestría Profesional en Ingeniería Eléctrica (PPEE/UnB)',
+    },
+    title: {
+      pt: 'Orientação de Mestrado Profissional',
+      en: 'Professional Master’s Supervision',
+      es: 'Orientación de Maestría Profesional',
+    },
+    text: {
+      pt: 'Guia para orientandos do PPEE: créditos, prazos, produção exigida para a defesa, etapas da dissertação e normas de redação.',
+      en: 'Guide for PPEE advisees: credits, deadlines, publication required for the defense, thesis stages, and writing standards.',
+      es: 'Guía para orientandos del PPEE: créditos, plazos, producción exigida para la defensa, etapas de la disertación y normas de redacción.',
+    },
+    tags: ['Mestrado', 'Dissertação', 'Segurança Cibernética'],
+  },
+  {
     id: 'cyber-adv',
     unb: true,
     categories: ['disciplines'],

@@ -33,6 +33,7 @@ Este site reúne materiais acadêmicos, tutoriais práticos, guias para certific
   - [Segurança em Redes Wi-Fi](guias/wifi.html)
   - [Monitoramento IoT (DHT22)](guias/dht22.html)
   - [Projeto Final de Graduação 1 e 2 (ENE0358 / ENE0360 / ENE0458)](guias/dicas.html)
+  - [Orientação de Mestrado Profissional (PPEE/UnB)](orientacao/mestrado-ppee.html)
   - [Grupo de Pesquisa RAVENS](guias/ravens.html)
 
 ---
@@ -65,6 +66,8 @@ peotta.github.io/
 │   ├── dht22.html
 │   ├── dicas.html
 │   └── ravens.html
+├── orientacao/                    # 🎓 Orientação de Pós-Graduação
+│   └── mestrado-ppee.html
 ├── assets/                        # 🎨 Recursos Estáticos Compartilhados
 │   ├── css/                       # Estilos globais
 │   ├── js/                        # Scripts e interações

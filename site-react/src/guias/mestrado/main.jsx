@@ -1,11 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import DicasApp from './DicasApp.jsx';
+import MestradoApp from './MestradoApp.jsx';
 import '../../styles.css';
 import '../shared/guia.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <DicasApp />
+    <MestradoApp />
   </StrictMode>,
 );

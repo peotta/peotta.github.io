@@ -69,3 +69,39 @@ export function CodeBox({ children, label }) {
     </div>
   );
 }
+
+export function Codes({ items }) {
+  return (
+    <span className="disc-codes">
+      {items.map((c) => (
+        <code key={c}>{c}</code>
+      ))}
+    </span>
+  );
+}
+
+// Faixa que abre um bloco de conteúdo (etapa, disciplina, grupo de normas).
+export function PhaseBanner({ id, codes, title, focus }) {
+  return (
+    <header id={id} className="phase-banner">
+      <Codes items={codes} />
+      <p className="phase-title">{title}</p>
+      <p className="phase-foco">{focus}</p>
+    </header>
+  );
+}
+
+// Lista de links externos em formato de botões.
+export function LinkList({ links }) {
+  return (
+    <ul className="doc-links">
+      {links.map((l) => (
+        <li key={l.href}>
+          <a href={l.href} target="_blank" rel="noreferrer">
+            {l.label} <span aria-hidden="true">↗</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}

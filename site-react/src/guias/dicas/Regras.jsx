@@ -1,4 +1,4 @@
-import { Callout, Card, DashList, GuideSection } from './ui.jsx';
+import { Callout, Card, DashList, GuideSection, LinkList } from '../shared/ui.jsx';
 
 // Regras extraídas do Regulamento do PFG de Engenharia de Redes de Comunicação (ENE/UnB, 2022),
 // do formulário de inscrição da Coordenação de Redes e da página da Secretaria do ENE.
@@ -14,20 +14,6 @@ const LINKS_BANCA = [
   { href: `${ENE}/secretaria/#tcc_banca`, label: 'Solicitação de banca na Secretaria do ENE' },
   { href: `${ENE}/wp-content/uploads/2025/04/Ata_PFG_-_Eng_Redes.pdf`, label: 'Ata de defesa (Redes)' },
 ];
-
-function LinkList({ links }) {
-  return (
-    <ul className="doc-links">
-      {links.map((l) => (
-        <li key={l.href}>
-          <a href={l.href} target="_blank" rel="noreferrer">
-            {l.label} <span aria-hidden="true">↗</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 export function Matricula() {
   return (

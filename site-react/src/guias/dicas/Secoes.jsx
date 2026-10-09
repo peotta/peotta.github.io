@@ -1,4 +1,4 @@
-import { Callout, Card, CodeBox, DashList, Example, GuideSection } from './ui.jsx';
+import { Callout, Card, CodeBox, DashList, Example, GuideSection } from '../shared/ui.jsx';
 
 export function Orientacoes() {
   return (

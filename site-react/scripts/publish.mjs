@@ -10,7 +10,7 @@ const dist = path.resolve(here, '..', 'dist');
 const root = path.resolve(here, '..', '..');
 
 // Paginas geradas pelo Vite (mesmas entradas de rollupOptions.input em vite.config.js).
-const PAGES = ['index.html', 'guias/dicas.html'];
+const PAGES = ['index.html', 'guias/dicas.html', 'orientacao/mestrado-ppee.html'];
 
 const bundleSrc = path.join(dist, 'assets', 'react');
 const bundleDst = path.join(root, 'assets', 'react');
@@ -22,7 +22,10 @@ if (PAGES.some((p) => !fs.existsSync(path.join(dist, p))) || !fs.existsSync(bund
 
 fs.rmSync(bundleDst, { recursive: true, force: true });
 fs.cpSync(bundleSrc, bundleDst, { recursive: true });
-for (const page of PAGES) fs.copyFileSync(path.join(dist, page), path.join(root, page));
+for (const page of PAGES) {
+  fs.mkdirSync(path.dirname(path.join(root, page)), { recursive: true });
+  fs.copyFileSync(path.join(dist, page), path.join(root, page));
+}
 
 const files = fs.readdirSync(bundleDst);
 console.log(`publicado: ${PAGES.join(', ')} + assets/react/ (${files.join(', ')})`);

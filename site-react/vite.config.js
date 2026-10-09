@@ -52,6 +52,7 @@ export default defineConfig({
       input: {
         main: path.resolve(here, 'index.html'),
         dicas: path.resolve(here, 'guias/dicas.html'),
+        mestrado: path.resolve(here, 'orientacao/mestrado-ppee.html'),
       },
     },
   },

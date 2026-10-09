@@ -1,4 +1,4 @@
-import { GuideSection } from './ui.jsx';
+import { Codes, GuideSection, PhaseBanner } from '../shared/ui.jsx';
 
 const OVERLEAF_URL =
   'https://www.overleaf.com/latex/templates/unbtex-a-class-for-bachelor-master-and-doctoral-thesis-at-the-university-of-brasilia-unb/rfsxjkzprztc';
@@ -68,16 +68,6 @@ export const ETAPAS = [
 
 export const DISCIPLINAS = ETAPAS.filter((e) => e.id.startsWith('pfg'));
 
-function Codigos({ codigos }) {
-  return (
-    <span className="disc-codes">
-      {codigos.map((c) => (
-        <code key={c}>{c}</code>
-      ))}
-    </span>
-  );
-}
-
 export function VisaoGeral() {
   return (
     <GuideSection
@@ -88,7 +78,7 @@ export function VisaoGeral() {
       <div className="g2">
         {DISCIPLINAS.map((e) => (
           <article key={e.id} className="card disc-card">
-            <Codigos codigos={e.codigos} />
+            <Codes items={e.codigos} />
             <h3>{e.titulo}</h3>
             <p className="disc-foco">{e.foco}</p>
             <p className="muted">{e.texto}</p>
@@ -111,16 +101,10 @@ export function VisaoGeral() {
   );
 }
 
-// Faixa que abre o bloco de conteúdo de cada disciplina.
+// Faixa que abre o bloco de conteúdo de cada etapa.
 export function Etapa({ id }) {
   const e = ETAPAS.find((x) => x.id === id);
-  return (
-    <header id={e.id} className="phase-banner">
-      <Codigos codigos={e.codigos} />
-      <p className="phase-title">{e.titulo}</p>
-      <p className="phase-foco">{e.foco}</p>
-    </header>
-  );
+  return <PhaseBanner id={e.id} codes={e.codigos} title={e.titulo} focus={e.foco} />;
 }
 
 // Chamada para escrever o trabalho no Overleaf com a classe UnBTeX.

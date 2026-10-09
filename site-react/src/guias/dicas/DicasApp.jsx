@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { readStorage, writeStorage, useActiveSection, useScrollProgress, useTypewriter } from '../../hooks.js';
-import MatrixRain from '../../components/MatrixRain.jsx';
+import { useTypewriter } from '../../hooks.js';
+import GuideLayout from '../shared/GuideLayout.jsx';
 import {
   Citacoes,
   Conclusao,
@@ -28,87 +27,7 @@ const TOC = [
   })),
 ];
 
-const SECTION_IDS = TOC.flatMap((g) => g.secoes.map((s) => s.id));
 const NORMAS = ['NBR 14724:2024', 'NBR 10520:2023', 'NBR 6023:2018', 'NBR 6028:2021'];
-
-function TocLinks({ active, onNavigate }) {
-  return TOC.map((g) => (
-    <div key={g.id} className="toc-group">
-      {g.label && (
-        <a className="toc-group-label" href={`#${g.id}`} onClick={onNavigate}>
-          {g.label}
-        </a>
-      )}
-      {g.secoes.map((s) => (
-        <a
-          key={s.id}
-          href={`#${s.id}`}
-          className={active === s.id ? 'is-active' : undefined}
-          aria-current={active === s.id ? 'true' : undefined}
-          onClick={onNavigate}
-        >
-          {s.label}
-        </a>
-      ))}
-    </div>
-  ));
-}
-
-function Header({ active, progress }) {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  useEffect(() => {
-    if (!open) return undefined;
-    const onKey = (e) => e.key === 'Escape' && setOpen(false);
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [open]);
-
-  return (
-    <header className={`site-header guide-header${scrolled ? ' is-scrolled' : ''}`}>
-      <div className="container nav-inner">
-        <a className="brand" href="/">
-          <span className="brand-mark" aria-hidden="true">LP</span>
-          <span className="brand-text">
-            <span className="brand-name">Laerte Peotta</span>
-            <span className="brand-sub">disciplinas / projeto final</span>
-          </span>
-        </a>
-
-        <nav id="menu-guia" className={`menu${open ? ' is-open' : ''}`} aria-label="Seções da disciplina">
-          <TocLinks active={active} onNavigate={() => setOpen(false)} />
-        </nav>
-
-        <div className="nav-tools">
-          <a className="button button-ghost button-sm back-link" href="/">
-            <span aria-hidden="true">←</span> Site principal
-          </a>
-          <button
-            type="button"
-            className={`menu-toggle${open ? ' is-open' : ''}`}
-            aria-expanded={open}
-            aria-controls="menu-guia"
-            aria-label={open ? 'Fechar seções' : 'Abrir seções'}
-            onClick={() => setOpen((v) => !v)}
-          >
-            <span />
-            <span />
-            <span />
-          </button>
-        </div>
-      </div>
-      <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} aria-hidden="true" />
-    </header>
-  );
-}
 
 function Hero() {
   const norma = useTypewriter(NORMAS);
@@ -164,96 +83,40 @@ function Hero() {
 }
 
 export default function DicasApp() {
-  const [motion, setMotion] = useState(() => readStorage('site-motion', 'on') === 'on');
-  const active = useActiveSection(SECTION_IDS);
-  const progress = useScrollProgress();
-
-  const changeMotion = (on) => {
-    setMotion(on);
-    writeStorage('site-motion', on ? 'on' : 'off');
-  };
-
-  // Mantem o item ativo visivel no sumario lateral, que tem rolagem propria.
-  const tocRef = useRef(null);
-  useEffect(() => {
-    const toc = tocRef.current;
-    const link = toc?.querySelector('a.is-active');
-    if (!toc || !link) return;
-    const top = link.getBoundingClientRect().top - toc.getBoundingClientRect().top + toc.scrollTop;
-    if (top < toc.scrollTop + 40 || top > toc.scrollTop + toc.clientHeight - 60) {
-      toc.scrollTo({ top: top - toc.clientHeight / 3 });
-    }
-  }, [active]);
-
-  // O navegador tenta rolar para a ancora antes do React renderizar; repete apos o render.
-  useEffect(() => {
-    const key = decodeURIComponent(location.hash.slice(1));
-    if (key) requestAnimationFrame(() => document.getElementById(key)?.scrollIntoView());
-  }, []);
-
   return (
-    <>
-      <a className="skip-link" href="#conteudo-guia">
-        Pular para o conteúdo
-      </a>
-      <MatrixRain enabled={motion} />
-      <Header active={active} progress={progress} />
-      <main id="conteudo-guia">
-        <Hero />
-        <div className="container guide-layout">
-          <aside ref={tocRef} className="guide-toc" aria-label="Nesta página">
-            <p className="toc-title">Nesta página</p>
-            <nav>
-              <TocLinks active={active} />
-            </nav>
-          </aside>
-          <div className="guide-body">
-            <VisaoGeral />
+    <GuideLayout
+      toc={TOC}
+      brandSub="disciplinas / projeto final"
+      menuLabel="Seções da disciplina"
+      hero={<Hero />}
+      footerText="Prof. Dr. Laerte Peotta de Melo - Projeto Final de Graduação 1 e 2."
+    >
+      <VisaoGeral />
 
-            <Etapa id="regras" />
-            <Matricula />
-            <Avaliacao />
-            <OverleafCta />
-            <Estrutura />
+      <Etapa id="regras" />
+      <Matricula />
+      <Avaliacao />
+      <OverleafCta />
+      <Estrutura />
 
-            <Etapa id="pfg1" />
-            <TemaOrientacao />
-            <Introducao />
-            <Fundamentos />
-            <Metodologia />
-            <RelatorioPfg1 />
+      <Etapa id="pfg1" />
+      <TemaOrientacao />
+      <Introducao />
+      <Fundamentos />
+      <Metodologia />
+      <RelatorioPfg1 />
 
-            <Etapa id="pfg2" />
-            <Resultados />
-            <Conclusao />
-            <Resumo />
-            <Defesa />
+      <Etapa id="pfg2" />
+      <Resultados />
+      <Conclusao />
+      <Resumo />
+      <Defesa />
 
-            <Etapa id="normas" />
-            <Orientacoes />
-            <Ilustracoes />
-            <Citacoes />
-            <Referencias />
-
-          </div>
-        </div>
-      </main>
-      <footer className="site-footer">
-        <div className="container footer-inner">
-          <p>
-            <span className="prompt">©</span> {new Date().getFullYear()} Prof. Dr. Laerte Peotta de Melo - Projeto Final de Graduação 1 e
-            2.
-          </p>
-          <div className="footer-links">
-            <label className="switch">
-              <input type="checkbox" checked={motion} onChange={(e) => changeMotion(e.target.checked)} />
-              <span className="switch-track" aria-hidden="true" />
-              Animação de fundo
-            </label>
-            <a href="#topo">Topo ↑</a>
-          </div>
-        </div>
-      </footer>
-    </>
+      <Etapa id="normas" />
+      <Orientacoes />
+      <Ilustracoes />
+      <Citacoes />
+      <Referencias />
+    </GuideLayout>
   );
 }
