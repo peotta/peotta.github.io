@@ -283,6 +283,27 @@ export const resources = [
     tags: ['Mestrado', 'CTI', 'Cibercrime'],
   },
   {
+    id: 'ppca0049',
+    code: 'PPCA0049',
+    unb: true,
+    categories: ['disciplines'],
+    href: 'https://github.com/peotta/PPCA0049',
+    external: true,
+    cta: cta.repo,
+    meta: {
+      pt: 'Doutorado Profissional em Computação Aplicada (PPCA/UnB)',
+      en: 'Professional Doctorate in Applied Computing (PPCA/UnB)',
+      es: 'Doctorado Profesional en Computación Aplicada (PPCA/UnB)',
+    },
+    title: { pt: 'Cibersegurança 1', en: 'Cybersecurity 1', es: 'Ciberseguridad 1' },
+    text: {
+      pt: 'Cibercrime, ataques cibernéticos, guerra cibernética, fraudes digitais e Cyber Threat Intelligence (CTI), com leitura crítica de artigos, seminários e artigo científico.',
+      en: 'Cybercrime, cyberattacks, cyber warfare, digital fraud, and Cyber Threat Intelligence (CTI), with critical paper reading, seminars, and a research article.',
+      es: 'Ciberdelito, ciberataques, guerra cibernética, fraudes digitales y Cyber Threat Intelligence (CTI), con lectura crítica de artículos, seminarios y artículo científico.',
+    },
+    tags: ['Doutorado', 'CTI', 'Guerra Cibernética'],
+  },
+  {
     id: 'guide-linux',
     categories: ['labs'],
     href: '/guias/linux.html',
