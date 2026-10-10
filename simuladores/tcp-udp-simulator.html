@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador Visual de TCP e UDP (camada de transporte) - RFC 9293</title>
+<meta name="description" content="Simulador interativo da camada de transporte: TCP (handshake, estados, janela deslizante, retransmissão por timeout, fast retransmit, slow start e congestion avoidance) e UDP (datagramas, perdas, desordem e DNS), com modo de comparação, diagrama de sequência, captura e gráfico da cwnd.">
+<link rel="canonical" href="https://peotta.github.io/simuladores/tcp-udp-simulator.html">
+<meta property="og:title" content="Simulador Visual de TCP e UDP">
+<meta property="og:description" content="Compare TCP e UDP na mesma rede, com perdas, atraso e reordenação: handshake, ACKs, retransmissões e controle de congestionamento.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://peotta.github.io/simuladores/tcp-udp-simulator.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B2447;
+    --bg-deep:#081A34;
+    --panel:#102C52;
+    --panel-2:#0D2545;
+    --border:#1F4270;
+    --border-soft:#173966;
+    --ink:#EAF2FB;
+    --muted:#8FA9C7;
+    --muted-line:#2C4F7C;
+    --amber:#F2A65A;
+    --teal:#5FD4C0;
+    --red:#E2574C;
+    --blue:#6FB8E8;
+    --purple:#B48EF0;
+    --chart-cwnd:#D07A2A;
+    --chart-ssthresh:#A07BE6;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;padding:0;overflow:hidden;}
+  body{
+    background:
+      radial-gradient(1100px 500px at 15% -10%, rgba(95,212,192,0.10), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(242,166,90,0.08), transparent 55%),
+      var(--bg-deep);
+    color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{max-width:1520px;margin:0 auto;height:100vh;padding:16px 22px 12px;display:flex;flex-direction:column;gap:12px;}
+
+  .topbar{flex:0 0 auto;background:linear-gradient(180deg, var(--panel), var(--panel-2));border:1px solid var(--border);border-radius:14px;padding:12px 22px 14px;box-shadow:0 10px 30px -12px rgba(0,0,0,0.45);}
+  .topbar-row{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:10px;}
+  .topbar-row h1{font-size:23px;font-weight:700;margin:0;letter-spacing:-0.01em;background:linear-gradient(90deg, var(--ink) 35%, var(--teal) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .title-wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .topbar-options{display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+  .topbar-protocol{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);font-weight:500;}
+  .topbar-protocol select{width:auto;}
+  .back-link{color:var(--teal);text-decoration:none;font-weight:600;font-size:13px;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--panel-2);display:inline-flex;align-items:center;gap:6px;}
+  .back-link:hover{border-color:var(--teal);}
+  .rfc-chips{display:flex;gap:8px;flex-wrap:wrap;}
+  .rfc-chip{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--teal);border:1px solid var(--teal);border-radius:20px;padding:3px 10px;text-decoration:none;}
+  .rfc-chip:hover{background:rgba(95,212,192,0.12);}
+
+  .scen-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-bottom:12px;}
+  .scen-group{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:600;margin:0 2px 0 8px;}
+  .scen-group:first-child{margin-left:0;}
+  button.chip{flex:none;font-size:13px;padding:5px 12px;border-radius:20px;font-weight:500;}
+  button.chip.active{border-color:var(--amber);color:var(--amber);background:rgba(242,166,90,0.10);}
+
+  .metro{display:flex;align-items:center;justify-content:space-between;position:relative;}
+  .stop{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;z-index:1;flex:0 0 auto;}
+  .dot{width:16px;height:16px;border-radius:50%;background:var(--panel-2);border:2px solid var(--muted-line);transition:all .25s ease;}
+  .stop.done .dot{background:var(--teal);border-color:var(--teal);}
+  .stop.active .dot{background:var(--amber);border-color:var(--amber);box-shadow:0 0 0 5px rgba(242,166,90,0.22);}
+  .stop-label{font-size:12.5px;color:var(--muted);text-align:center;max-width:150px;line-height:1.3;font-weight:500;}
+  .stop-label b{display:block;font-size:13.5px;}
+  .stop.active .stop-label,.stop.done .stop-label{color:var(--ink);}
+  .seg{flex:1 1 auto;height:2px;background:var(--muted-line);margin:0 -2px;position:relative;top:-16px;transition:background .25s ease;}
+  .seg.done{background:var(--teal);}
+
+  .workspace{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 300px;grid-template-rows:minmax(0,1fr);gap:14px;}
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 24px -14px rgba(0,0,0,0.5);}
+  .panel h2{font-size:15px;font-weight:600;margin:0;padding:12px 18px;border-bottom:1px solid var(--border-soft);color:var(--ink);}
+  .stage-header{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:10px 18px;border-bottom:1px solid var(--border-soft);}
+  .stage-header h2{padding:0;border:none;margin:0;flex:0 1 auto;}
+  .legend-inline{display:flex;align-items:center;flex-wrap:wrap;gap:14px;}
+  .legend-inline .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap;}
+  .legend-inline .legend-dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto;}
+
+  .stage-panel{padding:0;overflow:hidden;display:flex;flex-direction:column;min-height:0;}
+  .ladder-wrap{flex:1;min-height:0;overflow:auto;background-image:linear-gradient(var(--border-soft) 1px,transparent 1px),linear-gradient(90deg,var(--border-soft) 1px,transparent 1px);background-size:34px 34px;background-color:var(--bg);}
+  svg#ladder{display:block;width:100%;min-width:640px;}
+  .col-title{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;fill:var(--ink);}
+  .col-sub{font-family:'IBM Plex Mono',monospace;font-size:11px;fill:var(--muted);}
+  .time-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;fill:var(--muted);}
+  .seg-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;}
+  .ev-label{font-family:'IBM Plex Sans',sans-serif;font-size:11.5px;fill:var(--ink);}
+  .half-title{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;fill:var(--teal);letter-spacing:0.04em;}
+  g.seg-g{cursor:pointer;}
+
+  .side-col{display:flex;flex-direction:column;gap:12px;min-height:0;overflow-y:auto;}
+  .controls{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+  .row{display:flex;gap:10px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  button{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:500;background:var(--panel-2);color:var(--ink);border:1px solid var(--border);border-radius:9px;padding:10px 14px;cursor:pointer;transition:background .15s ease,border-color .15s ease,transform .1s ease;flex:1;}
+  button:hover:not(:disabled){border-color:var(--teal);transform:translateY(-1px);}
+  button:active:not(:disabled){transform:translateY(0);}
+  button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible,tr:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+  button.primary{background:linear-gradient(135deg, var(--teal), #4CC2AE);color:#06231C;border-color:var(--teal);font-weight:700;}
+  button.primary:hover:not(:disabled){background:linear-gradient(135deg, #79E0CE, var(--teal));}
+  button:disabled{opacity:.4;cursor:not-allowed;}
+  label.field{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:5px;font-weight:500;}
+  label.check{font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:8px;font-weight:500;cursor:pointer;}
+  .hidden{display:none !important;}
+  select,input[type=number],input[type=text]{font-family:'IBM Plex Mono',monospace;font-size:14px;background:var(--panel-2);color:var(--ink);border:1px solid var(--border);border-radius:9px;padding:8px 10px;width:100%;min-width:0;}
+  .sep{height:1px;background:var(--border-soft);margin:2px 0;}
+  .sub-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:600;}
+
+  .state-panel{padding:14px 16px;display:flex;flex-direction:column;gap:8px;}
+  .state-title{font-weight:700;font-size:14.5px;}
+  .cfg-line{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .cfg-line b{color:var(--ink);font-weight:500;text-align:right;}
+  .spill{font-family:'IBM Plex Mono',monospace;font-size:11.5px;padding:2px 9px;border-radius:20px;border:1px solid var(--amber);color:#06231C;background:var(--amber);font-weight:700;}
+  .spill.est{background:var(--teal);border-color:var(--teal);}
+  .spill.closed{background:transparent;color:var(--muted);border-color:var(--muted-line);}
+
+  .inspector{padding:16px 16px;min-height:110px;font-size:14.5px;flex:1 1 auto;}
+  .inspector .muted-txt{color:var(--muted);line-height:1.55;font-size:14px;}
+  .inspector .muted-txt p{margin:0 0 8px;}
+  .inspector .insp-title{font-weight:700;margin-bottom:10px;font-size:16px;}
+  .lbl{display:inline-flex;align-items:center;gap:5px;}
+  .field-help{position:fixed;z-index:50;display:none;max-width:330px;background:var(--panel-2);border:1px solid var(--teal);border-radius:10px;padding:10px 13px;box-shadow:0 12px 30px -10px rgba(0,0,0,0.6);font-size:13.5px;line-height:1.5;color:var(--muted);pointer-events:none;}
+  .field-help .fh-title{color:var(--ink);font-weight:700;margin-bottom:4px;}
+  .field-help p{margin:0 0 6px;}
+  .field-help p:last-child{margin-bottom:0;}
+  .field-help b{color:var(--ink);font-weight:600;}
+  .info{display:inline-block;color:var(--teal);font-size:12px;cursor:help;}
+  .inspector .insp-kicker{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--amber);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;}
+
+  .tabs-panel{flex:0 0 auto;height:34vh;min-height:200px;max-height:320px;display:flex;flex-direction:column;overflow:hidden;}
+  .tab-bar{flex:0 0 auto;display:flex;gap:4px;padding:8px 10px 0;border-bottom:1px solid var(--border-soft);overflow-x:auto;}
+  .tab-bar button{flex:none;background:transparent;color:var(--muted);border:1px solid transparent;border-radius:9px 9px 0 0;padding:8px 16px;font-size:14px;font-weight:500;white-space:nowrap;}
+  .tab-bar button:hover:not(:disabled){transform:none;border-color:transparent;color:var(--ink);}
+  .tab-bar button.active{background:var(--panel-2);color:var(--ink);border-color:var(--border-soft);border-bottom-color:var(--panel-2);}
+  .tab-content{display:none;flex:1;min-height:0;flex-direction:column;}
+  .tab-content.active{display:flex;}
+  .tab-inner-title{flex:0 0 auto;font-size:14.5px;font-weight:600;margin:0;padding:10px 18px;color:var(--ink);border-bottom:1px solid var(--border-soft);font-family:'IBM Plex Mono',monospace;}
+  .tab-scroll{flex:1;min-height:0;overflow-y:auto;}
+
+  table{width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:13.5px;}
+  thead th{position:sticky;top:0;background:var(--panel);z-index:1;text-align:left;color:var(--muted);font-weight:600;padding:8px 14px;border-bottom:1px solid var(--border-soft);font-size:12.5px;}
+  tbody td{padding:6px 14px;border-bottom:1px solid var(--border-soft);color:var(--ink);vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  .placeholder-row td{color:var(--muted);font-family:'IBM Plex Sans',sans-serif;padding:16px 16px;}
+  tr.cap-row{cursor:pointer;}
+  tr.cap-row:hover td{background:rgba(95,212,192,0.07);}
+  tr.cap-row.selected td{background:rgba(242,166,90,0.12);}
+  tr.cap-row.lost td{color:var(--muted);}
+  tr.sec-row td{background:var(--panel-2);color:var(--teal);font-weight:600;font-size:12.5px;letter-spacing:0.03em;}
+  td.meaning{color:var(--muted);font-family:'IBM Plex Sans',sans-serif;font-size:13px;}
+  td.expert{color:var(--amber);}
+  .dot-type{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;}
+
+  .chart-wrap{padding:10px 18px 4px;position:relative;}
+  .chart-legend{display:flex;gap:18px;font-size:12.5px;color:var(--muted);margin-bottom:4px;align-items:center;flex-wrap:wrap;}
+  .chart-legend span{display:inline-flex;align-items:center;gap:6px;}
+  .chart-legend i{display:inline-block;width:18px;height:0;border-top:2px solid;}
+  svg#cwndChart{display:block;width:100%;max-width:100%;height:230px;}
+  .axis-label{font-family:'IBM Plex Mono',monospace;font-size:11px;fill:var(--muted);}
+  .chart-tip{position:absolute;pointer-events:none;background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink);display:none;white-space:nowrap;}
+  details.chart-table{padding:0 18px 12px;color:var(--muted);font-size:13px;}
+  details.chart-table summary{cursor:pointer;}
+
+  .ref-body{padding:14px 18px;font-size:14.5px;line-height:1.6;color:var(--ink);}
+  .ref-body h3{font-size:15px;margin:16px 0 6px;color:var(--teal);}
+  .ref-body h3:first-child{margin-top:0;}
+  .ref-body p{margin:0 0 8px;color:var(--muted);}
+  .ref-body p b,.ref-body li b{color:var(--ink);font-weight:600;}
+  .ref-body ul{margin:0 0 8px;padding-left:20px;color:var(--muted);}
+  .ref-body table{margin:6px 0 10px;font-size:13.5px;}
+
+  .log-body{padding:10px 18px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.65;color:var(--muted);}
+  .log-body div{margin-bottom:3px;}
+  .log-body .tag{font-weight:700;padding:0 2px;}
+  .tag-conn{color:var(--teal);}
+  .tag-data{color:var(--amber);}
+  .tag-cc{color:var(--purple);}
+  .tag-loss{color:var(--red);}
+  .tag-udp{color:var(--blue);}
+  .tag-sys{color:var(--muted);}
+
+  .footer-credit{flex:0 0 auto;text-align:center;color:var(--muted);font-size:12px;line-height:1.5;letter-spacing:0.01em;}
+  .footer-credit strong{color:var(--ink);font-weight:600;}
+
+  @media (max-width:960px){
+    html,body{height:auto;overflow:visible;}
+    .app{height:auto;padding:12px 16px;}
+    .workspace{grid-template-columns:1fr;grid-template-rows:none;}
+    .ladder-wrap{height:460px;flex:none;}
+    .side-col{overflow-y:visible;}
+    .tabs-panel{height:auto;max-height:none;min-height:340px;}
+    .tab-content{min-height:300px;}
+    .stop-label{max-width:64px;font-size:10.5px;}
+    .stop-label b{font-size:11px;}
+    .metro{gap:2px;}
+    .topbar{padding:12px 14px;}
+    .topbar-row h1{font-size:20px;}
+  }
+</style>
+</head>
+
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="title-wrap">
+        <a href="../index.html" class="back-link">← Voltar ao Portal</a>
+        <h1>Simulador Visual de TCP e UDP</h1>
+      </div>
+      <div class="topbar-options">
+        <label class="topbar-protocol">Modo
+          <select id="modeSelect">
+            <option value="tcp" selected>TCP</option>
+            <option value="udp">UDP</option>
+            <option value="cmp">Comparação TCP x UDP</option>
+          </select>
+        </label>
+        <nav class="rfc-chips" aria-label="Especificações">
+          <a class="rfc-chip" href="https://www.rfc-editor.org/rfc/rfc9293" target="_blank" rel="noreferrer">RFC 9293 (TCP)</a>
+          <a class="rfc-chip" href="https://www.rfc-editor.org/rfc/rfc768" target="_blank" rel="noreferrer">RFC 768 (UDP)</a>
+          <a class="rfc-chip" href="https://www.rfc-editor.org/rfc/rfc5681" target="_blank" rel="noreferrer">RFC 5681</a>
+          <a class="rfc-chip" href="https://www.rfc-editor.org/rfc/rfc6298" target="_blank" rel="noreferrer">RFC 6298</a>
+        </nav>
+      </div>
+    </div>
+    <div class="scen-row" id="scenRow" aria-label="Cenários prontos"></div>
+    <div class="metro" id="metro"></div>
+  </header>
+
+  <main class="workspace">
+    <section class="panel stage-panel">
+      <div class="stage-header">
+        <h2 id="stageTitle">Diagrama de sequência</h2>
+        <div class="legend-inline">
+          <span class="legend-item"><span class="legend-dot" style="background:var(--teal)"></span>conexão (SYN, FIN)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span>dados</span>
+          <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>ACK / resposta</span>
+          <span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>retransmissão, ACK duplicado, perda</span>
+        </div>
+      </div>
+      <div class="ladder-wrap" id="ladderWrap">
+        <svg id="ladder" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Diagrama de sequência com as linhas do tempo do cliente e do servidor"></svg>
+      </div>
+    </section>
+
+    <aside class="side-col">
+      <div class="panel controls">
+        <div class="row">
+          <button class="primary" id="btnPlay" type="button">Simular</button>
+          <button id="btnStep" type="button">Passo</button>
+        </div>
+        <div class="row"><button id="btnRestart" type="button">Voltar ao início</button></div>
+        <label class="field" data-mode="udp">Aplicação UDP
+          <select id="appSelect">
+            <option value="stream" selected>Fluxo de datagramas (mídia)</option>
+            <option value="dns">DNS (consulta e resposta)</option>
+          </select>
+        </label>
+        <div class="sep"></div>
+        <div class="sub-title">Rede</div>
+        <div class="grid2">
+          <label class="field" data-app="file stream">Segmentos
+            <input type="number" id="fN" min="1" max="40" value="20">
+          </label>
+          <label class="field">RTT (ms)
+            <select id="fRtt"><option value="5">5</option><option value="10">10</option><option value="15" selected>15</option><option value="20">20</option><option value="50">50</option><option value="100">100</option><option value="200">200</option></select>
+          </label>
+          <label class="field" data-app="file stream">Banda (Mbps)
+            <select id="fBw"><option value="1" selected>1</option><option value="2">2</option><option value="5">5</option></select>
+          </label>
+          <label class="field">Perda (%)
+            <input type="number" id="fLoss" min="0" max="30" value="0">
+          </label>
+          <label class="field" data-app="file stream">Reordenação (%)
+            <input type="number" id="fReorder" min="0" max="30" value="0">
+          </label>
+          <label class="field">Semente
+            <input type="number" id="fSeed" min="1" max="9999" value="7">
+          </label>
+        </div>
+        <label class="field">Descartar na 1ª transmissão (nº)
+          <input type="text" id="fDrops" placeholder="ex.: 8, 15" value="">
+        </label>
+        <label class="check" data-app="file"><input type="checkbox" id="fAckLoss">Perda também nos ACKs</label>
+        <div class="sep" data-app="file"></div>
+        <div class="sub-title" data-app="file">TCP</div>
+        <div class="grid2" data-app="file">
+          <label class="field">Janela inicial
+            <select id="fIw"><option value="1" selected>1 seg.</option><option value="4">4 seg.</option><option value="10">10 seg.</option></select>
+          </label>
+          <label class="field">rwnd (seg.)
+            <select id="fRwnd"><option value="4">4</option><option value="8">8</option><option value="16" selected>16</option><option value="32">32</option></select>
+          </label>
+          <label class="field">ssthresh inicial
+            <select id="fSsth"><option value="64" selected>64 seg.</option><option value="8">8 seg.</option></select>
+          </label>
+        </div>
+        <label class="field">Velocidade da animação
+          <select id="speedSelect">
+            <option value="0.2" selected>Super lenta</option>
+            <option value="0.5">Lenta</option>
+            <option value="1">Normal</option>
+          </select>
+        </label>
+      </div>
+      <div class="panel state-panel" id="statePanel"></div>
+      <div class="panel inspector" id="inspector"></div>
+    </aside>
+  </main>
+
+  <section class="panel tabs-panel">
+    <div class="tab-bar" role="tablist">
+      <button class="tab-btn active" data-tab="cap" type="button" role="tab" aria-selected="true">Captura</button>
+      <button class="tab-btn" data-tab="msg" type="button" role="tab" aria-selected="false">Segmento</button>
+      <button class="tab-btn" data-tab="cwnd" type="button" role="tab" aria-selected="false">Janela (cwnd)</button>
+      <button class="tab-btn" data-tab="res" type="button" role="tab" aria-selected="false">Resultados</button>
+      <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência</button>
+      <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
+      <button class="tab-btn" data-tab="exp" type="button" role="tab" aria-selected="false">Explicação</button>
+    </div>
+    <div class="tab-content active" data-tab-content="cap">
+      <div class="tab-scroll">
+        <table>
+          <thead><tr><th>Nº</th><th>Tempo (s)</th><th>Origem</th><th>Destino</th><th>Protocolo</th><th>Tam.</th><th>Informação</th></tr></thead>
+          <tbody id="capBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tab-content" data-tab-content="msg">
+      <h2 id="msgTitle" class="tab-inner-title">Segmento selecionado</h2>
+      <div class="tab-scroll">
+        <table>
+          <thead><tr><th>Campo</th><th>Valor</th><th>Significado</th></tr></thead>
+          <tbody id="msgBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tab-content" data-tab-content="cwnd">
+      <div class="tab-scroll">
+        <div class="chart-wrap" id="chartWrap">
+          <div class="chart-legend" id="chartLegend">
+            <span><i style="border-color:var(--chart-cwnd)"></i>cwnd (janela de congestionamento)</span>
+            <span><i style="border-color:var(--chart-ssthresh);border-top-style:dashed"></i>ssthresh (limiar do slow start)</span>
+            <span>Eixo vertical em segmentos (MSS = 1000 bytes)</span>
+          </div>
+          <svg id="cwndChart" viewBox="0 0 900 250" preserveAspectRatio="xMinYMin meet" role="img" aria-label="Gráfico da cwnd e do ssthresh ao longo do tempo"></svg>
+          <div class="chart-tip" id="chartTip"></div>
+        </div>
+        <details class="chart-table">
+          <summary>Ver os valores em tabela</summary>
+          <table><thead><tr><th>Tempo (ms)</th><th>cwnd</th><th>ssthresh</th><th>Em voo</th><th>RTO (ms)</th><th>Evento</th></tr></thead><tbody id="chartTable"></tbody></table>
+        </details>
+      </div>
+    </div>
+    <div class="tab-content" data-tab-content="res">
+      <div class="tab-scroll">
+        <table>
+          <thead><tr id="resHead"><th>Métrica</th><th>Valor</th></tr></thead>
+          <tbody id="resBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tab-content" data-tab-content="ref">
+      <div class="tab-scroll">
+        <article class="ref-body">
+          <h3>A camada de transporte</h3>
+          <p>O IP entrega pacotes entre <b>hosts</b>, sem garantias. A camada de transporte entrega dados entre <b>processos</b>, identificados por <b>portas</b>. O <b>UDP</b> (RFC 768) acrescenta apenas portas, comprimento e checksum: cada datagrama é independente, sem conexão, sem confirmação, sem ordem e sem controle de taxa. O <b>TCP</b> (RFC 9293) oferece um fluxo de bytes confiável e ordenado, com controle de fluxo e de congestionamento, ao custo de abrir uma conexão e de esperar confirmações.</p>
+          <table>
+            <thead><tr><th>Aspecto</th><th>TCP</th><th>UDP</th></tr></thead>
+            <tbody>
+              <tr><td>Conexão</td><td>Sim (three-way handshake)</td><td>Não</td></tr>
+              <tr><td>Confiabilidade</td><td>ACKs e retransmissão</td><td>Nenhuma (a aplicação decide)</td></tr>
+              <tr><td>Ordem</td><td>Garantida (números de sequência)</td><td>Ordem de chegada</td></tr>
+              <tr><td>Controle de fluxo</td><td>Janela do receptor (rwnd)</td><td>Não</td></tr>
+              <tr><td>Controle de congestionamento</td><td>Sim (cwnd)</td><td>Não</td></tr>
+              <tr><td>Cabeçalho</td><td>20 a 60 bytes</td><td>8 bytes</td></tr>
+              <tr><td>Usos típicos</td><td>Web (HTTP/1.1 e 2), SSH, e-mail, transferência de arquivos</td><td>DNS, voz e vídeo (RTP), DHCP, NTP, QUIC (HTTP/3)</td></tr>
+            </tbody>
+          </table>
+          <h3>Conexão TCP</h3>
+          <ul>
+            <li><b>Abertura:</b> SYN, SYN-ACK e ACK. Cada lado escolhe um número de sequência inicial (ISN). O Wireshark, assim como este simulador, mostra números <b>relativos</b> (o ISN aparece como 0).</li>
+            <li><b>Estados:</b> o cliente passa por SYN_SENT e ESTABLISHED; o servidor por LISTEN, SYN_RCVD e ESTABLISHED.</li>
+            <li><b>Encerramento:</b> cada sentido é fechado com FIN e ACK. Quem fecha primeiro passa por FIN_WAIT_1, FIN_WAIT_2 e <b>TIME_WAIT</b>, onde espera 2×MSL (60 s no Linux) para absorver segmentos atrasados da conexão.</li>
+          </ul>
+          <h3>Confiabilidade e janela deslizante</h3>
+          <ul>
+            <li><b>ACK cumulativo:</b> informa o próximo byte esperado. Um segmento que chega fora de ordem faz o receptor repetir o último ACK (<b>ACK duplicado</b>).</li>
+            <li><b>RTO (RFC 6298):</b> o temporizador de retransmissão vale SRTT + 4×RTTVAR. Pelo <b>algoritmo de Karn</b>, segmentos retransmitidos não geram amostra de RTT. A cada timeout, o RTO dobra (backoff exponencial). A RFC recomenda mínimo de 1 s; o Linux usa 200 ms, valor adotado aqui.</li>
+            <li><b>Controle de fluxo:</b> o receptor anuncia quanto ainda consegue armazenar (rwnd). O emissor nunca tem mais dados em voo que min(cwnd, rwnd).</li>
+          </ul>
+          <h3>Controle de congestionamento (RFC 5681 e RFC 6582)</h3>
+          <ul>
+            <li><b>Slow start:</b> a cwnd começa pequena (1 a 4 segmentos; 10 no Linux, RFC 6928) e cresce 1 segmento por ACK, o que a <b>dobra a cada RTT</b>.</li>
+            <li><b>Congestion avoidance:</b> acima do ssthresh, cresce cerca de 1 segmento por RTT (crescimento linear).</li>
+            <li><b>Fast retransmit e fast recovery:</b> 3 ACKs duplicados indicam uma perda isolada. O emissor retransmite sem esperar o RTO e faz ssthresh = metade do que está em voo. O NewReno trata os ACKs parciais quando há várias perdas na mesma janela.</li>
+            <li><b>Timeout:</b> sinal de congestionamento grave. ssthresh = metade do que está em voo e cwnd = 1.</li>
+            <li>O Linux usa <b>CUBIC</b> (RFC 9438) por padrão. A lógica de crescer até perceber perda e então reduzir é a mesma mostrada aqui com Reno/NewReno.</li>
+          </ul>
+          <h3>UDP na prática</h3>
+          <p>Quem usa UDP assume o que precisa. O <b>DNS</b> repete a consulta se a resposta não chegar no tempo limite. A <b>voz e o vídeo</b> preferem perder um pacote a esperar por ele, porque um áudio atrasado já não serve. O <b>QUIC</b> (RFC 9000) implementa sobre o UDP a confiabilidade e o controle de congestionamento, com criptografia embutida.</p>
+        </article>
+      </div>
+    </div>
+    <div class="tab-content" data-tab-content="log">
+      <div class="tab-scroll"><div class="log-body" id="logBody"></div></div>
+    </div>
+    <div class="tab-content" data-tab-content="exp">
+      <div class="tab-scroll"><article class="ref-body" id="explainBody" aria-live="polite"></article></div>
+    </div>
+  </section>
+
+  <footer class="footer-credit">
+    Simulador desenvolvido pelo <strong>Prof. Dr. Laerte Peotta de Melo</strong>.<br>
+    Conteúdo elaborado com apoio de IA generativa, sob revisão do autor.<br>
+    Uso exclusivo para fins de ensino e pesquisa.
+  </footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const NS='http://www.w3.org/2000/svg';
+  function elNS(tag,attrs){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
+  const $=id=>document.getElementById(id);
+
+  // ---------- Constantes ----------
+  const MSS=1000, MIN_RTO=200;
+  const CLI={ip:'192.168.10.10',port:50432,isn:0x5A1B3C4D};
+  const SRV={ip:'203.0.113.80',isn:0x1F2E3D4C};
+  const COL={conn:'#5FD4C0',data:'#F2A65A',ack:'#6FB8E8',bad:'#E2574C',resp:'#6FB8E8'};
+  const DEFAULT_INSPECTOR='<div class="muted-txt"><p>Escolha um cenário no topo ou ajuste a rede e clique em <b>Simular</b>. Use <b>Passo</b> para avançar evento por evento.</p><p>Clique em uma seta do diagrama ou em uma linha da Captura para ver todos os campos do segmento.</p><p>Passe o mouse ou toque em qualquer campo de configuração (ⓘ) para ver a explicação dele.</p></div>';
+
+  // ---------- Estado ----------
+  let mode='tcp', app='file', speed=0.2;
+  let traces=[], layout=null;
+  let clock=0, endT=0, playing=false, lastTs=0, rate=0.1;
+  let capList=[], capShown=0, logShown=0, logAll=[], msgSel=null, activeScen=null;
+  let segEls=[], evEls=[];
+
+  // ---------- Referências DOM ----------
+  const modeSelect=$('modeSelect'), appSelect=$('appSelect'), scenRow=$('scenRow'), metroEl=$('metro');
+  const fN=$('fN'), fRtt=$('fRtt'), fBw=$('fBw'), fLoss=$('fLoss'), fReorder=$('fReorder'), fSeed=$('fSeed'), fDrops=$('fDrops'), fAckLoss=$('fAckLoss');
+  const fIw=$('fIw'), fRwnd=$('fRwnd'), fSsth=$('fSsth'), speedSelect=$('speedSelect');
+  const btnPlay=$('btnPlay'), btnStep=$('btnStep'), btnRestart=$('btnRestart');
+  const ladder=$('ladder'), ladderWrap=$('ladderWrap'), stageTitle=$('stageTitle');
+  const statePanel=$('statePanel'), inspector=$('inspector');
+  const capBody=$('capBody'), msgBody=$('msgBody'), msgTitle=$('msgTitle'), resBody=$('resBody'), resHead=$('resHead'), logBody=$('logBody');
+  const chart=$('cwndChart'), chartTip=$('chartTip'), chartTable=$('chartTable'), chartWrap=$('chartWrap');
+
+  // ---------- Aleatoriedade reprodutível (mesma semente, mesmas perdas) ----------
+  function rnd(seed,kind,idx,att){
+    let t=((seed*1000003)^(kind.charCodeAt(0)*7919)^(idx*104729)^(att*1299709))>>>0;
+    t=(t+0x6D2B79F5)>>>0;
+    t=Math.imul(t^(t>>>15),t|1);
+    t^=t+Math.imul(t^(t>>>7),t|61);
+    return ((t^(t>>>14))>>>0)/4294967296;
+  }
+  function params(){
+    const clamp=(v,a,b,d)=>{ const n=Number(v); return Number.isFinite(n)?Math.min(b,Math.max(a,Math.round(n))):d; };
+    return {
+      N:clamp(fN.value,1,40,20), rtt:+fRtt.value, bw:+fBw.value,
+      loss:clamp(fLoss.value,0,30,0)/100, reorder:clamp(fReorder.value,0,30,0)/100,
+      seed:clamp(fSeed.value,1,9999,7), ackLoss:fAckLoss.checked,
+      drops:fDrops.value.split(/[,; ]+/).map(x=>parseInt(x,10)).filter(x=>x>=1 && x<=40),
+      iw:+fIw.value, rwnd:+fRwnd.value, ssth:+fSsth.value
+    };
+  }
+  function dataLost(P,i,att){ return (att===0 && P.drops.indexOf(i+1)>=0) || rnd(P.seed,'d',i,att)<P.loss; }
+  function reorderExtra(P,i,att,tx){ return rnd(P.seed,'r',i,att)<P.reorder ? 2.5*tx+3 : 0; }
+
+  // ---------- Estrutura de um traço ----------
+  function newTrace(dport,svc,proto,title){
+    return {cols:[{key:'c',label:'Cliente',sub:CLI.ip+':'+CLI.port},{key:'s',label:'Servidor',sub:SRV.ip+':'+dport+' ('+svc+')'}],
+      proto:proto,title:title||proto,segs:[],events:[],log:[],states:[],samples:[],metro:[],stats:{},raw:{},end:0};
+  }
+  function addSeg(tr,o){
+    o.id=tr.segs.length; o.tags=o.tags||[];
+    if(o.lost) o.lostFrac=0.5;
+    tr.segs.push(o);
+    tr.end=Math.max(tr.end,o.lost?o.tSend+(o.tArr-o.tSend)*0.5:o.tArr);
+    return o;
+  }
+  function ev(tr,t,who,text){ tr.events.push({t:t,who:who,text:text}); tr.end=Math.max(tr.end,t); }
+  function lg(tr,t,text,tag){ tr.log.push({t:t,text:text,tag:tag||'sys'}); }
+  function st(tr,t,who,s){ tr.states.push({t:t,who:who,st:s}); }
+  function makeQueue(){
+    const q=[]; let n=0;
+    return {
+      at(t,fn){ q.push({t:t,o:n++,fn:fn}); },
+      run(limit){
+        let g=0;
+        while(q.length && g++<limit){
+          let b=0;
+          for(let i=1;i<q.length;i++) if(q[i].t<q[b].t || (q[i].t===q[b].t && q[i].o<q[b].o)) b=i;
+          const e=q.splice(b,1)[0]; e.fn(e.t);
+        }
+      }
+    };
+  }
+
+  // ---------- TCP: transferência de arquivo ----------
+  function simTcp(P,title){
+    const tr=newTrace(80,'HTTP','TCP',title);
+    const ow=P.rtt/2, tx=MSS*8/(P.bw*1000), N=P.N, Q=makeQueue();
+    let srtt=P.rtt, rttvar=P.rtt/2, rto=Math.max(MIN_RTO,P.rtt+2*P.rtt);
+    let cwnd=P.iw, ssthresh=P.ssth, una=0, nxt=0, dup=0, inRec=false, recover=0;
+    let nicFree=0, tVer=0, tOn=false, rcvNxt=0, lastAck=-1, dupN=0, ackNum=0;
+    const ooo=new Set(), txc=[], sentAt=[], wasRetx=[];
+    const S={sent:0,retx:0,fast:0,rto:0,start:0,end:0,acks:0,dupAcks:0,lostData:0,lostAcks:0,lostList:[],fastList:[],rtoList:[],rtoVals:[],caAt:null,oooSeen:false};
+    const sample=(t,e)=>tr.samples.push({t:t,cwnd:+cwnd.toFixed(2),ssthresh:ssthresh,flight:nxt-una,rto:Math.round(rto),ev:e||''});
+    const dataSeg=o=>Object.assign({proto:'TCP',win:64240,len:0},o);
+
+    // Abertura da conexão (sem perdas, para manter o foco na transferência)
+    st(tr,0,'s','LISTEN'); st(tr,0,'c','SYN_SENT');
+    tr.metro.push({t:0,label:'Handshake',sub:'SYN, SYN-ACK, ACK'});
+    addSeg(tr,dataSeg({from:'c',to:'s',tSend:0,tArr:ow,kind:'ctl',color:COL.conn,label:'SYN Seq=0',sport:CLI.port,dport:80,flags:['SYN'],seq:0,ack:null,opts:'MSS=1000',info:CLI.port+' → 80 [SYN] Seq=0 Win=64240 Len=0 MSS=1000'}));
+    lg(tr,0,'Cliente envia SYN (ISN mostrado como Seq=0 relativo) e anuncia MSS = 1000. Estado: SYN_SENT.','conn');
+    st(tr,ow,'s','SYN_RCVD');
+    addSeg(tr,dataSeg({from:'s',to:'c',tSend:ow,tArr:2*ow,kind:'ctl',color:COL.conn,label:'SYN, ACK Seq=0 Ack=1',sport:80,dport:CLI.port,flags:['SYN','ACK'],seq:0,ack:1,win:P.rwnd*MSS,opts:'MSS=1000',info:'80 → '+CLI.port+' [SYN, ACK] Seq=0 Ack=1 Win='+(P.rwnd*MSS)+' Len=0 MSS=1000'}));
+    lg(tr,ow,'Servidor responde SYN-ACK: confirma o SYN (Ack=1) e envia o próprio ISN. Estado: SYN_RCVD.','conn');
+    st(tr,2*ow,'c','ESTABLISHED');
+    addSeg(tr,dataSeg({from:'c',to:'s',tSend:2*ow,tArr:3*ow,kind:'ctl',color:COL.conn,label:'ACK Ack=1',sport:CLI.port,dport:80,flags:['ACK'],seq:1,ack:1,info:CLI.port+' → 80 [ACK] Seq=1 Ack=1 Win=64240 Len=0'}));
+    lg(tr,2*ow,'Cliente confirma com ACK e já pode enviar dados. Estado: ESTABLISHED. O handshake custou 1 RTT ('+P.rtt+' ms) antes do primeiro byte de dados.','conn');
+    st(tr,3*ow,'s','ESTABLISHED');
+    ev(tr,2*ow,'c','RTO inicial = '+Math.round(rto)+' ms');
+    tr.metro.push({t:2*ow,label:'Transferência',sub:'janela deslizante'});
+    S.start=2*ow; nicFree=2*ow;
+    sample(2*ow,'início');
+
+    function arm(t){ tVer++; const v=tVer; tOn=true; Q.at(t+rto,tt=>{ if(v===tVer && tOn) onRto(tt); }); }
+    function stop(){ tVer++; tOn=false; }
+
+    function send(i,t,why){
+      const att=txc[i]||0; txc[i]=att+1;
+      const tS=Math.max(t,nicFree); nicFree=tS+tx;
+      const extra=reorderExtra(P,i,att,tx), lost=dataLost(P,i,att), seq=1+i*MSS;
+      let pre='';
+      if(att>0){ pre=why==='fast'?'[TCP Fast Retransmission] ':'[TCP Retransmission] '; S.retx++; wasRetx[i]=true; }
+      const flags=i===N-1?['PSH','ACK']:['ACK'];
+      const s=addSeg(tr,dataSeg({from:'c',to:'s',tSend:tS,tArr:tS+tx+ow+extra,lost:lost,kind:'data',color:att>0?COL.bad:COL.data,
+        label:(att>0?'↻ ':'')+'#'+(i+1)+' Seq='+seq,sport:CLI.port,dport:80,flags:flags,seq:seq,ack:1,len:MSS,idx:i,
+        info:pre+CLI.port+' → 80 ['+flags.join(', ')+'] Seq='+seq+' Ack=1 Win=64240 Len='+MSS}));
+      if(att>0) s.tags.push(why==='fast'?'Fast Retransmission':'Retransmission');
+      if(extra) s.tags.push('atrasado na rede (reordenação)');
+      S.sent++; sentAt[i]=tS;
+      if(lost){ S.lostData++; S.lostList.push(i+1); lg(tr,tS,'Segmento #'+(i+1)+' (Seq='+seq+') perdido na rede.','loss'); }
+      else Q.at(s.tArr,tt=>receive(i,tt,s));
+      if(!tOn) arm(t);
+    }
+    function pump(t){
+      let g=0;
+      while(nxt<N && (nxt-una)<Math.floor(Math.min(cwnd,P.rwnd)) && g++<100){ const i=nxt; nxt++; send(i,t,txc[i]?'rto':'new'); }
+      if(!tOn && nxt>una) arm(t);
+      // Registra quantos segmentos ficaram em voo depois dos envios deste instante.
+      const last=tr.samples[tr.samples.length-1];
+      if(last && last.t===t) last.flight=nxt-una;
+    }
+    function receive(i,t,seg){
+      if(i===rcvNxt){
+        rcvNxt++; let filled=0;
+        while(ooo.has(rcvNxt)){ ooo.delete(rcvNxt); rcvNxt++; filled++; }
+        if(filled) ev(tr,t,'s','Lacuna preenchida: entrega até #'+rcvNxt+' em ordem');
+      } else if(i>rcvNxt){
+        ooo.add(i); seg.tags.push('fora de ordem'); S.oooSeen=true;
+        if(seg.info.indexOf('[TCP')!==0) seg.info='[TCP Out-Of-Order] '+seg.info;
+        ev(tr,t,'s','#'+(i+1)+' no buffer (falta #'+(rcvNxt+1)+')');
+      } else { seg.tags.push('duplicado'); seg.info='[TCP Spurious Retransmission] '+seg.info; }
+      const ackVal=1+rcvNxt*MSS;
+      let pre='', label='ACK='+ackVal;
+      if(ackVal===lastAck){ dupN++; S.dupAcks++; pre='[TCP Dup ACK #'+dupN+'] '; label+=' (dup '+dupN+')'; }
+      else { dupN=0; ackNum++; lastAck=ackVal; }
+      const k=S.acks++, lost=P.ackLoss && rnd(P.seed,'a',k,0)<P.loss;
+      const a=addSeg(tr,dataSeg({from:'s',to:'c',tSend:t,tArr:t+ow,lost:lost,kind:'ack',color:dupN?COL.bad:COL.ack,label:label,
+        sport:80,dport:CLI.port,flags:['ACK'],seq:1,ack:ackVal,win:P.rwnd*MSS,
+        info:pre+'80 → '+CLI.port+' [ACK] Seq=1 Ack='+ackVal+' Win='+(P.rwnd*MSS)+' Len=0'}));
+      if(dupN) a.tags.push('Dup ACK');
+      if(lost){ S.lostAcks++; lg(tr,t,'ACK='+ackVal+' perdido na rede. O próximo ACK, por ser cumulativo, cobre a perda.','loss'); }
+      else { const ai=rcvNxt; Q.at(t+ow,tt=>onAck(ai,tt)); }
+      if(rcvNxt===N && !S.rcvDone){ S.rcvDone=t; ev(tr,t,'s','Arquivo completo e em ordem ('+N+' segmentos)'); }
+    }
+    function onAck(ai,t){
+      if(una>=N) return;
+      if(ai>una){
+        const k=ai-1;
+        if(!wasRetx[k] && sentAt[k]!==undefined){
+          const r=t-sentAt[k];
+          rttvar=0.75*rttvar+0.25*Math.abs(srtt-r); srtt=0.875*srtt+0.125*r;
+          rto=Math.max(MIN_RTO,srtt+4*rttvar);
+        }
+        const acked=ai-una; una=ai; if(nxt<una) nxt=una;
+        let e='';
+        if(inRec){
+          if(ai>=recover){
+            cwnd=ssthresh; inRec=false; e='fim do fast recovery';
+            ev(tr,t,'c','ACK completo: fim do fast recovery, cwnd = '+ssthresh);
+            lg(tr,t,'O ACK cobre tudo até o ponto de recuperação: fim do fast recovery. cwnd = ssthresh = '+ssthresh+'.','cc');
+          } else {
+            cwnd=Math.max(cwnd-acked+1,1); e='ACK parcial';
+            ev(tr,t,'c','ACK parcial: retransmite #'+(una+1)+' (NewReno)');
+            lg(tr,t,'ACK parcial (NewReno, RFC 6582): houve outra perda na mesma janela. Retransmite #'+(una+1)+' sem esperar novos ACKs duplicados.','cc');
+            S.fastList.push(una+1); send(una,t,'fast');
+          }
+        } else if(cwnd<ssthresh){
+          cwnd+=acked;
+          if(cwnd>=ssthresh){
+            cwnd=ssthresh; e='congestion avoidance'; if(S.caAt===null && !S.fast && !S.rto) S.caAt=t;
+            ev(tr,t,'c','cwnd chegou ao ssthresh ('+ssthresh+'): congestion avoidance');
+            lg(tr,t,'cwnd chegou ao ssthresh ('+ssthresh+'): sai do slow start e passa ao crescimento linear (congestion avoidance).','cc');
+          }
+        } else cwnd+=acked/cwnd;
+        dup=0;
+        if(una>=N){ stop(); sample(t,e); finish(t); return; }
+        arm(t); sample(t,e);
+      } else if(ai===una && nxt>una){
+        dup++;
+        if(!inRec && dup===3){
+          const flight=nxt-una;
+          ssthresh=Math.max(Math.floor(flight/2),2); recover=nxt; inRec=true; S.fast++; S.fastList.push(una+1);
+          ev(tr,t,'c','3 ACKs duplicados: fast retransmit de #'+(una+1));
+          lg(tr,t,'Terceiro ACK duplicado: o segmento #'+(una+1)+' deve ter se perdido. Fast retransmit sem esperar o RTO. ssthresh = '+flight+'/2 = '+ssthresh+', cwnd = ssthresh + 3 = '+(ssthresh+3)+' (fast recovery).','cc');
+          send(una,t,'fast'); cwnd=ssthresh+3; sample(t,'fast retransmit');
+        } else if(inRec){ cwnd+=1; sample(t,''); }
+      }
+      pump(t);
+    }
+    function onRto(t){
+      if(una>=N) return;
+      const flight=nxt-una;
+      ssthresh=Math.max(Math.floor(flight/2),2); cwnd=1; inRec=false; dup=0; S.rto++;
+      const old=rto; S.rtoList.push(una+1); S.rtoVals.push(old); rto=Math.min(rto*2,60000); nxt=una; tOn=false;
+      ev(tr,t,'c','RTO ('+Math.round(old)+' ms) expirou: cwnd = 1, ssthresh = '+ssthresh);
+      lg(tr,t,'Timeout: nenhum ACK novo em '+Math.round(old)+' ms. Retransmite #'+(una+1)+', ssthresh = '+ssthresh+', cwnd = 1 (volta ao slow start) e o RTO dobra para '+Math.round(rto)+' ms.','loss');
+      sample(t,'RTO'); pump(t);
+    }
+    function finish(t){
+      S.end=t;
+      ev(tr,t,'c','Todos os dados confirmados');
+      tr.metro.push({t:t,label:'Encerramento',sub:'FIN e ACK'});
+      const fs=1+N*MSS;
+      st(tr,t,'c','FIN_WAIT_1');
+      addSeg(tr,dataSeg({from:'c',to:'s',tSend:t,tArr:t+ow,kind:'ctl',color:COL.conn,label:'FIN, ACK Seq='+fs,sport:CLI.port,dport:80,flags:['FIN','ACK'],seq:fs,ack:1,info:CLI.port+' → 80 [FIN, ACK] Seq='+fs+' Ack=1 Len=0'}));
+      lg(tr,t,'Cliente terminou de enviar: FIN. Estado: FIN_WAIT_1.','conn');
+      st(tr,t+ow,'s','CLOSE_WAIT');
+      addSeg(tr,dataSeg({from:'s',to:'c',tSend:t+ow,tArr:t+2*ow,kind:'ctl',color:COL.conn,label:'ACK='+(fs+1),sport:80,dport:CLI.port,flags:['ACK'],seq:1,ack:fs+1,win:P.rwnd*MSS,info:'80 → '+CLI.port+' [ACK] Seq=1 Ack='+(fs+1)+' Len=0'}));
+      st(tr,t+ow+1,'s','LAST_ACK');
+      addSeg(tr,dataSeg({from:'s',to:'c',tSend:t+ow+1,tArr:t+2*ow+1,kind:'ctl',color:COL.conn,label:'FIN, ACK Seq=1',sport:80,dport:CLI.port,flags:['FIN','ACK'],seq:1,ack:fs+1,win:P.rwnd*MSS,info:'80 → '+CLI.port+' [FIN, ACK] Seq=1 Ack='+(fs+1)+' Len=0'}));
+      lg(tr,t+ow,'Servidor confirma o FIN (CLOSE_WAIT); a aplicação fecha e ele envia o próprio FIN (LAST_ACK).','conn');
+      st(tr,t+2*ow,'c','FIN_WAIT_2'); st(tr,t+2*ow+1,'c','TIME_WAIT');
+      addSeg(tr,dataSeg({from:'c',to:'s',tSend:t+2*ow+1,tArr:t+3*ow+1,kind:'ctl',color:COL.conn,label:'ACK=2',sport:CLI.port,dport:80,flags:['ACK'],seq:fs+1,ack:2,info:CLI.port+' → 80 [ACK] Seq='+(fs+1)+' Ack=2 Len=0'}));
+      ev(tr,t+2*ow+1,'c','TIME_WAIT: aguarda 2×MSL (60 s no Linux)');
+      lg(tr,t+2*ow+1,'Cliente confirma o FIN do servidor e entra em TIME_WAIT por 2×MSL, para absorver segmentos atrasados desta conexão.','conn');
+      st(tr,t+3*ow+1,'s','CLOSED');
+      tr.metro.push({t:t+3*ow+1,label:'Fechado',sub:'TIME_WAIT no cliente'});
+    }
+
+    Q.at(2*ow,t=>pump(t));
+    Q.run(30000);
+    const dur=S.end?S.end-S.start:0;
+    tr.stats={
+      'Tempo total (do SYN ao último ACK)':Math.round(tr.end)+' ms',
+      'Tempo da transferência de dados':Math.round(dur)+' ms',
+      'Dados entregues à aplicação':N+' de '+N+' segmentos, em ordem',
+      'Segmentos de dados enviados':S.sent+' ('+S.retx+' retransmissões)',
+      'Perdas na rede (dados / ACKs)':S.lostData+' / '+S.lostAcks,
+      'Fast retransmits / timeouts':S.fast+' / '+S.rto,
+      'ACKs duplicados':S.dupAcks,
+      'Vazão útil (goodput)':dur?Math.round(N*MSS*8/dur)+' kbit/s (enlace de '+(P.bw*1000)+' kbit/s)':'-',
+      'Segmentos de controle':'3 no handshake e 4 no encerramento'
+    };
+    const uniq=a=>Array.from(new Set(a)).sort((x,y)=>x-y);
+    tr.raw={delivered:N,lost:S.lostData,order:'garantida',retx:S.retx,N:N,start:S.start,dur:dur,
+      lostList:S.lostList,fastList:uniq(S.fastList),rtoList:uniq(S.rtoList),rtoVals:S.rtoVals,caAt:S.caAt,lostAcks:S.lostAcks,oooSeen:S.oooSeen,
+      maxCwnd:Math.max.apply(null,tr.samples.map(x=>x.cwnd)),maxFlight:Math.max.apply(null,tr.samples.map(x=>x.flight))};
+    return tr;
+  }
+
+  // ---------- UDP: fluxo de datagramas ----------
+  function simUdp(P,title){
+    const tr=newTrace(5004,'RTP','UDP',title);
+    const ow=P.rtt/2, tx=MSS*8/(P.bw*1000), N=P.N;
+    st(tr,0,'c','sem conexão'); st(tr,0,'s','sem conexão');
+    tr.metro.push({t:0,label:'Envio',sub:'sem handshake'});
+    lg(tr,0,'O UDP não abre conexão: o primeiro datagrama sai imediatamente, na taxa que a aplicação escolher.','udp');
+    const arr=[], lostList=[], oooList=[]; let lost=0;
+    for(let i=0;i<N;i++){
+      const tS=i*tx, extra=reorderExtra(P,i,0,tx), l=dataLost(P,i,0);
+      const s=addSeg(tr,{from:'c',to:'s',tSend:tS,tArr:tS+tx+ow+extra,lost:l,kind:'data',color:COL.data,label:'Datagrama #'+(i+1),proto:'UDP',sport:CLI.port,dport:5004,len:MSS,idx:i,info:CLI.port+' → 5004 Len='+MSS});
+      if(extra) s.tags.push('atrasado na rede (reordenação)');
+      if(l){ lost++; lostList.push(i+1); s.tags.push('perdido'); lg(tr,tS,'Datagrama #'+(i+1)+' perdido. Ninguém retransmite: o UDP não sabe que ele se perdeu.','loss'); ev(tr,tS+tx+ow+4,'s','#'+(i+1)+' nunca chegou'); }
+      else arr.push(s);
+    }
+    arr.sort((a,b)=>a.tArr-b.tArr);
+    let maxI=-1, ooo=0;
+    arr.forEach(s=>{ if(s.idx<maxI){ ooo++; oooList.push(s.idx+1); s.tags.push('entregue fora de ordem'); ev(tr,s.tArr,'s','#'+(s.idx+1)+' entregue fora de ordem'); } maxI=Math.max(maxI,s.idx); });
+    const last=arr.length?arr[arr.length-1].tArr:tr.end;
+    tr.metro.push({t:last,label:'Fim',sub:'sem encerramento'});
+    tr.stats={
+      'Tempo até o último datagrama':Math.round(last)+' ms',
+      'Dados entregues à aplicação':arr.length+' de '+N+' datagramas',
+      'Perdidos (não recuperados)':lost,
+      'Entregues fora de ordem':ooo,
+      'Retransmissões':'0 (o UDP não retransmite)',
+      'Segmentos de controle':'nenhum'
+    };
+    tr.raw={kind:'stream',N:N,delivered:arr.length,lost:lost,lostList:lostList,oooList:oooList,order:ooo?ooo+' fora de ordem':'mantida nesta execução',retx:0,time:last};
+    return tr;
+  }
+
+  // ---------- UDP: DNS ----------
+  function simDns(P){
+    const tr=newTrace(53,'DNS','UDP','UDP');
+    const ow=P.rtt/2, TIMEOUT=1000;
+    st(tr,0,'c','sem conexão'); st(tr,0,'s','sem conexão');
+    tr.metro.push({t:0,label:'Consulta',sub:'um datagrama'});
+    let ok=false, k=0;
+    const lostQ=[], lostR=[];
+    for(k=0;k<3 && !ok;k++){
+      const t=k*TIMEOUT;
+      const lq=(k===0 && P.drops.indexOf(1)>=0) || rnd(P.seed,'d',k,0)<P.loss;
+      if(k>0){ ev(tr,t,'c','Timeout de '+TIMEOUT+' ms: a aplicação repete a consulta'); lg(tr,t,'Sem resposta em '+TIMEOUT+' ms: o resolvedor repete a consulta. Aqui a confiabilidade é responsabilidade da aplicação, não do UDP.','loss'); }
+      addSeg(tr,{from:'c',to:'s',tSend:t,tArr:t+ow,lost:lq,kind:'data',color:k?COL.bad:COL.data,label:(k?'↻ ':'')+'Consulta A www.unb.br id=0x2f1a',proto:'UDP',sport:CLI.port,dport:53,len:31,info:'Standard query 0x2f1a A www.unb.br'});
+      if(lq){ lostQ.push(k+1); lg(tr,t,'A consulta DNS foi perdida.','loss'); continue; }
+      const lr=rnd(P.seed,'a',k,0)<P.loss;
+      addSeg(tr,{from:'s',to:'c',tSend:t+ow+0.4,tArr:t+2*ow+0.4,lost:lr,kind:'ack',color:COL.resp,label:'Resposta A 164.41.101.12',proto:'UDP',sport:53,dport:CLI.port,len:47,info:'Standard query response 0x2f1a A www.unb.br A 164.41.101.12'});
+      if(lr){ lostR.push(k+1); lg(tr,t+ow,'A resposta DNS foi perdida.','loss'); continue; }
+      ok=true;
+      ev(tr,t+2*ow+0.4,'c','Resposta recebida: o ID 0x2f1a casa com a consulta');
+      lg(tr,t+2*ow+0.4,'O cliente associa a resposta à consulta pelo ID (0x2f1a) e pela porta. Resolução concluída em '+Math.round(t+2*ow)+' ms.','udp');
+      tr.metro.push({t:t+2*ow,label:'Resposta',sub:k?'após '+k+' repetição(ões)':'na primeira tentativa'});
+    }
+    if(!ok){ ev(tr,3*TIMEOUT,'c','Sem resposta após 3 tentativas'); tr.metro.push({t:3*TIMEOUT,label:'Falha',sub:'sem resposta'}); }
+    tr.raw={kind:'dns',ok:ok,attempts:k,lostQ:lostQ,lostR:lostR};
+    tr.stats={'Resultado':ok?'nome resolvido':'falhou','Tentativas':k,'Quem repete a consulta':'a aplicação (resolvedor), após o timeout','Conexão':'nenhuma: 1 RTT por consulta'};
+    return tr;
+  }
+
+  // ---------- Construção ----------
+  function build(){
+    pause();
+    const P=params();
+    if(mode==='cmp') traces=[simTcp(P,'TCP'),simUdp(P,'UDP')];
+    else if(mode==='tcp') traces=[simTcp(P)];
+    else traces=[app==='dns'?simDns(P):simUdp(P)];
+    endT=Math.max.apply(null,traces.map(t=>t.end))+Math.min(40,Math.max(4,P.rtt*0.5));
+    // Ritmo da animação: 1 RTT (ou 2 tempos de transmissão, se maior) leva cerca de 0,9 s em Normal.
+    const txMs=MSS*8/(P.bw*1000);
+    rate=Math.max(Math.max(P.rtt,2*txMs)/900,endT/60000);
+    clock=0; capShown=0; logShown=0; msgSel=null;
+    capList=[];
+    traces.forEach((tr,ti)=>tr.segs.forEach(s=>capList.push({tr:ti,seg:s})));
+    capList.sort((a,b)=>a.seg.tSend-b.seg.tSend);
+    capList.forEach((c,i)=>{ c.n=i+1; });
+    logAll=[];
+    traces.forEach(tr=>tr.log.forEach(l=>logAll.push({l:l,p:traces.length===2?tr.title+': ':''})));
+    logAll.sort((a,b)=>a.l.t-b.l.t);
+    logBody.innerHTML=''; capBody.innerHTML='';
+    stageTitle.textContent=mode==='cmp'?'Diagrama de sequência: TCP e UDP na mesma rede':(mode==='tcp'?'Diagrama de sequência: TCP (transferência de arquivo)':'Diagrama de sequência: UDP ('+appSelect.options[appSelect.selectedIndex].text+')');
+    drawLadder(P); drawChart(); renderResults(); renderExplain(); renderMessage(); update();
+  }
+
+  function drawLadder(P){
+    ladder.innerHTML=''; segEls=[]; evEls=[];
+    const W=mode==='cmp'?1240:900, top=70, ow=P.rtt/2, tx=MSS*8/(P.bw*1000);
+    let scale=Math.max(70/ow,(mode==='udp'&&app==='dns')?0:20/tx);
+    scale=Math.min(scale,7000/endT);
+    const H=top+endT*scale+30;
+    ladder.setAttribute('viewBox','0 0 '+W+' '+H);
+    ladder.style.minWidth=(mode==='cmp'?820:640)+'px';
+    const y=t=>top+t*scale;
+    layout={y:y,W:W};
+    const step=[10,20,50,100,200,500,1000,2000].find(s=>s*scale>=46)||5000;
+    for(let t=0;t<=endT;t+=step){
+      const ln=elNS('line',{x1:44,y1:y(t),x2:W-6,y2:y(t)}); ln.style.stroke='var(--border-soft)'; ladder.appendChild(ln);
+      const tl=elNS('text',{x:40,y:y(t)+4,'text-anchor':'end',class:'time-label'}); tl.textContent=t+' ms'; ladder.appendChild(tl);
+    }
+    const halves=traces.length===2?[[70,W/2-20],[W/2+40,W-20]]:[[70,W-20]];
+    traces.forEach((tr,ti)=>{
+      const x0=halves[ti][0], x1=halves[ti][1], pad=traces.length===2?175:220;
+      const xs={c:x0+pad,s:x1-pad};
+      if(traces.length===2){ const ht=elNS('text',{x:(x0+x1)/2,y:16,'text-anchor':'middle',class:'half-title'}); ht.textContent=tr.title; ladder.appendChild(ht); }
+      tr.cols.forEach(c=>{
+        const ty=traces.length===2?36:28;
+        const t1=elNS('text',{x:xs[c.key],y:ty,'text-anchor':'middle',class:'col-title'}); t1.textContent=c.label; ladder.appendChild(t1);
+        const t2=elNS('text',{x:xs[c.key],y:ty+16,'text-anchor':'middle',class:'col-sub'}); t2.textContent=c.sub; ladder.appendChild(t2);
+        const lf=elNS('line',{x1:xs[c.key],y1:top-8,x2:xs[c.key],y2:H-10}); lf.style.stroke='var(--muted)'; lf.style.strokeWidth='2px'; ladder.appendChild(lf);
+      });
+      tr.events.forEach(e=>{
+        const right=e.who==='s';
+        const g=elNS('g',{}); g.style.display='none';
+        const tt=elNS('text',{x:xs[e.who]+(right?10:-10),y:y(e.t)+4,'text-anchor':right?'start':'end',class:'ev-label'});
+        // Quebra anotações longas em linhas curtas para não sair da área do diagrama.
+        const words=e.text.split(' '), lines=[]; let cur='';
+        words.forEach(w=>{ if((cur+' '+w).trim().length>26 && cur){ lines.push(cur); cur=w; } else cur=(cur+' '+w).trim(); });
+        if(cur) lines.push(cur);
+        lines.forEach((ln,i)=>{ const sp=elNS('tspan',{x:xs[e.who]+(right?10:-10),dy:i===0?0:13}); sp.textContent=ln; tt.appendChild(sp); });
+        g.appendChild(tt); ladder.appendChild(g); evEls.push({t:e.t,g:g});
+      });
+      const lastLabelY={c:-99,s:-99};
+      tr.segs.forEach(s=>{
+        const xa=xs[s.from], xb=xs[s.to];
+        const g=elNS('g',{class:'seg-g'}); g.style.display='none';
+        const line=elNS('line',{x1:xa,y1:y(s.tSend),x2:xa,y2:y(s.tSend)});
+        line.style.stroke=s.color; line.style.strokeWidth=s.kind==='data'?'2.2px':'1.8px';
+        const head=elNS('polygon',{points:'0,0 -9,-4 -9,4'}); head.style.fill=s.color; head.style.display='none';
+        const mark=elNS('text',{'text-anchor':'middle',class:'seg-label'}); mark.style.fill='var(--red)'; mark.style.fontSize='15px'; mark.style.display='none'; mark.textContent='✕';
+        // Rótulo perto do emissor; se outro segmento saiu quase junto, desloca para não sobrepor.
+        let frac=0.24;
+        if(y(s.tSend)-lastLabelY[s.from]<13) frac=0.55;
+        else lastLabelY[s.from]=y(s.tSend);
+        const fx=xa+(xb-xa)*frac, fy=y(s.tSend)+(y(s.tArr)-y(s.tSend))*frac;
+        const lab=elNS('text',{x:fx,y:fy-4,'text-anchor':xb>xa?'start':'end',class:'seg-label'}); lab.style.fill=s.color; lab.textContent=s.label;
+        const hit=elNS('line',{x1:xa,y1:y(s.tSend),x2:xb,y2:y(s.tArr),stroke:'transparent','stroke-width':10});
+        g.appendChild(line); g.appendChild(head); g.appendChild(mark); g.appendChild(lab); g.appendChild(hit);
+        g.addEventListener('click',()=>{ msgSel=capList.find(c=>c.seg===s); renderMessage(); highlightCap(); activateTab('msg'); });
+        ladder.appendChild(g);
+        segEls.push({s:s,g:g,line:line,head:head,mark:mark,xa:xa,xb:xb});
+      });
+    });
+    ladderWrap.scrollTop=0;
+  }
+  function updateLadder(){
+    const y=layout.y;
+    segEls.forEach(e=>{
+      const s=e.s;
+      if(clock<s.tSend){ e.g.style.display='none'; return; }
+      e.g.style.display='';
+      const endF=s.lost?0.5:1;
+      const f=Math.min(1,(clock-s.tSend)/((s.tArr-s.tSend)*endF||1))*endF;
+      const x=e.xa+(e.xb-e.xa)*f, yy=y(s.tSend)+(y(s.tArr)-y(s.tSend))*f;
+      e.line.setAttribute('x2',x); e.line.setAttribute('y2',yy);
+      const done=f>=endF-1e-9;
+      if(done && !s.lost){
+        const ang=Math.atan2(y(s.tArr)-y(s.tSend),e.xb-e.xa)*180/Math.PI;
+        e.head.setAttribute('transform','translate('+x+','+yy+') rotate('+ang+')'); e.head.style.display='';
+      } else e.head.style.display='none';
+      if(done && s.lost){ e.mark.setAttribute('x',x); e.mark.setAttribute('y',yy+5); e.mark.style.display=''; } else e.mark.style.display='none';
+    });
+    evEls.forEach(e=>{ e.g.style.display=clock>=e.t?'':'none'; });
+  }
+
+  // ---------- Gráfico da cwnd ----------
+  let cg=null;
+  function drawChart(){
+    chart.innerHTML=''; chartTable.innerHTML=''; cg=null;
+    const tr=traces.find(t=>t.samples.length);
+    const legend=$('chartLegend');
+    if(!tr){
+      legend.style.display='none';
+      const t=elNS('text',{x:450,y:120,'text-anchor':'middle',class:'axis-label'}); t.style.fontSize='14px';
+      t.textContent='O UDP não tem controle de congestionamento: não existe cwnd.';
+      chart.appendChild(t); return;
+    }
+    legend.style.display='';
+    const S=tr.samples, L=48, R=880, T=14, B=222;
+    const t0=S[0].t, t1=Math.max(tr.end,t0+1);
+    const maxC=Math.max.apply(null,S.map(s=>s.cwnd));
+    const ss=S.map(s=>s.ssthresh).filter(v=>v<=maxC*2);
+    const yMax=Math.ceil(Math.max(maxC,ss.length?Math.max.apply(null,ss):0,4)*1.15);
+    const X=t=>L+(t-t0)/(t1-t0)*(R-L), Y=v=>B-Math.min(v,yMax)/yMax*(B-T);
+    cg={X:X,L:L,R:R};
+    const ys=yMax>40?10:(yMax>16?5:2);
+    for(let v=0;v<=yMax;v+=ys){
+      const ln=elNS('line',{x1:L,y1:Y(v),x2:R,y2:Y(v)}); ln.style.stroke='var(--border-soft)'; chart.appendChild(ln);
+      const t=elNS('text',{x:L-6,y:Y(v)+4,'text-anchor':'end',class:'axis-label'}); t.textContent=v; chart.appendChild(t);
+    }
+    const tst=[50,100,200,500,1000,2000].find(s=>(t1-t0)/s<=9)||5000;
+    for(let t=Math.ceil(t0/tst)*tst;t<=t1;t+=tst){ const tt=elNS('text',{x:X(t),y:B+16,'text-anchor':'middle',class:'axis-label'}); tt.textContent=t+' ms'; chart.appendChild(tt); }
+    const defs=elNS('defs',{}), cp=elNS('clipPath',{id:'reveal'}), cr=elNS('rect',{x:L-2,y:0,width:0,height:250,id:'revealRect'});
+    cp.appendChild(cr); defs.appendChild(cp); chart.appendChild(defs);
+    const g=elNS('g',{'clip-path':'url(#reveal)'});
+    const path=k=>{ let d=''; S.forEach((s,i)=>{ d+=i===0?'M'+X(s.t)+','+Y(s[k]):'H'+X(s.t)+'V'+Y(s[k]); }); return d+'H'+X(t1); };
+    S.forEach(s=>{
+      if(s.ev==='fast retransmit'||s.ev==='RTO'){
+        const ln=elNS('line',{x1:X(s.t),y1:T,x2:X(s.t),y2:B}); ln.style.stroke='var(--muted-line)'; ln.style.strokeDasharray='3,4'; g.appendChild(ln);
+        const lt=elNS('text',{x:X(s.t)+4,y:T+10,class:'axis-label'}); lt.textContent=s.ev==='RTO'?'RTO':'3 dup ACKs'; g.appendChild(lt);
+      }
+    });
+    const ps=elNS('path',{d:path('ssthresh'),fill:'none'}); ps.style.stroke='var(--chart-ssthresh)'; ps.style.strokeWidth='2px'; ps.style.strokeDasharray='6,4';
+    const pc=elNS('path',{d:path('cwnd'),fill:'none'}); pc.style.stroke='var(--chart-cwnd)'; pc.style.strokeWidth='2px';
+    g.appendChild(ps); g.appendChild(pc); chart.appendChild(g);
+    if(S.some(s=>s.ssthresh>yMax)){ const n=elNS('text',{x:R,y:T+10,'text-anchor':'end',class:'axis-label'}); n.textContent='ssthresh inicial ('+S[0].ssthresh+') acima da escala'; chart.appendChild(n); }
+    const cur=elNS('line',{x1:L,y1:T,x2:L,y2:B,id:'chartCursor'}); cur.style.stroke='var(--muted)'; chart.appendChild(cur);
+    const hov=elNS('line',{x1:0,y1:T,x2:0,y2:B}); hov.style.stroke='var(--ink)'; hov.style.display='none'; chart.appendChild(hov);
+    const hit=elNS('rect',{x:L,y:T,width:R-L,height:B-T,fill:'transparent'}); chart.appendChild(hit);
+    hit.addEventListener('mousemove',e=>{
+      const pt=chart.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
+      const p=pt.matrixTransform(chart.getScreenCTM().inverse());
+      const t=t0+(p.x-L)/(R-L)*(t1-t0);
+      let s=S[0]; S.forEach(x=>{ if(x.t<=t) s=x; });
+      hov.setAttribute('x1',p.x); hov.setAttribute('x2',p.x); hov.style.display='';
+      chartTip.style.display='block';
+      chartTip.innerHTML=Math.round(t)+' ms<br>cwnd: '+s.cwnd+'<br>ssthresh: '+s.ssthresh+'<br>em voo: '+s.flight;
+      const r=chartWrap.getBoundingClientRect();
+      chartTip.style.left=Math.min(e.clientX-r.left+12,r.width-140)+'px'; chartTip.style.top=(e.clientY-r.top-10)+'px';
+    });
+    hit.addEventListener('mouseleave',()=>{ hov.style.display='none'; chartTip.style.display='none'; });
+    S.forEach(s=>{ const r=document.createElement('tr'); r.innerHTML='<td>'+s.t.toFixed(1)+'</td><td>'+s.cwnd+'</td><td>'+s.ssthresh+'</td><td>'+s.flight+'</td><td>'+s.rto+'</td><td>'+s.ev+'</td>'; chartTable.appendChild(r); });
+  }
+  function updateChart(){
+    if(!cg) return;
+    const x=Math.max(cg.L,Math.min(cg.R,cg.X(clock)));
+    $('revealRect').setAttribute('width',x-cg.L+2);
+    const c=$('chartCursor'); c.setAttribute('x1',x); c.setAttribute('x2',x);
+  }
+
+  // ---------- Painéis ----------
+  function stateAt(tr,who){ let s='-'; tr.states.forEach(x=>{ if(x.who===who && x.t<=clock) s=x.st; }); return s; }
+  function sampleAt(tr){ let s=null; tr.samples.forEach(x=>{ if(x.t<=clock) s=x; }); return s; }
+  function pill(s){ const c=s==='ESTABLISHED'?' est':(s==='CLOSED'||s==='-'||s.indexOf('sem')===0?' closed':''); return '<span class="spill'+c+'">'+s+'</span>'; }
+  function renderState(){
+    let h='';
+    traces.forEach(tr=>{
+      h+='<div class="state-title">'+(traces.length===2?tr.title+': ':'')+(tr.proto==='TCP'?'estados TCP':'UDP não tem estados de conexão')+'</div>';
+      if(tr.proto==='TCP') tr.cols.forEach(c=>{ h+='<div class="cfg-line">'+c.label+pill(stateAt(tr,c.key))+'</div>'; });
+      const s=sampleAt(tr);
+      if(s) h+='<div class="cfg-line">cwnd / ssthresh<b>'+s.cwnd+' / '+s.ssthresh+'</b></div><div class="cfg-line">Segmentos em voo<b>'+s.flight+'</b></div><div class="cfg-line">RTO<b>'+s.rto+' ms</b></div>';
+    });
+    h+='<div class="cfg-line">Relógio<b>'+clock.toFixed(1)+' ms</b></div>';
+    statePanel.innerHTML=h;
+  }
+  function renderMetro(){
+    const m=traces[0].metro;
+    let a=0; m.forEach((x,i)=>{ if(x.t<=clock) a=i; });
+    if(clock>=endT-1) a=m.length;
+    metroEl.innerHTML='';
+    m.forEach((x,i)=>{
+      if(i>0){ const sg=document.createElement('div'); sg.className='seg'+(i<=a?' done':''); metroEl.appendChild(sg); }
+      const d=document.createElement('div'); d.className='stop'+(i<a?' done':(i===a?' active':''));
+      d.innerHTML='<div class="dot"></div><div class="stop-label"><b>'+x.label+'</b>'+x.sub+'</div>';
+      metroEl.appendChild(d);
+    });
+  }
+  function capRow(c){
+    const s=c.seg, tr=document.createElement('tr');
+    tr.className='cap-row'+(s.lost?' lost':'')+(c===msgSel?' selected':''); tr.tabIndex=0;
+    const src=s.from==='s'?SRV.ip:CLI.ip, dst=s.to==='s'?SRV.ip:CLI.ip;
+    const size=s.proto==='TCP'?40+(s.opts?4:0)+s.len:28+s.len;
+    tr.innerHTML='<td>'+c.n+'</td><td>'+(s.tSend/1000).toFixed(6)+'</td><td>'+src+'</td><td>'+dst+'</td><td>'+s.proto+'</td><td>'+size+'</td><td><span class="dot-type" style="background:'+s.color+'"></span>'+s.info+(s.lost?' (perdido na rede)':'')+'</td>';
+    const open=()=>{ msgSel=c; highlightCap(); renderMessage(); activateTab('msg'); };
+    tr.addEventListener('click',open);
+    tr.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); open(); } });
+    c.row=tr; return tr;
+  }
+  function highlightCap(){ capList.forEach(c=>{ if(c.row) c.row.classList.toggle('selected',c===msgSel); }); }
+  function updateCapture(){
+    if(capShown===0 && clock<capList[0].seg.tSend){ capBody.innerHTML='<tr class="placeholder-row"><td colspan="7">Clique em Simular para começar.</td></tr>'; return; }
+    if(capShown===0) capBody.innerHTML='';
+    let added=false;
+    while(capShown<capList.length && capList[capShown].seg.tSend<=clock){ capBody.appendChild(capRow(capList[capShown])); capShown++; added=true; }
+    if(added){ const sc=capBody.parentElement.parentElement; sc.scrollTop=sc.scrollHeight; }
+  }
+  function updateLog(){
+    let added=false;
+    while(logShown<logAll.length && logAll[logShown].l.t<=clock){
+      const e=logAll[logShown], d=document.createElement('div');
+      d.innerHTML='<span class="tag tag-'+e.l.tag+'">['+e.l.tag.toUpperCase()+']</span> '+e.l.t.toFixed(1)+' ms: '+e.p+e.l.text;
+      logBody.appendChild(d); logShown++; added=true;
+    }
+    if(added) logBody.parentElement.scrollTop=logBody.parentElement.scrollHeight;
+  }
+
+  // ---------- Detalhe do segmento ----------
+  function csum(b){ let s=0; for(let i=0;i<b.length;i+=2) s+=(b[i]<<8)+(i+1<b.length?b[i+1]:0); while(s>>>16) s=(s&0xffff)+(s>>>16); return (~s)&0xffff; }
+  const ipb=ip=>ip.split('.').map(Number);
+  function checksumOf(s){
+    const src=s.from==='s'?SRV.ip:CLI.ip, dst=s.to==='s'?SRV.ip:CLI.ip;
+    const pl=[]; for(let i=0;i<s.len;i++) pl.push(((s.seq||0)+i)&255);
+    if(s.proto==='UDP'){
+      const len=8+s.len, h=[s.sport>>8,s.sport&255,s.dport>>8,s.dport&255,len>>8,len&255,0,0];
+      return csum(ipb(src).concat(ipb(dst),[0,17,len>>8,len&255],h,pl));
+    }
+    const has=f=>s.flags.indexOf(f)>=0?1:0;
+    const fl=has('FIN')|has('SYN')<<1|has('RST')<<2|has('PSH')<<3|has('ACK')<<4;
+    const isnL=s.from==='c'?CLI.isn:SRV.isn, isnR=s.from==='c'?SRV.isn:CLI.isn;
+    const seq=(isnL+s.seq)>>>0, ack=s.ack===null?0:(isnR+s.ack)>>>0, hl=s.opts?24:20, len=hl+s.len;
+    const h=[s.sport>>8,s.sport&255,s.dport>>8,s.dport&255,seq>>>24,(seq>>>16)&255,(seq>>>8)&255,seq&255,ack>>>24,(ack>>>16)&255,(ack>>>8)&255,ack&255,(hl/4)<<4,fl,(s.win>>8)&255,s.win&255,0,0,0,0];
+    if(s.opts) h.push(2,4,MSS>>8,MSS&255);
+    return csum(ipb(src).concat(ipb(dst),[0,6,len>>8,len&255],h,pl));
+  }
+  function renderMessage(){
+    msgBody.innerHTML='';
+    if(!msgSel){ msgTitle.textContent='Segmento selecionado'; msgBody.innerHTML='<tr class="placeholder-row"><td colspan="3">Clique em uma seta do diagrama ou em uma linha da Captura.</td></tr>'; return; }
+    const s=msgSel.seg, rows=[];
+    msgTitle.textContent='#'+msgSel.n+' '+s.proto+': '+s.info;
+    const sec=t=>rows.push({sec:t}), r=(a,b,c,cls)=>rows.push({a:a,b:b,c:c||'',cls:cls});
+    sec('IPv4');
+    r('Origem',s.from==='s'?SRV.ip:CLI.ip,s.from==='s'?'servidor':'cliente');
+    r('Destino',s.to==='s'?SRV.ip:CLI.ip,'');
+    r('Protocolo',s.proto==='TCP'?'6 (TCP)':'17 (UDP)','');
+    if(s.proto==='TCP'){
+      const isnL=s.from==='c'?CLI.isn:SRV.isn, isnR=s.from==='c'?SRV.isn:CLI.isn;
+      sec('TCP (RFC 9293)');
+      r('Porta de origem',s.sport,s.sport===80?'servidor (HTTP)':'porta efêmera do cliente');
+      r('Porta de destino',s.dport,'');
+      r('Número de sequência',s.seq+' (relativo)','valor real: '+((isnL+s.seq)>>>0)+'. Posição do primeiro byte deste segmento no fluxo');
+      r('Número de reconhecimento',s.ack===null?'0 (flag ACK desligada)':s.ack+' (relativo)',s.ack===null?'':'valor real: '+((isnR+s.ack)>>>0)+'. Próximo byte esperado (ACK cumulativo)');
+      r('Tamanho do cabeçalho',(s.opts?24:20)+' bytes',s.opts?'20 fixos + opções':'sem opções');
+      r('Flags',s.flags.join(', '),{SYN:'abre a conexão',FIN:'encerra este sentido',ACK:'campo de reconhecimento válido',PSH:'entregar os dados à aplicação sem esperar'}[s.flags[0]]||'');
+      r('Janela',s.win+' bytes','espaço livre anunciado pelo emissor deste segmento (controle de fluxo)');
+      r('Checksum','0x'+checksumOf(s).toString(16).padStart(4,'0'),'cobre pseudo-cabeçalho IP, cabeçalho e dados');
+      if(s.opts) r('Opções',s.opts,'negociadas apenas no SYN e no SYN-ACK');
+      r('Dados',s.len+' bytes',s.len?'segmento '+(s.idx+1)+' do arquivo (MSS = 1000)':'segmento só de controle');
+    } else {
+      sec('UDP (RFC 768)');
+      r('Porta de origem',s.sport,'');
+      r('Porta de destino',s.dport,{53:'DNS',5004:'RTP (mídia)'}[s.dport]||'');
+      r('Comprimento',(8+s.len)+' bytes','cabeçalho (8) + dados');
+      r('Checksum','0x'+checksumOf(s).toString(16).padStart(4,'0'),'opcional no IPv4, obrigatório no IPv6');
+      r('Sequência, ACK e janela','não existem','o cabeçalho UDP tem só estes quatro campos');
+    }
+    sec('Análise');
+    r('Situação na rede',s.lost?'perdido na rede':'entregue em '+(s.tArr-s.tSend).toFixed(1)+' ms','',s.lost?'expert':'');
+    if(s.tags.length) r('Marcações',s.tags.join('; '),'equivalente ao "expert info" do Wireshark','expert');
+    rows.forEach(x=>{
+      const tr=document.createElement('tr');
+      if(x.sec){ tr.className='sec-row'; tr.innerHTML='<td colspan="3">'+x.sec+'</td>'; }
+      else tr.innerHTML='<td>'+x.a+'</td><td'+(x.cls?' class="'+x.cls+'"':'')+'>'+x.b+'</td><td class="meaning">'+x.c+'</td>';
+      msgBody.appendChild(tr);
+    });
+  }
+  function renderResults(){
+    resBody.innerHTML='';
+    if(traces.length===2){
+      resHead.innerHTML='<th>Métrica</th><th>TCP</th><th>UDP</th>';
+      const a=traces[0].raw, b=traces[1].raw, N=params().N;
+      [['Tempo até o fim',Math.round(traces[0].end)+' ms (inclui handshake e encerramento)',Math.round(b.time)+' ms'],
+       ['Dados entregues à aplicação',a.delivered+' de '+N,b.delivered+' de '+N],
+       ['Perdas na rede',a.lost+'',b.lost+''],
+       ['Perdas percebidas pela aplicação','0 (todas recuperadas)',(N-b.delivered)+''],
+       ['Ordem de entrega',a.order,b.order],
+       ['Retransmissões',a.retx+'','0'],
+       ['Conexão','handshake (1 RTT) e encerramento','nenhuma']
+      ].forEach(x=>{ const tr=document.createElement('tr'); tr.innerHTML='<td>'+x[0]+'</td><td>'+x[1]+'</td><td>'+x[2]+'</td>'; resBody.appendChild(tr); });
+      const tr=document.createElement('tr'); tr.innerHTML='<td colspan="3" class="meaning">Mesma rede e mesmas perdas (mesma semente): o TCP termina depois, mas entrega tudo e em ordem; o UDP termina antes e entrega o que chegou. A escolha depende da aplicação.</td>'; resBody.appendChild(tr);
+      return;
+    }
+    resHead.innerHTML='<th>Métrica</th><th>Valor</th>';
+    const s=traces[0].stats;
+    Object.keys(s).forEach(k=>{ const tr=document.createElement('tr'); tr.innerHTML='<td>'+k+'</td><td>'+s[k]+'</td>'; resBody.appendChild(tr); });
+  }
+  function activateTab(name){
+    document.querySelectorAll('.tab-btn').forEach(b=>{ const on=b.dataset.tab===name; b.classList.toggle('active',on); b.setAttribute('aria-selected',on); });
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.toggle('active',c.dataset.tabContent===name));
+  }
+
+  // ---------- Reprodução ----------
+  function update(){
+    updateLadder(); updateChart(); renderState(); renderMetro(); updateCapture(); updateLog();
+    btnPlay.textContent=playing?'Pausar':(clock>0 && clock<endT?'Continuar':'Simular');
+    if(playing){
+      const k=ladder.getBoundingClientRect().width/layout.W;
+      const target=layout.y(clock)*k-ladderWrap.clientHeight*0.6;
+      if(target>ladderWrap.scrollTop) ladderWrap.scrollTop=target;
+    }
+  }
+  function frame(ts){
+    if(!playing) return;
+    const dt=Math.min(100,ts-lastTs); lastTs=ts;
+    clock=Math.min(endT,clock+dt*rate*speed);
+    if(clock>=endT) playing=false;
+    update();
+    if(playing) requestAnimationFrame(frame);
+  }
+  function play(){ if(clock>=endT) restart(); playing=true; lastTs=performance.now(); update(); requestAnimationFrame(frame); }
+  function pause(){ playing=false; }
+  function restart(){ pause(); clock=0; capShown=0; logShown=0; capBody.innerHTML=''; logBody.innerHTML=''; ladderWrap.scrollTop=0; update(); }
+  function stepOnce(){
+    pause();
+    const ts=[];
+    traces.forEach(tr=>{ tr.segs.forEach(s=>{ ts.push(s.tSend); ts.push(s.lost?s.tSend+(s.tArr-s.tSend)*0.5:s.tArr); }); tr.events.forEach(e=>ts.push(e.t)); });
+    const n=ts.filter(t=>t>clock+0.01).sort((a,b)=>a-b)[0];
+    clock=n===undefined?endT:n;
+    update();
+    const k=ladder.getBoundingClientRect().width/layout.W;
+    ladderWrap.scrollTop=Math.max(0,layout.y(clock)*k-ladderWrap.clientHeight*0.5);
+  }
+
+  // ---------- Formulário e cenários ----------
+  function updateFields(){
+    document.querySelectorAll('[data-mode]').forEach(el=>el.classList.toggle('hidden',el.dataset.mode!==mode));
+    const key=mode==='udp'?app:'file';
+    document.querySelectorAll('[data-app]').forEach(el=>{
+      let show=el.dataset.app.split(' ').indexOf(key)>=0;
+      if(mode==='cmp') show=true;
+      el.classList.toggle('hidden',!show);
+    });
+  }
+  const SCENARIOS=[
+    {g:'TCP',id:'hs',label:'Handshake e encerramento',set:{mode:'tcp',N:3,loss:0,drops:'',iw:1,rwnd:16,ssth:64,reorder:0},
+      what:'<p>Três segmentos na abertura (SYN, SYN-ACK, ACK), três de dados e quatro no encerramento (FIN e ACK em cada sentido).</p><p>Acompanhe os estados no painel. O primeiro byte de dados só sai depois de 1 RTT, e o cliente termina em TIME_WAIT.</p>'},
+    {g:'TCP',id:'ss',label:'Slow start',set:{mode:'tcp',N:30,loss:0,drops:'',iw:1,rwnd:32,ssth:8,reorder:0},
+      what:'<p>A cwnd começa em 1 e cresce 1 segmento por ACK: as rajadas dobram a cada RTT (1, 2, 4, 8). Ao atingir o ssthresh (8), passa a crescer cerca de 1 segmento por RTT.</p><p>Veja a aba Janela (cwnd). Repare também que os ACKs voltam espaçados e cadenciam os próximos envios (ACK clocking).</p>'},
+    {g:'TCP',id:'fr',label:'Fast retransmit',set:{mode:'tcp',N:20,loss:0,drops:'8',iw:4,rwnd:16,ssth:64,reorder:0},
+      what:'<p>O segmento #8 se perde. Os seguintes chegam fora de ordem e o receptor repete o ACK do que falta. No terceiro ACK duplicado, o emissor retransmite sem esperar o timeout e reduz a janela à metade (fast recovery).</p><p>No gráfico, a cwnd cai à metade em vez de voltar a 1.</p>'},
+    {g:'TCP',id:'rto',label:'Timeout (RTO)',set:{mode:'tcp',N:6,loss:0,drops:'6',iw:4,rwnd:16,ssth:64,reorder:0},
+      what:'<p>O último segmento (#6) se perde. Sem segmentos depois dele, não surgem ACKs duplicados: só o temporizador RTO percebe a perda.</p><p>Depois do timeout, a cwnd volta a 1 e o RTO dobra. Compare o tempo gasto com o do fast retransmit.</p>'},
+    {g:'TCP',id:'rwnd',label:'Janela do receptor',set:{mode:'tcp',N:20,loss:0,drops:'',iw:10,rwnd:4,ssth:64,reorder:0},
+      what:'<p>A cwnd começa em 10, mas o receptor anuncia rwnd = 4 segmentos. O emissor nunca tem mais de 4 segmentos em voo: é o controle de fluxo, que protege o buffer do receptor.</p><p>Compare com rwnd = 16 e veja a diferença no tempo total.</p>'},
+    {g:'TCP',id:'rand',label:'Perdas aleatórias',set:{mode:'tcp',N:30,loss:8,drops:'',iw:4,rwnd:16,ssth:64,reorder:0},
+      what:'<p>8% de perda nos dados, sorteada pela semente. O TCP combina fast retransmit, ACKs parciais e, às vezes, timeouts.</p><p>Troque a semente para ver outras sequências de perdas com a mesma taxa.</p>'},
+    {g:'UDP',id:'ustream',label:'Fluxo com perdas',set:{mode:'udp',app:'stream',N:20,loss:10,drops:'',reorder:10},
+      what:'<p>Vinte datagramas de mídia saem sem handshake e sem esperar confirmação. Os perdidos não são recuperados e os atrasados chegam fora de ordem.</p><p>Para voz e vídeo, isso é aceitável: um áudio atrasado já não serve.</p>'},
+    {g:'UDP',id:'udns',label:'DNS com repetição',set:{mode:'udp',app:'dns',loss:0,drops:'1',reorder:0},
+      what:'<p>A primeira consulta se perde. O UDP não percebe; quem percebe é o resolvedor, que espera 1 s e repete a consulta.</p><p>É o padrão de quem usa UDP: a confiabilidade, quando necessária, fica com a aplicação.</p>'},
+    {g:'Comparação',id:'closs',label:'TCP x UDP: 10% de perda',set:{mode:'cmp',N:20,loss:10,drops:'',iw:4,rwnd:16,ssth:64,reorder:0},
+      what:'<p>Os dois protocolos enviam 20 segmentos pela mesma rede, com as mesmas perdas. O UDP termina antes e entrega o que chegou; o TCP leva mais tempo e entrega tudo, em ordem.</p><p>Veja a aba Resultados.</p>'},
+    {g:'Comparação',id:'cord',label:'TCP x UDP: reordenação',set:{mode:'cmp',N:20,loss:0,drops:'',iw:4,rwnd:16,ssth:64,reorder:15},
+      what:'<p>Sem perdas, mas com 15% dos pacotes atrasados na rede. O UDP entrega fora de ordem. O TCP reordena no buffer do receptor e pode até retransmitir sem necessidade, se a desordem gerar três ACKs duplicados.</p>'}
+  ];
+  function renderScenarios(){
+    scenRow.innerHTML=''; let g=null;
+    SCENARIOS.forEach(s=>{
+      if(s.g!==g){ g=s.g; const sp=document.createElement('span'); sp.className='scen-group'; sp.textContent=g; scenRow.appendChild(sp); }
+      const b=document.createElement('button'); b.type='button'; b.className='chip'+(activeScen===s.id?' active':''); b.textContent=s.label;
+      b.addEventListener('click',()=>applyScenario(s)); scenRow.appendChild(b);
+    });
+  }
+  function applyScenario(s){
+    const c=s.set;
+    mode=c.mode; modeSelect.value=mode;
+    if(c.app){ app=c.app; appSelect.value=app; } else if(mode!=='udp') app='file';
+    if(c.N!==undefined) fN.value=c.N;
+    fLoss.value=c.loss; fDrops.value=c.drops; fReorder.value=c.reorder||0;
+    if(c.iw) fIw.value=c.iw; if(c.rwnd) fRwnd.value=c.rwnd; if(c.ssth) fSsth.value=c.ssth;
+    fAckLoss.checked=false;
+    activeScen=s.id;
+    setInspector('<div class="insp-kicker">Cenário: '+s.g+'</div><div class="insp-title">'+s.label+'</div><div class="muted-txt">'+s.what+'<p>Clique em <b>Simular</b> ou avance com <b>Passo</b>.</p></div>');
+    renderScenarios(); updateFields(); build();
+  }
+  function changed(){ activeScen=null; renderScenarios(); setInspector(DEFAULT_INSPECTOR); build(); }
+
+  // ---------- Eventos ----------
+  btnPlay.addEventListener('click',()=>{ if(playing){ pause(); update(); } else play(); });
+  btnStep.addEventListener('click',stepOnce);
+  btnRestart.addEventListener('click',restart);
+  modeSelect.addEventListener('change',()=>{ mode=modeSelect.value; app=mode==='udp'?appSelect.value:'file'; updateFields(); changed(); });
+  appSelect.addEventListener('change',()=>{ app=appSelect.value; updateFields(); changed(); });
+  [fN,fRtt,fBw,fLoss,fReorder,fSeed,fDrops,fAckLoss,fIw,fRwnd,fSsth].forEach(e=>e.addEventListener('change',changed));
+  speedSelect.addEventListener('change',()=>{ speed=parseFloat(speedSelect.value); });
+  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
+
+  // ---------- Explicação de cada campo de configuração ----------
+  const HELP={
+    modeSelect:{t:'Modo',s:'Escolhe o protocolo simulado.',
+      p:['<b>TCP:</b> uma conexão completa, com handshake, transferência confiável e encerramento.','<b>UDP:</b> datagramas independentes, sem conexão e sem confirmação.','<b>Comparação:</b> TCP e UDP enviam o mesmo volume de dados pela mesma rede, com as mesmas perdas, lado a lado.']},
+    appSelect:{t:'Aplicação UDP',s:'Tipo de uso do UDP.',
+      p:['<b>Fluxo de datagramas:</b> mídia (voz ou vídeo, porta 5004 do RTP) enviada na taxa do enlace, sem esperar confirmação.','<b>DNS:</b> uma consulta e uma resposta na porta 53. Se a resposta não chegar em 1 s, a própria aplicação repete a consulta.']},
+    fN:{t:'Segmentos',s:'Quantos segmentos (TCP) ou datagramas (UDP) de 1000 bytes serão enviados.',
+      p:['Cada segmento carrega 1000 bytes de dados (o MSS). 20 segmentos equivalem a um arquivo de 20 kB.','Com mais segmentos, o crescimento da janela de congestionamento fica mais visível.']},
+    fRtt:{t:'RTT (Round-Trip Time)',s:'Tempo de ida e volta na rede, sem contar a transmissão.',
+      p:['Metade do RTT é o atraso de propagação em cada sentido.','Ele define o custo do handshake (1 RTT antes do primeiro dado), o ritmo do slow start (a janela dobra a cada RTT) e o valor do RTO.','Referências: cerca de 1 ms em rede local, 15 ms em uma rede metropolitana e de 100 a 200 ms entre continentes.']},
+    fBw:{t:'Banda',s:'Capacidade do enlace em megabits por segundo.',
+      p:['Define o tempo de transmissão de cada segmento: 1000 bytes levam 8 ms a 1 Mbps e 1,6 ms a 5 Mbps. Por isso as setas saem espaçadas no diagrama.','O produto banda × RTT indica quantos dados precisam estar em voo para ocupar o enlace inteiro.']},
+    fLoss:{t:'Perda (%)',s:'Probabilidade de cada segmento de dados ser descartado na rede.',
+      p:['O sorteio vale para cada transmissão, inclusive as retransmissões, e é definido pela semente.','No DNS, vale para a consulta e para a resposta.','Exemplo: 1% já é uma perda alta em redes cabeadas; redes sem fio congestionadas podem passar de 5%.']},
+    fReorder:{t:'Reordenação (%)',s:'Probabilidade de um pacote atrasar e chegar depois dos seguintes.',
+      p:['Simula pacotes que seguem caminhos diferentes ou ficam mais tempo em uma fila.','No TCP, o receptor guarda o pacote adiantado e repete o ACK do que falta (ACK duplicado). Se a desordem gerar 3 ACKs duplicados, o emissor retransmite sem necessidade.','No UDP, a aplicação recebe os datagramas fora de ordem.']},
+    fSeed:{t:'Semente',s:'Número que define o sorteio das perdas e dos atrasos.',
+      p:['A mesma semente gera sempre as mesmas perdas: a simulação se repete igual em aula.','No modo Comparação, TCP e UDP sofrem exatamente as mesmas perdas.','Troque o valor para ver outra sequência de perdas com a mesma taxa.']},
+    fDrops:{t:'Descartar na 1ª transmissão',s:'Números dos segmentos que se perdem na primeira vez que são enviados.',
+      p:['Separe os números por vírgula, por exemplo "8, 15". A retransmissão desses segmentos não é descartada, a não ser pela perda aleatória.','Permite criar situações exatas: perder um segmento do meio provoca fast retransmit; perder o último provoca timeout.','No DNS, "1" descarta a primeira consulta.']},
+    fAckLoss:{t:'Perda também nos ACKs',s:'Aplica a mesma taxa de perda aos ACKs do servidor.',
+      p:['Como o ACK do TCP é cumulativo, o ACK seguinte confirma também o que o ACK perdido confirmaria.','Por isso a perda de ACKs raramente causa retransmissão; na maioria das vezes, só atrasa um pouco o crescimento da janela.']},
+    fIw:{t:'Janela inicial (IW)',s:'Valor da cwnd no início da transferência, em segmentos.',
+      p:['É quantos segmentos o emissor pode enviar antes do primeiro ACK.','O valor original era 1; a RFC 5681 permite de 2 a 4 e o Linux usa 10 (RFC 6928).','Com 1, o slow start fica bem visível: 1, 2, 4, 8 segmentos por RTT.']},
+    fRwnd:{t:'rwnd (janela do receptor)',s:'Espaço de buffer que o servidor anuncia em cada ACK.',
+      p:['É o controle de fluxo: protege o receptor de receber mais do que consegue guardar. O valor aparece no campo Janela dos ACKs (16 segmentos = 16000 bytes).','O emissor nunca tem mais que o mínimo entre cwnd e rwnd em voo. Com rwnd = 4, a cwnd pode crescer, mas o envio fica limitado a 4 segmentos.']},
+    fSsth:{t:'ssthresh inicial',s:'Limiar entre o slow start e o congestion avoidance.',
+      p:['Abaixo do ssthresh, a cwnd cresce exponencialmente (slow start). Acima, cresce cerca de 1 segmento por RTT (congestion avoidance).','Com 64, o slow start vai até a primeira perda ou até o limite da rwnd. Com 8, a mudança de fase aparece cedo.','Depois de uma perda, o TCP recalcula o ssthresh como metade do que estava em voo.']},
+    speedSelect:{t:'Velocidade da animação',s:'Ritmo da animação. Não altera os resultados.',
+      p:['Muda só a velocidade de exibição. O tempo simulado, as perdas e as métricas são os mesmos.','Na Super lenta, com RTT de 15 ms, um RTT dura cerca de 4 s na tela.','Use o botão Passo para avançar evento por evento.']}
+  };
+  function setInspector(html){ inspector.innerHTML=html; }
+  // Balão flutuante ao lado do campo, para a explicação ficar sempre visível.
+  const helpBox=document.createElement('div');
+  helpBox.className='field-help'; helpBox.id='fieldHelp'; helpBox.setAttribute('role','tooltip');
+  document.body.appendChild(helpBox);
+  let helpId=null;
+  function showHelp(id){
+    const h=HELP[id], lab=$(id).closest('label');
+    helpId=id;
+    helpBox.innerHTML='<div class="fh-title">'+h.t+'</div>'+h.p.map(x=>'<p>'+x+'</p>').join('');
+    helpBox.style.display='block';
+    const r=(lab||$(id)).getBoundingClientRect(), bw=helpBox.offsetWidth, bh=helpBox.offsetHeight;
+    if(r.bottom<0 || r.top>window.innerHeight){ hideHelp(); return; }
+    const left=Math.max(8,Math.min(r.left,window.innerWidth-bw-8));
+    let top=r.bottom+6;
+    if(top+bh>window.innerHeight-8) top=Math.max(8,r.top-bh-6);
+    helpBox.style.left=left+'px'; helpBox.style.top=top+'px';
+  }
+  function hideHelp(){ helpBox.style.display='none'; helpId=null; }
+  // O balão usa posição fixa: ao rolar, acompanha o campo (e some se o campo sair da tela).
+  const followHelp=()=>{ if(helpId) showHelp(helpId); };
+  document.querySelector('.side-col').addEventListener('scroll',followHelp,{passive:true});
+  window.addEventListener('scroll',followHelp,{passive:true});
+  function attachHelp(){
+    Object.keys(HELP).forEach(id=>{
+      const ctl=$(id), lab=ctl.closest('label');
+      ctl.title=HELP[id].s;
+      if(lab){
+        const icon=document.createElement('span');
+        icon.className='info'; icon.setAttribute('aria-hidden','true'); icon.textContent='ⓘ';
+        // Nome do campo e ícone na mesma linha.
+        const txt=Array.from(lab.childNodes).find(n=>n.nodeType===3 && n.textContent.trim());
+        if(txt){
+          const wrap=document.createElement('span'); wrap.className='lbl';
+          lab.insertBefore(wrap,txt); wrap.appendChild(document.createTextNode(txt.textContent.trim())); wrap.appendChild(icon);
+          lab.removeChild(txt);
+        } else lab.appendChild(icon);
+        lab.addEventListener('mouseenter',()=>showHelp(id));
+        lab.addEventListener('mouseleave',()=>{ if(document.activeElement!==ctl) hideHelp(); });
+      }
+      ctl.setAttribute('aria-describedby','fieldHelp');
+      ctl.addEventListener('focus',()=>showHelp(id));
+      ctl.addEventListener('blur',hideHelp);
+      ctl.addEventListener('keydown',e=>{ if(e.key==='Escape') hideHelp(); });
+    });
+  }
+
+  // ---------- Aba Explicação: texto gerado a partir do experimento executado ----------
+  function listSeg(a){ return a.map(n=>'#'+n).join(', ').replace(/, ([^,]*)$/,' e $1'); }
+  function fmtMs(v){ return (Math.round(v*10)/10).toString().replace('.',',')+' ms'; }
+  function plural(n,s,p){ return n+' '+(n===1?s:p); }
+  // Escolhe singular ou plural conforme a quantidade de itens.
+  function sp(a,s,p){ return a.length===1?s:p; }
+  function explainConfig(P,withTcp){
+    const tx=MSS*8/(P.bw*1000), bdp=P.bw*P.rtt/8;
+    const pct=v=>Math.round(v*100)+'%';
+    let h='<p>O cliente envia '+plural(P.N,'segmento','segmentos')+' de 1000 bytes ('+P.N+' kB) por um enlace de <b>'+P.bw+' Mbps</b> com <b>RTT de '+P.rtt+' ms</b>. '+
+      'Cada segmento leva '+fmtMs(tx)+' para ser transmitido e mais '+fmtMs(P.rtt/2)+' para atravessar a rede. '+
+      'O produto banda × RTT é de <b>'+(Math.round(bdp*10)/10).toString().replace('.',',')+(bdp===1?' segmento':' segmentos')+'</b>: é o volume que precisa estar em voo para manter o enlace ocupado o tempo todo.</p>';
+    const net=[];
+    net.push(P.loss?'perda aleatória de '+pct(P.loss)+' (semente '+P.seed+')':'sem perda aleatória');
+    if(P.drops.length) net.push('descarte forçado na 1ª transmissão de '+listSeg(P.drops));
+    if(P.reorder) net.push(pct(P.reorder)+' dos pacotes atrasados (reordenação)');
+    if(withTcp && P.ackLoss && P.loss) net.push('perda também nos ACKs');
+    h+='<p>Condições da rede: '+net.join('; ')+'.';
+    if(withTcp) h+=' TCP com janela inicial de '+plural(P.iw,'segmento','segmentos')+', janela do receptor (rwnd) de '+P.rwnd+' e ssthresh inicial de '+P.ssth+'.';
+    return h+'</p>';
+  }
+  function explainTcp(tr,P){
+    const r=tr.raw, bdp=P.bw*P.rtt/8, cap=P.bw*1000;
+    let h='<p><b>Abertura.</b> A conexão começou com SYN, SYN-ACK e ACK. O primeiro byte de dados só saiu em '+fmtMs(r.start)+', ou seja, 1 RTT gasto apenas para combinar a conexão.</p>';
+    let g='<p><b>Janela de congestionamento.</b> A cwnd começou em '+plural(P.iw,'segmento','segmentos')+' e cresceu em slow start, 1 segmento a cada ACK';
+    if(r.caAt!==null) g+=', até atingir o ssthresh em '+fmtMs(r.caAt)+'. A partir daí passou ao crescimento linear (congestion avoidance), cerca de 1 segmento por RTT';
+    g+='. O maior valor alcançado foi '+(Math.round(r.maxCwnd*10)/10).toString().replace('.',',')+' segmentos.';
+    if(r.maxCwnd>P.rwnd && r.maxFlight>=P.rwnd) g+=' Mesmo assim, nunca houve mais de '+P.rwnd+' segmentos em voo: o limite foi a <b>janela do receptor</b> (controle de fluxo), e não a rede.';
+    if(r.maxFlight>Math.ceil(bdp)+1) g+=' Como o produto banda × RTT é pequeno, poucos segmentos em voo já ocupavam o enlace; o restante esperava na fila de transmissão do cliente.';
+    h+=g+'</p>';
+    if(!r.lostList.length && !r.lostAcks){
+      h+='<p><b>Perdas.</b> Nenhum segmento se perdeu, então não houve retransmissão: cada ACK confirmou dados novos e liberou novos envios (ACK clocking).</p>';
+    } else {
+      let p='<p><b>Perdas e recuperação.</b> ';
+      const uniqLost=Array.from(new Set(r.lostList)).sort((x,y)=>x-y);
+      if(r.lostList.length) p+=(r.lostList.length===1?'Perdeu-se':'Perderam-se')+' na rede '+plural(r.lostList.length,'transmissão','transmissões')+' de dados ('+sp(uniqLost,'segmento ','segmentos ')+listSeg(uniqLost)+'). ';
+      if(r.fastList.length) p+=sp(r.fastList,'O segmento ','Os segmentos ')+listSeg(r.fastList)+sp(r.fastList,' foi recuperado',' foram recuperados')+' por <b>fast retransmit</b>: os segmentos seguintes chegaram fora de ordem, o servidor repetiu o ACK do que faltava e, no terceiro ACK duplicado, o cliente retransmitiu sem esperar o temporizador, reduzindo o ssthresh à metade do que estava em voo (fast recovery). ';
+      if(r.rtoList.length) p+=sp(r.rtoList,'O segmento ','Os segmentos ')+listSeg(r.rtoList)+sp(r.rtoList,' só foi recuperado',' só foram recuperados')+' por <b>timeout</b>: não havia segmentos suficientes depois '+sp(r.rtoList,'dele','deles')+' para gerar três ACKs duplicados, então o cliente esperou o RTO ('+r.rtoVals.map(fmtMs).join(', ')+'), voltou a cwnd para 1 e dobrou o RTO (backoff). ';
+      if(r.lostAcks) p+='Também se perderam '+plural(r.lostAcks,'ACK','ACKs')+', sem grande efeito, porque o ACK seguinte, cumulativo, confirma o mesmo dado. ';
+      h+=p+'</p>';
+    }
+    const eff=r.dur?Math.round(r.N*MSS*8/r.dur/cap*100):0;
+    h+='<p><b>Resultado.</b> Os '+r.N+' segmentos chegaram à aplicação, completos e em ordem. A transferência de dados levou '+fmtMs(r.dur)+' e a conexão inteira, com abertura e encerramento, '+fmtMs(tr.end)+'. '+
+      'A vazão útil foi de '+(r.dur?Math.round(r.N*MSS*8/r.dur):0)+' kbit/s, ou '+eff+'% da capacidade do enlace.';
+    const why=[];
+    if(r.N*MSS*8/cap<P.rtt*3) why.push('a transferência é curta e boa parte do tempo vai para o slow start, quando a janela ainda é pequena');
+    if(r.rtoList.length) why.push('cada timeout deixou o enlace parado esperando o RTO');
+    if(r.fastList.length) why.push('cada perda reduziu a janela à metade');
+    if(P.rwnd<bdp) why.push('a rwnd é menor que o produto banda × RTT');
+    if(eff<85 && why.length) h+=' A eficiência ficou abaixo do máximo porque '+why.join('; ')+'.';
+    return h+'</p>';
+  }
+  function explainUdp(tr,P){
+    const r=tr.raw, tx=MSS*8/(P.bw*1000);
+    let h='<p><b>Envio.</b> Sem handshake, o primeiro datagrama saiu no instante 0. Os '+r.N+' datagramas foram enviados um a cada '+fmtMs(tx)+', sem esperar nenhuma confirmação, e o envio terminou em '+fmtMs(r.N*tx)+'.</p>';
+    if(r.lostList.length) h+='<p><b>Perdas.</b> '+sp(r.lostList,'O datagrama ','Os datagramas ')+listSeg(r.lostList)+sp(r.lostList,' se perdeu',' se perderam')+' e <b>ninguém percebeu</b>: o UDP não tem ACK, número de sequência nem retransmissão. Só a aplicação poderia notar a falta.</p>';
+    else h+='<p><b>Perdas.</b> Nenhum datagrama se perdeu nesta execução. Se houvesse perda, o UDP não a detectaria.</p>';
+    if(r.oooList.length) h+='<p><b>Ordem.</b> '+sp(r.oooList,'O datagrama ','Os datagramas ')+listSeg(r.oooList)+sp(r.oooList,' chegou depois de outros enviados mais tarde e foi entregue',' chegaram depois de outros enviados mais tarde e foram entregues')+' à aplicação nessa ordem trocada.</p>';
+    h+='<p><b>Resultado.</b> A aplicação recebeu '+r.delivered+' de '+r.N+' datagramas, e o último chegou em '+fmtMs(r.time)+'. '+
+      (r.lostList.length?'Para voz ou vídeo, isso é aceitável: um trecho perdido vira um pequeno ruído, e esperar por ele atrasaria todo o resto. Para um arquivo, faltariam pedaços e ele estaria corrompido.':'Mesmo sem perdas aqui, nada garante a entrega numa próxima execução.')+'</p>';
+    return h;
+  }
+  function explainDns(tr,P){
+    const r=tr.raw;
+    let h='<p>O cliente envia uma consulta DNS (um único datagrama UDP para a porta 53) e espera a resposta por até 1 s.</p>';
+    if(r.attempts===1 && r.ok) h+='<p>A consulta e a resposta chegaram na primeira tentativa: a resolução custou só 1 RTT ('+P.rtt+' ms), sem nenhum handshake.</p>';
+    else h+='<p>'+(r.lostQ.length?sp(r.lostQ,'A consulta da tentativa ','As consultas das tentativas ')+r.lostQ.join(' e ')+sp(r.lostQ,' se perdeu. ',' se perderam. '):'')+(r.lostR.length?sp(r.lostR,'A resposta da tentativa ','As respostas das tentativas ')+r.lostR.join(' e ')+sp(r.lostR,' se perdeu. ',' se perderam. '):'')+
+      'O UDP não percebe a perda: quem percebe é o resolvedor, que esperou 1 s sem resposta e repetiu a consulta. '+(r.ok?'Na tentativa '+r.attempts+', o nome foi resolvido.':'Depois de 3 tentativas, desistiu.')+'</p>';
+    h+='<p>Esse é o padrão de quem usa UDP: a confiabilidade, quando necessária, é implementada pela aplicação, que escolhe o tempo de espera e o número de repetições.</p>';
+    return h;
+  }
+  function explainConcepts(P){
+    const c=[];
+    traces.forEach(tr=>{
+      const r=tr.raw;
+      if(tr.proto==='TCP'){
+        c.push('<b>Three-way handshake</b> e <b>encerramento</b> com FIN e TIME_WAIT');
+        c.push('<b>Slow start</b>: a janela cresce 1 segmento por ACK');
+        if(r.caAt!==null) c.push('<b>Congestion avoidance</b>: crescimento linear acima do ssthresh');
+        if(r.maxCwnd>P.rwnd && r.maxFlight>=P.rwnd) c.push('<b>Controle de fluxo</b>: a rwnd limitou o envio');
+        if(r.fastList.length) c.push('<b>ACKs duplicados</b>, <b>fast retransmit</b> e <b>fast recovery</b>');
+        if(r.rtoList.length) c.push('<b>Timeout (RTO)</b> e <b>backoff exponencial</b>');
+        if(r.oooSeen) c.push('<b>Buffer do receptor</b> guardando segmentos fora de ordem');
+      } else if(r.kind==='dns'){
+        c.push('<b>Confiabilidade na aplicação</b>: timeout e repetição feitos pelo resolvedor DNS');
+      } else {
+        c.push('<b>Datagramas independentes</b>: sem conexão, sem ACK e sem retransmissão');
+        if(r.lostList.length) c.push('<b>Perda não recuperada</b> no UDP');
+        if(r.oooList.length) c.push('<b>Entrega fora de ordem</b> no UDP');
+      }
+    });
+    return '<ul>'+Array.from(new Set(c)).map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+  }
+  function explainNext(P){
+    const s=[];
+    if(mode!=='udp'){
+      const r=traces[0].raw;
+      if(!r.lostList.length) s.push('Digite <b>8</b> em "Descartar na 1ª transmissão" (com janela inicial de 4) para provocar um fast retransmit.');
+      if(!r.rtoList.length) s.push('Descarte o <b>último</b> segmento para ver por que ele só é recuperado por timeout.');
+      if(r.caAt===null) s.push('Mude o ssthresh inicial para <b>8</b> para ver a passagem do slow start ao crescimento linear.');
+      if(P.rwnd>4) s.push('Reduza a <b>rwnd para 4</b> e compare o tempo total: é o controle de fluxo limitando o envio.');
+      s.push('Aumente o <b>RTT</b> para 100 ms e observe como o handshake e o slow start passam a dominar o tempo.');
+    }
+    if(mode==='udp' && app!=='dns') s.push('Use o modo <b>Comparação</b> com os mesmos parâmetros e veja o TCP recuperar as mesmas perdas.');
+    if(mode==='udp' && app==='dns') s.push('Coloque <b>30%</b> de perda e troque a semente até a resolução falhar nas 3 tentativas.');
+    if(mode==='cmp') s.push('Troque a <b>semente</b> para comparar os dois protocolos com outras sequências de perdas.');
+    return '<ul>'+s.slice(0,4).map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+  }
+  function renderExplain(){
+    const P=params();
+    const scen=SCENARIOS.find(x=>x.id===activeScen);
+    let h='<h3>'+(scen?'Experimento: '+scen.label:'Experimento personalizado')+'</h3>';
+    h+='<p><b>Objetivo.</b> '+(mode==='cmp'?'Comparar TCP e UDP transmitindo os mesmos dados pela mesma rede, com as mesmas perdas.':(mode==='tcp'?'Observar como o TCP abre a conexão, controla quanto envia e garante a entrega de um arquivo.':(app==='dns'?'Observar como uma aplicação sobre UDP lida com a perda de uma consulta.':'Observar como o UDP entrega datagramas sem conexão e sem garantias.')))+'</p>';
+    h+='<h3>Configuração</h3>'+(mode==='udp'&&app==='dns'?'<p>RTT de '+P.rtt+' ms; '+(P.loss?'perda aleatória de '+Math.round(P.loss*100)+'% (semente '+P.seed+')':'sem perda aleatória')+(P.drops.indexOf(1)>=0?'; a primeira consulta é descartada':'')+'.</p>':explainConfig(P,mode!=='udp'));
+    h+='<h3>O que aconteceu</h3>';
+    if(mode==='cmp'){
+      const t=traces[0], u=traces[1];
+      h+='<h3>No TCP</h3>'+explainTcp(t,P)+'<h3>No UDP</h3>'+explainUdp(u,P);
+      h+='<h3>Comparação</h3><p>O UDP terminou em '+fmtMs(u.raw.time)+' e o TCP em '+fmtMs(t.end)+', '+(t.end/Math.max(u.raw.time,1)).toFixed(1).replace('.',',')+' vezes mais. '+
+        'Em troca, o TCP entregou '+t.raw.N+' de '+t.raw.N+' segmentos em ordem, enquanto o UDP entregou '+u.raw.delivered+' de '+u.raw.N+'. '+
+        'O tempo extra do TCP vem '+(t.raw.lostList.length?'do handshake (1 RTT), do slow start, da recuperação das perdas e do encerramento':'do handshake (1 RTT), do slow start e do encerramento')+'. '+
+        'Nenhum dos dois é melhor em geral: transferência de arquivos precisa do TCP; voz e vídeo em tempo real preferem o UDP.</p>';
+    } else if(mode==='tcp') h+=explainTcp(traces[0],P);
+    else h+=(app==='dns'?explainDns(traces[0],P):explainUdp(traces[0],P));
+    h+='<h3>Conceitos observados</h3>'+explainConcepts(P);
+    h+='<h3>Para explorar em seguida</h3>'+explainNext(P);
+    $('explainBody').innerHTML=h;
+  }
+
+  // ---------- Início ----------
+  attachHelp();
+  renderScenarios();
+  applyScenario(SCENARIOS[0]);
+})();
+</script>
+</body>
+</html>

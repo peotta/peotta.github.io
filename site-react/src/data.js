@@ -404,6 +404,19 @@ export const resources = [
     },
     tags: ['MPLS', 'LDP', 'L3VPN'],
   },
+  {
+    id: 'sim-tcp-udp',
+    categories: ['simulators'],
+    href: '/simuladores/tcp-udp-simulator.html',
+    cta: cta.sim,
+    title: { pt: 'Simulador de TCP e UDP', en: 'TCP and UDP Simulator', es: 'Simulador de TCP y UDP' },
+    text: {
+      pt: 'Camada de transporte em diagrama de sequência: handshake e estados do TCP, ACKs, RTO, fast retransmit, slow start e gráfico da cwnd, UDP com perdas e DNS, e comparação TCP x UDP na mesma rede.',
+      en: 'Transport layer in a sequence diagram: TCP handshake and states, ACKs, RTO, fast retransmit, slow start and a cwnd chart, UDP with losses and DNS, and a TCP vs UDP comparison on the same network.',
+      es: 'Capa de transporte en diagrama de secuencia: handshake y estados de TCP, ACKs, RTO, fast retransmit, slow start y gráfico de la cwnd, UDP con pérdidas y DNS, y comparación TCP vs UDP en la misma red.',
+    },
+    tags: ['TCP', 'UDP', 'RFC 9293'],
+  },
 ];
 
 export const profiles = [
