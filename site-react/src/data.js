@@ -200,6 +200,27 @@ export const resources = [
     tags: ['DevSecOps', 'Forense'],
   },
   {
+    id: 'pga0009',
+    code: 'PGA0009',
+    unb: true,
+    categories: ['disciplines'],
+    href: 'https://github.com/peotta/PGA0009',
+    external: true,
+    cta: cta.repo,
+    meta: {
+      pt: 'MBA em Privacidade e Segurança da Informação (PGAP/FACE/UnB)',
+      en: 'MBA in Privacy and Information Security (PGAP/FACE/UnB)',
+      es: 'MBA en Privacidad y Seguridad de la Información (PGAP/FACE/UnB)',
+    },
+    title: { pt: 'Gestão de Operações de Segurança', en: 'Security Operations Management', es: 'Gestión de Operaciones de Seguridad' },
+    text: {
+      pt: 'Fundamentos de segurança da informação, gestão de identidade e acesso, criptografia, segurança em redes, IDS/IPS, monitoramento, SOC, backup e Security by Design.',
+      en: 'Information security fundamentals, identity and access management, cryptography, network security, IDS/IPS, monitoring, SOC, backup, and Security by Design.',
+      es: 'Fundamentos de seguridad de la información, gestión de identidad y acceso, criptografía, seguridad en redes, IDS/IPS, monitoreo, SOC, backup y Security by Design.',
+    },
+    tags: ['MBA', 'SOC', 'IAM'],
+  },
+  {
     id: 'ene0274',
     code: 'ENE0274',
     unb: true,
