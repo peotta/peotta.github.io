@@ -99,4 +99,6 @@ Acesse em seu navegador: `http://localhost:8000`.
 
 ---
 
+## Uso de Inteligência Artificial
 
+Em conformidade com a Política de Uso Responsável da IA da FT/UnB, declara-se que este material foi elaborado com apoio de ferramentas de inteligência artificial generativa (Claude, ChatGPT e Gemini), sob revisão e responsabilidade do professor.
