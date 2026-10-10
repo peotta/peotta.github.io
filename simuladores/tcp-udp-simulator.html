@@ -322,9 +322,9 @@
       <button class="tab-btn" data-tab="msg" type="button" role="tab" aria-selected="false">Segmento</button>
       <button class="tab-btn" data-tab="cwnd" type="button" role="tab" aria-selected="false">Janela (cwnd)</button>
       <button class="tab-btn" data-tab="res" type="button" role="tab" aria-selected="false">Resultados</button>
+      <button class="tab-btn" data-tab="exp" type="button" role="tab" aria-selected="false">Experimento</button>
       <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência</button>
       <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
-      <button class="tab-btn" data-tab="exp" type="button" role="tab" aria-selected="false">Explicação</button>
     </div>
     <div class="tab-content active" data-tab-content="cap">
       <div class="tab-scroll">
@@ -407,6 +407,23 @@
           </ul>
           <h3>UDP na prática</h3>
           <p>Quem usa UDP assume o que precisa. O <b>DNS</b> repete a consulta se a resposta não chegar no tempo limite. A <b>voz e o vídeo</b> preferem perder um pacote a esperar por ele, porque um áudio atrasado já não serve. O <b>QUIC</b> (RFC 9000) implementa sobre o UDP a confiabilidade e o controle de congestionamento, com criptografia embutida.</p>
+          <h3>TCP, UDP e segurança</h3>
+          <ul>
+            <li><b>SYN flood:</b> muitos SYN sem o ACK final esgotam a fila de conexões semiabertas do servidor. SYN cookies (RFC 4987) evitam reservar estado antes do handshake terminar.</li>
+            <li><b>Números de sequência:</b> um ISN previsível permite injetar segmentos ou derrubar conexões de fora do caminho. Pilhas modernas sorteiam o ISN (RFC 6528) e só aceitam RST com a sequência exata (RFC 5961).</li>
+            <li><b>UDP sem conexão:</b> nada confirma a origem de um datagrama. Isso permite falsificação, reflexão e amplificação (DNS, NTP, memcached). A defesa começa na rede de origem (BCP 38) e no próprio serviço (sem recursão aberta, limite de respostas).</li>
+            <li><b>Varreduras:</b> o TCP responde SYN-ACK em porta aberta e RST em porta fechada; o UDP só denuncia porta fechada com ICMP Port Unreachable. Política padrão de descarte e firewall stateful reduzem o que a varredura revela.</li>
+            <li>Para praticar a defesa contra esses ataques, use o <a href="tcp-udp-security-simulator.html">Simulador de Ataques e Defesas TCP/UDP</a>.</li>
+          </ul>
+          <h3>Roteiro de exercícios</h3>
+          <ol>
+            <li><b>Handshake e encerramento:</b> identifique na aba Captura os números de sequência e de confirmação de cada segmento. Por que o SYN e o FIN consomem um número de sequência?</li>
+            <li><b>Slow start:</b> acompanhe a aba Janela (cwnd) e mostre que a janela dobra a cada RTT. Em que momento o crescimento passa a ser linear?</li>
+            <li><b>Fast retransmit</b> e <b>Timeout (RTO):</b> compare o tempo total e a cwnd depois da perda nos dois cenários. Por que o timeout é tratado como sinal mais grave?</li>
+            <li><b>Janela do receptor:</b> quem limita a transmissão, a rede ou o receptor? Como você percebe isso na aba Janela (cwnd)?</li>
+            <li><b>DNS com repetição:</b> o que a aplicação precisa fazer por conta própria quando usa UDP e a resposta se perde?</li>
+            <li><b>TCP x UDP: 10% de perda:</b> compare o tempo e os dados entregues. Para voz em tempo real e para transferência de arquivos, qual protocolo você escolheria, e por quê?</li>
+          </ol>
         </article>
       </div>
     </div>
@@ -1226,7 +1243,7 @@
     });
   }
 
-  // ---------- Aba Explicação: texto gerado a partir do experimento executado ----------
+  // ---------- Aba Experimento: texto gerado a partir do experimento executado ----------
   function listSeg(a){ return a.map(n=>'#'+n).join(', ').replace(/, ([^,]*)$/,' e $1'); }
   function fmtMs(v){ return (Math.round(v*10)/10).toString().replace('.',',')+' ms'; }
   function plural(n,s,p){ return n+' '+(n===1?s:p); }

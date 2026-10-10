@@ -321,9 +321,10 @@
 
   <section class="panel tabs-panel">
     <div class="tab-bar" role="tablist">
-      <button class="tab-btn active" data-tab="cap" type="button" role="tab" aria-selected="true">Captura de pacotes</button>
+      <button class="tab-btn active" data-tab="cap" type="button" role="tab" aria-selected="true">Captura</button>
       <button class="tab-btn" data-tab="msg" type="button" role="tab" aria-selected="false">Mensagem DHCP</button>
       <button class="tab-btn" data-tab="lease" type="button" role="tab" aria-selected="false">Leases dos servidores</button>
+      <button class="tab-btn" data-tab="exp" type="button" role="tab" aria-selected="false">Experimento</button>
       <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência</button>
       <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
     </div>
@@ -351,6 +352,9 @@
           <tbody id="leaseBody"></tbody>
         </table>
       </div>
+    </div>
+    <div class="tab-content" data-tab-content="exp">
+      <div class="tab-scroll"><article class="ref-body" id="explainBody" aria-live="polite"></article></div>
     </div>
     <div class="tab-content" data-tab-content="ref">
       <div class="tab-scroll">
@@ -395,6 +399,15 @@
             <li><b>DHCP snooping:</b> o switch só aceita Offer e Ack vindos de portas confiáveis e monta uma tabela de vínculos (MAC, IP e porta). Essa tabela também é a base do Dynamic ARP Inspection e do IP Source Guard.</li>
             <li><b>Port security:</b> limitar o número de MACs por porta reduz o efeito do starvation.</li>
           </ul>
+          <h3>Roteiro de exercícios</h3>
+          <ol>
+            <li>Com <b>1 servidor</b>, avance fase a fase e anote origem e destino (IP e MAC) de cada mensagem na aba Captura. Por que o DISCOVER e o REQUEST vão em broadcast?</li>
+            <li>Escolha <b>2 servidores</b>: que opção do REQUEST faz o servidor não escolhido devolver a oferta ao pool?</li>
+            <li>Marque <b>Simular conflito de IP</b>: descreva o papel do ARP Probe e do DHCPDECLINE. O que aconteceria sem o ARP Probe?</li>
+            <li>Com o cliente em BOUND, derrube o servidor no inspetor e clique em <b>Renovar (T1)</b>. Explique RENEWING, REBINDING e a expiração usando T1 e T2.</li>
+            <li>Derrube o enlace do servidor antes do OFFER e avance várias vezes: como cresce o intervalo entre as retransmissões, e por quê?</li>
+            <li><b>Segurança:</b> um colega liga um roteador doméstico com DHCP ativo na rede do laboratório. O que acontece com os clientes e que configuração no switch evita o problema?</li>
+          </ol>
         </article>
       </div>
     </div>
@@ -468,6 +481,7 @@
   let conflictUsed=false;
   let selected=null;          // {type:'node'|'link', id}
   let speedMultiplier=0.6;
+  let journal=[], journalStart={servers:1,lease:8,conflict:false};
 
   // ---------- Referências DOM ----------
   const linksGroup=document.getElementById('linksGroup');
@@ -694,6 +708,7 @@
       if(reachable(s)) log(s.id+' recebeu o DISCOVER.','discover');
       else log(s.id+' não recebeu o DISCOVER ('+(s.up?'enlace caído':'servidor inativo')+').','fail');
     });
+    jr('discover',{xid:xid,reached:activeServers().filter(reachable).map(s=>s.id),missed:activeServers().filter(s=>!reachable(s)).map(s=>s.id+' ('+(s.up?'enlace caído':'servidor inativo')+')')});
     currentStep=1;
   }
 
@@ -712,6 +727,7 @@
     if(!offers.length){
       const delay=Math.min(64,4*Math.pow(2,retryCount));
       retryCount++;
+      jr('nooffer',{delay:delay,why:activeServers().map(s=>!s.up?s.id+' inativo':!linkOf(s).up||!link('L1').up?'enlace de '+s.id+' caído':s.id+' sem endereços livres')});
       simTime+=delay;
       log('Nenhum OFFER recebido. O cliente espera '+delay+' s (backoff exponencial, RFC 2131 seção 4.1) e retransmite o DISCOVER.','fail');
       const msg=mkDiscover(); msg.secs=Math.round(simTime);
@@ -728,6 +744,7 @@
     await Promise.all(offers.map(o=>route([o.s.id,'SW1','PC-A'],COLORS.OFFER,'OFFER')));
     chosen=offers[0];
     log('Cliente recebeu '+offers.length+' OFFER(s) e escolhe a oferta de '+chosen.s.id+' ('+chosen.ip+').'+(offers.length>1?' O RFC permite qualquer critério; aqui vale a primeira recebida.':''),'offer');
+    jr('offer',{offers:offers.map(o=>({s:o.s.id,ip:o.ip})),chosen:chosen.s.id});
     currentStep=2;
   }
 
@@ -744,6 +761,7 @@
         log(o.s.id+' vê que a opção 54 aponta para '+chosen.s.id+', cancela sua oferta e devolve '+o.ip+' ao pool.','request');
       }
     });
+    jr('request',{ip:chosen.ip,s:chosen.s.id,cancelled:offers.filter(o=>o!==chosen).map(o=>o.s.id)});
     currentStep=3;
   }
 
@@ -752,6 +770,7 @@
     if(!reachable(s)){
       simTime+=4;
       log('Sem DHCPACK de '+s.id+' ('+(s.up?'enlace caído':'servidor inativo')+'). O cliente retransmite o REQUEST. Restaure o servidor ou o enlace e avance novamente.','fail');
+      jr('noack',{s:s.id,why:s.up?'enlace caído':'servidor inativo'});
       const rq=mkRequestSelecting(chosen); rq.secs=Math.round(simTime);
       addCapture(rq);
       refreshAll();
@@ -781,6 +800,7 @@
       await route(['PC-A','SW1',s.id],COLORS.DECLINE,'DECLINE');
       s.leases.set(ip,{mac:'-',state:'DECLINED'});
       log(s.id+' marca '+ip+' como indisponível e não o oferecerá novamente. O cliente espera 10 s e volta ao estado INIT.','fail');
+      jr('conflict',{s:s.id,ip:ip});
       simTime+=10;
       clientState='INIT'; currentStep=0; chosen=null; offers=[];
       return;
@@ -789,6 +809,7 @@
     binding={s:s,ip:ip,hours:leaseHours};
     clientState='BOUND';
     currentStep=4;
+    jr('bound',{s:s.id,ip:ip,hours:leaseHours});
     log('Nenhuma resposta ao ARP Probe. PC-A configura '+ip+'/24, gateway '+GATEWAY+' e DNS '+DNS_LIST.join(', ')+'. Estado: BOUND. T1 = '+t1Secs(leaseHours)+' s, T2 = '+t2Secs(leaseHours)+' s.','ack');
   }
 
@@ -809,6 +830,7 @@
         log(b.s.id+' confirma com <b>DHCPACK</b>. O lease é renovado por mais '+b.hours+' h. Estado: RENEWING para BOUND.','ack');
         refreshAll();
         await route([b.s.id,'SW1','PC-A'],COLORS.ACK,'ACK');
+        jr('renew',{s:b.s.id,ip:b.ip,hours:b.hours});
         clientState='BOUND';
       } else {
         await animateHop('PC-A','SW1',COLORS.REQUEST,'REQUEST');
@@ -822,6 +844,7 @@
         log('Nenhum servidor responde: somente '+b.s.id+' conhece este lease.','fail');
         simTime+=b.hours*3600-t2Secs(b.hours);
         log('O lease expirou (T0). O cliente remove '+b.ip+' e volta ao estado INIT.','fail');
+        jr('expire',{s:b.s.id,ip:b.ip,why:b.s.up?'enlace caído':'servidor inativo'});
         clientState='INIT'; currentStep=0; binding=null; chosen=null; offers=[];
       }
     } finally { busy=false; refreshAll(); }
@@ -843,6 +866,7 @@
         await animateHop('PC-A','SW1',COLORS.RELEASE,'RELEASE');
         log(b.s.id+' não recebeu o RELEASE: o lease permanece registrado até expirar.','fail');
       }
+      jr('release',{s:b.s.id,ip:b.ip,ok:reachable(b.s)});
       clientState='INIT'; currentStep=0; binding=null; chosen=null; offers=[];
       log('PC-A remove a configuração IP. Estado: INIT.','sys');
     } finally { busy=false; refreshAll(); }
@@ -852,6 +876,7 @@
     if(busy || currentStep>=4) return;
     if(!link('L1').up){
       log('O enlace PC-A / SW1 está caído: o cliente não consegue transmitir.','fail');
+      jr('linkdown');
       return;
     }
     busy=true; updatePhaseUI();
@@ -870,6 +895,7 @@
     linksAll.forEach(l=>{l.up=true;});
     serversAll.forEach(s=>{s.up=true; s.leases=new Map();});
     xid=newXid();
+    journal=[]; journalStart={servers:serverCount,lease:leaseHours,conflict:conflictSim};
     logBody.innerHTML='';
     log('PC-A iniciou sem endereço IP (0.0.0.0). Estado: INIT.','sys');
     refreshAll();
@@ -1096,7 +1122,7 @@
     msgBody.innerHTML='';
     if(!msgSel){
       msgTitle.textContent='Mensagem selecionada';
-      msgBody.innerHTML='<tr class="placeholder-row"><td colspan="3">Avance as fases ou clique em um pacote na aba "Captura de pacotes" para ver todos os campos.</td></tr>';
+      msgBody.innerHTML='<tr class="placeholder-row"><td colspan="3">Avance as fases ou clique em um pacote na aba "Captura" para ver todos os campos.</td></tr>';
       return;
     }
     msgTitle.textContent=(msgSel.kind==='arp'?'ARP':'DHCP '+msgSel.type)+': '+msgSel.info;
@@ -1138,6 +1164,7 @@
   function activateTab(name){
     document.querySelectorAll('.tab-btn').forEach(b=>{ const on=b.dataset.tab===name; b.classList.toggle('active',on); b.setAttribute('aria-selected',on); });
     document.querySelectorAll('.tab-content').forEach(c=>c.classList.toggle('active',c.dataset.tabContent===name));
+    if(name==='exp') renderExplain();
   }
 
   // ---------- Inspetor ----------
@@ -1158,6 +1185,7 @@
         '<div class="row" style="margin-top:12px;"><button type="button" id="btnInspToggle" '+(busy?'disabled':'')+'>'+(l.up?'Derrubar enlace':'Restaurar enlace')+'</button></div>';
       document.getElementById('btnInspToggle').onclick=()=>{
         l.up=!l.up;
+        jr('link',{name:l.a+' / '+l.b,up:l.up});
         log('Enlace '+l.a+' / '+l.b+' '+(l.up?'restaurado.':'derrubado.'),l.up?'sys':'fail');
         refreshAll();
       };
@@ -1191,6 +1219,7 @@
         '<div class="row" style="margin-top:12px;"><button type="button" id="btnInspToggle" '+(busy?'disabled':'')+'>'+(s.up?'Derrubar servidor':'Restaurar servidor')+'</button></div>';
       document.getElementById('btnInspToggle').onclick=()=>{
         s.up=!s.up;
+        jr('server',{id:s.id,up:s.up});
         log(s.id+(s.up?' voltou a responder.':' ficou inativo e não responde a nenhuma mensagem.'),s.up?'sys':'fail');
         refreshAll();
       };
@@ -1198,7 +1227,109 @@
   }
 
   function refreshAll(){
-    render(); updatePhaseUI(); renderStatePanel(); renderLeases(); renderCapture(); renderMessage(); refreshInspector();
+    render(); updatePhaseUI(); renderStatePanel(); renderLeases(); renderCapture(); renderMessage(); refreshInspector(); renderExplain();
+  }
+
+  // ---------- Aba Experimento: texto gerado a partir da sessão ----------
+  function jr(type,data){
+    journal.push(Object.assign({type:type,t:simTime},data||{}));
+    if(isExpActive()) renderExplain();
+  }
+  function isExpActive(){ const c=document.querySelector('.tab-content[data-tab-content="exp"]'); return c && c.classList.contains('active'); }
+  function plural(n,s,p){ return n+' '+(n===1?s:p); }
+  function fmtT(t){
+    if(t<1) return 't = '+(Math.round(t*1000)/1000).toString().replace('.',',')+' s';
+    if(t<3600) return 't = '+Math.round(t)+' s';
+    return 't = '+(Math.round(t/360)/10).toString().replace('.',',')+' h';
+  }
+  function hoursTxt(h){ return plural(h,'hora','horas'); }
+  function explainStep(e){
+    const b=x=>'<b>'+x+'</b>';
+    switch(e.type){
+      case 'discover': return 'PC-A, ainda sem endereço, enviou o '+b('DHCPDISCOVER')+' em broadcast (xid '+e.xid+'). '+(e.reached.length?'Receberam: '+e.reached.join(' e ')+'.':'Nenhum servidor recebeu.')+(e.missed.length?' Não receberam: '+e.missed.join('; ')+'.':'');
+      case 'nooffer': return 'Nenhum '+b('OFFER')+' chegou ('+e.why.join('; ')+'). O cliente esperou '+e.delay+' s (backoff exponencial) e retransmitiu o DISCOVER.';
+      case 'offer': return plural(e.offers.length,'servidor ofereceu','servidores ofereceram')+' endereço: '+e.offers.map(o=>o.s+' ('+o.ip+')').join(', ')+'. O cliente escolheu a oferta de '+b(e.chosen)+(e.offers.length>1?', a primeira que chegou':'')+'.';
+      case 'request': return 'PC-A enviou o '+b('DHCPREQUEST')+' em broadcast pedindo '+e.ip+' a '+e.s+(e.cancelled.length?'. '+e.cancelled.join(' e ')+' viu que não foi escolhido e devolveu a oferta ao pool.':'.');
+      case 'noack': return 'O '+b('DHCPACK')+' não veio de '+e.s+' ('+e.why+'). O cliente retransmitiu o REQUEST.';
+      case 'conflict': return e.s+' concedeu '+e.ip+', mas o '+b('ARP Probe')+' recebeu resposta de PC-B, que já usava o endereço. PC-A enviou '+b('DHCPDECLINE')+', o servidor marcou '+e.ip+' como indisponível e o cliente voltou a INIT.';
+      case 'bound': return e.s+' confirmou com '+b('DHCPACK')+'. Sem resposta ao ARP Probe, PC-A configurou '+b(e.ip+'/24')+', gateway '+GATEWAY+' e DNS '+DNS_LIST.join(', ')+', com lease de '+hoursTxt(e.hours)+'. Estado: BOUND.';
+      case 'renew': return 'No T1, PC-A pediu a renovação em unicast a '+e.s+', que respondeu com '+b('DHCPACK')+': o lease de '+e.ip+' foi estendido por mais '+hoursTxt(e.hours)+'.';
+      case 'expire': return 'No T1, a renovação em unicast para '+e.s+' ficou sem resposta ('+e.why+'). No T2, o REQUEST foi para broadcast (REBINDING), mas nenhum outro servidor conhecia o lease. Ao fim do lease, PC-A perdeu '+b(e.ip)+' e voltou a INIT.';
+      case 'release': return 'PC-A enviou '+b('DHCPRELEASE')+' para '+e.s+(e.ok?', que devolveu '+e.ip+' ao pool.':', mas a mensagem não chegou: o lease de '+e.ip+' continua reservado no servidor até expirar.')+' O servidor não responde ao RELEASE.';
+      case 'link': return 'Enlace '+e.name+' '+(e.up?'restaurado':'derrubado')+'.';
+      case 'server': return e.id+' '+(e.up?'voltou a responder':'ficou inativo')+'.';
+      case 'lease': return 'Duração do lease alterada para '+hoursTxt(e.hours)+' (vale para as próximas concessões).';
+      case 'conflictcfg': return 'Simulação de conflito '+(e.on?'ativada':'desativada')+'.';
+      case 'linkdown': return 'Tentativa de avançar com o enlace PC-A / SW1 caído: o cliente não consegue transmitir.';
+    }
+    return '';
+  }
+  function explainSetup(){
+    const cfg=journalStart;
+    const pools=serversAll.slice(0,cfg.servers).map(s=>s.id+' ('+s.ip+', pool '+NET+'.'+s.start+' a .'+s.end+')').join(' e ');
+    let h='<p>Rede '+NET+'.0/24 com '+plural(cfg.servers,'servidor DHCP','servidores DHCP')+': '+pools+'. O PC-A (MAC '+client.mac+') começa sem endereço; o PC-B tem IP estático.</p>';
+    h+='<p>Lease de <b>'+hoursTxt(cfg.lease)+'</b>: T1 (renovação, 50%) em '+t1Secs(cfg.lease)+' s e T2 (rebinding, 87,5%) em '+t2Secs(cfg.lease)+' s.</p>';
+    h+='<p>Simulação de conflito: '+(cfg.conflict?'<b>ativa</b>. O PC-B responde ao ARP Probe pelo primeiro endereço concedido, como se já o usasse.':'desativada.')+'</p>';
+    const down=linksAll.filter(l=>!l.up && (l.id!=='L3'||serverCount>1)).map(l=>'enlace '+l.a+' / '+l.b+' caído').concat(activeServers().filter(s=>!s.up).map(s=>s.id+' inativo'));
+    if(down.length) h+='<p>Situação atual da rede: '+down.join('; ')+'.</p>';
+    return h;
+  }
+  function explainResults(){
+    if(!journal.length) return '<p>Nada executado ainda. Clique em <b>Avançar fase</b> para enviar o primeiro DISCOVER; esta aba descreve cada passo à medida que ele acontece.</p>';
+    let h='<ol>'+journal.map(e=>'<li>'+fmtT(e.t)+': '+explainStep(e)+'</li>').join('')+'</ol>';
+    h+='<p>Estado atual do cliente: <b>'+clientState+'</b>'+(binding?', com '+binding.ip+' concedido por '+binding.s.id:', sem endereço IP')+'.</p>';
+    if(capture.length){
+      const cnt={}; let bc=0;
+      capture.forEach(c=>{ const k=c.msg.kind==='arp'?'ARP':'DHCP'+c.msg.type; cnt[k]=(cnt[k]||0)+1; if(c.msg.dstMac===BCAST_MAC) bc++; });
+      h+='<p>A aba Captura registrou <b>'+plural(capture.length,'mensagem','mensagens')+'</b> ('+Object.keys(cnt).map(k=>cnt[k]+' '+k).join(', ')+'), das quais '+bc+' em broadcast e '+(capture.length-bc)+' em unicast.</p>';
+    }
+    const pools=activeServers().map(s=>{
+      const st={}; s.leases.forEach(l=>{ st[l.state]=(st[l.state]||0)+1; });
+      const parts=Object.keys(st).map(k=>st[k]+' '+({BOUND:'em uso',OFFERED:'oferecido',DECLINED:'marcado como indisponível'}[k]||k));
+      return s.id+': '+(parts.length?parts.join(', '):'nenhum endereço reservado');
+    });
+    h+='<p>Pools: '+pools.join('; ')+'.</p>';
+    return h;
+  }
+  function explainConcepts(){
+    const has=t=>journal.some(e=>e.type===t);
+    const items=[];
+    if(has('discover')) items.push('O cliente ainda não tem endereço, então o DISCOVER sai de <b>0.0.0.0:68</b> para <b>255.255.255.255:67</b>. O switch inunda o quadro por todas as portas e só servidores DHCP o processam.');
+    if(has('offer')) items.push('O <b>xid</b> amarra todas as mensagens de uma mesma negociação. O OFFER reserva um endereço e traz a configuração (máscara, gateway, DNS, lease, T1 e T2) nas opções.');
+    if(journal.some(e=>e.type==='offer' && e.offers.length>1)) items.push('Com dois servidores, o REQUEST vai em <b>broadcast</b> e leva a opção 54 (Server Identifier): o escolhido confirma e os outros sabem que devem devolver a oferta ao pool.');
+    if(has('bound') || has('conflict')) items.push('Antes de usar o endereço, o cliente faz um <b>ARP Probe</b> (RFC 2131, seção 3.1) para descobrir se alguém já o usa.');
+    if(has('conflict')) items.push('O <b>DHCPDECLINE</b> avisa o servidor do conflito; o endereço sai do pool e o cliente recomeça do zero.');
+    if(has('nooffer')) items.push('Sem resposta, o cliente retransmite com <b>backoff exponencial</b> (4, 8, 16 s... até 64 s), para não inundar a rede.');
+    if(has('noack')) items.push('Se o ACK não chega, o cliente não usa o endereço: só o <b>DHCPACK</b> conclui a concessão.');
+    if(has('renew')) items.push('A renovação no <b>T1</b> é feita em unicast, direto com o servidor que concedeu o lease; o cliente mantém o endereço o tempo todo.');
+    if(has('expire')) items.push('No <b>T2</b>, o cliente tenta qualquer servidor em broadcast (REBINDING). Se ninguém confirmar até o fim do lease, ele perde o endereço. Por isso redes com dois servidores precisam de failover ou pools coordenados.');
+    if(has('release')) items.push('O <b>DHCPRELEASE</b> não tem resposta. Se ele se perde, o endereço só volta ao pool quando o lease expira.');
+    if(has('offer')) items.push('<b>Segurança:</b> o DHCP não autentica ninguém. Qualquer host pode responder a um DISCOVER (servidor falso, rogue DHCP) ou pedir endereços até esgotar o pool (starvation). Os controles são DHCP snooping, port security e a opção 82 no switch.');
+    if(!items.length) items.push('Avance as fases para ver os conceitos que aparecem nesta sessão.');
+    return '<ul>'+items.map(t=>'<li>'+t+'</li>').join('')+'</ul>';
+  }
+  function explainNext(){
+    const has=t=>journal.some(e=>e.type===t);
+    const next=[];
+    if(!has('bound') && !has('conflict')) next.push('Clique em <b>Avançar fase</b> até o ACK e acompanhe a troca de estados do cliente (INIT, SELECTING, REQUESTING, BOUND).');
+    if(journalStart.servers===1) next.push('Escolha <b>2 servidores</b> e veja as duas ofertas e o descarte da que não foi escolhida.');
+    if(!journalStart.conflict) next.push('Marque <b>Simular conflito de IP</b> e reinicie: veja o ARP Probe detectar o conflito e o DECLINE.');
+    if(has('bound') && !has('renew') && !has('expire') && binding) next.push('Clique em <b>Renovar (T1)</b> para ver a renovação em unicast.');
+    if(has('renew') && !has('expire')) next.push('Derrube o servidor no inspetor e clique em <b>Renovar (T1)</b>: o cliente passa por REBINDING e perde o endereço.');
+    if(!has('nooffer') && !has('noack')) next.push('Reinicie, derrube o enlace do servidor antes do OFFER e observe as retransmissões com backoff.');
+    if(binding && !has('release')) next.push('Use <b>RELEASE</b> e veja que o servidor não responde, mas devolve o endereço ao pool.');
+    return '<ul>'+next.slice(0,4).map(t=>'<li>'+t+'</li>').join('')+'</ul>';
+  }
+  function renderExplain(){
+    const body=document.getElementById('explainBody');
+    if(!body) return;
+    let h='<h3>Experimento: obtenção de endereço com DHCP</h3>';
+    h+='<p><b>Objetivo.</b> Acompanhar como o PC-A, sem endereço IP, obtém sua configuração pelo processo <b>DORA</b> (Discover, Offer, Request, Ack) e como o cliente reage a falhas: servidor ausente, conflito de endereço, renovação e liberação do lease (RFC 2131).</p>';
+    h+='<h3>Configuração</h3>'+explainSetup();
+    h+='<h3>O que aconteceu</h3>'+explainResults();
+    h+='<h3>Conceitos observados</h3>'+explainConcepts();
+    h+='<h3>Para explorar em seguida</h3>'+explainNext();
+    body.innerHTML=h;
   }
 
   // ---------- Eventos ----------
@@ -1206,9 +1337,9 @@
   btnReset.addEventListener('click',reset);
   btnRenew.addEventListener('click',doRenew);
   btnRelease.addEventListener('click',doRelease);
-  conflictCheck.addEventListener('change',()=>{ conflictSim=conflictCheck.checked; });
+  conflictCheck.addEventListener('change',()=>{ conflictSim=conflictCheck.checked; jr('conflictcfg',{on:conflictSim}); });
   speedSelect.addEventListener('change',()=>{ speedMultiplier=parseFloat(speedSelect.value); });
-  leaseSelect.addEventListener('change',()=>{ leaseHours=parseInt(leaseSelect.value,10); });
+  leaseSelect.addEventListener('change',()=>{ leaseHours=parseInt(leaseSelect.value,10); jr('lease',{hours:leaseHours}); });
   serverCountSelect.addEventListener('change',()=>{ serverCount=parseInt(serverCountSelect.value,10); reset(); });
   document.querySelectorAll('.tab-btn').forEach(b=>{
     b.addEventListener('click',()=>activateTab(b.dataset.tab));

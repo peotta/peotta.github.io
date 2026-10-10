@@ -301,6 +301,7 @@
     <div class="tab-bar" role="tablist">
       <button class="tab-btn active" data-tab="lsdb" type="button" role="tab" aria-selected="true">Vetores / LSDB</button>
       <button class="tab-btn" data-tab="route" type="button" role="tab" aria-selected="false">Tabela de roteamento</button>
+      <button class="tab-btn" data-tab="exp" type="button" role="tab" aria-selected="false">Experimento</button>
       <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência</button>
       <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
     </div>
@@ -321,6 +322,9 @@
           <tbody id="routeBody"></tbody>
         </table>
       </div>
+    </div>
+    <div class="tab-content" data-tab-content="exp">
+      <div class="tab-scroll"><article class="ref-body" id="explainBody" aria-live="polite"></article></div>
     </div>
     <div class="tab-content" data-tab-content="ref">
       <div class="tab-scroll">
@@ -363,6 +367,15 @@
             <li><b>Interfaces passivas:</b> desativar o envio de Hello e de atualizações nas interfaces voltadas para usuários impede que um host participe do roteamento.</li>
             <li><b>Filtragem e resumo de rotas:</b> filtrar o que se aceita e resumir rotas reduz o efeito de anúncios indevidos e da instabilidade de enlaces (flapping).</li>
           </ul>
+          <h3>Roteiro de exercícios</h3>
+          <ol>
+            <li><b>OSPF, área única:</b> avance até a convergência e anote o caminho de PC-A a PC-B. Existe caminho com menos saltos? Por que o OSPF não o escolheu?</li>
+            <li>Aumente o custo do enlace <b>R2 / R3</b> para 50 e simule a comunicação de novo. Quais roteadores originam novos LSAs, e qual é o novo caminho?</li>
+            <li>Troque para <b>RIPv2</b>, converja e compare o caminho com o do OSPF. Altere o custo de um enlace: o que muda?</li>
+            <li>No RIPv2, derrube o enlace <b>R2 / R3</b> e conte as rodadas até reconvergir. Desmarque o split horizon, derrube <b>R5 / R6</b> e explique a diferença (contagem ao infinito).</li>
+            <li>Ative o modo <b>multi-área</b> e identifique os ABRs. Por que toda área precisa se ligar à área 0?</li>
+            <li><b>Segurança:</b> um host na rede do PC-A passa a enviar anúncios OSPF falsos. Que configurações impediriam a injeção de rotas?</li>
+          </ol>
         </article>
       </div>
     </div>
@@ -474,6 +487,7 @@
   let spfVisited=new Set();
   let flowEdges=new Set();
   let speedMultiplier=0.3;
+  let journal=[], journalStart={proto:'ospf',multi:false,sh:true}, ripRounds=0;
 
   let stopLabels=['Down','Hello / 2-Way','Adjacência Full','Inundação de LSA','SPF / Convergido'];
   const stopLabelsOspf=['Down','Hello / 2-Way','Adjacência Full','Inundação de LSA','SPF / Convergido'];
@@ -613,6 +627,7 @@
   }
 
   async function ripRoundAnimated(roundLabel){
+    ripRounds++;
     const {nextT,changed,touchedRouters}=ripComputeRound();
     const upLinks=links.filter(l=>l.up);
     await Promise.all(upLinks.map(l=>Promise.all([animatePacket(l.a,l.b,'var(--teal)'), animatePacket(l.b,l.a,'var(--teal)')])));
@@ -970,6 +985,12 @@
 
   // ---------- Topology change (cost edit / link failure) ----------
   async function onTopologyChanged(affectedRouterIds, reason){
+    const l=findLink(affectedRouterIds[0],affectedRouterIds[1]), r0=ripRounds;
+    const ignored=protocol==='rip' && reason==='cost', early=!ignored && currentStep<3;
+    await onTopologyChangedRaw(affectedRouterIds, reason);
+    jr('topo',{reason:reason,link:l.a+' / '+l.b,cost:l.cost,up:l.up,proto:protocol,ignored:ignored,early:early,lsas:affectedRouterIds.join(' e '),rounds:ripRounds-r0,sh:splitHorizonEnabled,hp:pathText(hostPath(),protocol==='ospf')});
+  }
+  async function onTopologyChangedRaw(affectedRouterIds, reason){
     render();
     if(protocol==='rip' && reason==='cost'){
       log('RIPv2 ignora o custo do enlace (usa apenas contagem de saltos): nenhuma reconvergência necessária.','sys');
@@ -1108,6 +1129,15 @@
   // ---------- Host-to-host communication demo ----------
   async function simulateHostCommunication(sourceId){
     if(busy) return;
+    const src=hosts.find(h=>h.id===sourceId) || hosts[0], dst=hosts.find(h=>h.id!==src.id);
+    const early=currentStep<3;
+    await simulateHostCommunicationRaw(sourceId);
+    if(early){ jr('early'); return; }
+    const hp=hostPath(src,dst);
+    jr('comm',{src:src.id,dst:dst.id,ok:!!(hp && hp.path.length),hp:pathText(hp,protocol==='ospf'),proto:protocol});
+  }
+  async function simulateHostCommunicationRaw(sourceId){
+    if(busy) return;
     const src=hosts.find(h=>h.id===sourceId) || hosts[0];
     const dst=hosts.find(h=>h.id!==src.id);
     if(currentStep<3){
@@ -1201,8 +1231,10 @@
   async function advanceStep(){
     if(busy || currentStep>=4) return;
     busy=true; updatePhaseUI();
+    const stepNo=currentStep+1, r0=ripRounds;
     await stepFns[currentStep]();
     currentStep++; updatePhaseUI();
+    phaseJournal(stepNo, ripRounds-r0);
     busy=false; updatePhaseUI();
   }
 
@@ -1247,11 +1279,146 @@
     stepFns = protocol==='ospf' ? stepFnsOspf : stepFnsRip;
     lsdbByRouter={}; ripTable={}; routingTableRows=[]; treeEdges=new Set(); spfVisited=new Set(); flowEdges=new Set();
     selectedLinkId=null; selectedRouterId=null;
+    journal=[]; journalStart={proto:protocol,multi:multiAreaActive(),sh:splitHorizonEnabled}; ripRounds=0;
     logBody.innerHTML='';
     configureProtocolUI();
     renderAreaBackgrounds();
     log('Simulação reiniciada em modo '+(protocol==='ospf'?('OSPF, '+(multiAreaActive()?'multi-área':'área única')):'RIPv2')+'. Todos os enlaces estão ativos, nenhuma rota aprendida ainda.','sys');
-    render(); renderInspector(); renderLeftPanel(rootRouter); renderRoutingTable(); updatePhaseUI();
+    render(); renderInspector(); renderLeftPanel(rootRouter); renderRoutingTable(); updatePhaseUI(); renderExplain();
+  }
+
+  // ---------- Aba Experimento: texto gerado a partir da sessão ----------
+  function jr(type,data){
+    journal.push(Object.assign({type:type},data||{}));
+    if(isExpActive()) renderExplain();
+  }
+  function isExpActive(){ const c=document.querySelector('.tab-content[data-tab-content="exp"]'); return c && c.classList.contains('active'); }
+  function plural(n,s,p){ return n+' '+(n===1?s:p); }
+  function hostPath(s,d){
+    s=s||hosts[0]; d=d||hosts[1];
+    if(protocol==='ospf'){
+      if(!lsdbByRouter[s.attach]) return null;
+      const {dist,prev}=dijkstra(graphFromLSDB(s.attach), s.attach);
+      const p=pathTo(prev,s.attach,d.attach);
+      return p.length?{path:p,metric:dist[d.attach]}:{path:[],metric:null};
+    }
+    if(!ripTable[s.attach]) return null;
+    const r=ripForwardPath(s.attach,d.attach);
+    return r.reached?{path:r.path,metric:ripTable[s.attach].get(d.attach).metric}:{path:[],metric:null};
+  }
+  function minHops(a,b){
+    const g=buildGraph(), seen=new Set([a]); let fr=[a], d=0;
+    while(fr.length){ if(fr.includes(b)) return d; const nx=[]; fr.forEach(n=>(g[n]||[]).forEach(e=>{ if(!seen.has(e.to)){ seen.add(e.to); nx.push(e.to); } })); fr=nx; d++; }
+    return null;
+  }
+  function tableText(){
+    const rows=routingTableRows.filter(r=>r.next!=='Local');
+    if(!rows.length) return '';
+    return 'Tabela de '+rootRouter+': '+rows.map(r=>r.cost===null?r.dest+' inalcançável':r.dest+' via '+r.next+' ('+(protocol==='ospf'?'custo ':'')+r.cost+(protocol==='rip'?(r.cost===1?' salto':' saltos'):'')+')').join('; ')+'.';
+  }
+  function pathText(hp,unitOspf){
+    if(!hp) return 'tabelas ainda não calculadas';
+    if(!hp.path.length) return 'sem caminho entre '+hosts[0].id+' e '+hosts[1].id+' (rede particionada)';
+    return hp.path.join(' → ')+' ('+(unitOspf?'custo total '+hp.metric:plural(hp.metric,'salto','saltos'))+')';
+  }
+  function explainPhase(e){
+    if(e.proto==='ospf'){
+      if(e.step===1) return '<b>Hello</b>: os roteadores trocaram Hello em '+plural(e.links,'enlace ativo','enlaces ativos')+' e chegaram ao estado <b>2-Way</b> com cada vizinho.';
+      if(e.step===2) return '<b>Adjacência</b>: troca de DBD, LSR, LSU e LSAck; '+plural(e.links,'adjacência chegou','adjacências chegaram')+' a <b>Full</b>.';
+      if(e.step===3) return '<b>Inundação</b>: cada um dos '+e.routers+' roteadores originou seu Router-LSA (enlaces e custos), inundado por toda a rede. Todas as LSDBs ficaram idênticas.';
+      return '<b>SPF</b>: Dijkstra com raiz em '+e.root+'. '+e.table+(e.hp?' Caminho de '+hosts[0].id+' a '+hosts[1].id+': '+e.hp+'.':'');
+    }
+    if(e.step===1) return '<b>Vetores iniciais</b>: cada roteador conhece só a si mesmo, com métrica 0.';
+    if(e.step===2) return '<b>1ª troca</b>: cada roteador enviou seu vetor de distância aos vizinhos e aprendeu os destinos a 1 salto.';
+    if(e.step===3) return '<b>Convergência</b>: '+plural(e.rounds,'rodada adicional','rodadas adicionais')+' de Response até nenhuma tabela mudar (Bellman-Ford distribuído).';
+    return '<b>Tabelas finais</b>: '+e.table+(e.hp?' Caminho de '+hosts[0].id+' a '+hosts[1].id+': '+e.hp+'.':'');
+  }
+  function explainItem(e){
+    if(e.type==='phase') return explainPhase(e);
+    if(e.type==='topo'){
+      let t=(e.reason==='cost'?'Custo do enlace '+e.link+' alterado para '+e.cost+'. ':(e.up?'Enlace '+e.link+' restaurado. ':'Falha no enlace '+e.link+'. '));
+      if(e.ignored) return t+'O RIP ignora custos (só conta saltos): nada mudou nas tabelas.';
+      if(e.early) return t+'Os protocolos ainda não tinham convergido; a mudança vale para as próximas fases.';
+      if(e.proto==='ospf') t+=e.lsas+' originaram novos Router-LSAs (número de sequência maior), inundados pela rede, e o SPF foi recalculado.';
+      else t+='Atualização disparada (triggered update) e '+plural(e.rounds,'rodada','rodadas')+' de Response até reconvergir.'+(!e.sh && !e.up && e.rounds>=8?' O número alto de rodadas é a <b>contagem ao infinito</b>: sem split horizon, os vizinhos reanunciam uns aos outros a rota perdida, somando 1 a cada volta, até a métrica chegar a 16.':'');
+      return t+' Caminho de '+hosts[0].id+' a '+hosts[1].id+' agora: '+e.hp+'.';
+    }
+    if(e.type==='comm') return '<b>Comunicação</b> de '+e.src+' para '+e.dst+': '+(e.ok?'pacote entregue por '+e.hp+'.':'não há caminho; a rede está particionada.')+(e.proto==='rip'&&e.ok?' Cada roteador decidiu só o próximo salto, sem conhecer o caminho completo.':'');
+    if(e.type==='sh') return 'Split horizon com poison reverse '+(e.on?'ativado':'desativado')+'.';
+    if(e.type==='early') return 'Tentativa de comunicação antes da convergência: os roteadores ainda não têm rotas.';
+    return '';
+  }
+  function explainSetup(){
+    const s=journalStart;
+    const init=s.multi?linksInitMulti:linksInitSingle;
+    let h='<p>Protocolo: <b>'+(s.proto==='ospf'?'OSPF':'RIPv2')+'</b>'+(s.proto==='ospf'?(s.multi?', <b>multi-área</b> (áreas 1, 0 e 2; R2, R3, R8 e R9 são ABRs, com um pé no backbone)':', área única'):(s.sh?', com split horizon e poison reverse':', <b>sem</b> split horizon'))+'.</p>';
+    h+='<p>Topologia: '+plural(routers.length,'roteador','roteadores')+' e '+plural(init.length,'enlace','enlaces')+' ('+init.map(l=>l.a+'-'+l.b+' custo '+l.cost).join(', ')+'). '+hosts[0].id+' está ligado a '+hosts[0].attach+' e '+hosts[1].id+' a '+hosts[1].attach+'.'+(s.proto==='rip'?' O RIP ignora esses custos: a métrica é o número de saltos (máximo 15; 16 significa inalcançável).':'')+'</p>';
+    if(s.proto==='ospf' && s.multi) h+='<p><i>Simplificação do simulador: as áreas aparecem no desenho, mas o SPF é calculado sobre a topologia inteira. No OSPF real, cada área tem sua própria LSDB e os ABRs anunciam as outras áreas por LSAs de resumo (tipo 3).</i></p>';
+    const ch=[];
+    links.forEach((l,i)=>{ if(!l.up) ch.push('enlace '+l.a+' / '+l.b+' caído'); else if(l.cost!==init[i].cost) ch.push('custo '+l.cost+' em '+l.a+' / '+l.b+' (era '+init[i].cost+')'); });
+    if(s.proto==='rip' && splitHorizonEnabled!==s.sh) ch.push('split horizon '+(splitHorizonEnabled?'ativado':'desativado')+' durante a sessão');
+    if(ch.length) h+='<p>Situação atual: '+ch.join('; ')+'.</p>';
+    return h;
+  }
+  function explainResults(){
+    if(!journal.length) return '<p>Nada executado ainda. Clique em <b>Avançar fase</b> para acompanhar a convergência; depois teste a comunicação entre '+hosts[0].id+' e '+hosts[1].id+'.</p>';
+    let h='<ol>'+journal.map(e=>'<li>'+explainItem(e)+'</li>').join('')+'</ol>';
+    h+='<p>Fase atual: <b>'+stopLabels[Math.min(currentStep,4)]+'</b>.'+(currentStep>=4?' '+tableText():'')+'</p>';
+    return h;
+  }
+  function explainConcepts(){
+    const has=t=>journal.some(e=>e.type===t);
+    const phase=n=>journal.some(e=>e.type==='phase' && e.step===n);
+    const s=journalStart, items=[];
+    if(s.proto==='ospf'){
+      if(phase(1)) items.push('O <b>Hello</b> descobre vizinhos e confirma a comunicação nos dois sentidos (2-Way). Só depois os roteadores sincronizam as bases e chegam a <b>Full</b>.');
+      if(phase(3)) items.push('No <b>estado de enlace</b>, cada roteador descreve só os próprios enlaces (Router-LSA) e a inundação entrega essa descrição a todos. Todos passam a ter o mesmo mapa da rede.');
+      if(phase(4)){
+        items.push('Cada roteador roda <b>Dijkstra</b> sobre a própria LSDB e escolhe o caminho de <b>menor custo</b> (por padrão, inversamente proporcional à banda), não o de menos saltos.');
+        const hp=hostPath(), mh=hp && hp.path.length?minHops(hp.path[0],hp.path[hp.path.length-1]):null;
+        if(hp && hp.path.length && mh!==null && hp.path.length-1>mh) items.push('Repare que o caminho escolhido tem '+(hp.path.length-1)+' saltos, mas existe outro com '+mh+': o OSPF preferiu o de menor custo.');
+      }
+      if(has('topo') && journal.some(e=>e.type==='topo' && !e.early && !e.ignored)) items.push('Numa mudança de topologia, só os roteadores afetados originam novos LSAs (com <b>número de sequência</b> maior, que invalida o anterior) e todos recalculam o SPF. A convergência é rápida e sem laços.');
+      if(s.multi) items.push('O <b>multi-área</b> limita o tamanho da LSDB e o alcance das inundações: toda área se liga ao backbone (área 0) por um <b>ABR</b>.');
+    } else {
+      if(phase(2)) items.push('No <b>vetor de distância</b>, cada roteador só conhece o que os vizinhos anunciam: a distância até cada destino e por quem. Ninguém tem o mapa completo.');
+      if(phase(3)) items.push('A convergência é <b>Bellman-Ford distribuído</b>: as notícias andam um salto por rodada, por isso redes maiores demoram mais.');
+      if(phase(4)) items.push('A métrica é o <b>número de saltos</b>: um enlace lento conta o mesmo que um rápido. Com 16 saltos o destino é inalcançável, o que limita o tamanho da rede.');
+      if(journal.some(e=>e.type==='topo' && e.ignored)) items.push('Alterar o custo não muda nada no RIP: ele não usa custo de enlace.');
+      if(journal.some(e=>e.type==='topo' && !e.early && !e.ignored && !e.up)) items.push('Numa falha, o <b>split horizon com poison reverse</b> impede que um vizinho devolva uma rota que aprendeu de você, evitando a <b>contagem ao infinito</b>. Compare quantas rodadas a reconvergência leva com e sem ele.');
+    }
+    if(phase(1) || phase(2)) items.push('<b>Segurança:</b> roteadores aceitam rotas de quem fala o protocolo no enlace. Um atacante pode injetar rotas falsas e desviar tráfego. Use autenticação ('+(s.proto==='ospf'?'OSPF com HMAC-SHA, RFC 5709':'RIPv2 com MD5')+') e interfaces passivas onde não há roteadores vizinhos.');
+    if(!items.length) items.push('Avance as fases para ver os conceitos que aparecem nesta sessão.');
+    return '<ul>'+items.map(t=>'<li>'+t+'</li>').join('')+'</ul>';
+  }
+  function explainNext(){
+    const has=t=>journal.some(e=>e.type===t);
+    const s=journalStart, next=[];
+    if(currentStep<4) next.push('Clique em <b>Avançar fase</b> até a convergência.');
+    if(currentStep>=4 && !has('comm')) next.push('Clique em <b>Simular PC-A → PC-B</b> e veja o caminho de '+hosts[0].id+' a '+hosts[1].id+'.');
+    if(currentStep>=4 && !journal.some(e=>e.type==='topo' && !e.up && e.reason!=='cost')) next.push('Clique em um enlace do caminho atual e use <b>Derrubar enlace</b>: veja a reconvergência e o novo caminho.');
+    if(currentStep>=4 && s.proto==='ospf' && !journal.some(e=>e.type==='topo' && e.reason==='cost')) next.push('Aumente o custo de um enlace do caminho para 50 e veja o OSPF desviar o tráfego.');
+    if(s.proto==='rip' && s.sh) next.push('Desmarque o <b>split horizon</b>, derrube um enlace e compare o número de rodadas até reconvergir.');
+    next.push(s.proto==='ospf'?'Troque para <b>RIPv2</b> e compare: o caminho pode mudar, porque o RIP conta saltos e ignora custos.':'Troque para <b>OSPF</b> e compare o caminho escolhido pelo custo com o escolhido por saltos.');
+    if(s.proto==='ospf' && !s.multi) next.push('Experimente o modo <b>multi-área</b> e identifique os ABRs.');
+    return '<ul>'+next.slice(0,4).map(t=>'<li>'+t+'</li>').join('')+'</ul>';
+  }
+  function phaseJournal(n,rounds){
+    const e={step:n,proto:protocol,links:links.filter(l=>l.up).length,routers:routers.length,rounds:rounds};
+    if(n===4){ e.root=rootRouter; e.table=tableText(); const hp=hostPath(); e.hp=hp?pathText(hp,protocol==='ospf'):''; }
+    jr('phase',e);
+  }
+  function renderExplain(){
+    const body=document.getElementById('explainBody');
+    if(!body) return;
+    const s=journalStart;
+    let h='<h3>Experimento: convergência '+(s.proto==='ospf'?'OSPF'+(s.multi?' multi-área':''):'RIPv2')+'</h3>';
+    h+='<p><b>Objetivo.</b> '+(s.proto==='ospf'?'Observar como o OSPF (estado de enlace, RFC 2328) forma adjacências, sincroniza a LSDB e calcula o caminho de menor custo com Dijkstra, e como reage a falhas e mudanças de custo.':'Observar como o RIPv2 (vetor de distância, RFC 2453) troca vetores com os vizinhos e converge por Bellman-Ford contando saltos, e como reage a falhas.')+'</p>';
+    h+='<h3>Configuração</h3>'+explainSetup();
+    h+='<h3>O que aconteceu</h3>'+explainResults();
+    h+='<h3>Conceitos observados</h3>'+explainConcepts();
+    h+='<h3>Para explorar em seguida</h3>'+explainNext();
+    body.innerHTML=h;
   }
 
   // ---------- Wire up controls ----------
@@ -1276,6 +1443,7 @@
   });
   splitHorizonCheck.addEventListener('change',()=>{
     splitHorizonEnabled=splitHorizonCheck.checked;
+    jr('sh',{on:splitHorizonEnabled});
     log('Split horizon com poison reverse '+(splitHorizonEnabled?'ativado':'desativado')+'.','sys');
   });
   btnAdvance.addEventListener('click', advanceStep);
@@ -1288,6 +1456,7 @@
       const target=btn.getAttribute('data-tab');
       document.querySelectorAll('.tab-btn').forEach(b=>{ b.classList.toggle('active', b===btn); b.setAttribute('aria-selected', b===btn); });
       document.querySelectorAll('.tab-content').forEach(c=>c.classList.toggle('active', c.getAttribute('data-tab-content')===target));
+      if(target==='exp') renderExplain();
     });
   });
 

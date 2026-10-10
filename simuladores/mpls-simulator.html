@@ -339,9 +339,10 @@
   <section class="panel tabs-panel">
     <div class="tab-bar" role="tablist">
       <button class="tab-btn active" data-tab="tables" type="button" role="tab" aria-selected="true">LIB / LFIB</button>
-      <button class="tab-btn" data-tab="cap" type="button" role="tab" aria-selected="false">Captura por enlace</button>
+      <button class="tab-btn" data-tab="cap" type="button" role="tab" aria-selected="false">Captura</button>
       <button class="tab-btn" data-tab="msg" type="button" role="tab" aria-selected="false">Pacote</button>
       <button class="tab-btn" data-tab="term" type="button" role="tab" aria-selected="false">Terminal</button>
+      <button class="tab-btn" data-tab="exp" type="button" role="tab" aria-selected="false">Experimento</button>
       <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência</button>
       <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
     </div>
@@ -378,6 +379,9 @@
     </div>
     <div class="tab-content" data-tab-content="term">
       <div class="term" id="term" aria-live="polite"></div>
+    </div>
+    <div class="tab-content" data-tab-content="exp">
+      <div class="tab-scroll"><article class="ref-body" id="explainBody" aria-live="polite"></article></div>
     </div>
     <div class="tab-content" data-tab-content="ref">
       <div class="tab-scroll">
@@ -428,6 +432,15 @@
             <li><b>Proteção do LDP e do BGP:</b> autenticação TCP-MD5 ou TCP-AO (RFC 5925) e filtros que aceitem LDP e BGP só de vizinhos conhecidos.</li>
             <li><b>Ocultação da topologia:</b> desativar a propagação de TTL esconde o núcleo no traceroute. As extensões da RFC 4950, por outro lado, revelam os rótulos em uso.</li>
           </ul>
+          <h3>Roteiro de exercícios</h3>
+          <ol>
+            <li>Rode um <b>ping</b> antes de avançar as fases e outro depois da fase LSP. Compare na aba Captura: onde aparecem push, swap e pop?</li>
+            <li>Na aba <b>LIB / LFIB</b>, escolha P1 e explique por que a LIB tem mais rótulos que a LFIB para a mesma FEC (retenção liberal).</li>
+            <li>Rode o <b>traceroute</b> com <b>Propagar TTL</b> ligado e desligado. Quais saltos somem, e por que um provedor faria isso?</li>
+            <li>Troque o rótulo do egresso entre <b>implicit-null</b>, <b>explicit-null</b> e <b>sem PHP</b>. Em que roteador o último rótulo é removido em cada caso?</li>
+            <li>Mude para <b>L3VPN</b> e rode um ping: que rótulos cada P enxerga, e por que os P não precisam conhecer as rotas dos clientes?</li>
+            <li>Derrube o enlace <b>P1 / P3</b> com os LSPs instalados: o caminho e os rótulos mudam? Por que não é preciso esperar nova sinalização LDP?</li>
+          </ol>
         </article>
       </div>
     </div>
@@ -493,6 +506,7 @@
   let root='PE1', dir='H-A', speed=0.8;
   let selected=null, capture=[], msgSel=null, simClock=0, clockBase=0;
   let spfTab={};
+  let journal=[], journalStart={service:'ip',php:'implicit',prop:true}, curRun=null;
 
   // ---------- Referências DOM ----------
   const linksGroup=$('linksGroup'), nodesGroup=$('nodesGroup'), packetsGroup=$('packetsGroup');
@@ -829,15 +843,19 @@
   async function runPing(){
     const [src,dst]=hostPair();
     tprompt(src.id,'ping -c 1 '+dst.ip);
+    curRun.src=src.id; curRun.dst=dst.ip;
     tprint('PING '+dst.ip+' ('+dst.ip+') 56(84) bytes of data.');
     clockBase=simClock;
     log('<b>'+src.id+' envia Echo Request para '+dst.ip+'</b>.','data');
     const p={src:src.ip,dst:dst.ip,ipttl:64,kind:'echo',stack:[],delay:0,seq:1};
     const r=await forward(p,src.id);
+    curRun.at=r.at; curRun.expired=r.status==='expired'?r.at:null;
     if(r.status==='delivered'){
       log(dst.id+' responde com Echo Reply. A volta usa outro LSP (LSPs são unidirecionais), com outros rótulos.','data');
       const q={src:dst.ip,dst:src.ip,ipttl:64,kind:'reply',stack:[],delay:p.delay+0.05,seq:1};
       const rr=await forward(q,dst.id);
+      if(rr.status==='delivered'){ curRun.ok=true; curRun.rtt=q.delay; curRun.ttl=q.ipttl; }
+      else { curRun.at=rr.at; curRun.expired=rr.status==='expired'?rr.at:null; }
       if(rr.status==='delivered'){
         tprint('64 bytes from '+dst.ip+': icmp_seq=1 ttl='+q.ipttl+' time='+q.delay.toFixed(2)+' ms');
         log('TTL recebido em '+src.id+': '+q.ipttl+' ('+(64-q.ipttl)+' decrementos). '+(propagate?'Com propagação, cada LSR do caminho conta.':'Sem propagação, só os PEs decrementam o TTL do IP.'),'sys');
@@ -859,6 +877,7 @@
   async function runTrace(){
     const [src,dst]=hostPair();
     tprompt(src.id,'traceroute -n -e -q 1 -m 10 '+dst.ip);
+    curRun.src=src.id; curRun.dst=dst.ip;
     tprint('traceroute to '+dst.ip+' ('+dst.ip+'), 10 hops max, 60 byte packets');
     log('<b>'+src.id+' inicia traceroute para '+dst.ip+'</b>: sondas UDP com TTL 1, 2, 3...','data');
     for(let ttl=1;ttl<=10;ttl++){
@@ -866,6 +885,7 @@
       clockBase=simClock;
       const p={src:src.ip,dst:dst.ip,ipttl:ttl,kind:'udp',stack:[],delay:0,udp:33433+ttl,quiet:true};
       const r=await forward(p,src.id);
+      if(r.status!=='aborted') curRun.hops.push({ttl:ttl,status:r.status,at:r.at,from:r.from,mode:r.mode,labels:r.labels||[]});
       const n=String(ttl).padStart(2,' ');
       if(r.status==='expired'){
         const srcPe=src.pe;
@@ -898,10 +918,14 @@
   async function runTool(fn){
     if(busy) return;
     busy=true; stopReq=false; updateUI();
+    curRun={tool:fn===runPing?'ping':'trace',capStart:capture.length,hops:[],prop:propagate};
     activateTab('cap');
     try{ await fn(); }
     catch(err){ log('Erro interno do simulador: '+err.message,'fail'); console.error(err); }
-    finally{ busy=false; updateUI(); render(); }
+    finally{
+      if(curRun){ curRun.capEnd=capture.length; const run=curRun; curRun=null; jr(run.tool,run); }
+      busy=false; updateUI(); render();
+    }
   }
 
   // ---------- Avanço de fases ----------
@@ -913,6 +937,12 @@
       await PHASES[step]();
       step++;
       if(step===4){ describeLsp('H-A'); describeLsp('H-B'); }
+      const ups=links.filter(l=>l.up).length;
+      if(step===1 || step===2) jr('phase',{step:step,links:ups});
+      else if(step===3){
+        const f=fecs().find(x=>x.owner==='PE2' && x.kind==='loopback');
+        jr('phase',{step:3,fecs:fecs().length,fec:f.id,sample:['PE2','P3','P4','P1','P2','PE1'].map(r=>r+' anunciou '+fmtL(localLabel(r,f))).join(', '),vpn:service==='vpn'?vpnLabel('PE1')+' (PE1) e '+vpnLabel('PE2')+' (PE2)':''});
+      } else jr('phase',{step:4,ab:lspText('H-A'),ba:lspText('H-B')});
     } finally { busy=false; updateUI(); render(); renderTables(); }
   }
 
@@ -922,6 +952,7 @@
       net:'10.0.'+(i+1)+'.0/30',ipA:'10.0.'+(i+1)+'.1',ipB:'10.0.'+(i+1)+'.2'}));
     spfAll();
     step=0; selected=null; capture=[]; msgSel=null; simClock=0;
+    journal=[]; journalStart={service:service,php:php,prop:propagate};
     logBody.innerHTML='';
     log('Rede iniciada em modo '+(service==='vpn'?'L3VPN':'IP sobre MPLS')+'. O IGP (OSPF) já convergiu: todos os LSRs conhecem as loopbacks'+(service==='ip'?' e as redes dos clientes':'; as redes dos clientes ficam só nas VRFs dos PEs')+'. Ainda não há rótulos.','sys');
     stageTitle.textContent=service==='vpn'?'Núcleo MPLS com L3VPN: 2 PE e 4 P':'Núcleo MPLS: 2 PE e 4 P';
@@ -1165,6 +1196,7 @@
   function activateTab(name){
     document.querySelectorAll('.tab-btn').forEach(b=>{ const on=b.dataset.tab===name; b.classList.toggle('active',on); b.setAttribute('aria-selected',on); });
     document.querySelectorAll('.tab-content').forEach(c=>c.classList.toggle('active',c.dataset.tabContent===name));
+    if(name==='exp') renderExplain();
   }
 
   // ---------- Inspetor ----------
@@ -1233,11 +1265,126 @@
   function topologyChanged(msg){
     spfAll();
     log(msg,'fail');
+    jr('topo',{msg:msg,ab:step>=4?lspText(dir):''});
     if(step>=4){ describeLsp('H-A'); describeLsp('H-B'); }
     refreshAll();
   }
 
-  function refreshAll(){ render(); updateUI(); renderTables(); renderCapture(); renderMessage(); renderInspector(); }
+  function refreshAll(){ render(); updateUI(); renderTables(); renderCapture(); renderMessage(); renderInspector(); renderExplain(); }
+
+  // ---------- Aba Experimento: texto gerado a partir da sessão ----------
+  function jr(type,data){
+    journal.push(Object.assign({type:type},data||{}));
+    if(isExpActive()) renderExplain();
+  }
+  function isExpActive(){ const c=document.querySelector('.tab-content[data-tab-content="exp"]'); return c && c.classList.contains('active'); }
+  function plural(n,s,p){ return n+' '+(n===1?s:p); }
+  function escT(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function lspText(fromId){
+    const hops=lspHops(fromId);
+    const tgt=HOSTS.find(h=>h.id!==fromId);
+    if(!hops.length) return 'sem LSP completo de '+node(fromId).pe+' até '+tgt.pe;
+    return hops.map(h=>h.from+' ['+stackText(h.stackObj)+']').join(' → ')+' → '+tgt.pe;
+  }
+  function phpTxt(v){ return v==='implicit'?'implicit-null (3): o penúltimo salto remove o rótulo (PHP)':v==='explicit'?'explicit-null (0): o rótulo chega ao egresso, preservando o campo de QoS (EXP/TC)':'sem PHP: o egresso anuncia um rótulo próprio e faz o pop'; }
+  function ttlTxt(v){ return v?'Uniform (propagate-ttl): o TTL do IP é copiado para o rótulo e cada LSR do núcleo decrementa':'Pipe (no propagate-ttl): o rótulo começa com TTL 255 e o núcleo fica invisível para o TTL do IP'; }
+  function explainPhase(e){
+    if(e.step===1) return '<b>Discovery</b>: LDP Hello (UDP 646, para 224.0.0.2) em '+plural(e.links,'enlace ativo','enlaces ativos')+'. Cada LSR descobriu seus vizinhos diretos.';
+    if(e.step===2) return '<b>Sessão</b>: '+plural(e.links,'sessão LDP','sessões LDP')+' sobre TCP 646 chegaram a OPERATIONAL. Em cada par, o LSR com a maior loopback abre a conexão (RFC 5036).';
+    if(e.step===3) return '<b>Mapping</b>: cada LSR alocou um rótulo local para cada uma das '+e.fecs+' FECs e o anunciou a todos os vizinhos. Para a loopback do PE2 ('+e.fec+'): '+e.sample+'.'+(e.vpn?' Em paralelo, PE1 e PE2 trocaram por MP-BGP as rotas VPNv4 da VRF CLIENTE, com os rótulos VPN '+e.vpn+'.':'');
+    return '<b>LSP</b>: cada LSR combinou a LIB com o próximo salto do IGP e instalou a LFIB. LSP de ida: '+escT(e.ab)+'. LSP de volta: '+escT(e.ba)+'.';
+  }
+  function opsOf(r,kind){
+    return capture.slice(r.capStart,r.capEnd).filter(c=>c.pkt.kind===kind && lsr(c.from)).map(c=>c.from+': '+c.op);
+  }
+  function explainPing(r){
+    let t='<b>ping</b> de '+r.src+' para '+r.dst+': ';
+    if(r.ok) t+='sucesso, RTT de '+r.rtt.toFixed(2).replace('.',',')+' ms e TTL recebido '+r.ttl+' ('+plural(64-r.ttl,'decremento','decrementos')+').'+(r.prop?' Com o modelo Uniform, cada LSR do caminho decrementou o TTL.':' Com o modelo Pipe, só os PEs decrementam o TTL do IP; o núcleo não aparece.');
+    else if(r.expired) t+='falhou: o TTL expirou em '+r.expired+'.';
+    else t+='falhou: o pacote foi descartado'+(r.at?' em '+r.at:'')+'.';
+    const ida=opsOf(r,'echo'), volta=opsOf(r,'reply');
+    if(ida.length) t+='<br>Ida: '+escT(ida.join('; '))+'.';
+    if(volta.length) t+='<br>Volta: '+escT(volta.join('; '))+'.';
+    return t;
+  }
+  function explainTrace(r){
+    let t='<b>traceroute</b> de '+r.src+' para '+r.dst+' (TTL '+(r.prop?'propagado':'não propagado')+'):<br>';
+    t+=r.hops.map(h=>{
+      if(h.status==='expired') return 'TTL '+h.ttl+': '+h.from+' ('+h.at+')'+(h.mode==='label'?', com a pilha ['+h.labels.map(x=>x.label).join(' | ')+'] devolvida no ICMP (RFC 4950)':'');
+      if(h.status==='delivered') return 'TTL '+h.ttl+': '+r.dst+' (destino alcançado)';
+      return 'TTL '+h.ttl+': *';
+    }).join('<br>');
+    return t;
+  }
+  function explainStepItem(e){
+    if(e.type==='phase') return explainPhase(e);
+    if(e.type==='topo') return escT(e.msg)+(e.ab?' LSP de ida agora: '+escT(e.ab)+'.':'');
+    if(e.type==='php') return 'Egresso passou a anunciar '+phpTxt(e.php)+'.';
+    if(e.type==='ttl') return 'Modelo de TTL alterado para '+ttlTxt(e.prop)+'.';
+    if(e.type==='ping') return explainPing(e);
+    if(e.type==='trace') return explainTrace(e);
+    return '';
+  }
+  function explainSetup(){
+    const s=journalStart;
+    let h='<p>Núcleo com 2 PE (PE1 e PE2, roteadores de borda) e 4 P (P1 a P4), OSPF já convergido. H-A (192.168.1.10) fica atrás do PE1 e H-B (192.168.2.10) atrás do PE2.</p>';
+    h+='<p>Serviço: <b>'+(s.service==='vpn'?'L3VPN':'IP sobre MPLS')+'</b>. '+(s.service==='vpn'?'As redes dos clientes existem só na VRF CLIENTE dos PEs; o núcleo usa uma pilha de 2 rótulos (transporte + VPN).':'Todos os LSRs conhecem as redes dos clientes; o pacote leva 1 rótulo.')+'</p>';
+    h+='<p>Rótulo do egresso: '+phpTxt(s.php)+'. Modelo de TTL: '+ttlTxt(s.prop)+'.</p>';
+    const ch=[];
+    links.forEach((l,i)=>{ if(!l.up) ch.push('enlace '+l.a+' / '+l.b+' caído'); else if(l.cost!==LINKS_INIT[i][3]) ch.push('custo '+l.cost+' no enlace '+l.a+' / '+l.b+' (era '+LINKS_INIT[i][3]+')'); });
+    if(php!==s.php || propagate!==s.prop) ch.push('configuração de PHP ou TTL alterada durante a sessão (veja abaixo)');
+    if(ch.length) h+='<p>Situação atual: '+ch.join('; ')+'.</p>';
+    return h;
+  }
+  function explainResults(){
+    if(!journal.length) return '<p>Nada executado ainda. Clique em <b>Avançar fase</b> para o LDP descobrir vizinhos, abrir sessões e distribuir rótulos; depois use <b>ping</b> e <b>traceroute</b>.</p>';
+    let h='<ol>'+journal.map(e=>'<li>'+explainStepItem(e)+'</li>').join('')+'</ol>';
+    h+='<p>Fase atual: <b>'+STOPS[step][0]+'</b> ('+STOPS[step][1]+'). '+(step>=4?'Os LSPs estão instalados.':'Os pacotes ainda seguem roteamento IP comum (ou são descartados, na L3VPN).')+'</p>';
+    return h;
+  }
+  function explainConcepts(){
+    const has=t=>journal.some(e=>e.type===t);
+    const phase=n=>journal.some(e=>e.type==='phase' && e.step===n);
+    const pings=journal.filter(e=>e.type==='ping'), traces=journal.filter(e=>e.type==='trace');
+    const items=[];
+    if(phase(1)) items.push('O <b>LDP</b> (RFC 5036) só funciona sobre um IGP convergido: ele descobre vizinhos por Hello em UDP, abre sessão em TCP e distribui o mapeamento FEC para rótulo.');
+    if(phase(3)) items.push('Os rótulos têm significado <b>local</b>: cada LSR escolhe os seus. No modo <b>Downstream Unsolicited</b> com <b>retenção liberal</b>, cada LSR guarda na LIB os rótulos de todos os vizinhos, mas só o do próximo salto do IGP vai para a LFIB.');
+    if(pings.some(p=>p.ok) || traces.length) items.push('O PE de entrada faz <b>push</b> (classifica o pacote em uma FEC), os P fazem <b>swap</b> olhando só o rótulo do topo, sem consultar o IP, e a pilha é removida com <b>pop</b> no fim do LSP.');
+    if(pings.length) items.push('LSPs são <b>unidirecionais</b>: a volta usa outro LSP, com outros rótulos.');
+    if(phase(3) && (journalStart.php==='implicit' || journal.some(e=>e.type==='php' && e.php==='implicit'))) items.push('Com <b>implicit-null</b>, o penúltimo salto já remove o rótulo (PHP) e o PE de saída faz uma só consulta (IP ou VRF).');
+    if(journal.some(e=>e.type==='php' && e.php!=='implicit') || journalStart.php!=='implicit') items.push('<b>explicit-null</b> mantém um rótulo até o egresso para preservar a marcação de QoS; <b>sem PHP</b>, o egresso faz duas consultas (rótulo e depois IP).');
+    if(journalStart.service==='vpn') items.push('Na <b>L3VPN</b> (RFC 4364), o rótulo externo leva o pacote até o PE de saída e o interno (rótulo VPN, aprendido por MP-BGP) indica a VRF. Os P não conhecem as rotas dos clientes, e redes de clientes diferentes podem até se sobrepor.');
+    if(traces.length) items.push('No traceroute, o modelo <b>Uniform</b> mostra os P (o TTL do rótulo expira neles e o ICMP leva a pilha recebida, RFC 4950); o modelo <b>Pipe</b> esconde o núcleo do cliente.');
+    if(has('topo')) items.push('Quando a topologia muda, o OSPF reconverge e, graças à <b>retenção liberal</b>, a LFIB troca de rótulo sem esperar nova sinalização. Uma sessão LDP que cai leva junto os rótulos aprendidos por ela.');
+    if(phase(2)) items.push('<b>Segurança:</b> o MPLS separa tráfego, mas não cifra nem autentica pacotes. Proteja o núcleo: não aceite pacotes rotulados vindos de clientes, autentique as sessões LDP e BGP (TCP MD5 ou TCP-AO) e filtre o acesso às loopbacks.');
+    if(!items.length) items.push('Avance as fases para ver os conceitos que aparecem nesta sessão.');
+    return '<ul>'+items.map(t=>'<li>'+t+'</li>').join('')+'</ul>';
+  }
+  function explainNext(){
+    const has=t=>journal.some(e=>e.type===t);
+    const traces=journal.filter(e=>e.type==='trace');
+    const next=[];
+    if(step<4) next.push('Clique em <b>Avançar fase</b> até instalar os LSPs. Rode um ping antes disso e compare: '+(service==='vpn'?'na L3VPN, sem LSP o PE descarta.':'sem rótulos, o pacote segue por roteamento IP comum.'));
+    if(step>=4 && !has('ping')) next.push('Rode <b>ping</b> e acompanhe na aba Captura o push, os swaps e o pop.');
+    if(step>=4 && !traces.length) next.push('Rode <b>traceroute</b> e veja os P responderem com a pilha de rótulos.');
+    if(traces.length && traces.every(t=>t.prop)) next.push('Desmarque <b>Propagar TTL</b> e repita o traceroute: o núcleo some (modelo Pipe).');
+    if(step>=4 && !has('topo')) next.push('Derrube o enlace P1 / P3 no inspetor e repita o ping: veja o LSP mudar de caminho e de rótulos.');
+    if(step>=3 && !has('php')) next.push('Troque o rótulo do egresso para <b>explicit-null</b> ou <b>sem PHP</b> e compare onde o pop acontece.');
+    if(journalStart.service==='ip') next.push('Mude o serviço para <b>L3VPN</b> e observe a pilha de 2 rótulos.');
+    next.push('Troque o sentido do teste para <b>H-B → H-A</b> e compare os rótulos: o LSP de volta é outro.');
+    return '<ul>'+next.slice(0,4).map(t=>'<li>'+t+'</li>').join('')+'</ul>';
+  }
+  function renderExplain(){
+    const body=$('explainBody');
+    if(!body) return;
+    let h='<h3>Experimento: '+(journalStart.service==='vpn'?'L3VPN sobre MPLS':'IP sobre MPLS com LDP')+'</h3>';
+    h+='<p><b>Objetivo.</b> Observar como o LDP monta LSPs sobre o IGP e como os pacotes atravessam o núcleo por comutação de rótulos (push, swap e pop)'+(journalStart.service==='vpn'?', com a separação de clientes da L3VPN':'')+'.</p>';
+    h+='<h3>Configuração</h3>'+explainSetup();
+    h+='<h3>O que aconteceu</h3>'+explainResults();
+    h+='<h3>Conceitos observados</h3>'+explainConcepts();
+    h+='<h3>Para explorar em seguida</h3>'+explainNext();
+    body.innerHTML=h;
+  }
 
   // ---------- Eventos ----------
   btnAdvance.addEventListener('click',advance);
@@ -1247,12 +1394,14 @@
   serviceSelect.addEventListener('change',()=>{ service=serviceSelect.value; reset(); });
   phpSelect.addEventListener('change',()=>{
     php=phpSelect.value;
+    jr('php',{php:php});
     log('Egresso passa a anunciar '+(php==='implicit'?'implicit-null (3): o penúltimo salto faz pop':(php==='explicit'?'explicit-null (0): o rótulo chega ao egresso':'um rótulo próprio: sem PHP, o egresso faz o pop'))+'.'+(step>=3?' Os PEs reenviam o Label Mapping das próprias FECs.':''),'label');
     if(step>=4){ describeLsp('H-A'); describeLsp('H-B'); }
     refreshAll();
   });
   ttlCheck.addEventListener('change',()=>{
     propagate=ttlCheck.checked;
+    jr('ttl',{prop:propagate});
     log(propagate?'mpls ip propagate-ttl: modelo Uniform, o TTL do IP é copiado para o rótulo.':'no mpls ip propagate-ttl: modelo Pipe, o rótulo começa com TTL 255 e o núcleo some do traceroute.','sys');
   });
   rootSelect.addEventListener('change',()=>{ root=rootSelect.value; renderTables(); render(); });

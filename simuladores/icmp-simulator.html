@@ -373,7 +373,8 @@
       <button class="tab-btn" data-tab="cap" type="button" role="tab" aria-selected="false">Captura</button>
       <button class="tab-btn" data-tab="msg" type="button" role="tab" aria-selected="false">Pacote</button>
       <button class="tab-btn" data-tab="routes" type="button" role="tab" aria-selected="false">Tabelas de rotas</button>
-      <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência ICMP</button>
+      <button class="tab-btn" data-tab="exp" type="button" role="tab" aria-selected="false">Experimento</button>
+      <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência</button>
       <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
     </div>
     <div class="tab-content active" data-tab-content="term">
@@ -407,6 +408,9 @@
           <tbody id="routeBody"></tbody>
         </table>
       </div>
+    </div>
+    <div class="tab-content" data-tab-content="exp">
+      <div class="tab-scroll"><article class="ref-body" id="explainBody" aria-live="polite"></article></div>
     </div>
     <div class="tab-content" data-tab-content="ref">
       <div class="tab-scroll">
@@ -454,6 +458,15 @@
             <li><b>Buraco negro de PMTUD</b> (RFC 2923): bloquear todo ICMP de erro impede o 3/4 de chegar. Pacotes pequenos funcionam, mas os grandes com DF somem; conexões TCP travam após o handshake. Nunca filtre o tipo 3 código 4.</li>
             <li><b>Ataques históricos:</b> Smurf (Echo para broadcast direcionado, mitigado pela RFC 2644), Ping of Death (datagrama remontado acima de 65535 bytes), túneis ICMP (dados escondidos no payload do Echo) e Redirect forjado para desviar tráfego.</li>
           </ul>
+          <h3>Roteiro de exercícios</h3>
+          <ol>
+            <li><b>Echo (ping):</b> anote o TTL recebido e calcule quantos roteadores existem até o SRV. Repita com <code>ping 10.0.23.2</code> e explique a diferença no TTL inicial.</li>
+            <li><b>traceroute (UDP)</b> e <b>tracert (Windows)</b>: compare os pacotes na aba Captura. Por que o último salto responde com mensagens diferentes nas duas ferramentas?</li>
+            <li><b>Rede, Host e Porta inalcançável:</b> para cada cenário, identifique quem gerou o erro (endereço de origem) e explique por que o Host Unreachable demora cerca de 3 s.</li>
+            <li><b>PMTUD (DF)</b> e depois <b>Buraco negro PMTUD</b>: por que o mesmo comando funciona no primeiro e some no segundo? Por que nunca se deve filtrar o tipo 3 código 4?</li>
+            <li><b>Proibido (3/13)</b> e <b>Filtro silencioso:</b> o que cada um revela a quem faz reconhecimento? Qual você usaria na borda de uma rede corporativa, e por quê?</li>
+            <li><b>Porta inalcançável</b> com <code>-p 9999</code> e com <code>-p 53</code>: como um scan UDP distingue porta aberta, fechada e filtrada?</li>
+          </ol>
         </article>
       </div>
     </div>
@@ -530,6 +543,7 @@
   let capture=[], msgSel=null, selected=null, activeScenario=null;
   let ipIdSeq={};
   let termHistory=[], histIdx=0;
+  let lastRun=null;
 
   // ---------- Referências DOM ----------
   const $=id=>document.getElementById(id);
@@ -911,6 +925,16 @@
   }
 
   async function probe(p){
+    const ttl0=p.ttl;
+    const r=await probeRaw(p);
+    if(lastRun && !lastRun.done && r.kind!=='aborted'){
+      const ic=r.pkt && r.pkt.icmp;
+      lastRun.probes.push({kind:r.kind,ttl0:ttl0,src:r.pkt?r.pkt.src:null,type:ic?ic.type:null,code:ic?ic.code:null,mtu:ic?ic.mtu:0,rtt:r.rtt,ttl:r.ttl,msg:r.msg,lmtu:r.mtu});
+      if(isExpActive()) renderExplain();
+    }
+    return r;
+  }
+  async function probeRaw(p){
     clockBase=simClock; p.delay=0;
     const me=nodes['PC-A'];
     if(isLocal(me,p.dst) || p.dst.indexOf('127.')===0) return {kind:'reply',rtt:0.03+Math.random()*0.02,ttl:64,pkt:{src:p.dst}};
@@ -1181,6 +1205,7 @@
     try{ c=parseCommand(line); }
     catch(err){ tprint(err.message,'t-err'); return; }
     busy=true; stopReq=false; refreshControls(); refreshInspector();
+    lastRun={line:line,c:c,scen:activeScenario,changes:netChanges(),capStart:capture.length,pmtuBefore:Object.assign({},pmtuCache),probes:[],aborted:false,done:false};
     log('<b>$ '+esc(line)+'</b>','sys');
     try{
       if(c.tool==='ping') await runPing(c);
@@ -1191,6 +1216,7 @@
       tprint('erro interno do simulador: '+err.message,'t-err');
       console.error(err);
     } finally {
+      lastRun.aborted=stopReq; lastRun.done=true; lastRun.capEnd=capture.length; lastRun.pmtuAfter=Object.assign({},pmtuCache);
       busy=false; quiet=false; stopReq=false; refreshAll();
     }
   }
@@ -1274,6 +1300,7 @@
     if(busy) return;
     const s=SCENARIOS.find(x=>x.id===id);
     resetNetwork(true);
+    lastRun=null;
     if(s.setup) s.setup();
     activeScenario=id;
     loadForm(s.cmd);
@@ -1290,6 +1317,7 @@
     pmtuCache={};
     activeScenario=null; selected=null;
     if(!keepOutput){
+      lastRun=null;
       capture=[]; msgSel=null; simClock=0;
       logBody.innerHTML='';
       log('Rede reiniciada com a configuração padrão.','sys');
@@ -1619,6 +1647,7 @@
   function activateTab(name){
     document.querySelectorAll('.tab-btn').forEach(b=>{ const on=b.dataset.tab===name; b.classList.toggle('active',on); b.setAttribute('aria-selected',on); });
     document.querySelectorAll('.tab-content').forEach(c=>c.classList.toggle('active',c.dataset.tabContent===name));
+    if(name==='exp') renderExplain();
   }
 
   // ---------- Inspetor ----------
@@ -1714,14 +1743,14 @@
   }
 
   function refreshAll(){
-    render(); refreshControls(); renderCapture(); renderMessage(); renderRoutes(); refreshInspector(); updateForm();
+    render(); refreshControls(); renderCapture(); renderMessage(); renderRoutes(); refreshInspector(); updateForm(); renderExplain();
   }
 
   // ---------- Eventos ----------
   btnRun.addEventListener('click',()=>execute(formCommand()));
   btnStop.addEventListener('click',()=>{ if(busy){ stopReq=true; log('Interrompido pelo usuário (Ctrl+C).','sys'); } });
   btnReset.addEventListener('click',()=>{ if(busy) return; resetNetwork(false); refreshAll(); });
-  btnClear.addEventListener('click',()=>{ term.innerHTML=''; if(!busy){ capture=[]; msgSel=null; simClock=0; logBody.innerHTML=''; refreshAll(); } });
+  btnClear.addEventListener('click',()=>{ term.innerHTML=''; if(!busy){ capture=[]; msgSel=null; simClock=0; lastRun=null; logBody.innerHTML=''; refreshAll(); } });
   speedSelect.addEventListener('change',()=>{ speed=parseFloat(speedSelect.value); });
   [fTool,fDst,fCount,fTtl,fSize,fPmtu,fPort,fMax].forEach(e=>e.addEventListener('input',updateForm));
   [fTool,fDst,fPmtu].forEach(e=>e.addEventListener('change',updateForm));
@@ -1739,6 +1768,190 @@
   });
   document.addEventListener('keydown',e=>{ if(e.key==='c' && e.ctrlKey && busy && !window.getSelection().toString()){ stopReq=true; } });
   document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
+
+  // ---------- Aba Experimento: texto gerado a partir da execução ----------
+  function netChanges(){
+    const out=[];
+    Object.values(links).forEach(l=>{
+      if(!l.up) out.push('enlace '+l.name+' caído');
+      else if(l.mtu!==l.defMtu) out.push('MTU '+l.mtu+' no enlace '+l.name);
+    });
+    if(state.r1Acl==='deny-icmp') out.push('ACL de entrada em R1 (g0/1) negando todo ICMP');
+    if(state.r1Acl==='deny-icmp-errors') out.push('ACL de entrada em R1 (g0/1) que só aceita Echo Reply e bloqueia os erros ICMP');
+    if(state.r3Acl==='deny-unreach') out.push('ACL de saída em R3 (g0/1) negando o tráfego e respondendo com 3/13');
+    if(state.r3Acl==='deny-silent') out.push('ACL de saída em R3 (g0/1) descartando em silêncio');
+    if(!state.r2lan) out.push('R2 sem a rota para 10.0.4.0/24');
+    if(!state.srvEcho) out.push('firewall do SRV bloqueando ping');
+    ['R1','R2','R3'].forEach(id=>{ if(!state.unreach[id]) out.push(id+' com no ip unreachables'); });
+    return out;
+  }
+  function isExpActive(){ const c=document.querySelector('.tab-content[data-tab-content="exp"]'); return c && c.classList.contains('active'); }
+  function who(ip){ const n=nodeOfIp(ip); return n?ip+' ('+n.id+')':ip; }
+  function plural(n,s,p){ return n+' '+(n===1?s:p); }
+  function fmtMsBr(v){ return (Math.round(v*100)/100).toString().replace('.',',')+' ms'; }
+  function errDesc(type,code,src,mtu){
+    const at='<b>'+esc(who(src))+'</b>';
+    if(type===11) return 'Time Exceeded (11/0) gerado por '+at+': o datagrama chegou com TTL 1, o roteador descartou e avisou a origem.';
+    if(type===3 && code===0) return 'Net Unreachable (3/0) gerado por '+at+': o roteador não tem rota para a rede de destino, nem rota padrão.';
+    if(type===3 && code===1) return 'Host Unreachable (3/1) gerado por '+at+': a rede existe, mas ninguém respondeu ao ARP pelo endereço de destino.';
+    if(type===3 && code===3) return 'Port Unreachable (3/3) gerado por '+at+': o datagrama chegou ao destino, mas nenhuma aplicação escuta aquela porta.';
+    if(type===3 && code===4) return 'Fragmentation Needed (3/4) gerado por '+at+': o datagrama tinha DF ligado e não cabia na MTU '+mtu+' do próximo enlace.';
+    if(type===3 && code===13) return 'Communication Administratively Prohibited (3/13) gerado por '+at+': uma ACL negou o tráfego e anunciou o bloqueio.';
+    return 'ICMP tipo '+type+' código '+code+' gerado por '+at+'.';
+  }
+  function explainGoal(c){
+    const d='<b>'+esc(c.dst)+'</b>';
+    if(c.tool==='ping') return 'Testar se '+d+' responde e medir o tempo de ida e volta (RTT), usando Echo Request (tipo 8) e Echo Reply (tipo 0).';
+    if(c.tool==='traceroute') return 'Descobrir o caminho até '+d+' salto a salto, como o traceroute do Linux: sondas UDP com TTL crescente.';
+    if(c.tool==='traceroute-I') return 'Descobrir o caminho até '+d+' salto a salto com sondas ICMP Echo e TTL crescente (traceroute -I).';
+    if(c.tool==='tracert') return 'Descobrir o caminho até '+d+' como o Windows faz: Echo Request com TTL crescente.';
+    return 'Verificar se a porta UDP <b>'+c.port+'</b> de '+d+' está aberta, interpretando as respostas ICMP (técnica de scan UDP).';
+  }
+  function explainSetup(r){
+    const c=r.c;
+    let h='<p>Comando executado no PC-A (10.0.1.10): <code>'+esc(r.line)+'</code>.</p><p>';
+    if(c.tool==='ping'){
+      const df=c.pmtu==='dont'?'DF desligado (-M dont): os roteadores podem fragmentar':c.pmtu==='do'?'DF ligado e fragmentação proibida também no PC-A (-M do)':'DF ligado; se aprender uma PMTU menor, o PC-A fragmenta localmente (-M want, padrão do Linux)';
+      h+=plural(c.count,'Echo Request','Echo Requests')+' com TTL inicial '+c.ttl+' e datagramas de '+(c.size+28)+' bytes ('+c.size+' de dados + 8 do cabeçalho ICMP + 20 do IP). '+df+'.';
+    } else if(c.tool==='hping3'){
+      h+=plural(c.count,'datagrama UDP','datagramas UDP')+' para a porta '+c.port+', com TTL inicial '+c.ttl+'. O hping3 não espera resposta da aplicação: interpreta o ICMP que volta (ou a falta dele).';
+    } else {
+      h+='Até '+c.max+' saltos, com '+plural(c.q,'sonda','sondas')+' por salto. '+(c.tool==='traceroute'?'As sondas são datagramas UDP para portas altas (33434 em diante), que nenhuma aplicação usa.':'As sondas são Echo Request.')+' O TTL começa em 1 e sobe a cada salto.';
+    }
+    h+='</p><p>Estado da rede: '+(r.changes.length?r.changes.map(esc).join('; ')+'.':'configuração padrão (caminho PC-A, R1, R2, R3 até a LAN do SRV, MTU 1500 em todos os enlaces).')+'</p>';
+    const now=netChanges();
+    if(r.done && now.join('|')!==r.changes.join('|')) h+='<p><i>A rede foi alterada depois desta execução. Rode o comando de novo para ver o efeito.</i></p>';
+    return h;
+  }
+  function explainResults(r){
+    const P=r.probes, c=r.c;
+    if(!P.length) return '<p>'+(r.done?'Nenhuma sonda foi enviada'+(r.aborted?' (execução interrompida)':'')+'.':'Executando...')+'</p>';
+    let h='<p>'+(r.done?(P.length===1?'Foi enviada ':'Foram enviadas '):'Até agora, ')+'<b>'+plural(P.length,'sonda','sondas')+'</b>'+(r.aborted?' antes da interrupção (Ctrl+C)':'')+'.</p>';
+    const items=[];
+    const replies=P.filter(p=>p.kind==='reply');
+    if(replies.length){
+      const avg=replies.reduce((a,p)=>a+p.rtt,0)/replies.length;
+      const src=replies[0].src, n=nodeOfIp(src);
+      let t=plural(replies.length,'Echo Reply recebido','Echo Replies recebidos')+' de <b>'+esc(who(src))+'</b>, RTT médio de '+fmtMsBr(avg)+' e TTL recebido '+replies[0].ttl+'.';
+      if(n && n.ttl0) t+=' Como '+n.id+' começa com TTL '+n.ttl0+(n.kind==='router'?' (roteador)':' (Linux)')+', a resposta atravessou '+plural(n.ttl0-replies[0].ttl,'roteador','roteadores')+'.';
+      items.push(t);
+    }
+    const groups={};
+    P.filter(p=>p.kind==='error').forEach(p=>{ const k=p.type+'/'+p.code+'@'+p.src; (groups[k]=groups[k]||{p:p,n:0}).n++; });
+    Object.values(groups).forEach(g=>items.push((g.n>1?g.n+'x ':'')+errDesc(g.p.type,g.p.code,g.p.src,g.p.mtu)));
+    const genErr={};
+    capture.slice(r.capStart, r.done?r.capEnd:capture.length).forEach(e=>{
+      const p=e.pkt;
+      if(p.kind!=='arp' && p.proto===1 && ERROR_TYPES.has(p.icmp.type)) (genErr[p.icmp.type+'/'+p.icmp.code+'@'+e.where]=genErr[p.icmp.type+'/'+p.icmp.code+'@'+e.where]||{n:0,p:p,where:e.where}).n++;
+    });
+    Object.values(genErr).forEach(g=>{
+      const got=P.filter(p=>p.kind==='error' && p.type===g.p.icmp.type && p.code===g.p.icmp.code).length;
+      if(g.n>got) items.push('<b>'+esc(g.where)+'</b> gerou '+plural(g.n-got,'erro','erros')+' '+g.p.icmp.type+'/'+g.p.icmp.code+(g.n-got===1?' (está na Captura), mas ':' (estão na Captura), mas ')+(g.n-got===1?'ele foi descartado':'eles foram descartados')+' no caminho de volta e não '+(g.n-got===1?'chegou':'chegaram')+' ao PC-A.');
+    });
+    const tos=P.filter(p=>p.kind==='timeout').length;
+    if(tos){
+      const causes=[];
+      if(r.changes.some(x=>x.indexOf('em silêncio')>=0)) causes.push('a ACL silenciosa em R3');
+      if(r.changes.some(x=>x.indexOf('bloqueia os erros')>=0)) causes.push('a ACL de R1, que descarta os erros ICMP no caminho de volta');
+      if(r.changes.some(x=>x.indexOf('negando todo ICMP')>=0)) causes.push('a ACL de R1, que nega todo ICMP');
+      if(r.changes.some(x=>x.indexOf('bloqueando ping')>=0)) causes.push('o firewall do SRV');
+      if(r.changes.some(x=>x.indexOf('no ip unreachables')>=0)) causes.push('um roteador com no ip unreachables, que descarta sem avisar');
+      items.push(plural(tos,'sonda ficou','sondas ficaram')+' sem resposta (timeout). '+(causes.length?'Causa provável: '+causes.join('; ')+'.':'Algo descartou o pacote ou a resposta sem gerar ICMP.')+' Um timeout não diz <b>onde</b> o pacote morreu.');
+    }
+    const loc=P.filter(p=>p.kind==='local');
+    if(loc.length){
+      const m=loc.find(p=>p.msg==='mtu');
+      if(m) items.push('O próprio PC-A recusou enviar '+plural(loc.filter(p=>p.msg==='mtu').length,'sonda','sondas')+' (local error: message too long): o datagrama excede a PMTU de '+m.lmtu+' bytes já conhecida e -M do proíbe fragmentar.');
+      else items.push('O PC-A não conseguiu enviar: '+(loc[0].msg==='net'?'não há rota na própria máquina.':'o gateway não respondeu ao ARP.'));
+    }
+    h+='<ul>'+items.map(t=>'<li>'+t+'</li>').join('')+'</ul>';
+    if(c.tool!=='ping' && c.tool!=='hping3'){
+      const hops={};
+      P.forEach(p=>{ (hops[p.ttl0]=hops[p.ttl0]||[]).push(p); });
+      h+='<p>Caminho descoberto:</p><ul>'+Object.keys(hops).map(Number).sort((a,b)=>a-b).map(t=>{
+        const ok=hops[t].find(p=>p.kind!=='timeout' && p.src);
+        if(!ok) return '<li>TTL '+t+': * (nenhuma resposta)</li>';
+        const what=ok.kind==='reply'?'Echo Reply, destino alcançado':ok.type===11?'Time Exceeded':'Destination Unreachable '+ok.type+'/'+ok.code;
+        return '<li>TTL '+t+': '+esc(who(ok.src))+' ('+what+')</li>';
+      }).join('')+'</ul>';
+    }
+    const cap=capture.slice(r.capStart, r.done?r.capEnd:capture.length);
+    if(cap.length){
+      const cnt={};
+      const add=k=>{ cnt[k]=(cnt[k]||0)+1; };
+      cap.forEach(e=>{
+        const p=e.pkt;
+        if(p.kind==='arp') add('ARP Request');
+        else if(p.frag) add('fragmentos IP');
+        else if(p.proto===17) add('UDP');
+        else if(p.icmp.type===8) add('Echo Request');
+        else if(p.icmp.type===0) add('Echo Reply');
+        else if(p.icmp.type===11) add('Time Exceeded');
+        else add('Destination Unreachable '+p.icmp.type+'/'+p.icmp.code);
+      });
+      const fragSet={};
+      cap.filter(e=>e.pkt.frag).forEach(e=>{ fragSet[e.where+'/'+e.pkt.ipid]=e.where; });
+      const fragWhere=[...new Set(Object.values(fragSet))];
+      const frags=Object.keys(fragSet).length;
+      h+='<p>A aba Captura registrou <b>'+plural(cap.length,'pacote','pacotes')+'</b> nesta execução: '+Object.keys(cnt).map(k=>cnt[k]+' '+k).join(', ')+'.'+(frags?' '+plural(frags,'datagrama foi fragmentado','datagramas foram fragmentados')+' no caminho (fragmentação feita por '+fragWhere.join(' e ')+').':'')+'</p>';
+    }
+    const learned=Object.keys(r.pmtuAfter||pmtuCache).filter(k=>(r.pmtuAfter||pmtuCache)[k]!==r.pmtuBefore[k]);
+    if(learned.length) h+='<p>O PC-A gravou no cache de PMTU: '+learned.map(k=>esc(k)+' = '+(r.pmtuAfter||pmtuCache)[k]+' bytes').join(', ')+'. Os próximos envios para esse destino respeitam esse limite.</p>';
+    return h;
+  }
+  function explainConcepts(r){
+    const P=r.probes, seen=new Set(P.filter(p=>p.kind==='error').map(p=>p.type+'/'+p.code));
+    const items=[];
+    if(P.some(p=>p.kind==='reply')) items.push('<b>Echo Request e Reply</b> carregam o mesmo identificador e a mesma sequência; é assim que o ping associa cada resposta à sua pergunta. O TTL recebido revela o sistema de origem (64 no Linux, 128 no Windows, 255 em roteadores) e o número de saltos.');
+    if(seen.has('11/0')) items.push('<b>Time Exceeded</b> existe para impedir que pacotes circulem para sempre. Todo erro ICMP volta para a <b>origem</b> e cita o cabeçalho IP original mais 8 bytes, o que permite casar o erro com a sonda certa. O traceroute explora exatamente isso.');
+    if(seen.has('3/0')) items.push('<b>Net Unreachable</b> é obrigatório quando um roteador não tem nenhuma rota (RFC 1812). O endereço de quem gera o erro mostra onde o caminho termina.');
+    if(seen.has('3/1')) items.push('<b>Host Unreachable</b> só sai depois de o ARP falhar (3 tentativas), por isso demora cerca de 3 s.');
+    if(seen.has('3/3')) items.push('<b>Port Unreachable</b> vem do próprio destino. Porta fechada responde 3/3; porta aberta ou filtrada em silêncio não responde. É a base do scan UDP.');
+    if(seen.has('3/4')) items.push('<b>Path MTU Discovery</b> (RFC 1191): com DF ligado, o roteador não fragmenta; devolve 3/4 com a MTU do próximo enlace e a origem passa a enviar pacotes menores.');
+    if(seen.has('3/13')) items.push('Um filtro que responde <b>3/13</b> denuncia a própria existência e o local do bloqueio. É uma escolha entre facilitar o diagnóstico e esconder a rede.');
+    if(P.some(p=>p.kind==='timeout')) items.push('Descartar em <b>silêncio</b> esconde a rede de quem faz reconhecimento, mas também dificulta o diagnóstico: só sobra o timeout.');
+    if(r.changes.some(x=>x.indexOf('bloqueia os erros')>=0) && P.some(p=>p.kind==='timeout')) items.push('<b>Buraco negro de PMTUD</b> (RFC 2923): bloquear os erros ICMP impede o 3/4 de chegar. Pacotes pequenos funcionam e os grandes somem. Nunca filtre o tipo 3 código 4.');
+    if(capture.slice(r.capStart, r.done?r.capEnd:capture.length).some(e=>e.pkt.frag)) items.push('<b>Fragmentação IPv4</b>: os fragmentos compartilham o mesmo ID, o offset é contado em blocos de 8 bytes e o bit MF marca que há mais. Só o destino remonta.');
+    if(r.changes.some(x=>x.indexOf('LAN do servidor caído')>=0) && seen.has('11/0')) items.push('<b>Loop de roteamento</b>: sem a rota conectada, R3 devolve o pacote para R2 pela rota padrão. O TTL cai a cada volta até o Time Exceeded.');
+    if(!items.length) items.push('Execute o comando para ver os conceitos que aparecem nesta execução.');
+    return '<ul>'+items.map(t=>'<li>'+t+'</li>').join('')+'</ul>';
+  }
+  function explainNext(r){
+    const next=[];
+    const scen=SCENARIOS.find(x=>x.id===r.scen);
+    if(scen){
+      const ps=scen.what.match(/<p>(.*?)<\/p>/g)||[];
+      if(ps.length>1) next.push(ps[ps.length-1].replace(/<\/?p>/g,''));
+    }
+    const P=r.probes, c=r.c, seen=new Set(P.filter(p=>p.kind==='error').map(p=>p.type+'/'+p.code));
+    if(c.tool==='ping' && P.some(p=>p.kind==='reply')) next.push('Rode <b>traceroute -n '+esc(c.dst)+'</b> para ver por quais roteadores a resposta passou.');
+    if(c.tool==='traceroute') next.push('Compare com <b>tracert -d '+esc(c.dst)+'</b>: as sondas viram Echo Request e o último salto responde com Echo Reply.');
+    if(seen.has('3/3')) next.push('Troque a porta para <b>53</b> (aberta no SRV) e observe a ausência de resposta ICMP.');
+    if(seen.has('3/4') && c.pmtu==='do') next.push('Repita com <b>-M want</b>: depois de aprender a PMTU, o PC-A fragmenta localmente e o ping passa.');
+    if(P.some(p=>p.kind==='timeout')) next.push('Compare com o cenário <b>Proibido (3/13)</b>: o mesmo bloqueio, mas anunciado.');
+    next.push('Clique em um roteador ou enlace e altere ACL, MTU ou <b>no ip unreachables</b>; rode o mesmo comando e compare as duas execuções.');
+    return '<ul>'+next.slice(0,4).map(t=>'<li>'+t+'</li>').join('')+'</ul>';
+  }
+  function renderExplain(){
+    const body=$('explainBody');
+    if(!body) return;
+    const scen=SCENARIOS.find(x=>x.id===activeScenario);
+    if(!lastRun){
+      let h='<h3>'+(scen?'Experimento: '+esc(scen.label):'Experimento personalizado')+'</h3>';
+      h+='<p>Nenhum comando executado ainda. '+(scen?'O cenário já preparou a rede e o formulário: clique em <b>Executar</b>.':'Monte o comando no painel lateral ou digite no terminal.')+' Esta aba descreve o que foi feito, o que aconteceu e o que observar, a partir da execução.</p>';
+      h+='<h3>Configuração atual</h3><p>Comando no formulário: <code>'+esc(formCommand())+'</code>.</p><p>Estado da rede: '+(netChanges().map(esc).join('; ')||'configuração padrão')+'.</p>';
+      body.innerHTML=h;
+      return;
+    }
+    const rs=SCENARIOS.find(x=>x.id===lastRun.scen);
+    let h='<h3>'+(rs?'Experimento: '+esc(rs.label):'Experimento personalizado')+'</h3>';
+    h+='<p><b>Objetivo.</b> '+explainGoal(lastRun.c)+'</p>';
+    h+='<h3>Configuração</h3>'+explainSetup(lastRun);
+    h+='<h3>O que aconteceu</h3>'+explainResults(lastRun);
+    h+='<h3>Conceitos observados</h3>'+explainConcepts(lastRun);
+    h+='<h3>Para explorar em seguida</h3>'+explainNext(lastRun);
+    body.innerHTML=h;
+  }
 
   // ---------- Início ----------
   resetNetwork(false);
