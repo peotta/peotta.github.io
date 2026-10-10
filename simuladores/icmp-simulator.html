@@ -117,6 +117,7 @@
 
   /* ---------- Sidebar ---------- */
   .side-col{display:flex;flex-direction:column;gap:12px;min-height:0;overflow-y:auto;}
+  .side-col>.panel{flex-shrink:0;}
   .controls{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
   .row{display:flex;gap:10px;}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
@@ -145,6 +146,33 @@
     padding:9px 11px;word-break:break-all;line-height:1.45;
   }
   .cmd-preview::before{content:'$ ';color:var(--muted);}
+  .cmd-explain{font-size:12.5px;line-height:1.5;color:var(--muted);background:var(--panel-2);border:1px solid var(--border-soft);border-radius:9px;padding:8px 11px;}
+  .cmd-explain .ce-title{font-size:11.5px;color:var(--amber);text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-bottom:4px;}
+  .cmd-explain ul{margin:0;padding-left:16px;}
+  .cmd-explain li{margin-bottom:3px;}
+  .cmd-explain code{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--teal);}
+  .field-help{position:fixed;z-index:50;display:none;max-width:340px;background:var(--panel-2);border:1px solid var(--teal);border-radius:10px;padding:10px 13px;box-shadow:0 12px 30px -10px rgba(0,0,0,0.6);font-size:13.5px;line-height:1.5;color:var(--muted);pointer-events:none;}
+  .field-help .fh-title{color:var(--ink);font-weight:700;margin-bottom:4px;}
+  .field-help p{margin:0 0 6px;}
+  .field-help p:last-child{margin-bottom:0;}
+  .field-help b{color:var(--ink);font-weight:600;}
+  .info{display:inline-block;color:var(--teal);font-size:12px;cursor:help;}
+  .lbl{display:inline-flex;align-items:center;gap:5px;}
+
+  /* Aba Cenário */
+  .scen-body{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:28px;}
+  .scen-body h4{font-size:13px;margin:14px 0 4px;color:var(--amber);text-transform:uppercase;letter-spacing:0.05em;}
+  .scen-body .sc-kicker{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--amber);letter-spacing:0.05em;text-transform:uppercase;}
+  .scen-body .sc-title{margin:2px 0 6px;font-size:17px;}
+  .scen-body .sc-cmd code{color:var(--teal);}
+  .scen-body .sc-msgs{margin:4px 0 8px;}
+  .sc-side{border-left:1px solid var(--border-soft);padding-left:24px;}
+  .sc-side h4:first-of-type{margin-top:6px;}
+  .sc-gdoc{font-size:13.5px;}
+  .sc-list{list-style:none;padding-left:0;margin:0 0 6px;}
+  .sc-list li{font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.45;}
+  button.sc-link{flex:none;font-size:12.5px;padding:2px 10px;border-radius:20px;font-weight:600;margin-right:4px;}
+  button.sc-link.active{border-color:var(--amber);color:var(--amber);background:rgba(242,166,90,0.10);}
 
   .inspector{padding:16px 16px;min-height:110px;font-size:14.5px;flex:1 1 auto;}
   .inspector .muted-txt{color:var(--muted);line-height:1.55;font-size:14px;}
@@ -259,6 +287,8 @@
     .tab-content{min-height:300px;}
     .topbar{padding:12px 14px;}
     .topbar-row h1{font-size:20px;}
+    .scen-body{grid-template-columns:1fr;}
+    .sc-side{border-left:0;padding-left:0;border-top:1px solid var(--border-soft);padding-top:8px;}
   }
 </style>
 </head>
@@ -346,6 +376,7 @@
           </label>
         </div>
         <div class="cmd-preview" id="cmdPreview" aria-live="polite"></div>
+        <div class="cmd-explain" id="cmdExplain"></div>
         <div class="row">
           <button class="primary" id="btnRun" type="button">Executar</button>
           <button id="btnStop" type="button">Parar</button>
@@ -369,7 +400,8 @@
 
   <section class="panel tabs-panel">
     <div class="tab-bar" role="tablist">
-      <button class="tab-btn active" data-tab="term" type="button" role="tab" aria-selected="true">Terminal PC-A</button>
+      <button class="tab-btn active" data-tab="scen" type="button" role="tab" aria-selected="true">Cenário</button>
+      <button class="tab-btn" data-tab="term" type="button" role="tab" aria-selected="false">Terminal PC-A</button>
       <button class="tab-btn" data-tab="cap" type="button" role="tab" aria-selected="false">Captura</button>
       <button class="tab-btn" data-tab="msg" type="button" role="tab" aria-selected="false">Pacote</button>
       <button class="tab-btn" data-tab="routes" type="button" role="tab" aria-selected="false">Tabelas de rotas</button>
@@ -377,7 +409,10 @@
       <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência</button>
       <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
     </div>
-    <div class="tab-content active" data-tab-content="term">
+    <div class="tab-content active" data-tab-content="scen">
+      <div class="tab-scroll"><article class="ref-body scen-body" id="scenBody" aria-live="polite"></article></div>
+    </div>
+    <div class="tab-content" data-tab-content="term">
       <div class="term" id="term" aria-live="polite"></div>
       <form class="term-input" id="termForm" autocomplete="off">
         <span>aluno@pc-a:~$</span>
@@ -502,7 +537,7 @@
   const PING_TEXT={'11/0':'Time to live exceeded','3/0':'Destination Net Unreachable','3/1':'Destination Host Unreachable','3/3':'Destination Port Unreachable','3/13':'Packet filtered'};
   const TRACE_ANN={0:'!N',1:'!H',2:'!P',4:'!F',13:'!X'};
   const WIN_TEXT={0:'Destination net unreachable.',1:'Destination host unreachable.',3:'Destination port unreachable.',4:'Packet needs to be fragmented but DF set.',13:'Communication administratively prohibited.'};
-  const DEFAULT_INSPECTOR='<div class="muted-txt"><p>Escolha um cenário no topo ou monte o comando no painel acima e clique em <b>Executar</b>. Você também pode digitar comandos no terminal (digite <b>help</b>).</p><p>Clique em um roteador, enlace ou host para alterar ACLs, MTU, rotas ou derrubar enlaces. Clique em um pacote da aba Captura para ver todos os campos e o hex dump.</p></div>';
+  const DEFAULT_INSPECTOR='<div class="muted-txt"><p>Escolha um cenário no topo ou monte o comando no painel acima e clique em <b>Executar</b>. Você também pode digitar comandos no terminal (digite <b>help</b>).</p><p>Passe o mouse, toque ou navegue com Tab pelos campos de configuração (ⓘ) para ver o que cada opção faz. A caixa <b>O que este comando faz</b> explica cada parte do comando montado.</p><p>Clique em um roteador, enlace ou host para alterar ACLs, MTU, rotas ou derrubar enlaces. Clique em um pacote da aba Captura para ver todos os campos e o hex dump.</p></div>';
 
   // ---------- Topologia ----------
   const links={
@@ -1222,17 +1257,17 @@
   }
 
   // ---------- Formulário ----------
-  function formCommand(){
-    const tool=fTool.value;
-    const c={tool:tool,dst:fDst.value,count:+fCount.value||1,ttl:+fTtl.value||64,size:fSize.value===''?56:+fSize.value,pmtu:fPmtu.value,port:+fPort.value||0,max:+fMax.value||10};
-    return buildCommand(c);
+  function formParams(){
+    return {tool:fTool.value,dst:fDst.value,count:+fCount.value||1,ttl:+fTtl.value||64,size:fSize.value===''?56:+fSize.value,pmtu:fPmtu.value,port:+fPort.value||0,max:+fMax.value||10,q:3};
   }
+  function formCommand(){ return buildCommand(formParams()); }
   function updateForm(){
     const tool=fTool.value;
     document.querySelectorAll('[data-tools]').forEach(el=>{
       el.classList.toggle('hidden',el.dataset.tools.split(' ').indexOf(tool)<0);
     });
     cmdPreview.textContent=formCommand();
+    renderCmdExplain();
   }
   function loadForm(line){
     const c=parseCommand(line);
@@ -1307,6 +1342,7 @@
     selected={type:'scenario',id:id};
     log('Cenário carregado: <b>'+s.label+'</b>. Comando sugerido: '+esc(s.cmd),'sys');
     refreshAll();
+    activateTab('scen');
   }
 
   // ---------- Reinício ----------
@@ -1670,7 +1706,7 @@
     if(!selected){ inspector.innerHTML=DEFAULT_INSPECTOR; return; }
     if(selected.type==='scenario'){
       const s=SCENARIOS.find(x=>x.id===selected.id);
-      inspector.innerHTML='<div class="insp-kicker">Cenário: '+s.group+'</div><div class="insp-title">'+s.label+'</div><div class="muted-txt">'+s.what+'<p>Clique em <b>Executar</b> para rodar o comando.</p></div>';
+      inspector.innerHTML='<div class="insp-kicker">Cenário: '+s.group+'</div><div class="insp-title">'+s.label+'</div><div class="muted-txt"><p>'+SCEN_DOC[s.id].short+'</p><p>A explicação completa (o que é, o que observar e as mensagens envolvidas) está na aba <b>Cenário</b>, abaixo.</p><p>Clique em <b>Executar</b> para rodar o comando.</p></div>';
       return;
     }
     if(selected.type==='link'){
@@ -1743,7 +1779,7 @@
   }
 
   function refreshAll(){
-    render(); refreshControls(); renderCapture(); renderMessage(); renderRoutes(); refreshInspector(); updateForm(); renderExplain();
+    render(); refreshControls(); renderCapture(); renderMessage(); renderRoutes(); refreshInspector(); updateForm(); renderExplain(); renderScenarioTab();
   }
 
   // ---------- Eventos ----------
@@ -1953,7 +1989,237 @@
     body.innerHTML=h;
   }
 
+  // ---------- Explicação de cada campo de configuração ----------
+  const DST_INFO={
+    '10.0.4.20':'servidor SRV (Linux), 3 roteadores adiante. Responde ping com TTL inicial 64 e tem as portas UDP 53 (DNS) e 123 (NTP) abertas.',
+    '10.0.23.2':'interface g0/0 do roteador R3. Roteadores respondem com TTL inicial 255.',
+    '10.0.1.1':'gateway padrão do PC-A (R1), a 1 salto.',
+    '10.0.4.99':'endereço sem host na LAN do servidor. R3 tenta ARP três vezes e devolve Host Unreachable (3/1) depois de cerca de 3 s.',
+    '192.168.50.1':'rede para a qual R2 não tem rota. R2 devolve Net Unreachable (3/0).'
+  };
+  const HELP={
+    fTool:{t:'Ferramenta',s:'Programa executado no PC-A.',
+      p:['<b>ping:</b> envia ICMP Echo Request (tipo 8) e espera Echo Reply (tipo 0). Mede alcançabilidade, tempo de ida e volta (RTT) e perda; o TTL da resposta indica quantos roteadores existem no caminho.',
+         '<b>traceroute (sondas UDP):</b> envia datagramas UDP para portas altas (33434 em diante) com TTL 1, 2, 3... Cada roteador onde o TTL se esgota responde Time Exceeded (11/0); o destino responde Port Unreachable (3/3), o que encerra o rastreamento.',
+         '<b>traceroute -I (sondas ICMP):</b> a mesma lógica, mas com Echo Request; o destino responde Echo Reply. Útil quando um firewall bloqueia UDP.',
+         '<b>tracert (Windows):</b> sempre usa Echo Request, com 3 sondas por salto, e mostra "Request timed out." quando ninguém responde.',
+         '<b>hping3 --udp:</b> envia datagramas UDP para uma porta escolhida. Porta fechada gera Port Unreachable (3/3); porta aberta ou filtrada em silêncio não responde. É a técnica do scan UDP.']},
+    fDst:{t:'Destino',s:'Endereço IPv4 alvo. Cada opção provoca um comportamento diferente.',
+      p:Object.keys(DST_INFO).map(k=>'<b>'+k+':</b> '+DST_INFO[k]).concat(['No terminal, qualquer endereço IPv4 pode ser usado. O simulador não tem DNS.'])},
+    fCount:{t:'Quantidade (-c, count)',s:'Número de sondas enviadas.',
+      p:['No ping, quantos Echo Requests; no hping3, quantos datagramas UDP. O intervalo entre envios é de 1 s.',
+         'Ao final, o ping mostra a estatística: pacotes transmitidos, recebidos, % de perda e RTT mínimo, médio, máximo e desvio (mdev).',
+         'No Linux real, sem -c o ping só para com Ctrl+C. Aqui o padrão é 4 e o máximo é 10.']},
+    fTtl:{t:'TTL inicial (-t)',s:'Valor do campo Time To Live no cabeçalho IP da sonda.',
+      p:['Cada roteador decrementa o TTL em 1. Quem recebe o pacote com TTL 1 descarta e devolve Time Exceeded (11/0) à origem.',
+         'Com -t 1 a sonda morre no primeiro roteador; com -t 2, no segundo. É o princípio do traceroute feito à mão.',
+         'Valores iniciais típicos: 64 no Linux, 128 no Windows e 255 em roteadores.']},
+    fSize:{t:'Dados (-s, bytes)',s:'Tamanho dos dados do Echo Request, sem os cabeçalhos.',
+      p:['O datagrama IP tem s + 8 (cabeçalho ICMP) + 20 (cabeçalho IP) bytes. O padrão 56 gera 84 bytes, como em "56(84) bytes of data".',
+         '1472 é o maior valor que cabe numa MTU de 1500 sem fragmentar (1472 + 28 = 1500).',
+         'Use valores grandes junto com o DF para testar MTU e PMTUD.']},
+    fPmtu:{t:'DF / PMTUD (-M)',s:'Controla o bit Don\'t Fragment (DF) e a descoberta da MTU do caminho.',
+      p:['<b>want</b> (padrão do Linux): liga o DF. Se um roteador devolver Fragmentation Needed (3/4), o PC-A grava a MTU no cache e passa a fragmentar localmente.',
+         '<b>do:</b> liga o DF e proíbe fragmentar também no PC-A. Se o pacote não couber na MTU conhecida, o ping recusa enviar ("message too long").',
+         '<b>dont:</b> desliga o DF. Os roteadores fragmentam no caminho e o destino remonta.']},
+    fPort:{t:'Porta UDP (-p)',s:'Porta de destino dos datagramas do hping3.',
+      p:['Porta fechada: o destino gera Port Unreachable (3/3). Porta aberta: a aplicação recebe o datagrama e nada volta.',
+         'No SRV, as portas 53 (DNS) e 123 (NTP) estão abertas; 9999 está fechada.',
+         'Sem resposta, não dá para distinguir porta aberta de porta filtrada em silêncio. É a limitação do scan UDP.']},
+    fMax:{t:'Máx. saltos (-m no Linux, -h no Windows)',s:'Maior TTL que o traceroute ou o tracert vai testar.',
+      p:['O rastreamento termina ao alcançar o destino ou ao chegar a este limite.',
+         'Linhas com * * * são saltos que não responderam: filtro silencioso, ACL ou roteador com no ip unreachables.',
+         'O padrão das ferramentas reais é 30; aqui, 10 basta para a topologia.']},
+    speedSelect:{t:'Velocidade da animação',s:'Ritmo da animação. Não altera os resultados.',
+      p:['Muda só a velocidade de exibição. RTT, TTL e as mensagens geradas são os mesmos.',
+         'No traceroute, só a primeira sonda de cada salto é animada; todas aparecem na aba Captura.']}
+  };
+  const helpBox=document.createElement('div');
+  helpBox.className='field-help'; helpBox.id='fieldHelp'; helpBox.setAttribute('role','tooltip');
+  document.body.appendChild(helpBox);
+  let helpId=null;
+  function showHelp(id){
+    const h=HELP[id], lab=$(id).closest('label');
+    helpId=id;
+    helpBox.innerHTML='<div class="fh-title">'+h.t+'</div>'+h.p.map(x=>'<p>'+x+'</p>').join('');
+    helpBox.style.display='block';
+    const r=(lab||$(id)).getBoundingClientRect(), bw=helpBox.offsetWidth, bh=helpBox.offsetHeight;
+    if(r.bottom<0 || r.top>window.innerHeight){ hideHelp(); return; }
+    const left=Math.max(8,Math.min(r.left,window.innerWidth-bw-8));
+    let top=r.bottom+6;
+    if(top+bh>window.innerHeight-8) top=Math.max(8,r.top-bh-6);
+    helpBox.style.left=left+'px'; helpBox.style.top=top+'px';
+  }
+  function hideHelp(){ helpBox.style.display='none'; helpId=null; }
+  const followHelp=()=>{ if(helpId) showHelp(helpId); };
+  document.querySelector('.side-col').addEventListener('scroll',followHelp,{passive:true});
+  window.addEventListener('scroll',followHelp,{passive:true});
+  function attachHelp(){
+    Object.keys(HELP).forEach(id=>{
+      const ctl=$(id), lab=ctl.closest('label');
+      ctl.title=HELP[id].s;
+      if(lab){
+        const icon=document.createElement('span');
+        icon.className='info'; icon.setAttribute('aria-hidden','true'); icon.textContent='ⓘ';
+        const txt=Array.from(lab.childNodes).find(n=>n.nodeType===3 && n.textContent.trim());
+        if(txt){
+          const wrap=document.createElement('span'); wrap.className='lbl';
+          lab.insertBefore(wrap,txt); wrap.appendChild(document.createTextNode(txt.textContent.trim())); wrap.appendChild(icon);
+          lab.removeChild(txt);
+        } else lab.appendChild(icon);
+        lab.addEventListener('mouseenter',()=>showHelp(id));
+        lab.addEventListener('mouseleave',()=>{ if(document.activeElement!==ctl) hideHelp(); });
+        lab.addEventListener('touchstart',()=>showHelp(id),{passive:true});
+      }
+      ctl.setAttribute('aria-describedby','fieldHelp');
+      ctl.addEventListener('focus',()=>showHelp(id));
+      ctl.addEventListener('blur',hideHelp);
+      ctl.addEventListener('keydown',e=>{ if(e.key==='Escape') hideHelp(); });
+    });
+    document.addEventListener('touchstart',e=>{ if(helpId && !e.target.closest('label.field')) hideHelp(); },{passive:true});
+  }
+
+  // ---------- Explicação do comando montado no formulário ----------
+  function explainCommand(c){
+    const out=[];
+    const short=c.dst==='10.0.4.20' && c.ttl<=3;
+    const ttlTxt=short?'TTL inicial '+c.ttl+': não alcança o SRV, que está a 3 roteadores. R'+c.ttl+' recebe com TTL 1, descarta e devolve Time Exceeded (11/0).':'TTL inicial '+c.ttl+'.';
+    const add=(tok,txt)=>out.push([tok,txt]);
+    if(c.tool==='ping'){
+      add('ping','envia ICMP Echo Request (tipo 8) e espera Echo Reply (tipo 0).');
+      add('-c '+c.count,plural(c.count,'sonda','sondas')+', uma por segundo.');
+      add(c.ttl!==64?'-t '+c.ttl:'(TTL 64)',c.ttl!==64?ttlTxt:'TTL padrão do Linux; a opção -t foi omitida.');
+      add(c.size!==56?'-s '+c.size:'(56 bytes)',(c.size!==56?c.size:56)+' bytes de dados; o datagrama IP tem '+(c.size+28)+' bytes'+(c.size+28>1500?', mais que a MTU Ethernet de 1500':'')+'.');
+      add(c.pmtu!=='want'?'-M '+c.pmtu:'(-M want)',c.pmtu==='do'?'DF ligado e fragmentação proibida: se não couber num enlace, o roteador devolve 3/4 e, depois disso, o próprio PC-A recusa enviar.':c.pmtu==='dont'?'DF desligado: os roteadores podem fragmentar.':'DF ligado; com uma PMTU aprendida, o PC-A fragmenta localmente.');
+    } else if(c.tool==='hping3'){
+      add('hping3 --udp','envia datagramas UDP e interpreta o ICMP que volta.');
+      add('-p '+c.port,'porta de destino '+c.port+(c.dst==='10.0.4.20' && !short?([53,123].indexOf(c.port)>=0?': aberta no SRV, não deve haver resposta.':': fechada no SRV, espere Port Unreachable (3/3).'):'.'));
+      add('-c '+c.count,plural(c.count,'datagrama','datagramas')+'.');
+      if(c.ttl!==64) add('-t '+c.ttl,ttlTxt);
+    } else {
+      const win=c.tool==='tracert';
+      add(win?'tracert -d':(c.tool==='traceroute-I'?'traceroute -n -I':'traceroute -n'),(win||c.tool==='traceroute-I'?'sondas Echo Request':'sondas UDP para portas a partir de 33434')+' com TTL 1, 2, 3...; '+(win?'-d':'-n')+' mostra só os endereços, sem consultar DNS.');
+      add((win?'-h ':'-m ')+c.max,'testa no máximo '+plural(c.max,'salto','saltos')+'.');
+      add('3 sondas por salto',win?'padrão do tracert.':'padrão do traceroute (opção -q).');
+    }
+    add(c.dst,DST_INFO[c.dst]||'endereço informado no terminal.');
+    return out;
+  }
+  function renderCmdExplain(){
+    const box=$('cmdExplain');
+    if(!box) return;
+    box.innerHTML='<div class="ce-title">O que este comando faz</div><ul>'+explainCommand(formParams()).map(x=>'<li><code>'+esc(x[0])+'</code> '+x[1]+'</li>').join('')+'</ul>';
+  }
+
+  // ---------- Aba Cenário: explicação didática de cada cenário ----------
+  const GROUP_DOC={
+    'Consultas':'Mensagens de consulta do ICMP (Echo Request e Echo Reply) e as ferramentas que exploram o TTL para descobrir o caminho até o destino.',
+    'Destination Unreachable':'O tipo 3 avisa a origem que o pacote não pôde ser entregue. O código diz o motivo: rede sem rota (0), host que não responde (1), porta fechada (3), MTU (4) ou filtro (13).',
+    'MTU':'Cada enlace tem um tamanho máximo de pacote (MTU). Pacotes maiores são fragmentados pelos roteadores ou, com o bit DF ligado, geram um aviso para a origem reduzir o tamanho (PMTUD).',
+    'Filtros e falhas':'Como ACLs, firewalls e erros de roteamento aparecem (ou deixam de aparecer) para quem testa a rede, e que problemas um filtro mal planejado pode criar.'
+  };
+  const SCEN_DOC={
+    echo:{short:'Echo Request e Echo Reply: a consulta mais básica do ICMP.',
+      concept:'O <b>ping</b> é a consulta mais simples do ICMP. A origem envia um <b>Echo Request</b> (tipo 8, código 0) e o destino devolve os mesmos dados em um <b>Echo Reply</b> (tipo 0, código 0). O identificador e o número de sequência casam cada resposta com o seu pedido, e o tempo entre os dois é o RTT (tempo de ida e volta).',
+      observe:['No terminal: o RTT de cada resposta e <b>ttl=61</b> (o Linux do SRV começa em 64 e três roteadores decrementaram).','Na Captura: pares de Echo Request e Echo Reply com o mesmo id e a mesma seq.','Na aba Pacote: os campos Type, Code, Identifier, Sequence Number e o checksum.'],
+      msgs:[['8/0','Echo Request','PC-A para o SRV'],['0/0','Echo Reply','SRV para o PC-A']],
+      why:'O ping confirma a conectividade de camada 3 e mede a latência. Para quem faz reconhecimento, ele revela hosts ativos (ping sweep); por isso muitas redes limitam ou bloqueiam Echo Request vindo de fora.'},
+    ttl:{short:'O TTL chega a zero no meio do caminho e o roteador avisa com Time Exceeded.',
+      concept:'O <b>TTL</b> (Time To Live) é um contador no cabeçalho IP. Cada roteador o diminui em 1. Quem recebe um pacote com TTL 1 não pode encaminhá-lo: descarta e avisa a origem com <b>Time Exceeded</b> (tipo 11, código 0). Sem esse mecanismo, um pacote preso em um laço circularia para sempre.',
+      observe:['No terminal: "From 10.0.12.2 icmp_seq=1 Time to live exceeded".','O endereço que responde é o da interface de R2 voltada para o PC-A, não o do destino.','Na aba Pacote do erro: o cabeçalho IP original citado, com TTL 1 e o mesmo id e seq do ping.'],
+      msgs:[['8/0','Echo Request','com TTL 2'],['11/0','Time Exceeded','R2 para o PC-A']],
+      why:'É a peça que o traceroute usa para descobrir cada salto, e um dos sinais de que existe um loop de roteamento.'},
+    trace:{short:'Sondas UDP com TTL crescente revelam cada roteador do caminho.',
+      concept:'O <b>traceroute</b> descobre o caminho explorando o TTL: envia sondas com TTL 1, 2, 3... e cada roteador onde o TTL se esgota se revela ao devolver Time Exceeded. No Linux, as sondas são <b>datagramas UDP</b> para portas altas (33434 em diante), que nenhuma aplicação usa. Quando a sonda chega ao destino, ele responde <b>Port Unreachable</b> (3/3), e é isso que encerra o rastreamento.',
+      observe:['No terminal: as linhas 1, 2 e 3 mostram R1, R2 e R3; a linha 4 mostra o SRV.','Cada linha tem 3 tempos: são 3 sondas por salto.','Na Captura: UDP com portas 33434, 33435..., Time Exceeded dos roteadores e Port Unreachable do SRV.'],
+      msgs:[['UDP','Sonda','portas a partir de 33434'],['11/0','Time Exceeded','R1, R2 e R3'],['3/3','Port Unreachable','SRV, no último salto']],
+      why:'O traceroute mapeia a topologia, o que serve tanto ao diagnóstico quanto ao reconhecimento. Linhas com * * * são saltos que não responderam.'},
+    tracert:{short:'A versão do Windows usa Echo Request como sonda.',
+      concept:'O <b>tracert</b> do Windows segue a mesma ideia do traceroute, mas usa <b>Echo Request</b> como sonda. Os roteadores intermediários respondem Time Exceeded e o destino responde com <b>Echo Reply</b>.',
+      observe:['No terminal: o formato do Windows, com "Tracing route to" e os tempos em ms.','Na Captura: Echo Requests com TTL crescente e, no último salto, um Echo Reply.','Compare com o cenário traceroute (UDP): o caminho é o mesmo, as mensagens são outras.'],
+      msgs:[['8/0','Echo Request','sonda'],['11/0','Time Exceeded','roteadores intermediários'],['0/0','Echo Reply','destino']],
+      why:'Um firewall que bloqueia UDP e libera ping faz o traceroute do Linux falhar e o tracert funcionar (e o contrário). Por isso o Linux oferece o traceroute -I, que usa ICMP.'},
+    net:{short:'Destination Unreachable código 0: o roteador não tem rota.',
+      concept:'<b>Net Unreachable</b> (tipo 3, código 0): um roteador recebeu um pacote para uma rede que não está na tabela de rotas e também não tem rota padrão. A RFC 1812 obriga o roteador a descartar e avisar a origem.',
+      observe:['No terminal: "From 10.0.12.2 icmp_seq=1 Destination Net Unreachable".','O erro vem de R2: o endereço de origem do erro mostra <b>onde</b> o caminho termina.','Na aba Tabelas de rotas: R1 encaminha pela rota padrão, mas R2 não tem rota para 192.168.50.0/24 nem rota padrão.'],
+      msgs:[['8/0','Echo Request','para 192.168.50.1'],['3/0','Net Unreachable','R2 para o PC-A']],
+      why:'É o diagnóstico de rota faltando. Derrubar o enlace R1 / R2 e repetir mostra o mesmo erro vindo de outro ponto.'},
+    host:{short:'Destination Unreachable código 1: ninguém responde ao ARP.',
+      concept:'<b>Host Unreachable</b> (tipo 3, código 1): a rede de destino existe e está ligada ao último roteador, mas nenhum equipamento responde ao <b>ARP</b> pelo endereço pedido. Sem o endereço MAC, o roteador não consegue montar o quadro de entrega.',
+      observe:['Na Captura: três ARP Requests de R3 perguntando por 10.0.4.99, sem resposta.','O erro só chega cerca de 3 s depois: é o tempo das tentativas de ARP.','No terminal: "Destination Host Unreachable" vindo de R3.'],
+      msgs:[['8/0','Echo Request','para 10.0.4.99'],['ARP','Who has 10.0.4.99?','R3, três vezes'],['3/1','Host Unreachable','R3 para o PC-A']],
+      why:'Explica por que um ping para um host desligado na mesma LAN demora antes de falhar.'},
+    port:{short:'Destination Unreachable código 3: a porta UDP está fechada.',
+      concept:'<b>Port Unreachable</b> (tipo 3, código 3): o datagrama chegou ao destino, mas nenhuma aplicação escuta aquela porta UDP. Quem gera o erro é o <b>próprio host de destino</b>, não um roteador.',
+      observe:['No hping3: "ICMP Port Unreachable from ip=10.0.4.20".','Troque para a porta 53 (DNS, aberta no SRV): a aplicação recebe e nada volta.','Na aba Pacote do erro: o SRV cita uma parte maior do datagrama original (hosts Linux citam até 548 bytes).'],
+      msgs:[['UDP','Datagrama','PC-A para a porta 9999'],['3/3','Port Unreachable','SRV para o PC-A']],
+      why:'É a base do scan UDP (nmap -sU): porta fechada responde 3/3; porta aberta ou filtrada em silêncio não responde, por isso o nmap a marca como "open|filtered".'},
+    frag:{short:'O pacote não cabe no enlace e o roteador o divide em fragmentos.',
+      concept:'<b>Fragmentação</b>: quando um datagrama é maior que a MTU do próximo enlace e o bit DF está desligado, o roteador o divide em fragmentos. Todos levam o mesmo campo <b>Identification</b>; o <b>Fragment Offset</b> (em blocos de 8 bytes) indica a posição de cada parte e o bit <b>MF</b> avisa que ainda há mais. Só o destino remonta o datagrama.',
+      observe:['O enlace R2 / R3 tem MTU 1400, e o pacote tem 1500 bytes com DF desligado (-M dont).','Na Captura: R2 gera 2 fragmentos (offsets 0 e 172); na volta, R3 fragmenta o Echo Reply.','Na aba Pacote: os campos Flags (MF) e Fragment Offset.'],
+      msgs:[['8/0','Echo Request','fragmentado por R2'],['0/0','Echo Reply','fragmentado por R3']],
+      why:'Fragmentar custa processamento, e a perda de um único fragmento perde o datagrama inteiro. Ataques antigos (Teardrop, fragmentos sobrepostos) exploravam a remontagem. No IPv6, roteadores não fragmentam.'},
+    pmtud:{short:'Com DF ligado, o roteador avisa a MTU e a origem se adapta.',
+      concept:'<b>Path MTU Discovery</b> (RFC 1191): a origem envia com o bit DF ligado. O roteador cujo próximo enlace tem MTU menor não pode fragmentar: descarta o pacote e devolve <b>Fragmentation Needed</b> (tipo 3, código 4) com o campo <b>Next-Hop MTU</b>. A origem guarda esse valor no cache de PMTU e passa a enviar pacotes menores.',
+      observe:['No terminal: "Frag needed and DF set (mtu = 1400)" vindo de R2.','Os envios seguintes falham no próprio PC-A ("message too long"), porque -M do proíbe fragmentar localmente.','Clique no PC-A: o inspetor mostra o cache de PMTU com 10.0.4.20 = 1400.'],
+      msgs:[['8/0','Echo Request','1500 bytes, DF=1'],['3/4','Fragmentation Needed','R2 para o PC-A, MTU 1400']],
+      why:'É assim que conexões TCP se ajustam a túneis e VPNs, que têm MTU menor. Mas tudo depende de o 3/4 chegar à origem: veja o cenário Buraco negro PMTUD.'},
+    prohib:{short:'Destination Unreachable código 13: o filtro se anuncia.',
+      concept:'<b>Communication Administratively Prohibited</b> (tipo 3, código 13): uma ACL negou o pacote e o roteador avisa a origem de que o tráfego foi bloqueado por política. O ping do Linux mostra "Packet filtered"; o traceroute mostra a anotação !X.',
+      observe:['No terminal: "From 10.0.23.2 icmp_seq=1 Packet filtered".','O erro vem de R3, onde está a ACL de saída para a LAN do servidor.','No log: a ACL nega e responde com 3/13.'],
+      msgs:[['8/0','Echo Request','para o SRV'],['3/13','Administratively Prohibited','R3 para o PC-A']],
+      why:'Facilita o diagnóstico (fica claro que existe um filtro e onde ele está), mas entrega essa mesma informação a quem faz reconhecimento. Compare com o Filtro silencioso.'},
+    silent:{short:'O filtro descarta sem avisar: só sobra o timeout.',
+      concept:'<b>Filtro silencioso</b>: a ACL descarta o pacote sem gerar nenhuma mensagem ICMP. A origem não recebe erro nenhum, só espera até o tempo limite. O mesmo efeito aparece em roteadores configurados com <b>no ip unreachables</b>.',
+      observe:['No traceroute: R1, R2 e R3 aparecem; dali em diante, só * * * até o limite de saltos.','Na Captura: sondas UDP sem nenhuma resposta depois de R3.','Compare com o cenário Proibido (3/13): o bloqueio é o mesmo, a resposta não.'],
+      msgs:[['UDP','Sonda','sem resposta após R3'],['11/0','Time Exceeded','só de R1, R2 e R3']],
+      why:'Esconde a rede de varreduras: o atacante não sabe se o host existe. Em troca, o diagnóstico fica mais difícil, e o próprio silêncio indica que algo filtra depois de R3.'},
+    blackhole:{short:'O firewall bloqueia o aviso de MTU e os pacotes grandes somem.',
+      concept:'O <b>buraco negro de PMTUD</b> (RFC 2923) acontece quando um firewall bloqueia todo ICMP de erro "por segurança". O roteador gera o <b>Fragmentation Needed</b> (3/4), mas o aviso é descartado no caminho de volta. A origem nunca aprende a MTU menor, continua enviando pacotes grandes com DF e eles desaparecem sem nenhum aviso.',
+      observe:['No terminal: só timeouts, nenhuma mensagem de erro.','Na Captura: o 3/4 <b>foi gerado</b> por R2, mas não chegou ao PC-A (a ACL de R1 o descartou).','Rode depois "ping -c 2 10.0.4.20": pacotes pequenos funcionam normalmente.'],
+      msgs:[['8/0','Echo Request','1500 bytes, DF=1'],['3/4','Fragmentation Needed','gerado por R2, descartado em R1']],
+      why:'É o sintoma clássico de VPNs e túneis: a conexão TCP abre (o handshake usa pacotes pequenos), mas trava ao transferir dados, como páginas que nunca terminam de carregar. A correção é liberar o ICMP tipo 3 código 4 (e o tipo 11) ou ajustar o MSS do TCP (MSS clamping). Nunca filtre o 3/4.'},
+    loop:{short:'Dois roteadores apontam um para o outro e o TTL salva a rede.',
+      concept:'Um <b>loop de roteamento</b> acontece quando roteadores apontam uns para os outros como caminho para o mesmo destino. O pacote fica indo e voltando entre eles. Quem salva a rede é o <b>TTL</b>: ele cai a cada volta até um roteador descartar o pacote e gerar Time Exceeded.',
+      observe:['O enlace da LAN do servidor caiu: R3 perde a rota conectada e usa a rota padrão de volta para R2, que devolve o pacote para R3.','Na animação e no log: o pacote vai e volta entre R2 e R3 com o TTL diminuindo.','No terminal: o Time Exceeded vem de um dos dois roteadores do laço.'],
+      msgs:[['8/0','Echo Request','preso entre R2 e R3'],['11/0','Time Exceeded','quando o TTL chega a 1']],
+      why:'Loops surgem de rotas estáticas mal planejadas ou durante a convergência de protocolos dinâmicos. Enquanto existem, consomem banda e CPU; o TTL limita o estrago, mas não resolve a causa.'}
+  };
+  function renderScenarioTab(){
+    const body=$('scenBody');
+    if(!body) return;
+    const s=SCENARIOS.find(x=>x.id===activeScenario);
+    let left;
+    if(!s){
+      left='<h3>Nenhum cenário selecionado</h3><p>A rede foi alterada pelo inspetor ou o comando foi digitado no terminal. Escolha um cenário à direita ou no topo para carregar a rede e o comando, ou continue explorando: a aba <b>Experimento</b> descreve cada execução.</p>';
+    } else {
+      const d=SCEN_DOC[s.id];
+      left='<div class="sc-kicker">'+esc(s.group)+'</div><h3 class="sc-title">'+esc(s.label)+'</h3>'+
+        '<p class="sc-cmd">Comando do cenário: <code>'+esc(s.cmd)+'</code></p>'+
+        '<h4>O que é</h4><p>'+d.concept+'</p>'+
+        '<h4>Neste cenário</h4>'+s.what+
+        '<h4>O que observar</h4><ul>'+d.observe.map(x=>'<li>'+x+'</li>').join('')+'</ul>'+
+        '<h4>Mensagens envolvidas</h4><table class="sc-msgs"><thead><tr><th>Tipo/código</th><th>Mensagem</th><th>Quem envia</th></tr></thead><tbody>'+
+          d.msgs.map(m=>'<tr><td>'+m[0]+'</td><td>'+m[1]+'</td><td class="meaning">'+m[2]+'</td></tr>').join('')+'</tbody></table>'+
+        '<h4>Por que importa</h4><p>'+d.why+'</p>';
+    }
+    let right='<h3>Tipos de consulta</h3>';
+    let group=null;
+    SCENARIOS.forEach(x=>{
+      if(x.group!==group){
+        if(group!==null) right+='</ul>';
+        group=x.group;
+        right+='<h4>'+esc(group)+'</h4><p class="sc-gdoc">'+GROUP_DOC[group]+'</p><ul class="sc-list">';
+      }
+      right+='<li><button type="button" class="sc-link'+(s&&s.id===x.id?' active':'')+'" data-scen="'+x.id+'"'+(busy?' disabled':'')+'>'+esc(x.label)+'</button> '+SCEN_DOC[x.id].short+'</li>';
+    });
+    right+='</ul>';
+    body.innerHTML='<div class="sc-main">'+left+'</div><aside class="sc-side">'+right+'</aside>';
+    body.querySelectorAll('.sc-link').forEach(b=>b.addEventListener('click',()=>applyScenario(b.dataset.scen)));
+  }
+
   // ---------- Início ----------
+  attachHelp();
   resetNetwork(false);
   tprint('Simulador ICMP: terminal do PC-A (10.0.1.10). Digite help ou escolha um cenário acima.','t-dim');
   applyScenario('echo');
