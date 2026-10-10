@@ -139,7 +139,6 @@ export function Footer({ t, motion, onMotion }) {
             <span className="switch-track" aria-hidden="true" />
             {t.footer.motion}
           </label>
-          <a href="/classico.html">{t.footer.classic}</a>
           <a href="#topo">{t.footer.top} ↑</a>
         </div>
       </div>

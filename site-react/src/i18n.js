@@ -95,7 +95,7 @@ export const strings = {
       profiles: { lattes: 'Produção acadêmica e trajetória', dblp: 'Publicações acadêmicas', linkedin: 'Rede profissional', github: 'Repositórios e materiais', orcid: 'Identificador de pesquisador' },
     },
     palette: { placeholder: 'Ir para seção ou conteúdo...', hint: 'para navegar', sections: 'Seções', results: 'Conteúdos', none: 'Nada encontrado' },
-    footer: { text: 'Prof. Dr. Laerte Peotta de Melo - ensino, pesquisa e atuação em cibersegurança, redes e computação.', ai: 'Conteúdo elaborado com apoio de IA generativa, sob revisão do autor.', classic: 'Versão clássica do site', top: 'Voltar ao topo', motion: 'Efeito Matrix' },
+    footer: { text: 'Prof. Dr. Laerte Peotta de Melo', ai: 'Conteúdo elaborado com apoio de IA generativa, sob revisão do autor.', top: 'Voltar ao topo', motion: 'Efeito Matrix' },
   },
 
   en: {
@@ -187,7 +187,7 @@ export const strings = {
       profiles: { lattes: 'Academic production and trajectory', dblp: 'Academic publications', linkedin: 'Professional network', github: 'Repositories and materials', orcid: 'Researcher identifier' },
     },
     palette: { placeholder: 'Jump to a section or content...', hint: 'to navigate', sections: 'Sections', results: 'Content', none: 'Nothing found' },
-    footer: { text: 'Prof. Dr. Laerte Peotta de Melo - teaching, research, and professional practice in cybersecurity, networks, and computing.', ai: 'Content created with the support of generative AI, reviewed by the author.', classic: 'Classic site version', top: 'Back to top', motion: 'Matrix effect' },
+    footer: { text: 'Prof. Dr. Laerte Peotta de Melo', ai: 'Content created with the support of generative AI, reviewed by the author.', top: 'Back to top', motion: 'Matrix effect' },
   },
 
   es: {
@@ -279,6 +279,6 @@ export const strings = {
       profiles: { lattes: 'Producción académica y trayectoria', dblp: 'Publicaciones académicas', linkedin: 'Red profesional', github: 'Repositorios y materiales', orcid: 'Identificador de investigador' },
     },
     palette: { placeholder: 'Ir a una sección o contenido...', hint: 'para navegar', sections: 'Secciones', results: 'Contenidos', none: 'Nada encontrado' },
-    footer: { text: 'Prof. Dr. Laerte Peotta de Melo - docencia, investigación y actuación en ciberseguridad, redes y computación.', ai: 'Contenido elaborado con apoyo de IA generativa, bajo revisión del autor.', classic: 'Versión clásica del sitio', top: 'Volver arriba', motion: 'Efecto Matrix' },
+    footer: { text: 'Prof. Dr. Laerte Peotta de Melo', ai: 'Contenido elaborado con apoyo de IA generativa, bajo revisión del autor.', top: 'Volver arriba', motion: 'Efecto Matrix' },
   },
 };

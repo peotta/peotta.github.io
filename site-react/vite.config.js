@@ -8,7 +8,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, '..');
 
 // Pastas do site estatico existente que o app React referencia por caminho absoluto.
-const legacyDirs = ['/classico.html', '/assets/', '/arquivos/', '/guias/', '/labs/', '/simuladores/', '/certificacoes/'];
+const legacyDirs = ['/assets/', '/arquivos/', '/guias/', '/labs/', '/simuladores/', '/certificacoes/'];
 const mime = {
   '.html': 'text/html; charset=utf-8',
   '.png': 'image/png',
