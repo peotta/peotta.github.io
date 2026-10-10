@@ -417,6 +417,19 @@ export const resources = [
     },
     tags: ['TCP', 'UDP', 'RFC 9293'],
   },
+  {
+    id: 'sim-tcp-udp-security',
+    categories: ['simulators'],
+    href: '/simuladores/tcp-udp-security-simulator.html',
+    cta: cta.sim,
+    title: { pt: 'Ataques e defesas TCP/UDP', en: 'TCP/UDP Attacks and Defenses', es: 'Ataques y defensas TCP/UDP' },
+    text: {
+      pt: 'Laboratório defensivo com 12 ataques (SYN flood, Slowloris, RST injection, varreduras, DDoS por botnet, amplificação, DNS water torture e outros), mitigação upstream, falsos positivos e ciclo de resposta a incidente.',
+      en: 'Defensive lab with 12 attacks (SYN flood, Slowloris, RST injection, scans, botnet DDoS, amplification, DNS water torture and more), upstream mitigation, false positives, and the incident response lifecycle.',
+      es: 'Laboratorio defensivo con 12 ataques (SYN flood, Slowloris, inyección RST, escaneos, DDoS por botnet, amplificación, DNS water torture y otros), mitigación upstream, falsos positivos y ciclo de respuesta a incidentes.',
+    },
+    tags: ['TCP', 'UDP', 'Defesa de redes'],
+  },
 ];
 
 export const profiles = [

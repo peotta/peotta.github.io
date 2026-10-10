@@ -18,6 +18,7 @@ Este site reúne materiais acadêmicos, tutoriais práticos, guias para certific
   - [Simulador de ICMP (ping, traceroute e PMTUD)](simuladores/icmp-simulator.html)
   - [Simulador de MPLS (LDP e L3VPN)](simuladores/mpls-simulator.html)
   - [Simulador de TCP e UDP](simuladores/tcp-udp-simulator.html)
+  - [Simulador de Ataques e Defesas TCP/UDP](simuladores/tcp-udp-security-simulator.html)
 - **🧪 Laboratórios Práticos de Cibersegurança:**
   - [Índice Geral de Laboratórios](labs/index.html)
   - `Lab 01` - [Reconhecimento Passivo com Kismet](labs/lab01-reconhecimento.html)

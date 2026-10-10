@@ -38,6 +38,11 @@
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
   </url>
+  <url>
+    <loc>https://peotta.github.io/simuladores/tcp-udp-security-simulator.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
 
   <!-- Laboratórios Práticos de Cibersegurança & Redes -->
   <url>
