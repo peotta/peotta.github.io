@@ -3,7 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulador Visual de Roteamento — OSPF / RIPv2</title>
+<title>Simulador Visual de Roteamento (OSPF e RIPv2) - RFC 2328</title>
+<meta name="description" content="Simulador interativo de roteamento dinâmico: OSPF (RFC 2328) em área única e multiárea, com Hello, adjacências, inundação de LSAs e SPF (Dijkstra), e RIPv2 (RFC 2453) com vetor de distância, split horizon e poison reverse.">
+<link rel="canonical" href="https://peotta.github.io/simuladores/router_simulator.html">
+<meta property="og:title" content="Simulador Visual de Roteamento - OSPF e RIPv2">
+<meta property="og:description" content="Veja o OSPF formar adjacências, inundar LSAs e calcular o SPF, e o RIPv2 convergir por Bellman-Ford, com falhas de enlace e custos editáveis.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://peotta.github.io/simuladores/router_simulator.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -56,6 +62,13 @@
   }
   .topbar-protocol{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);font-weight:500;}
   .topbar-protocol select{width:auto;}
+  .title-wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .topbar-options{display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+  .back-link{color:var(--teal);text-decoration:none;font-weight:600;font-size:13px;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--panel-2);display:inline-flex;align-items:center;gap:6px;}
+  .back-link:hover{border-color:var(--teal);}
+  .rfc-chips{display:flex;gap:8px;flex-wrap:wrap;}
+  .rfc-chip{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--teal);border:1px solid var(--teal);border-radius:20px;padding:3px 10px;text-decoration:none;}
+  .rfc-chip:hover{background:rgba(95,212,192,0.12);}
 
   .metro{display:flex;align-items:center;justify-content:space-between;position:relative;}
   .stop{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;z-index:1;flex:0 0 auto;}
@@ -79,7 +92,7 @@
   }
   .panel h2{font-size:15px;font-weight:600;margin:0;padding:12px 18px;border-bottom:1px solid var(--border-soft);color:var(--ink);text-transform:none;}
   .stage-header{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:10px 18px;border-bottom:1px solid var(--border-soft);}
-  .stage-header h2{padding:0;border:none;margin:0;flex:0 0 auto;}
+  .stage-header h2{padding:0;border:none;margin:0;flex:0 1 auto;}
   .legend-inline{display:flex;align-items:center;flex-wrap:wrap;gap:16px;}
   .legend-inline .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap;}
   .legend-inline .legend-dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto;}
@@ -111,6 +124,7 @@
   }
   button:hover:not(:disabled){border-color:var(--teal);transform:translateY(-1px);}
   button:active:not(:disabled){transform:translateY(0);}
+  button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible,svg g:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
   button.primary{background:linear-gradient(135deg, var(--teal), #4CC2AE);color:#06231C;border-color:var(--teal);font-weight:700;}
   button.primary:hover:not(:disabled){background:linear-gradient(135deg, #79E0CE, var(--teal));}
   button:disabled{opacity:.4;cursor:not-allowed;}
@@ -132,10 +146,10 @@
 
   /* ---------- Bottom tabs: vetores/LSDB, tabela, log ---------- */
   .tabs-panel{flex:0 0 auto;height:34vh;min-height:190px;max-height:280px;display:flex;flex-direction:column;overflow:hidden;}
-  .tab-bar{flex:0 0 auto;display:flex;gap:4px;padding:8px 10px 0;border-bottom:1px solid var(--border-soft);}
+  .tab-bar{flex:0 0 auto;display:flex;gap:4px;padding:8px 10px 0;border-bottom:1px solid var(--border-soft);overflow-x:auto;}
   .tab-bar button{
     flex:none;background:transparent;color:var(--muted);border:1px solid transparent;
-    border-radius:9px 9px 0 0;padding:9px 18px;font-size:14.5px;font-weight:500;
+    border-radius:9px 9px 0 0;padding:9px 18px;font-size:14.5px;font-weight:500;white-space:nowrap;
   }
   .tab-bar button:hover:not(:disabled){transform:none;border-color:transparent;color:var(--ink);}
   .tab-bar button.active{background:var(--panel-2);color:var(--ink);border-color:var(--border-soft);border-bottom-color:var(--panel-2);}
@@ -167,6 +181,15 @@
   .tag-sys{color:var(--muted);}
   .log-body div{margin-bottom:3px;}
 
+  /* ---------- Referência ---------- */
+  .ref-body{padding:14px 18px;font-size:14.5px;line-height:1.6;color:var(--ink);}
+  .ref-body h3{font-size:15px;margin:16px 0 6px;color:var(--teal);}
+  .ref-body h3:first-child{margin-top:0;}
+  .ref-body p{margin:0 0 8px;color:var(--muted);}
+  .ref-body p b,.ref-body li b{color:var(--ink);font-weight:600;}
+  .ref-body ul{margin:0 0 8px;padding-left:20px;color:var(--muted);}
+  .ref-body table{margin:6px 0 10px;font-size:13.5px;}
+
   /* ---------- Footer credit ---------- */
   .footer-credit{
     flex:0 0 auto;
@@ -178,10 +201,14 @@
     html,body{height:auto;overflow:visible;}
     .app{height:auto;}
     .workspace{grid-template-columns:1fr;grid-template-rows:none;}
-    .stage-svg-wrap{min-height:360px;}
+    .app{padding:12px 16px;}
+    .stage-svg-wrap{min-height:0;overflow-x:auto;justify-content:flex-start;}
+    svg#topology{min-width:720px;height:400px;}
     .side-col{overflow-y:visible;}
-    .tabs-panel{height:auto;max-height:none;}
-    .stop-label{max-width:78px;font-size:11px;}
+    .tabs-panel{height:auto;max-height:none;min-height:320px;}
+    .tab-content{min-height:280px;}
+    .stop-label{max-width:64px;font-size:10.5px;}
+    .metro{gap:2px;}
     .topbar-row h1{font-size:20px;}
   }
 </style>
@@ -189,26 +216,32 @@
 
 <body>
 <div class="app">
-  <div class="topbar">
+  <header class="topbar">
     <div class="topbar-row">
-      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-        <a href="../index.html" style="color:var(--teal);text-decoration:none;font-weight:600;font-size:13px;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--panel-2);display:inline-flex;align-items:center;gap:6px;">← Voltar ao Portal</a>
-        <h1 style="margin:0;">Simulador Visual de Roteamento</h1>
+      <div class="title-wrap">
+        <a href="../index.html" class="back-link">← Voltar ao Portal</a>
+        <h1>Simulador Visual de Roteamento</h1>
       </div>
+      <div class="topbar-options">
       <label class="topbar-protocol">Protocolo
         <select id="protocolSelect">
           <option value="ospf" selected>OSPF (estado de enlace)</option>
           <option value="rip">RIPv2 (vetor de distância)</option>
         </select>
       </label>
+        <nav class="rfc-chips" aria-label="Especificações">
+          <a class="rfc-chip" href="https://www.rfc-editor.org/rfc/rfc2328" target="_blank" rel="noreferrer">RFC 2328 (OSPFv2)</a>
+          <a class="rfc-chip" href="https://www.rfc-editor.org/rfc/rfc2453" target="_blank" rel="noreferrer">RFC 2453 (RIPv2)</a>
+        </nav>
+      </div>
     </div>
     <div class="metro" id="metro"></div>
-  </div>
+  </header>
 
-  <div class="workspace">
-    <div class="panel stage-panel">
+  <main class="workspace">
+    <section class="panel stage-panel">
       <div class="stage-header">
-        <h2 id="stageTitle">Topologia — Área 0 (OSPF)</h2>
+        <h2 id="stageTitle">Topologia: Área 0 (OSPF)</h2>
         <div class="legend-inline">
           <span class="legend-item"><span class="legend-dot" style="background:var(--muted-line)"></span>sem adjacência</span>
           <span class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span><span id="legendAmber">Hello/2-Way · caminho SPF</span></span>
@@ -217,25 +250,25 @@
         </div>
       </div>
       <div class="stage-svg-wrap">
-        <svg id="topology" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
+        <svg id="topology" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Topologia de roteadores e hosts PC-A e PC-B">
           <g id="areasGroup"></g>
           <g id="linksGroup"></g>
           <g id="nodesGroup"></g>
           <g id="packetsGroup"></g>
         </svg>
       </div>
-    </div>
+    </section>
 
-    <div class="side-col">
+    <aside class="side-col">
       <div class="panel controls">
         <div class="row">
-          <button class="primary" id="btnAdvance">Avançar fase</button>
+          <button class="primary" id="btnAdvance" type="button">Avançar fase</button>
         </div>
         <div class="row">
-          <button id="btnReset">Reiniciar</button>
+          <button id="btnReset" type="button">Reiniciar</button>
         </div>
         <div class="row">
-          <button id="btnComm">Simular PC-A → PC-B</button>
+          <button id="btnComm" type="button">Simular PC-A → PC-B</button>
         </div>
         <label class="field"><span id="rootSelectLabel">Raiz da tabela SPF</span>
           <select id="rootSelect"></select>
@@ -249,22 +282,30 @@
         <label class="field" id="splitHorizonRow" style="display:none;">
           <span style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="splitHorizonCheck" checked style="width:auto;">Split horizon com poison reverse</span>
         </label>
+        <label class="field">Velocidade da animação
+          <select id="speedSelect">
+            <option value="0.15">Lenta</option>
+            <option value="0.3" selected>Normal</option>
+            <option value="0.6">Rápida</option>
+          </select>
+        </label>
       </div>
 
       <div class="panel inspector" id="inspector">
         <div class="muted-txt" id="inspectorDefault">Clique em um roteador para defini-lo como raiz da tabela de rotas, em um enlace para editar seu custo e simular uma falha, ou em PC-A/PC-B para simular a comunicação entre eles pelo melhor caminho OSPF.</div>
       </div>
-    </div>
-  </div>
+    </aside>
+  </main>
 
-  <div class="panel tabs-panel">
-    <div class="tab-bar">
-      <button class="tab-btn active" data-tab="lsdb" type="button">Vetores / LSDB</button>
-      <button class="tab-btn" data-tab="route" type="button">Tabela de roteamento</button>
-      <button class="tab-btn" data-tab="log" type="button">Log de eventos</button>
+  <section class="panel tabs-panel">
+    <div class="tab-bar" role="tablist">
+      <button class="tab-btn active" data-tab="lsdb" type="button" role="tab" aria-selected="true">Vetores / LSDB</button>
+      <button class="tab-btn" data-tab="route" type="button" role="tab" aria-selected="false">Tabela de roteamento</button>
+      <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência</button>
+      <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
     </div>
     <div class="tab-content active" data-tab-content="lsdb">
-      <h2 id="lsdbTitle" class="tab-inner-title">Base de dados de estado de enlace (LSDB) — R1</h2>
+      <h2 id="lsdbTitle" class="tab-inner-title">Base de dados de estado de enlace (LSDB): R1</h2>
       <div class="tab-scroll">
         <table>
           <thead id="lsdbThead"><tr><th>Origem</th><th>Seq</th><th>Enlaces anunciados</th></tr></thead>
@@ -273,7 +314,7 @@
       </div>
     </div>
     <div class="tab-content" data-tab-content="route">
-      <h2 id="routeTitle" class="tab-inner-title">Tabela de roteamento OSPF — R1</h2>
+      <h2 id="routeTitle" class="tab-inner-title">Tabela de roteamento OSPF: R1</h2>
       <div class="tab-scroll">
         <table>
           <thead id="routeThead"><tr><th>Destino</th><th>Custo</th><th>Próximo salto</th></tr></thead>
@@ -281,22 +322,67 @@
         </table>
       </div>
     </div>
+    <div class="tab-content" data-tab-content="ref">
+      <div class="tab-scroll">
+        <article class="ref-body">
+          <h3>Roteamento dinâmico</h3>
+          <p>Com roteamento dinâmico, os roteadores trocam informações para montar a tabela de roteamento sozinhos e reagir a falhas. Há duas famílias: no <b>vetor de distância</b> (RIP), cada roteador só conhece o que os vizinhos anunciam; no <b>estado de enlace</b> (OSPF), todos recebem o mapa completo da área e calculam o melhor caminho por conta própria.</p>
+          <h3>OSPF (RFC 2328)</h3>
+          <ul>
+            <li><b>Hello:</b> descobre vizinhos (a cada 10 s em redes broadcast). Quando um roteador vê o próprio Router ID no Hello do vizinho, o estado passa a <b>2-Way</b>.</li>
+            <li><b>Adjacência:</b> os vizinhos trocam DBD, LSR, LSU e LSAck até sincronizar as bases. O estado final é <b>Full</b>.</li>
+            <li><b>Inundação de LSAs:</b> cada roteador origina um Router-LSA com seus enlaces e custos. As LSAs se propagam por toda a área até que todas as LSDBs fiquem idênticas.</li>
+            <li><b>SPF:</b> cada roteador executa Dijkstra sobre a LSDB, tendo a si mesmo como raiz, e instala o próximo salto de cada destino.</li>
+            <li><b>Custo:</b> por padrão, é a largura de banda de referência dividida pela largura de banda do enlace. Vence o menor custo total.</li>
+            <li><b>Multiárea:</b> a Área 0 é o backbone. Os ABRs (roteadores de borda de área) resumem cada área para as demais com Summary LSAs (tipo 3), o que reduz a LSDB e o custo do SPF.</li>
+          </ul>
+          <h3>RIPv2 (RFC 2453)</h3>
+          <ul>
+            <li><b>Métrica:</b> número de saltos. O valor 16 significa inalcançável, o que limita a rede a 15 saltos.</li>
+            <li><b>Atualizações:</b> a cada 30 s, cada roteador envia sua tabela (vetor de distância) aos vizinhos, por multicast 224.0.0.9 na porta UDP 520.</li>
+            <li><b>Bellman-Ford:</b> o roteador soma 1 à métrica anunciada pelo vizinho e adota a rota se ela for melhor ou se vier do próximo salto atual.</li>
+            <li><b>Split horizon com poison reverse:</b> a rota volta ao vizinho de quem foi aprendida com métrica 16. Isso evita loops e a contagem até o infinito.</li>
+            <li><b>Triggered update:</b> depois de uma falha, o roteador anuncia a mudança imediatamente, sem esperar os 30 s.</li>
+          </ul>
+          <h3>Comparação</h3>
+          <table>
+            <thead><tr><th>Aspecto</th><th>OSPF</th><th>RIPv2</th></tr></thead>
+            <tbody>
+              <tr><td>Tipo</td><td>Estado de enlace</td><td>Vetor de distância</td></tr>
+              <tr><td>Algoritmo</td><td>Dijkstra (SPF)</td><td>Bellman-Ford</td></tr>
+              <tr><td>Métrica</td><td>Custo (largura de banda)</td><td>Saltos (máx. 15)</td></tr>
+              <tr><td>Visão da rede</td><td>Mapa completo da área</td><td>Só o que os vizinhos anunciam</td></tr>
+              <tr><td>Convergência</td><td>Rápida</td><td>Lenta (rodadas de 30 s)</td></tr>
+              <tr><td>Transporte</td><td>IP protocolo 89, 224.0.0.5 e 224.0.0.6</td><td>UDP 520, 224.0.0.9</td></tr>
+              <tr><td>Escala</td><td>Grande, com hierarquia de áreas</td><td>Pequena</td></tr>
+            </tbody>
+          </table>
+          <h3>Roteamento e segurança</h3>
+          <ul>
+            <li><b>Injeção de rotas:</b> um atacante na mesma rede pode anunciar rotas falsas para desviar tráfego (man-in-the-middle) ou criar um buraco negro. A defesa é a <b>autenticação</b>: no OSPF, HMAC-SHA (RFC 5709); no RIPv2, MD5 ou HMAC-SHA (RFC 4822).</li>
+            <li><b>Interfaces passivas:</b> desativar o envio de Hello e de atualizações nas interfaces voltadas para usuários impede que um host participe do roteamento.</li>
+            <li><b>Filtragem e resumo de rotas:</b> filtrar o que se aceita e resumir rotas reduz o efeito de anúncios indevidos e da instabilidade de enlaces (flapping).</li>
+          </ul>
+        </article>
+      </div>
+    </div>
     <div class="tab-content" data-tab-content="log">
       <div class="tab-scroll">
         <div class="log-body" id="logBody"></div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="footer-credit">
+  <footer class="footer-credit">
     Simulador desenvolvido pelo <strong>Prof. Dr. Laerte Peotta de Melo</strong>.<br>
     Conteúdo elaborado com apoio de IA generativa, sob revisão do autor.<br>
     Uso exclusivo para fins de ensino e pesquisa.
-  </div>
+  </footer>
 </div>
 
 <script>
 (function(){
+  'use strict';
   const NS='http://www.w3.org/2000/svg';
   function elNS(tag,attrs){
     const e=document.createElementNS(NS,tag);
@@ -359,7 +445,7 @@
   ];
   const areaBackgrounds=[
     {x:10,y:90,w:276,h:316,label:'Área 1',color:'#B48EF0'},
-    {x:354,y:60,w:182,h:376,label:'Área 0 — backbone',color:'#6FB8E8'},
+    {x:354,y:60,w:182,h:376,label:'Área 0 (backbone)',color:'#6FB8E8'},
     {x:614,y:90,w:272,h:316,label:'Área 2',color:'#F0956F'},
   ];
 
@@ -372,7 +458,7 @@
 
   // ---------- Runtime state ----------
   let protocol='ospf';        // 'ospf' | 'rip'
-  let areaMode='single';      // 'single' | 'multi' — só relevante quando protocol==='ospf'
+  let areaMode='single';      // 'single' | 'multi': só relevante quando protocol==='ospf'
   function multiAreaActive(){ return protocol==='ospf' && areaMode==='multi'; }
   let currentStep=0;          // 0..4  (0=down, 4=convergido)
   let busy=false;
@@ -422,6 +508,7 @@
   const legendAmber=document.getElementById('legendAmber');
   const legendTeal=document.getElementById('legendTeal');
   const logBody=document.getElementById('logBody');
+  const speedSelect=document.getElementById('speedSelect');
 
   // ---------- Utility ----------
   function wait(ms){return new Promise(res=>setTimeout(res, ms/speedMultiplier));}
@@ -431,7 +518,7 @@
     const div=document.createElement('div');
     div.innerHTML='<span class="tag tag-'+tag+'">['+tag.toUpperCase()+']</span> '+msg;
     logBody.appendChild(div);
-    logBody.scrollTop=logBody.scrollHeight;
+    logBody.parentElement.scrollTop=logBody.parentElement.scrollHeight;
   }
 
   function buildGraph(){
@@ -462,7 +549,7 @@
     if(protocol==='ospf'){
       stopLabels=stopLabelsOspf;
       rootSelectLabel.textContent='Raiz da tabela SPF';
-      stageTitle.textContent = multiAreaActive() ? 'Topologia — Multi-área (OSPF)' : 'Topologia — Área 0 (OSPF)';
+      stageTitle.textContent = multiAreaActive() ? 'Topologia: Multi-área (OSPF)' : 'Topologia: Área 0 (OSPF)';
       legendAmber.textContent='Hello/2-Way · caminho SPF';
       legendTeal.textContent='adjacência Full (fora do caminho)';
       areaModeRow.style.display='flex';
@@ -472,7 +559,7 @@
     } else {
       stopLabels=stopLabelsRip;
       rootSelectLabel.textContent='Ver tabela do roteador';
-      stageTitle.textContent='Topologia — Rede RIPv2';
+      stageTitle.textContent='Topologia: Rede RIPv2';
       legendAmber.textContent='troca de vetores · caminho';
       legendTeal.textContent='rota estável (fora do caminho)';
       areaModeRow.style.display='none';
@@ -532,9 +619,9 @@
     ripTable=nextT;
     render();
     if(changed){
-      log('Rodada '+roundLabel+' (Response RIP): '+touchedRouters.size+' roteador(es) atualizaram rotas — '+Array.from(touchedRouters).join(', ')+'.','lsa');
+      log('Rodada '+roundLabel+' (Response RIP): '+touchedRouters.size+' roteador(es) atualizaram rotas: '+Array.from(touchedRouters).join(', ')+'.','lsa');
     } else {
-      log('Rodada '+roundLabel+': nenhuma atualização — tabelas estáveis.','sys');
+      log('Rodada '+roundLabel+': nenhuma atualização, tabelas estáveis.','sys');
     }
     return changed;
   }
@@ -560,7 +647,7 @@
   }
 
   async function doRipFinalize(){
-    log('RIPv2 convergiu — tabelas de roteamento estáveis em todos os roteadores.','spf');
+    log('RIPv2 convergiu: tabelas de roteamento estáveis em todos os roteadores.','spf');
     showRipTable(rootRouter);
     if(currentStep<4){ currentStep=4; updatePhaseUI(); }
   }
@@ -622,6 +709,16 @@
     return 'var(--muted-line)';
   }
 
+  // Torna um elemento do SVG acionável por mouse, toque e teclado.
+  function clickable(g,handler,label){
+    g.style.cursor='pointer';
+    g.setAttribute('tabindex','0');
+    g.setAttribute('role','button');
+    g.setAttribute('aria-label',label);
+    g.addEventListener('click',handler);
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); handler(); } });
+  }
+
   function render(){
     linksGroup.innerHTML=''; nodesGroup.innerHTML='';
 
@@ -652,15 +749,16 @@
         color='var(--teal)'; width=3; dash='';
       }
 
+      const gl=elNS('g',{});
+      clickable(gl,()=>selectLink(l.id),'Enlace '+l.a+' / '+l.b+', custo '+l.cost);
       const hit=elNS('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'transparent','stroke-width':16});
-      hit.style.cursor='pointer';
-      hit.addEventListener('click',()=>selectLink(l.id));
 
       const line=elNS('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y});
       line.style.stroke=color; line.style.strokeWidth=width+'px';
       if(dash) line.style.strokeDasharray=dash;
 
-      linksGroup.appendChild(line); linksGroup.appendChild(hit);
+      gl.appendChild(line); gl.appendChild(hit);
+      linksGroup.appendChild(gl);
 
       const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
       const pill=elNS('rect',{x:mx-16,y:my-11,width:32,height:18,rx:4});
@@ -672,8 +770,7 @@
 
     routers.forEach(r=>{
       const g=elNS('g',{});
-      g.style.cursor='pointer';
-      g.addEventListener('click',()=>selectRouter(r.id));
+      clickable(g,()=>selectRouter(r.id),'Roteador '+r.id);
       const isRoot=r.id===rootRouter;
       const isAbr = multiAreaActive() && r.abr;
       const highlighted = isRoot || spfVisited.has(r.id);
@@ -707,8 +804,7 @@
 
     hosts.forEach(h=>{
       const g=elNS('g',{});
-      g.style.cursor='pointer';
-      g.addEventListener('click',()=>simulateHostCommunication(h.id));
+      clickable(g,()=>simulateHostCommunication(h.id),'Host '+h.id+': simular comunicação');
       const screen=elNS('rect',{x:h.x-17,y:h.y-15,width:34,height:24,rx:3});
       screen.style.fill='var(--panel)'; screen.style.stroke='var(--ink)'; screen.style.strokeWidth='1.5px';
       const stand=elNS('line',{x1:h.x,y1:h.y+9,x2:h.x,y2:h.y+15});
@@ -766,7 +862,7 @@
   }
 
   function renderLSDBTable(root){
-    lsdbTitle.textContent='Base de dados de estado de enlace (LSDB) — '+root+(multiAreaActive()?' (detalhe só da própria área)':'');
+    lsdbTitle.textContent='Base de dados de estado de enlace (LSDB): '+root+(multiAreaActive()?' (detalhe só da própria área)':'');
     lsdbBody.innerHTML='';
     const db=lsdbByRouter[root];
     if(!db || db.size===0){
@@ -786,7 +882,7 @@
       const ownerObj=byId(owner);
       const sameArea = !multiAreaActive() || (ownerObj.areas||[]).some(a=>rootAreas.includes(a));
       if(sameArea){
-        const linksTxt=lsa.links.map(l=>l.to+'('+l.cost+')').join(', ')||'—';
+        const linksTxt=lsa.links.map(l=>l.to+'('+l.cost+')').join(', ')||'-';
         tr.innerHTML='<td>'+owner+'</td><td>0x8000000'+lsa.seq+'</td><td>'+linksTxt+'</td>';
       } else {
         const d=sameAreaDist[owner];
@@ -798,7 +894,7 @@
   }
 
   function renderRoutingTable(){
-    routeTitle.textContent='Tabela de roteamento '+(protocol==='ospf'?'OSPF':'RIPv2')+' — '+rootRouter;
+    routeTitle.textContent='Tabela de roteamento '+(protocol==='ospf'?'OSPF':'RIPv2')+': '+rootRouter;
     routeBody.innerHTML='';
     if(routingTableRows.length===0){
       routeBody.innerHTML='<tr class="placeholder-row"><td colspan="3">Execute o cálculo SPF para gerar a tabela de roteamento.</td></tr>';
@@ -806,7 +902,7 @@
     }
     routingTableRows.forEach(row=>{
       const tr=document.createElement('tr');
-      const cost = row.cost===null ? '—' : (row.cost===0? '0 (local)' : row.cost);
+      const cost = row.cost===null ? '-' : (row.cost===0? '0 (local)' : row.cost);
       const next = row.next===null ? 'Inalcançável' : (row.next==='Local' ? 'Local' : row.next);
       tr.innerHTML='<td>'+row.dest+'</td><td>'+cost+'</td><td>'+next+'</td>';
       routeBody.appendChild(tr);
@@ -834,18 +930,18 @@
     if(selectedLinkId){
       const l=links.find(x=>x.id===selectedLinkId);
       inspector.innerHTML=
-        '<div class="insp-title">Enlace '+l.a+' – '+l.b+(multiAreaActive() && l.area?' <span style="color:var(--muted);font-size:12px;font-weight:400;">(Área '+l.area+')</span>':'')+'</div>'+
+        '<div class="insp-title">Enlace '+l.a+' / '+l.b+(multiAreaActive() && l.area?' <span style="color:var(--muted);font-size:12px;font-weight:400;">(Área '+l.area+')</span>':'')+'</div>'+
         '<div class="insp-row"><span class="muted-txt">Estado</span>'+
         '<span class="status-pill '+(l.up?'status-up':'status-down')+'">'+(l.up?'ATIVO':'INATIVO')+'</span></div>'+
         '<label class="field" style="margin-bottom:10px;">Custo do enlace'+(protocol==='rip'?' (ignorado pelo RIP)':'')+
         '<input type="number" id="costInput" min="1" value="'+l.cost+'"></label>'+
-        '<div class="row"><button id="applyCostBtn">Aplicar custo</button>'+
-        '<button id="toggleUpBtn">'+(l.up?'Derrubar enlace':'Restaurar enlace')+'</button></div>';
+        '<div class="row"><button id="applyCostBtn" type="button">Aplicar custo</button>'+
+        '<button id="toggleUpBtn" type="button">'+(l.up?'Derrubar enlace':'Restaurar enlace')+'</button></div>';
       document.getElementById('applyCostBtn').addEventListener('click',()=>{
         const v=parseInt(document.getElementById('costInput').value,10);
         if(v>0 && v!==l.cost){
           l.cost=v;
-          log('Custo do enlace '+l.a+'–'+l.b+' alterado para '+v+'.','sys');
+          log('Custo do enlace '+l.a+' / '+l.b+' alterado para '+v+'.','sys');
           onTopologyChanged([l.a,l.b],'cost');
         }
       });
@@ -857,7 +953,7 @@
       const neighborLines=(g[selectedRouterId]||[]).map(e=>{
         const lk=findLink(selectedRouterId,e.to);
         const stateTxt = protocol==='ospf' ? (lk?lk.visualState:'down') : (lk && lk.up ? 'ativo' : 'inativo');
-        return selectedRouterId+' – '+e.to+' &nbsp; ('+stateTxt+', custo '+e.cost+')';
+        return selectedRouterId+' / '+e.to+' &nbsp; ('+stateTxt+', custo '+e.cost+')';
       });
       const descLine = protocol==='ospf' ? 'Definido como raiz da tabela de rotas.' : 'Exibindo a tabela RIP deste roteador.';
       inspector.innerHTML=
@@ -876,7 +972,7 @@
   async function onTopologyChanged(affectedRouterIds, reason){
     render();
     if(protocol==='rip' && reason==='cost'){
-      log('RIPv2 ignora o custo do enlace (usa apenas contagem de saltos) — nenhuma reconvergência necessária.','sys');
+      log('RIPv2 ignora o custo do enlace (usa apenas contagem de saltos): nenhuma reconvergência necessária.','sys');
       return;
     }
     if(currentStep<3){ return; }
@@ -917,9 +1013,9 @@
     l.visualState = (up && protocol==='ospf') ? 'full' : 'down';
     if(selectedLinkId===l.id) renderInspector();
     if(!up){
-      log('Falha simulada no enlace '+l.a+'–'+l.b+'.','fail');
+      log('Falha simulada no enlace '+l.a+' / '+l.b+'.','fail');
     }
-    else { log('Enlace '+l.a+'–'+l.b+' restaurado.','sys'); }
+    else { log('Enlace '+l.a+' / '+l.b+' restaurado.','sys'); }
     await onTopologyChanged([l.a,l.b], 'status');
   }
 
@@ -1027,7 +1123,7 @@
       const {dist,prev}=dijkstra(graph, src.attach);
       const path=pathTo(prev, src.attach, dst.attach);
       if(path.length===0){
-        log('Não há caminho disponível entre '+src.id+' e '+dst.id+' — rede particionada.','fail');
+        log('Não há caminho disponível entre '+src.id+' e '+dst.id+': rede particionada.','fail');
       } else {
         log('Melhor caminho OSPF: '+path.join(' → ')+' (custo total '+dist[dst.attach]+').','spf');
         flowEdges.add(src.id+'|'+src.attach); flowEdges.add(src.attach+'|'+src.id);
@@ -1054,7 +1150,7 @@
         await animatePacket(src.id, src.attach, 'var(--amber)');
         for(let i=0;i<path.length-1;i++){
           await animatePacket(path[i], path[i+1], 'var(--amber)');
-          log(path[i]+' encaminha para '+path[i+1]+' — decisão local, sem conhecer o caminho completo.','spf');
+          log(path[i]+' encaminha para '+path[i+1]+': decisão local, sem conhecer o caminho completo.','spf');
         }
         await animatePacket(dst.attach, dst.id, 'var(--amber)');
         log('Pacote de '+src.id+' entregue a '+dst.id+' com sucesso.','spf');
@@ -1071,7 +1167,7 @@
       l.visualState='init'; render();
       await Promise.all([animatePacket(l.a,l.b,'var(--amber)'), animatePacket(l.b,l.a,'var(--amber)')]);
       l.visualState='twoway'; render();
-      log(l.a+' \u2194 '+l.b+': Hello recebido nos dois sentidos — vizinhos em 2-Way (custo '+l.cost+').','hello');
+      log(l.a+' \u2194 '+l.b+': Hello recebido nos dois sentidos, vizinhos em 2-Way (custo '+l.cost+').','hello');
     }));
   }
 
@@ -1094,7 +1190,7 @@
     });
     render();
     await Promise.all(routers.map(r=>floodLSA(r.id)));
-    log('Todas as LSAs foram inundadas — as LSDBs convergiram para uma visão idêntica da topologia.','lsa');
+    log('Todas as LSAs foram inundadas: as LSDBs convergiram para uma visão idêntica da topologia.','lsa');
     renderLSDBTable(rootRouter);
   }
 
@@ -1154,7 +1250,7 @@
     logBody.innerHTML='';
     configureProtocolUI();
     renderAreaBackgrounds();
-    log('Simulação reiniciada em modo '+(protocol==='ospf'?('OSPF — '+(multiAreaActive()?'multi-área':'área única')):'RIPv2')+'. Todos os enlaces estão ativos, nenhuma rota aprendida ainda.','sys');
+    log('Simulação reiniciada em modo '+(protocol==='ospf'?('OSPF, '+(multiAreaActive()?'multi-área':'área única')):'RIPv2')+'. Todos os enlaces estão ativos, nenhuma rota aprendida ainda.','sys');
     render(); renderInspector(); renderLeftPanel(rootRouter); renderRoutingTable(); updatePhaseUI();
   }
 
@@ -1185,11 +1281,12 @@
   btnAdvance.addEventListener('click', advanceStep);
   btnReset.addEventListener('click', resetSim);
   btnComm.addEventListener('click', ()=>simulateHostCommunication());
+  speedSelect.addEventListener('change',()=>{ speedMultiplier=parseFloat(speedSelect.value); });
 
   document.querySelectorAll('.tab-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
       const target=btn.getAttribute('data-tab');
-      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b===btn));
+      document.querySelectorAll('.tab-btn').forEach(b=>{ b.classList.toggle('active', b===btn); b.setAttribute('aria-selected', b===btn); });
       document.querySelectorAll('.tab-content').forEach(c=>c.classList.toggle('active', c.getAttribute('data-tab-content')===target));
     });
   });

@@ -369,12 +369,12 @@
 
   <section class="panel tabs-panel">
     <div class="tab-bar" role="tablist">
-      <button class="tab-btn active" data-tab="term" type="button" role="tab">Terminal PC-A</button>
-      <button class="tab-btn" data-tab="cap" type="button" role="tab">Captura</button>
-      <button class="tab-btn" data-tab="msg" type="button" role="tab">Pacote</button>
-      <button class="tab-btn" data-tab="routes" type="button" role="tab">Tabelas de rotas</button>
-      <button class="tab-btn" data-tab="ref" type="button" role="tab">Referência ICMP</button>
-      <button class="tab-btn" data-tab="log" type="button" role="tab">Log de eventos</button>
+      <button class="tab-btn active" data-tab="term" type="button" role="tab" aria-selected="true">Terminal PC-A</button>
+      <button class="tab-btn" data-tab="cap" type="button" role="tab" aria-selected="false">Captura</button>
+      <button class="tab-btn" data-tab="msg" type="button" role="tab" aria-selected="false">Pacote</button>
+      <button class="tab-btn" data-tab="routes" type="button" role="tab" aria-selected="false">Tabelas de rotas</button>
+      <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência ICMP</button>
+      <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
     </div>
     <div class="tab-content active" data-tab-content="term">
       <div class="term" id="term" aria-live="polite"></div>

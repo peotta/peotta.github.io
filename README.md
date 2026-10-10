@@ -13,8 +13,8 @@ Este site reúne materiais acadêmicos, tutoriais práticos, guias para certific
 ### Principais Seções e Conteúdos
 
 - **⚡ Simuladores Interativos de Redes:**
-  - [Simulador Visual de OSPF Multi-Área](simuladores/ospf_simulator.html)
-  - [Simulador de Roteador e Tabelas IP (LPM/TTL)](simuladores/router_simulator.html)
+  - [Simulador de Roteamento (OSPF e RIPv2)](simuladores/router_simulator.html)
+  - [Simulador de DHCP (DORA)](simuladores/dhcp-simulator.html)
   - [Simulador de ICMP (ping, traceroute e PMTUD)](simuladores/icmp-simulator.html)
 - **🧪 Laboratórios Práticos de Cibersegurança:**
   - [Índice Geral de Laboratórios](labs/index.html)
@@ -51,9 +51,10 @@ peotta.github.io/
 │   ├── lab03-protocolos.html
 │   ├── lab04-ataques.html
 │   └── lab05-ferramentas.html
-├── simuladores/                   # ⚡ Simuladores Interativos (OSPF e Router)
-│   ├── ospf_simulator.html
-│   └── router_simulator.html
+├── simuladores/                   # ⚡ Simuladores Interativos (Roteamento, DHCP e ICMP)
+│   ├── router_simulator.html
+│   ├── dhcp-simulator.html
+│   └── icmp-simulator.html
 ├── certificacoes/                 # 🎓 Planos de Estudo e Certificações
 │   ├── ccna.html
 │   ├── ccna-cybersecurity.html

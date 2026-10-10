@@ -357,13 +357,13 @@ export const resources = [
     categories: ['simulators'],
     href: '/simuladores/router_simulator.html',
     cta: cta.sim,
-    title: { pt: 'Simulador de Roteador & Protocolos IP', en: 'Router & IP Protocols Simulator', es: 'Simulador de Router y Protocolos IP' },
+    title: { pt: 'Simulador de Roteamento (OSPF e RIPv2)', en: 'Routing Simulator (OSPF and RIPv2)', es: 'Simulador de Enrutamiento (OSPF y RIPv2)' },
     text: {
-      pt: 'Encaminhamento de pacotes camada 3 e roteamento dinâmico: cabeçalho IPv4, lookup por LPM, decremento de TTL e simulação de OSPF multiárea e RIPv2.',
-      en: 'Layer 3 packet forwarding and dynamic routing: IPv4 header, LPM lookup, TTL decrement, and simulation of multi-area OSPF and RIPv2.',
-      es: 'Reenvío de paquetes de capa 3 y enrutamiento dinámico: encabezado IPv4, búsqueda LPM, decremento de TTL y simulación de OSPF multiárea y RIPv2.',
+      pt: 'Roteamento dinâmico passo a passo: OSPF em área única e multiárea (Hello, adjacências, LSAs e SPF) e RIPv2 com Bellman-Ford e split horizon, com falhas de enlace e custos editáveis.',
+      en: 'Step-by-step dynamic routing: single-area and multi-area OSPF (Hello, adjacencies, LSAs, and SPF) and RIPv2 with Bellman-Ford and split horizon, with link failures and editable costs.',
+      es: 'Enrutamiento dinámico paso a paso: OSPF en área única y multiárea (Hello, adyacencias, LSAs y SPF) y RIPv2 con Bellman-Ford y split horizon, con fallas de enlace y costos editables.',
     },
-    tags: ['OSPF', 'RIPv2', 'LPM'],
+    tags: ['OSPF', 'RIPv2', 'SPF'],
   },
   {
     id: 'sim-dhcp',

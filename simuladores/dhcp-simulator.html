@@ -6,6 +6,10 @@
 <title>Simulador Visual de DHCP (DORA) - RFC 2131</title>
 <meta name="description" content="Simulador interativo do protocolo DHCP (RFC 2131) com as fases DORA: Discover, Offer, Request e Acknowledge, incluindo renovação de lease, DHCPRELEASE, DHCPDECLINE e captura de pacotes.">
 <link rel="canonical" href="https://peotta.github.io/simuladores/dhcp-simulator.html">
+<meta property="og:title" content="Simulador Visual de DHCP (DORA)">
+<meta property="og:description" content="Acompanhe Discover, Offer, Request e Acknowledge, renovação de lease, conflitos de IP e servidores concorrentes, com captura de pacotes.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://peotta.github.io/simuladores/dhcp-simulator.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -89,7 +93,7 @@
   }
   .panel h2{font-size:15px;font-weight:600;margin:0;padding:12px 18px;border-bottom:1px solid var(--border-soft);color:var(--ink);text-transform:none;}
   .stage-header{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:10px 18px;border-bottom:1px solid var(--border-soft);}
-  .stage-header h2{padding:0;border:none;margin:0;flex:0 0 auto;}
+  .stage-header h2{padding:0;border:none;margin:0;flex:0 1 auto;}
   .legend-inline{display:flex;align-items:center;flex-wrap:wrap;gap:16px;}
   .legend-inline .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap;}
   .legend-inline .legend-dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto;}
@@ -125,6 +129,7 @@
   }
   button:hover:not(:disabled){border-color:var(--teal);transform:translateY(-1px);}
   button:active:not(:disabled){transform:translateY(0);}
+  button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible,svg g:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
   button.primary{background:linear-gradient(135deg, var(--teal), #4CC2AE);color:#06231C;border-color:var(--teal);font-weight:700;}
   button.primary:hover:not(:disabled){background:linear-gradient(135deg, #79E0CE, var(--teal));}
   button:disabled{opacity:.4;cursor:not-allowed;}
@@ -200,6 +205,15 @@
   .tag-sys{color:var(--muted);}
   .log-body div{margin-bottom:3px;}
 
+  /* ---------- Referência ---------- */
+  .ref-body{padding:14px 18px;font-size:14.5px;line-height:1.6;color:var(--ink);}
+  .ref-body h3{font-size:15px;margin:16px 0 6px;color:var(--teal);}
+  .ref-body h3:first-child{margin-top:0;}
+  .ref-body p{margin:0 0 8px;color:var(--muted);}
+  .ref-body p b,.ref-body li b{color:var(--ink);font-weight:600;}
+  .ref-body ul{margin:0 0 8px;padding-left:20px;color:var(--muted);}
+  .ref-body table{margin:6px 0 10px;font-size:13.5px;}
+
   /* ---------- Footer credit ---------- */
   .footer-credit{
     flex:0 0 auto;
@@ -211,10 +225,14 @@
     html,body{height:auto;overflow:visible;}
     .app{height:auto;}
     .workspace{grid-template-columns:1fr;grid-template-rows:none;}
-    .stage-svg-wrap{min-height:360px;}
+    .app{padding:12px 16px;}
+    .stage-svg-wrap{min-height:0;overflow-x:auto;justify-content:flex-start;}
+    svg#topology{min-width:720px;height:400px;}
     .side-col{overflow-y:visible;}
-    .tabs-panel{height:auto;max-height:none;min-height:260px;}
-    .stop-label{max-width:78px;font-size:11px;}
+    .tabs-panel{height:auto;max-height:none;min-height:320px;}
+    .tab-content{min-height:280px;}
+    .stop-label{max-width:64px;font-size:10.5px;}
+    .metro{gap:2px;}
     .topbar-row h1{font-size:20px;}
   }
 </style>
@@ -261,7 +279,7 @@
         </div>
       </div>
       <div class="stage-svg-wrap">
-        <svg id="topology" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Topologia DHCP com cliente, switch e servidores">
+        <svg id="topology" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Topologia DHCP com cliente, switch e servidores">
           <g id="linksGroup"></g>
           <g id="nodesGroup"></g>
           <g id="packetsGroup"></g>
@@ -302,11 +320,12 @@
   </main>
 
   <section class="panel tabs-panel">
-    <div class="tab-bar">
-      <button class="tab-btn active" data-tab="cap" type="button">Captura de pacotes</button>
-      <button class="tab-btn" data-tab="msg" type="button">Mensagem DHCP</button>
-      <button class="tab-btn" data-tab="lease" type="button">Leases dos servidores</button>
-      <button class="tab-btn" data-tab="log" type="button">Log de eventos</button>
+    <div class="tab-bar" role="tablist">
+      <button class="tab-btn active" data-tab="cap" type="button" role="tab" aria-selected="true">Captura de pacotes</button>
+      <button class="tab-btn" data-tab="msg" type="button" role="tab" aria-selected="false">Mensagem DHCP</button>
+      <button class="tab-btn" data-tab="lease" type="button" role="tab" aria-selected="false">Leases dos servidores</button>
+      <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência</button>
+      <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
     </div>
     <div class="tab-content active" data-tab-content="cap">
       <div class="tab-scroll">
@@ -331,6 +350,52 @@
           <thead><tr><th>Servidor</th><th>Endereço</th><th>Cliente (MAC)</th><th>Estado</th><th>Lease</th></tr></thead>
           <tbody id="leaseBody"></tbody>
         </table>
+      </div>
+    </div>
+    <div class="tab-content" data-tab-content="ref">
+      <div class="tab-scroll">
+        <article class="ref-body">
+          <h3>O que é o DHCP</h3>
+          <p>O <b>Dynamic Host Configuration Protocol</b> (RFC 2131) entrega automaticamente a um host o endereço IP, a máscara, o gateway e os servidores DNS. As opções que carregam cada parâmetro estão na RFC 2132. O DHCP usa <b>UDP</b>: o servidor escuta na porta <b>67</b> e o cliente, na porta <b>68</b>. O endereço é <b>emprestado</b> por um tempo (lease) e precisa ser renovado.</p>
+          <h3>Troca DORA</h3>
+          <ul>
+            <li><b>Discover:</b> o cliente, ainda sem IP, envia em broadcast de 0.0.0.0 para 255.255.255.255 procurando servidores.</li>
+            <li><b>Offer:</b> cada servidor que recebeu o pedido reserva um endereço do pool e o oferece no campo yiaddr.</li>
+            <li><b>Request:</b> o cliente escolhe uma oferta e a pede em broadcast. A opção 54 (Server Identifier) avisa os servidores não escolhidos para liberarem suas reservas.</li>
+            <li><b>Acknowledge:</b> o servidor escolhido confirma e grava o lease. Antes de usar o endereço, o cliente pode testá-lo com um ARP Probe (RFC 5227).</li>
+          </ul>
+          <h3>Ciclo de vida do lease</h3>
+          <ul>
+            <li><b>T1 (50% do lease):</b> o cliente entra em RENEWING e pede a renovação em unicast ao servidor original.</li>
+            <li><b>T2 (87,5%):</b> sem resposta, o cliente entra em REBINDING e pede a renovação em broadcast a qualquer servidor.</li>
+            <li><b>Expiração:</b> sem renovação, o cliente abandona o endereço e volta ao estado INIT.</li>
+            <li><b>DHCPDECLINE:</b> enviado quando o ARP Probe revela que o endereço já está em uso. O servidor marca o endereço como indisponível.</li>
+            <li><b>DHCPRELEASE:</b> o cliente devolve o endereço antes do fim do lease. O servidor não responde a essa mensagem.</li>
+          </ul>
+          <h3>Mensagens DHCP (opção 53)</h3>
+          <table>
+            <thead><tr><th>Valor</th><th>Mensagem</th><th>Sentido</th><th>Função</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>DHCPDISCOVER</td><td>Cliente → servidor</td><td class="meaning">Procurar servidores (broadcast)</td></tr>
+              <tr><td>2</td><td>DHCPOFFER</td><td>Servidor → cliente</td><td class="meaning">Oferecer um endereço</td></tr>
+              <tr><td>3</td><td>DHCPREQUEST</td><td>Cliente → servidor</td><td class="meaning">Aceitar uma oferta ou renovar o lease</td></tr>
+              <tr><td>4</td><td>DHCPDECLINE</td><td>Cliente → servidor</td><td class="meaning">Recusar um endereço em conflito</td></tr>
+              <tr><td>5</td><td>DHCPACK</td><td>Servidor → cliente</td><td class="meaning">Confirmar a concessão</td></tr>
+              <tr><td>6</td><td>DHCPNAK</td><td>Servidor → cliente</td><td class="meaning">Negar o pedido (por exemplo, endereço de outra rede)</td></tr>
+              <tr><td>7</td><td>DHCPRELEASE</td><td>Cliente → servidor</td><td class="meaning">Devolver o endereço</td></tr>
+              <tr><td>8</td><td>DHCPINFORM</td><td>Cliente → servidor</td><td class="meaning">Pedir só parâmetros (o IP já foi configurado manualmente)</td></tr>
+            </tbody>
+          </table>
+          <h3>Relay agent</h3>
+          <p>Broadcast não atravessa roteadores. Quando o servidor fica em outra rede, o roteador atua como <b>relay agent</b> (comando <b>ip helper-address</b> no Cisco IOS): ele recebe o broadcast, preenche o campo <b>giaddr</b> com o IP da interface e repassa o pedido em unicast ao servidor, que usa o giaddr para escolher o pool certo.</p>
+          <h3>DHCP e segurança</h3>
+          <ul>
+            <li><b>Servidor falso (rogue DHCP):</b> um atacante responde mais rápido que o servidor legítimo e entrega o próprio IP como gateway ou DNS, o que abre caminho para um man-in-the-middle.</li>
+            <li><b>Esgotamento (starvation):</b> o atacante envia Discovers com MACs forjados até esvaziar o pool, negando serviço aos clientes legítimos.</li>
+            <li><b>DHCP snooping:</b> o switch só aceita Offer e Ack vindos de portas confiáveis e monta uma tabela de vínculos (MAC, IP e porta). Essa tabela também é a base do Dynamic ARP Inspection e do IP Source Guard.</li>
+            <li><b>Port security:</b> limitar o número de MACs por porta reduz o efeito do starvation.</li>
+          </ul>
+        </article>
       </div>
     </div>
     <div class="tab-content" data-tab-content="log">
@@ -811,6 +876,15 @@
   }
 
   // ---------- Renderização do SVG ----------
+  // Torna um elemento do SVG acionável por mouse, toque e teclado.
+  function clickable(g,handler,label){
+    g.style.cursor='pointer';
+    g.setAttribute('tabindex','0');
+    g.setAttribute('role','button');
+    g.setAttribute('aria-label',label);
+    g.addEventListener('click',handler);
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); handler(); } });
+  }
   function progressLinks(){
     const ids=new Set(['L1']);
     if(currentStep===1) activeServers().forEach(s=>ids.add(s.linkId));
@@ -840,13 +914,14 @@
       else if(binding && (l.id==='L1' || l.id===binding.s.linkId)){ color='var(--teal)'; width=3; }
       else if(currentStep>=1 && currentStep<4 && prog.has(l.id)){ color='var(--amber)'; width=3; }
 
+      const gl=elNS('g',{});
+      clickable(gl,()=>selectLink(l.id),'Enlace '+l.a+' / '+l.b);
       const hit=elNS('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'transparent','stroke-width':16});
-      hit.style.cursor='pointer';
-      hit.addEventListener('click',()=>selectLink(l.id));
       const line=elNS('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y});
       line.style.stroke=color; line.style.strokeWidth=width+'px';
       if(dash) line.style.strokeDasharray=dash;
-      linksGroup.appendChild(line); linksGroup.appendChild(hit);
+      gl.appendChild(line); gl.appendChild(hit);
+      linksGroup.appendChild(gl);
 
       const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
       const pill=elNS('rect',{x:mx-22,y:my-10,width:44,height:19,rx:5});
@@ -857,8 +932,8 @@
     });
 
     // Switch
-    const gs=elNS('g',{}); gs.style.cursor='pointer';
-    gs.addEventListener('click',()=>selectNode('SW1'));
+    const gs=elNS('g',{});
+    clickable(gs,()=>selectNode('SW1'),'Switch SW1');
     const swRect=elNS('rect',{x:sw.x-46,y:sw.y-24,width:92,height:48,rx:10});
     swRect.style.fill='var(--panel)'; swRect.style.stroke='var(--ink)'; swRect.style.strokeWidth='1.5px';
     const swLabel=elNS('text',{x:sw.x,y:sw.y-2,'text-anchor':'middle',class:'router-label'});
@@ -873,8 +948,8 @@
 
     // Servidores DHCP
     activeServers().forEach(s=>{
-      const g=elNS('g',{}); g.style.cursor='pointer';
-      g.addEventListener('click',()=>selectNode(s.id));
+      const g=elNS('g',{});
+      clickable(g,()=>selectNode(s.id),'Servidor '+s.id);
       const isBound=binding && binding.s===s;
       const isOffering=currentStep===2 && offers.some(o=>o.s===s);
       const rect=elNS('rect',{x:s.x-48,y:s.y-26,width:96,height:52,rx:12});
@@ -907,8 +982,8 @@
     });
 
     // PC-B (host com IP estático)
-    const gb=elNS('g',{}); gb.style.cursor='pointer';
-    gb.addEventListener('click',()=>selectNode('PC-B'));
+    const gb=elNS('g',{});
+    clickable(gb,()=>selectNode('PC-B'),'PC-B (IP estático)');
     drawMonitor(gb,pcb.x,pcb.y);
     const bl=elNS('text',{x:pcb.x,y:pcb.y-30,'text-anchor':'middle',class:'router-label'});
     bl.style.fontSize='13px'; bl.textContent='PC-B';
@@ -918,8 +993,8 @@
     nodesGroup.appendChild(gb);
 
     // PC-A (cliente DHCP)
-    const gc=elNS('g',{}); gc.style.cursor='pointer';
-    gc.addEventListener('click',()=>selectNode('PC-A'));
+    const gc=elNS('g',{});
+    clickable(gc,()=>selectNode('PC-A'),'PC-A (cliente DHCP)');
     drawMonitor(gc,client.x,client.y);
     const cl=elNS('text',{x:client.x,y:client.y-34,'text-anchor':'middle',class:'router-label'});
     cl.textContent='PC-A';
@@ -1061,7 +1136,7 @@
   }
 
   function activateTab(name){
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+    document.querySelectorAll('.tab-btn').forEach(b=>{ const on=b.dataset.tab===name; b.classList.toggle('active',on); b.setAttribute('aria-selected',on); });
     document.querySelectorAll('.tab-content').forEach(c=>c.classList.toggle('active',c.dataset.tabContent===name));
   }
 
@@ -1080,7 +1155,7 @@
       inspector.innerHTML='<div class="insp-title">Enlace '+l.a+' / '+l.b+'</div>'+
         inspRow('Porta',l.port)+
         inspRow('Estado','<span class="status-pill '+(l.up?'status-up':'status-down')+'">'+(l.up?'ativo':'caído')+'</span>')+
-        '<div class="row" style="margin-top:12px;"><button id="btnInspToggle" '+(busy?'disabled':'')+'>'+(l.up?'Derrubar enlace':'Restaurar enlace')+'</button></div>';
+        '<div class="row" style="margin-top:12px;"><button type="button" id="btnInspToggle" '+(busy?'disabled':'')+'>'+(l.up?'Derrubar enlace':'Restaurar enlace')+'</button></div>';
       document.getElementById('btnInspToggle').onclick=()=>{
         l.up=!l.up;
         log('Enlace '+l.a+' / '+l.b+' '+(l.up?'restaurado.':'derrubado.'),l.up?'sys':'fail');
@@ -1113,7 +1188,7 @@
         '<div class="neighbor-line">Pool: '+NET+'.'+s.start+' a '+NET+'.'+s.end+'</div>'+
         '<div class="neighbor-line">Leases ativos: '+bound+'</div>'+
         '<div class="neighbor-line">Gateway: '+GATEWAY+'</div>'+
-        '<div class="row" style="margin-top:12px;"><button id="btnInspToggle" '+(busy?'disabled':'')+'>'+(s.up?'Derrubar servidor':'Restaurar servidor')+'</button></div>';
+        '<div class="row" style="margin-top:12px;"><button type="button" id="btnInspToggle" '+(busy?'disabled':'')+'>'+(s.up?'Derrubar servidor':'Restaurar servidor')+'</button></div>';
       document.getElementById('btnInspToggle').onclick=()=>{
         s.up=!s.up;
         log(s.id+(s.up?' voltou a responder.':' ficou inativo e não responde a nenhuma mensagem.'),s.up?'sys':'fail');
