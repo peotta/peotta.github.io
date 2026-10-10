@@ -391,6 +391,19 @@ export const resources = [
     },
     tags: ['ICMP', 'RFC 792', 'PMTUD'],
   },
+  {
+    id: 'sim-mpls',
+    categories: ['simulators'],
+    href: '/simuladores/mpls-simulator.html',
+    cta: cta.sim,
+    title: { pt: 'Simulador de MPLS (LDP e L3VPN)', en: 'MPLS Simulator (LDP and L3VPN)', es: 'Simulador de MPLS (LDP y L3VPN)' },
+    text: {
+      pt: 'Núcleo MPLS com 6 LSRs: sessões LDP, LIB e LFIB, push, swap e pop, PHP, modelos de TTL, traceroute com rótulos (RFC 4950) e L3VPN com pilha de dois rótulos.',
+      en: 'MPLS core with 6 LSRs: LDP sessions, LIB and LFIB, push, swap, and pop, PHP, TTL models, traceroute with labels (RFC 4950), and L3VPN with a two-label stack.',
+      es: 'Núcleo MPLS con 6 LSRs: sesiones LDP, LIB y LFIB, push, swap y pop, PHP, modelos de TTL, traceroute con etiquetas (RFC 4950) y L3VPN con pila de dos etiquetas.',
+    },
+    tags: ['MPLS', 'LDP', 'L3VPN'],
+  },
 ];
 
 export const profiles = [

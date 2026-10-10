@@ -16,6 +16,7 @@ Este site reúne materiais acadêmicos, tutoriais práticos, guias para certific
   - [Simulador de Roteamento (OSPF e RIPv2)](simuladores/router_simulator.html)
   - [Simulador de DHCP (DORA)](simuladores/dhcp-simulator.html)
   - [Simulador de ICMP (ping, traceroute e PMTUD)](simuladores/icmp-simulator.html)
+  - [Simulador de MPLS (LDP e L3VPN)](simuladores/mpls-simulator.html)
 - **🧪 Laboratórios Práticos de Cibersegurança:**
   - [Índice Geral de Laboratórios](labs/index.html)
   - `Lab 01` - [Reconhecimento Passivo com Kismet](labs/lab01-reconhecimento.html)
@@ -51,10 +52,11 @@ peotta.github.io/
 │   ├── lab03-protocolos.html
 │   ├── lab04-ataques.html
 │   └── lab05-ferramentas.html
-├── simuladores/                   # ⚡ Simuladores Interativos (Roteamento, DHCP e ICMP)
+├── simuladores/                   # ⚡ Simuladores Interativos (Roteamento, DHCP, ICMP e MPLS)
 │   ├── router_simulator.html
 │   ├── dhcp-simulator.html
-│   └── icmp-simulator.html
+│   ├── icmp-simulator.html
+│   └── mpls-simulator.html
 ├── certificacoes/                 # 🎓 Planos de Estudo e Certificações
 │   ├── ccna.html
 │   ├── ccna-cybersecurity.html
