@@ -378,6 +378,19 @@ export const resources = [
     },
     tags: ['DHCP', 'RFC 2131', 'ARP'],
   },
+  {
+    id: 'sim-icmp',
+    categories: ['simulators'],
+    href: '/simuladores/icmp-simulator.html',
+    cta: cta.sim,
+    title: { pt: 'Simulador de ICMP (ping e traceroute)', en: 'ICMP Simulator (ping and traceroute)', es: 'Simulador de ICMP (ping y traceroute)' },
+    text: {
+      pt: 'ping, traceroute, tracert e hping3 em uma rede simulada (RFC 792): Echo, Time Exceeded, Destination Unreachable, fragmentação, PMTUD, ACLs e loops, com captura e hex dump.',
+      en: 'ping, traceroute, tracert, and hping3 on a simulated network (RFC 792): Echo, Time Exceeded, Destination Unreachable, fragmentation, PMTUD, ACLs, and loops, with capture and hex dump.',
+      es: 'ping, traceroute, tracert y hping3 en una red simulada (RFC 792): Echo, Time Exceeded, Destination Unreachable, fragmentación, PMTUD, ACLs y bucles, con captura y volcado hexadecimal.',
+    },
+    tags: ['ICMP', 'RFC 792', 'PMTUD'],
+  },
 ];
 
 export const profiles = [

@@ -15,6 +15,7 @@ Este site reúne materiais acadêmicos, tutoriais práticos, guias para certific
 - **⚡ Simuladores Interativos de Redes:**
   - [Simulador Visual de OSPF Multi-Área](simuladores/ospf_simulator.html)
   - [Simulador de Roteador e Tabelas IP (LPM/TTL)](simuladores/router_simulator.html)
+  - [Simulador de ICMP (ping, traceroute e PMTUD)](simuladores/icmp-simulator.html)
 - **🧪 Laboratórios Práticos de Cibersegurança:**
   - [Índice Geral de Laboratórios](labs/index.html)
   - `Lab 01` - [Reconhecimento Passivo com Kismet](labs/lab01-reconhecimento.html)
