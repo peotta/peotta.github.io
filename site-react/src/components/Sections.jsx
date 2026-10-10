@@ -129,9 +129,7 @@ export function Footer({ t, motion, onMotion }) {
     <footer className="site-footer">
       <div className="container footer-inner">
         <p>
-          <span className="prompt">©</span> {new Date().getFullYear()} {t.footer.text}
-          <br />
-          {t.footer.ai}
+          <span className="prompt">©</span> {new Date().getFullYear()} {t.footer.text} - {t.footer.ai}
         </p>
         <div className="footer-links">
           <label className="switch">

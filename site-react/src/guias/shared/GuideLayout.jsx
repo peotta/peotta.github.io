@@ -135,9 +135,7 @@ export default function GuideLayout({ toc, brandSub, menuLabel, hero, footerText
       <footer className="site-footer">
         <div className="container footer-inner">
           <p>
-            <span className="prompt">©</span> {new Date().getFullYear()} {footerText}
-            <br />
-            Conteúdo elaborado com apoio de IA generativa, sob revisão do autor.
+            <span className="prompt">©</span> {new Date().getFullYear()} {footerText} Conteúdo elaborado com apoio de IA generativa, sob revisão do autor.
           </p>
           <div className="footer-links">
             <label className="switch">
