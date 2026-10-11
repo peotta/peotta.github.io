@@ -16,6 +16,7 @@ Este site reúne materiais acadêmicos, tutoriais práticos, guias para certific
   - [Simulador de Roteamento (OSPF e RIPv2)](simuladores/router_simulator.html)
   - [Simulador de DHCP (DORA)](simuladores/dhcp-simulator.html)
   - [Simulador de ICMP (ping, traceroute e PMTUD)](simuladores/icmp-simulator.html)
+  - [Simulador de BGP (sessões, seleção de caminho e defesas)](simuladores/bgp-simulator.html)
   - [Simulador de MPLS (LDP e L3VPN)](simuladores/mpls-simulator.html)
   - [Simulador de TCP e UDP](simuladores/tcp-udp-simulator.html)
   - [Simulador de Ataques e Defesas TCP/UDP](simuladores/tcp-udp-security-simulator.html)
@@ -54,10 +55,11 @@ peotta.github.io/
 │   ├── lab03-protocolos.html
 │   ├── lab04-ataques.html
 │   └── lab05-ferramentas.html
-├── simuladores/                   # ⚡ Simuladores Interativos (Roteamento, DHCP, ICMP, MPLS, TCP e UDP)
+├── simuladores/                   # ⚡ Simuladores Interativos (Roteamento, DHCP, ICMP, BGP, MPLS, TCP e UDP)
 │   ├── router_simulator.html
 │   ├── dhcp-simulator.html
 │   ├── icmp-simulator.html
+│   ├── bgp-simulator.html
 │   ├── mpls-simulator.html
 │   └── tcp-udp-simulator.html
 ├── certificacoes/                 # 🎓 Planos de Estudo e Certificações
