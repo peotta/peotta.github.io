@@ -287,6 +287,14 @@
   .field-help b{color:var(--ink);font-weight:600;}
   .info{display:inline-block;color:var(--teal);font-size:12px;cursor:help;font-weight:400;}
   .lbl{display:inline-flex;align-items:center;gap:5px;}
+
+  /* Palco com altura mínima: a topologia nunca é espremida. Em telas baixas a página rola. */
+  @media (min-width:961px){
+    html,body{height:auto;min-height:100%;overflow:auto;}
+    .app{height:auto;min-height:100vh;padding:12px 20px 8px;gap:10px;}
+    .workspace{flex:1 0 600px;min-height:600px;}
+    .footer-credit br{display:none;}
+  }
 </style>
 </head>
 
@@ -916,9 +924,15 @@
         ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
         draw();
       }
+      // Fator de escala: nós, textos e pacotes crescem com o canvas (referência: 820 x 380)
+      function kf() {
+        const w = canvas.clientWidth || 760, h = canvas.clientHeight || 300;
+        return Math.max(1, Math.min(1.7, Math.min(w / 820, h / 380)));
+      }
       function nodes() {
-        const w = canvas.clientWidth || 760;
-        const h = canvas.clientHeight || 300;
+        const K = kf();
+        const w = (canvas.clientWidth || 760) / K;
+        const h = (canvas.clientHeight || 300) / K;
         const reflect = current().mode === 'reflect';
         const n = {
           attacker: { x: 80, y: h * .3, name: current().multi ? 'Botnet' : 'Atacante', ip: current().multi ? 'milhares de IPs' : '198.51.100.x' },
@@ -988,6 +1002,7 @@
       function draw() {
         const w = canvas.clientWidth || 760, h = canvas.clientHeight || 300;
         ctx.clearRect(0, 0, w, h);
+        ctx.save(); ctx.scale(kf(), kf());
         const n = nodes(), s = current();
         line(n.client, n.firewall); line(n.firewall, n.server);
         if (s.mode === 'reflect') {
@@ -1013,6 +1028,7 @@
             ctx.beginPath(); ctx.arc(p.to.x, p.to.y, 40, 0, Math.PI * 2); ctx.stroke();
           }
         });
+        ctx.restore();
       }
       // Pacote percorre a lista de pontos; se blocked, é neutralizado no último ponto
       function addParticle(points, text, type = 'attack', blocked = false, spd = 1, countsDelivery = false) {
