@@ -2,11 +2,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { LANGS, strings } from './i18n.js';
 import { readStorage, writeStorage, useActiveSection, useScrollProgress } from './hooks.js';
 import MatrixRain from './components/MatrixRain.jsx';
-import Nav, { NAV_ITEMS } from './components/Nav.jsx';
+import Nav, { SPY_IDS } from './components/Nav.jsx';
 import Hero from './components/Hero.jsx';
 import Catalog from './components/Catalog.jsx';
 import CommandPalette from './components/CommandPalette.jsx';
 import Ravens from './components/Ravens.jsx';
+import Simulators from './components/Simulators.jsx';
 import { About, Contact, Footer, Podcast, Work } from './components/Sections.jsx';
 
 // Ancoras do site classico redirecionadas para o catalogo ja filtrado.
@@ -14,11 +15,10 @@ const LEGACY_HASH = {
   labs: 'labs',
   cursos: 'courses',
   disciplinas: 'disciplines',
-  simuladores: 'simulators',
   certificacoes: 'courses',
 };
 
-const SECTION_IDS = NAV_ITEMS.map((n) => n.id);
+const SECTION_IDS = SPY_IDS;
 
 function initialLang() {
   const saved = readStorage('site-lang', '');
@@ -92,12 +92,13 @@ export default function App() {
     <>
       <a className="skip-link" href="#conteudo-principal">{t.skip}</a>
       <MatrixRain enabled={motion} />
-      <Nav t={t} lang={lang} onLang={setLang} active={active} progress={progress} onSearch={openPalette} />
+      <Nav t={t} lang={lang} onLang={setLang} active={active} filter={filter} progress={progress} onSearch={openPalette} />
       <main id="conteudo-principal">
         <Hero t={t} />
         <About t={t} />
         <Work t={t} />
         <Catalog t={t} lang={lang} filter={filter} onFilter={setFilter} query={query} onQuery={setQuery} />
+        <Simulators t={t} lang={lang} />
         <Ravens t={t} lang={lang} />
         <Podcast t={t} />
         <Contact t={t} />

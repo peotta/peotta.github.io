@@ -20,9 +20,9 @@ const unbGrad = {
 
 const certMeta = { pt: 'Certificação profissional', en: 'Professional certification', es: 'Certificación profesional' };
 
-export const CATEGORY_ORDER = ['labs', 'courses', 'disciplines', 'simulators'];
+export const CATEGORY_ORDER = ['labs', 'courses', 'disciplines'];
 
-export const resources = [
+const allItems = [
   {
     id: 'labs-80211',
     featured: true,
@@ -444,6 +444,12 @@ export const resources = [
     tags: ['TCP', 'UDP', 'Defesa de redes'],
   },
 ];
+
+// O catalogo mostra laboratorios, cursos e disciplinas; os simuladores ficam em secao propria.
+export const resources = allItems.filter((r) => !r.categories.includes('simulators'));
+export const simulators = allItems.filter((r) => r.categories.includes('simulators'));
+// Busca global (paleta de comandos) cobre tudo.
+export const searchable = allItems;
 
 export const profiles = [
   { id: 'email', icon: '✉', label: 'E-mail', value: 'peotta@gmail.com', href: 'mailto:peotta@gmail.com' },

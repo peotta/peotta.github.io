@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
-import { CATEGORY_ORDER, resources } from '../data.js';
+import { CATEGORY_ORDER, resources, searchable } from '../data.js';
 
 export const normalize = (s) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
-export function searchResources(query, lang) {
+function searchIn(list, query, lang) {
   const q = normalize(query.trim());
-  if (!q) return resources;
+  if (!q) return list;
   const terms = q.split(/\s+/);
-  return resources.filter((r) => {
+  return list.filter((r) => {
     const hay = normalize(
       [r.title[lang], r.text[lang], r.meta?.[lang] ?? '', r.code ?? '', ...(r.tags ?? [])].join(' '),
     );
@@ -16,7 +16,10 @@ export function searchResources(query, lang) {
   });
 }
 
-function ResourceCard({ r, lang, t }) {
+// Busca global (paleta de comandos): catalogo e simuladores.
+export const searchResources = (query, lang) => searchIn(searchable, query, lang);
+
+export function ResourceCard({ r, lang, t }) {
   const label = r.categories.map((c) => t.catalog.categories[c]);
   return (
     <article className={`resource-card${r.featured ? ' is-featured' : ''}`}>
@@ -61,7 +64,7 @@ export default function Catalog({ t, lang, filter, onFilter, query, onQuery }) {
   }, []);
 
   const visible = useMemo(() => {
-    const matched = searchResources(query, lang);
+    const matched = searchIn(resources, query, lang);
     return filter === 'all' ? matched : matched.filter((r) => r.categories.includes(filter));
   }, [filter, query, lang]);
 

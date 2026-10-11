@@ -9,7 +9,7 @@ export const strings = {
   pt: {
     description: 'Site acadêmico e profissional de Prof. Dr. Laerte Peotta de Melo, com atuação em cibersegurança, redes de computadores, crimes cibernéticos e forense digital.',
     skip: 'Pular para o conteúdo',
-    nav: { about: 'Sobre', work: 'Atuação', content: 'Conteúdos', ravens: 'RAVENS', podcast: 'Podcast', contact: 'Contato', menu: 'Abrir menu', close: 'Fechar menu', search: 'Buscar' },
+    nav: { about: 'Sobre', content: 'Conteúdos', classes: 'Disciplinas', simulators: 'Simuladores', podcast: 'Podcast', contact: 'Contato', menu: 'Abrir menu', close: 'Fechar menu', search: 'Buscar' },
     hero: {
       subtitle: 'Professor e pesquisador em segurança cibernética e redes de comunicação na Universidade de Brasília',
       text: 'Professor, pesquisador e profissional com atuação em <strong>Cibersegurança</strong>, <strong>Engenharia de Redes</strong>, <strong>Ciência da Computação</strong>, <strong>crimes cibernéticos</strong>, <strong>forense digital</strong> e <strong>Segurança do Sistema Financeiro</strong>. Mestre e Doutor em Engenharia Elétrica, articula ensino, pesquisa aplicada e produção de materiais acadêmicos e técnicos voltados à formação e ao desenvolvimento profissional.',
@@ -57,8 +57,12 @@ export const strings = {
       certificate: 'Certificado (PDF)',
       results: 'Resultado oficial',
     },
+    simulators: {
+      title: 'Simuladores de Rede e Protocolos',
+      lead: 'Ferramentas interativas para ver o funcionamento de protocolos e ataques: roteamento, DHCP, ICMP, BGP, MPLS, TCP e UDP.',
+    },
     catalog: {
-      title: 'Laboratórios, cursos e materiais',
+      title: 'Disciplinas, laboratórios e materiais de aula',
       lead: 'Filtre por categoria ou busque por tema, protocolo ou certificação.',
       searchPlaceholder: 'Buscar: wireshark, ospf, ccna, linux...',
       searchLabel: 'Buscar conteúdos',
@@ -101,7 +105,7 @@ export const strings = {
   en: {
     description: 'Academic and professional website of Prof. Dr. Laerte Peotta de Melo, focused on cybersecurity, computer networks, cybercrime, and digital forensics.',
     skip: 'Skip to content',
-    nav: { about: 'About', work: 'Expertise', content: 'Content', ravens: 'RAVENS', podcast: 'Podcast', contact: 'Contact', menu: 'Open menu', close: 'Close menu', search: 'Search' },
+    nav: { about: 'About', content: 'Content', classes: 'Classes', simulators: 'Simulators', podcast: 'Podcast', contact: 'Contact', menu: 'Open menu', close: 'Close menu', search: 'Search' },
     hero: {
       subtitle: 'Professor and researcher in cybersecurity and communication networks at the University of Brasília',
       text: 'Professor, researcher, and professional working in <strong>Cybersecurity</strong>, <strong>Network Engineering</strong>, <strong>Computer Science</strong>, <strong>cybercrime</strong>, <strong>digital forensics</strong>, and <strong>Financial System Security</strong>. Holding both M.Sc. and Ph.D. degrees in Electrical Engineering, he connects teaching, applied research, and the development of academic and technical materials aimed at education and professional growth.',
@@ -149,8 +153,12 @@ export const strings = {
       certificate: 'Certificate (PDF)',
       results: 'Official results',
     },
+    simulators: {
+      title: 'Network and Protocol Simulators',
+      lead: 'Interactive tools to see how protocols and attacks work: routing, DHCP, ICMP, BGP, MPLS, TCP, and UDP.',
+    },
     catalog: {
-      title: 'Labs, courses, and materials',
+      title: 'Classes, labs, and course materials',
       lead: 'Filter by category or search by topic, protocol, or certification.',
       searchPlaceholder: 'Search: wireshark, ospf, ccna, linux...',
       searchLabel: 'Search content',
@@ -193,7 +201,7 @@ export const strings = {
   es: {
     description: 'Sitio académico y profesional del Prof. Dr. Laerte Peotta de Melo, con actuación en ciberseguridad, redes de computadoras, ciberdelitos y forense digital.',
     skip: 'Saltar al contenido',
-    nav: { about: 'Sobre', work: 'Actuación', content: 'Contenidos', ravens: 'RAVENS', podcast: 'Podcast', contact: 'Contacto', menu: 'Abrir menú', close: 'Cerrar menú', search: 'Buscar' },
+    nav: { about: 'Sobre', content: 'Contenidos', classes: 'Asignaturas', simulators: 'Simuladores', podcast: 'Podcast', contact: 'Contacto', menu: 'Abrir menú', close: 'Cerrar menú', search: 'Buscar' },
     hero: {
       subtitle: 'Profesor e investigador en ciberseguridad y redes de comunicación en la Universidad de Brasilia',
       text: 'Profesor, investigador y profesional con actuación en <strong>Ciberseguridad</strong>, <strong>Ingeniería de Redes</strong>, <strong>Ciencias de la Computación</strong>, <strong>ciberdelitos</strong>, <strong>forense digital</strong> y <strong>Seguridad del Sistema Financiero</strong>. Magíster y Doctor en Ingeniería Eléctrica, articula docencia, investigación aplicada y producción de materiales académicos y técnicos orientados a la formación y al desarrollo profesional.',
@@ -241,8 +249,12 @@ export const strings = {
       certificate: 'Certificado (PDF)',
       results: 'Resultado oficial',
     },
+    simulators: {
+      title: 'Simuladores de Redes y Protocolos',
+      lead: 'Herramientas interactivas para ver cómo funcionan protocolos y ataques: enrutamiento, DHCP, ICMP, BGP, MPLS, TCP y UDP.',
+    },
     catalog: {
-      title: 'Laboratorios, cursos y materiales',
+      title: 'Asignaturas, laboratorios y materiales de clase',
       lead: 'Filtre por categoría o busque por tema, protocolo o certificación.',
       searchPlaceholder: 'Buscar: wireshark, ospf, ccna, linux...',
       searchLabel: 'Buscar contenidos',

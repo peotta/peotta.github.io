@@ -3,9 +3,9 @@ import { LANGS } from '../i18n.js';
 
 export const NAV_ITEMS = [
   { id: 'sobre', key: 'about' },
-  { id: 'atuacao', key: 'work' },
   { id: 'conteudos', key: 'content' },
-  { id: 'ravens', key: 'ravens' },
+  { id: 'disciplinas', key: 'classes', filter: 'disciplines' },
+  { id: 'simuladores', key: 'simulators' },
   { id: 'podcast', key: 'podcast' },
   { id: 'contato', key: 'contact' },
 ];
@@ -44,7 +44,17 @@ function Flag({ code }) {
   );
 }
 
-export default function Nav({ t, lang, onLang, active, progress, onSearch }) {
+// Links de filtro (#disciplinas, #simuladores) levam ao catalogo ja filtrado; nao sao secoes da pagina.
+const FILTERED = NAV_ITEMS.filter((n) => n.filter).map((n) => n.filter);
+export const SPY_IDS = NAV_ITEMS.filter((n) => !n.filter).map((n) => n.id);
+
+function isActive(item, active, filter) {
+  if (active !== 'conteudos') return !item.filter && active === item.id;
+  if (item.filter) return filter === item.filter;
+  return item.id === 'conteudos' && !FILTERED.includes(filter);
+}
+
+export default function Nav({ t, lang, onLang, active, filter, progress, onSearch }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -80,8 +90,8 @@ export default function Nav({ t, lang, onLang, active, progress, onSearch }) {
             <a
               key={item.id}
               href={`#${item.id}`}
-              className={active === item.id ? 'is-active' : undefined}
-              aria-current={active === item.id ? 'true' : undefined}
+              className={isActive(item, active, filter) ? 'is-active' : undefined}
+              aria-current={isActive(item, active, filter) ? 'true' : undefined}
               onClick={() => setOpen(false)}
             >
               {t.nav[item.key]}
