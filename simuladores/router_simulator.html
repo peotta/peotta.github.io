@@ -212,6 +212,42 @@
     .metro{gap:2px;}
     .topbar-row h1{font-size:20px;}
   }
+  .inspector .insp-kicker{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--amber);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;}
+
+  /* Chips de cenário (padrão do simulador de ICMP) */
+  .scen-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:0 0 12px;}
+  .scen-group{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:600;margin:0 2px 0 8px;}
+  .scen-group:first-child{margin-left:0;}
+  button.chip{flex:none;font-size:13px;padding:5px 12px;border-radius:20px;font-weight:500;}
+  button.chip.active{border-color:var(--amber);color:var(--amber);background:rgba(242,166,90,0.10);}
+
+  /* Aba Cenário */
+  .scen-body{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:28px;}
+  .scen-body h4{font-size:13px;margin:14px 0 4px;color:var(--amber);text-transform:uppercase;letter-spacing:0.05em;}
+  .scen-body .sc-kicker{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--amber);letter-spacing:0.05em;text-transform:uppercase;}
+  .scen-body .sc-title{margin:2px 0 6px;font-size:17px;}
+  .scen-body .sc-cmd code{color:var(--teal);}
+  .scen-body .sc-msgs{margin:4px 0 8px;}
+  .sc-side{border-left:1px solid var(--border-soft);padding-left:24px;}
+  .sc-side h4:first-of-type{margin-top:6px;}
+  .sc-gdoc{font-size:13.5px;}
+  .sc-list{list-style:none;padding-left:0;margin:0 0 6px;}
+  .sc-list li{font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.45;}
+  button.sc-link{flex:none;font-size:12.5px;padding:2px 10px;border-radius:20px;font-weight:600;margin-right:4px;}
+  button.sc-link.active{border-color:var(--amber);color:var(--amber);background:rgba(242,166,90,0.10);}
+  @media (max-width:960px){
+    .scen-body{grid-template-columns:1fr;}
+    .sc-side{border-left:0;padding-left:0;border-top:1px solid var(--border-soft);padding-top:8px;}
+  }
+
+  /* Ajuda dos campos (ⓘ) */
+  .field-help{position:fixed;z-index:50;display:none;max-width:340px;background:var(--panel-2);border:1px solid var(--teal);border-radius:10px;padding:10px 13px;box-shadow:0 12px 30px -10px rgba(0,0,0,0.6);font-size:13.5px;line-height:1.5;color:var(--muted);pointer-events:none;}
+  .field-help .fh-title{color:var(--ink);font-weight:700;margin-bottom:4px;}
+  .field-help p{margin:0 0 6px;}
+  .field-help p:last-child{margin-bottom:0;}
+  .field-help b{color:var(--ink);font-weight:600;}
+  .info{display:inline-block;color:var(--teal);font-size:12px;cursor:help;font-weight:400;}
+  .lbl{display:inline-flex;align-items:center;gap:5px;}
 </style>
 </head>
 
@@ -236,6 +272,7 @@
         </nav>
       </div>
     </div>
+    <div class="scen-row" id="scenRow" aria-label="Cenários prontos"></div>
     <div class="metro" id="metro"></div>
   </header>
 
@@ -300,13 +337,17 @@
 
   <section class="panel tabs-panel">
     <div class="tab-bar" role="tablist">
-      <button class="tab-btn active" data-tab="lsdb" type="button" role="tab" aria-selected="true">Vetores / LSDB</button>
+      <button class="tab-btn active" data-tab="scen" type="button" role="tab" aria-selected="true">Cenário</button>
+      <button class="tab-btn" data-tab="lsdb" type="button" role="tab" aria-selected="false">Vetores / LSDB</button>
       <button class="tab-btn" data-tab="route" type="button" role="tab" aria-selected="false">Tabela de roteamento</button>
       <button class="tab-btn" data-tab="exp" type="button" role="tab" aria-selected="false">Experimento</button>
       <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência</button>
       <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
     </div>
-    <div class="tab-content active" data-tab-content="lsdb">
+    <div class="tab-content active" data-tab-content="scen">
+      <div class="tab-scroll"><article class="ref-body scen-body" id="scenBody" aria-live="polite"></article></div>
+    </div>
+    <div class="tab-content" data-tab-content="lsdb">
       <h2 id="lsdbTitle" class="tab-inner-title">Base de dados de estado de enlace (LSDB): R1</h2>
       <div class="tab-scroll">
         <table>
@@ -346,7 +387,7 @@
             <li><b>Métrica:</b> número de saltos. O valor 16 significa inalcançável, o que limita a rede a 15 saltos.</li>
             <li><b>Atualizações:</b> a cada 30 s, cada roteador envia sua tabela (vetor de distância) aos vizinhos, por multicast 224.0.0.9 na porta UDP 520.</li>
             <li><b>Bellman-Ford:</b> o roteador soma 1 à métrica anunciada pelo vizinho e adota a rota se ela for melhor ou se vier do próximo salto atual.</li>
-            <li><b>Split horizon com poison reverse:</b> a rota volta ao vizinho de quem foi aprendida com métrica 16. Isso evita loops e a contagem até o infinito.</li>
+            <li><b>Split horizon com poison reverse:</b> a rota volta ao vizinho de quem foi aprendida com métrica 16. Isso evita o laço entre dois vizinhos; em laços de três ou mais roteadores, a contagem ao infinito ainda acontece e só termina pelo limite de 16.</li>
             <li><b>Triggered update:</b> depois de uma falha, o roteador anuncia a mudança imediatamente, sem esperar os 30 s.</li>
           </ul>
           <h3>Comparação</h3>
@@ -373,7 +414,7 @@
             <li><b>OSPF, área única:</b> avance até a convergência e anote o caminho de PC-A a PC-B. Existe caminho com menos saltos? Por que o OSPF não o escolheu?</li>
             <li>Aumente o custo do enlace <b>R2 / R3</b> para 50 e simule a comunicação de novo. Quais roteadores originam novos LSAs, e qual é o novo caminho?</li>
             <li>Troque para <b>RIPv2</b>, converja e compare o caminho com o do OSPF. Altere o custo de um enlace: o que muda?</li>
-            <li>No RIPv2, derrube o enlace <b>R2 / R3</b> e conte as rodadas até reconvergir. Desmarque o split horizon, derrube <b>R5 / R6</b> e explique a diferença (contagem ao infinito).</li>
+            <li>No RIPv2, derrube o enlace <b>R2 / R3</b> e conte as rodadas até reconvergir (o destino continua alcançável). Depois isole o PC-B derrubando <b>R5 / R6</b> e <b>R3 / R6</b>, com e sem split horizon. Por que a contagem ao infinito acontece mesmo com split horizon nesta topologia?</li>
             <li>Ative o modo <b>multi-área</b> e identifique os ABRs. Por que toda área precisa se ligar à área 0?</li>
             <li><b>Segurança:</b> um host na rede do PC-A passa a enviar anúncios OSPF falsos. Que configurações impediriam a injeção de rotas?</li>
           </ol>
@@ -870,6 +911,7 @@
     btnAdvance.disabled = busy || currentStep>=4;
     btnAdvance.textContent = currentStep>=4 ? 'Simulação completa' : 'Avançar fase';
     btnComm.disabled = busy || currentStep<3;
+    renderScenarioChips();
   }
 
   // ---------- Tables ----------
@@ -1285,7 +1327,7 @@
     configureProtocolUI();
     renderAreaBackgrounds();
     log('Simulação reiniciada em modo '+(protocol==='ospf'?('OSPF, '+(multiAreaActive()?'multi-área':'área única')):'RIPv2')+'. Todos os enlaces estão ativos, nenhuma rota aprendida ainda.','sys');
-    render(); renderInspector(); renderLeftPanel(rootRouter); renderRoutingTable(); updatePhaseUI(); renderExplain();
+    render(); renderInspector(); renderLeftPanel(rootRouter); renderRoutingTable(); updatePhaseUI(); renderExplain(); renderScenarioChips(); renderScenarioTab();
   }
 
   // ---------- Aba Experimento: texto gerado a partir da sessão ----------
@@ -1327,12 +1369,12 @@
       if(e.step===1) return '<b>Hello</b>: os roteadores trocaram Hello em '+plural(e.links,'enlace ativo','enlaces ativos')+' e chegaram ao estado <b>2-Way</b> com cada vizinho.';
       if(e.step===2) return '<b>Adjacência</b>: troca de DBD, LSR, LSU e LSAck; '+plural(e.links,'adjacência chegou','adjacências chegaram')+' a <b>Full</b>.';
       if(e.step===3) return '<b>Inundação</b>: cada um dos '+e.routers+' roteadores originou seu Router-LSA (enlaces e custos), inundado por toda a rede. Todas as LSDBs ficaram idênticas.';
-      return '<b>SPF</b>: Dijkstra com raiz em '+e.root+'. '+e.table+(e.hp?' Caminho de '+hosts[0].id+' a '+hosts[1].id+': '+e.hp+'.':'');
+      return '<b>SPF</b>: Dijkstra com raiz em '+e.root+'; a tabela resultante está na aba Tabela de roteamento.'+(e.hp?' Caminho de '+hosts[0].id+' a '+hosts[1].id+': '+e.hp+'.':'');
     }
     if(e.step===1) return '<b>Vetores iniciais</b>: cada roteador conhece só a si mesmo, com métrica 0.';
     if(e.step===2) return '<b>1ª troca</b>: cada roteador enviou seu vetor de distância aos vizinhos e aprendeu os destinos a 1 salto.';
     if(e.step===3) return '<b>Convergência</b>: '+plural(e.rounds,'rodada adicional','rodadas adicionais')+' de Response até nenhuma tabela mudar (Bellman-Ford distribuído).';
-    return '<b>Tabelas finais</b>: '+e.table+(e.hp?' Caminho de '+hosts[0].id+' a '+hosts[1].id+': '+e.hp+'.':'');
+    return '<b>Tabelas finais</b>: as rotas estáveis estão na aba Tabela de roteamento.'+(e.hp?' Caminho de '+hosts[0].id+' a '+hosts[1].id+': '+e.hp+'.':'');
   }
   function explainItem(e){
     if(e.type==='phase') return explainPhase(e);
@@ -1341,7 +1383,7 @@
       if(e.ignored) return t+'O RIP ignora custos (só conta saltos): nada mudou nas tabelas.';
       if(e.early) return t+'Os protocolos ainda não tinham convergido; a mudança vale para as próximas fases.';
       if(e.proto==='ospf') t+=e.lsas+' originaram novos Router-LSAs (número de sequência maior), inundados pela rede, e o SPF foi recalculado.';
-      else t+='Atualização disparada (triggered update) e '+plural(e.rounds,'rodada','rodadas')+' de Response até reconvergir.'+(!e.sh && !e.up && e.rounds>=8?' O número alto de rodadas é a <b>contagem ao infinito</b>: sem split horizon, os vizinhos reanunciam uns aos outros a rota perdida, somando 1 a cada volta, até a métrica chegar a 16.':'');
+      else t+='Atualização disparada (triggered update) e '+plural(e.rounds,'rodada','rodadas')+' de Response até reconvergir.'+(!e.up && e.rounds>=8?(e.sh?' O número alto de rodadas é a <b>contagem ao infinito</b>, mesmo com split horizon: ele só evita o laço entre dois vizinhos, e esta topologia tem laços de três ou mais roteadores. A contagem termina quando a métrica chega a 16.':' O número alto de rodadas é a <b>contagem ao infinito</b>: sem split horizon, os vizinhos reanunciam uns aos outros a rota perdida, somando 1 a cada volta, até a métrica chegar a 16.'):'');
       return t+' Caminho de '+hosts[0].id+' a '+hosts[1].id+' agora: '+e.hp+'.';
     }
     if(e.type==='comm') return '<b>Comunicação</b> de '+e.src+' para '+e.dst+': '+(e.ok?'pacote entregue por '+e.hp+'.':'não há caminho; a rede está particionada.')+(e.proto==='rip'&&e.ok?' Cada roteador decidiu só o próximo salto, sem conhecer o caminho completo.':'');
@@ -1364,7 +1406,6 @@
   function explainResults(){
     if(!journal.length) return '<p>Nada executado ainda. Clique em <b>Avançar fase</b> para acompanhar a convergência; depois teste a comunicação entre '+hosts[0].id+' e '+hosts[1].id+'.</p>';
     let h='<ol>'+journal.map(e=>'<li>'+explainItem(e)+'</li>').join('')+'</ol>';
-    h+='<p>Fase atual: <b>'+stopLabels[Math.min(currentStep,4)]+'</b>.'+(currentStep>=4?' '+tableText():'')+'</p>';
     return h;
   }
   function explainConcepts(){
@@ -1386,7 +1427,7 @@
       if(phase(3)) items.push('A convergência é <b>Bellman-Ford distribuído</b>: as notícias andam um salto por rodada, por isso redes maiores demoram mais.');
       if(phase(4)) items.push('A métrica é o <b>número de saltos</b>: um enlace lento conta o mesmo que um rápido. Com 16 saltos o destino é inalcançável, o que limita o tamanho da rede.');
       if(journal.some(e=>e.type==='topo' && e.ignored)) items.push('Alterar o custo não muda nada no RIP: ele não usa custo de enlace.');
-      if(journal.some(e=>e.type==='topo' && !e.early && !e.ignored && !e.up)) items.push('Numa falha, o <b>split horizon com poison reverse</b> impede que um vizinho devolva uma rota que aprendeu de você, evitando a <b>contagem ao infinito</b>. Compare quantas rodadas a reconvergência leva com e sem ele.');
+      if(journal.some(e=>e.type==='topo' && !e.early && !e.ignored && !e.up)) items.push('Numa falha, o <b>split horizon com poison reverse</b> impede que um vizinho devolva uma rota que aprendeu de você. Isso evita o laço entre dois vizinhos, mas não laços maiores: quando um destino fica isolado numa topologia com ciclos, a <b>contagem ao infinito</b> acontece mesmo assim e termina pelo limite de 16.');
     }
     if(phase(1) || phase(2)) items.push('<b>Segurança:</b> roteadores aceitam rotas de quem fala o protocolo no enlace. Um atacante pode injetar rotas falsas e desviar tráfego. Use autenticação ('+(s.proto==='ospf'?'OSPF com HMAC-SHA, RFC 5709':'RIPv2 com MD5')+') e interfaces passivas onde não há roteadores vizinhos.');
     if(!items.length) items.push('Avance as fases para ver os conceitos que aparecem nesta sessão.');
@@ -1399,7 +1440,7 @@
     if(currentStep>=4 && !has('comm')) next.push('Clique em <b>Simular PC-A → PC-B</b> e veja o caminho de '+hosts[0].id+' a '+hosts[1].id+'.');
     if(currentStep>=4 && !journal.some(e=>e.type==='topo' && !e.up && e.reason!=='cost')) next.push('Clique em um enlace do caminho atual e use <b>Derrubar enlace</b>: veja a reconvergência e o novo caminho.');
     if(currentStep>=4 && s.proto==='ospf' && !journal.some(e=>e.type==='topo' && e.reason==='cost')) next.push('Aumente o custo de um enlace do caminho para 50 e veja o OSPF desviar o tráfego.');
-    if(s.proto==='rip' && s.sh) next.push('Desmarque o <b>split horizon</b>, derrube um enlace e compare o número de rodadas até reconvergir.');
+    if(s.proto==='rip' && s.sh) next.push('Isole o PC-B (derrube <b>R5 / R6</b> e <b>R3 / R6</b>) e conte as rodadas; repita com o split horizon desmarcado e compare.');
     next.push(s.proto==='ospf'?'Troque para <b>RIPv2</b> e compare: o caminho pode mudar, porque o RIP conta saltos e ignora custos.':'Troque para <b>OSPF</b> e compare o caminho escolhido pelo custo com o escolhido por saltos.');
     if(s.proto==='ospf' && !s.multi) next.push('Experimente o modo <b>multi-área</b> e identifique os ABRs.');
     return '<ul>'+next.slice(0,4).map(t=>'<li>'+t+'</li>').join('')+'</ul>';
@@ -1422,6 +1463,207 @@
     body.innerHTML=h;
   }
 
+  // ---------- Cenários prontos ----------
+  const SCENARIOS=[
+    {group:'OSPF',id:'ospf',label:'Convergência OSPF',cfg:{proto:'ospf',area:'single',sh:true},
+      what:'<p>Clique em <b>Avançar fase</b> quatro vezes: Hello (2-Way), Adjacência Full, Inundação de LSA e SPF. Depois clique em <b>Simular PC-A → PC-B</b>.</p><p>O caminho escolhido é R1 → R2 → R3 → R6, com custo total 30.</p>'},
+    {group:'OSPF',id:'cost',label:'Custo e melhor caminho',cfg:{proto:'ospf',area:'single',sh:true},
+      what:'<p>Converja e simule a comunicação. Depois clique no enlace <b>R2 / R3</b>, mude o custo para 50 e clique em <b>Aplicar custo</b>.</p><p>Simule de novo: o tráfego passa a ir por R2 → R5 → R6.</p>'},
+    {group:'OSPF',id:'ospffail',label:'Falha de enlace',cfg:{proto:'ospf',area:'single',sh:true},
+      what:'<p>Converja e simule a comunicação. Depois clique no enlace <b>R2 / R3</b> e use <b>Derrubar enlace</b>.</p><p>Só R2 e R3 originam novos LSAs; todos recalculam o SPF e a comunicação segue por outro caminho.</p>'},
+    {group:'OSPF',id:'multi',label:'OSPF multi-área',cfg:{proto:'ospf',area:'multi',sh:true},
+      what:'<p>Nove roteadores em três áreas. Converja e simule a comunicação de PC-A (área 1) até PC-B (área 2).</p><p>O caminho atravessa o backbone pelos ABRs.</p>'},
+    {group:'RIPv2',id:'rip',label:'Convergência RIPv2',cfg:{proto:'rip',area:'single',sh:true},
+      what:'<p>Avance as fases: vetores iniciais, 1ª troca e as rodadas até as tabelas estabilizarem. Depois simule a comunicação.</p><p>O caminho é R1 → R2 → R3 → R6, com 3 saltos.</p>'},
+    {group:'RIPv2',id:'ripcost',label:'Saltos, não custo',cfg:{proto:'rip',area:'single',sh:true},
+      what:'<p>Converja e mude o custo de um enlace do caminho, por exemplo <b>R2 / R3</b> para 50.</p><p>Nada muda nas tabelas: o RIP só conta saltos.</p>'},
+    {group:'RIPv2',id:'infinity',label:'Contagem ao infinito',cfg:{proto:'rip',area:'single',sh:false},
+      what:'<p>O split horizon está <b>desligado</b>. Converja e derrube os enlaces <b>R5 / R6</b> e <b>R3 / R6</b>: o PC-B fica isolado.</p><p>Conte no log as rodadas até a rede perceber. Depois repita no cenário Convergência RIPv2, com split horizon: a contagem acontece de novo, porque esta topologia tem laços de três ou mais roteadores.</p>'}
+  ];
+  let activeScenario=null;
+  function renderScenarioChips(){
+    const row=document.getElementById('scenRow');
+    row.innerHTML=''; let g=null;
+    SCENARIOS.forEach(s=>{
+      if(s.group!==g){ g=s.group; const sp=document.createElement('span'); sp.className='scen-group'; sp.textContent=g; row.appendChild(sp); }
+      const b=document.createElement('button'); b.type='button'; b.className='chip'+(activeScenario===s.id?' active':''); b.textContent=s.label; b.disabled=busy;
+      b.addEventListener('click',()=>applyScenario(s)); row.appendChild(b);
+    });
+  }
+  function applyScenario(s){
+    if(busy) return;
+    protocol=s.cfg.proto; protocolSelect.value=protocol;
+    areaMode=s.cfg.area; areaModeSelect.value=areaMode;
+    splitHorizonEnabled=s.cfg.sh; splitHorizonCheck.checked=splitHorizonEnabled;
+    activeScenario=s.id;
+    resetSim();
+    log('Cenário carregado: <b>'+s.label+'</b>.','sys');
+    activateTab('scen');
+  }
+  function clearScenario(){ if(activeScenario){ activeScenario=null; renderScenarioChips(); renderScenarioTab(); renderInspector(); } }
+  function activateTab(name){
+    document.querySelectorAll('.tab-btn').forEach(b=>{ const on=b.dataset.tab===name; b.classList.toggle('active',on); b.setAttribute('aria-selected',on); });
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.toggle('active',c.dataset.tabContent===name));
+    if(name==='exp') renderExplain();
+  }
+
+  const GROUP_DOC={
+    'OSPF':'Estado de enlace: cada roteador conhece o mapa inteiro da rede e calcula sozinho o caminho de menor custo, com Dijkstra.',
+    'RIPv2':'Vetor de distância: cada roteador só conhece o que os vizinhos anunciam e escolhe o caminho com menos saltos.'
+  };
+  const SCEN_DOC={
+    ospf:{short:'Adjacências, inundação de LSAs e cálculo do SPF.',
+      concept:'O <b>OSPF</b> (RFC 2328) é um protocolo de <b>estado de enlace</b>. Os roteadores formam adjacências com Hello, sincronizam um banco de dados com a descrição de todos os enlaces (<b>LSDB</b>) e, com esse mapa completo, cada um calcula sozinho a árvore de menor custo (<b>SPF</b>, algoritmo de Dijkstra).',
+      observe:['No trilho de fases: Hello / 2-Way, Adjacência Full, Inundação de LSA e SPF.','Na aba Vetores / LSDB: a mesma LSDB em todos os roteadores.','Na aba Tabela de roteamento: o custo e o próximo salto de cada destino a partir da raiz.'],
+      msgs:[['Hello','descobre vizinhos e confirma o 2-Way','todos os roteadores'],['DBD, LSR, LSU e LSAck','sincronizam a LSDB até Full','cada par de vizinhos'],['Router-LSA','descreve os enlaces e custos do roteador','cada roteador']],
+      why:'Converge rápido e sem laços, porque todos calculam sobre o mesmo mapa. O custo, ligado à banda, permite preferir enlaces rápidos.'},
+    cost:{short:'O OSPF escolhe o menor custo total, não o menor número de saltos.',
+      concept:'O OSPF escolhe o caminho de <b>menor custo total</b>, não o de menos saltos. O custo de cada interface costuma ser inversamente proporcional à banda. Ao mudar um custo, os roteadores do enlace originam novos LSAs e todos recalculam o SPF.',
+      observe:['Antes: R1 → R2 → R3 → R6, custo 30.','Depois do custo 50 em R2 / R3: R1 → R2 → R5 → R6, custo 45.','No log: novos LSAs de R2 e R3, com número de sequência maior.'],
+      cols:['Caminho','Custo total','Situação'],
+      msgs:[['R1 → R2 → R3 → R6','30','antes da mudança'],['R1 → R2 → R5 → R6','45','com custo 50 em R2 / R3']],
+      why:'É assim que o administrador faz engenharia de tráfego com o OSPF: ajusta custos para preferir ou evitar enlaces.'},
+    ospffail:{short:'Só os roteadores do enlace originam LSAs; todos recalculam.',
+      concept:'Quando um enlace cai, só os dois roteadores ligados a ele percebem. Eles originam novos <b>Router-LSAs</b> com número de sequência maior, que invalidam os anteriores, e a inundação leva a mudança a todos. Cada roteador recalcula o SPF sobre a LSDB atualizada.',
+      observe:['No log: os LSAs de R2 e R3 com sequência nova e a reconvergência.','Na aba Tabela de roteamento: destinos que mudam de próximo salto.','Simule a comunicação: o pacote segue pelo caminho alternativo.'],
+      msgs:[['Router-LSA','nova sequência, sem o enlace caído','R2 e R3'],['LSAck','confirma o recebimento de cada LSA','vizinhos']],
+      why:'A convergência rápida limita o tempo em que o tráfego se perde. Em produção, o BFD detecta a falha em milissegundos.'},
+    multi:{short:'Três áreas ligadas ao backbone pelos ABRs.',
+      concept:'Em redes grandes, o OSPF divide os roteadores em <b>áreas</b>. Toda área se liga ao <b>backbone</b> (área 0) por um <b>ABR</b> (Area Border Router), que participa das duas. Isso limita o tamanho da LSDB e o alcance das inundações.',
+      observe:['No desenho: as áreas 1, 0 e 2 e os ABRs R2, R3, R8 e R9.','Simule a comunicação: R1 → R2 → R4 → R8 → R7, atravessando o backbone.','Simplificação do simulador: o SPF roda sobre a topologia inteira; no OSPF real, os ABRs resumem as outras áreas em LSAs tipo 3.'],
+      cols:['Papel','Função','Roteadores'],
+      msgs:[['Interno','fica em uma só área','R1, R4, R5, R6 e R7'],['ABR','liga uma área ao backbone','R2, R3, R8 e R9'],['Backbone','área 0, por onde passa o tráfego entre áreas','R4, R5, R6 e os ABRs']],
+      why:'A hierarquia permite ao OSPF escalar: uma falha dentro de uma área não obriga as outras a recalcular tudo.'},
+    rip:{short:'Vetores de distância trocados até as tabelas estabilizarem.',
+      concept:'O <b>RIPv2</b> (RFC 2453) é um protocolo de <b>vetor de distância</b>. Cada roteador envia aos vizinhos a lista de destinos que conhece e a distância até cada um, em <b>saltos</b>. Quem recebe soma 1 e guarda o menor valor (Bellman-Ford). Ninguém conhece o mapa completo da rede.',
+      observe:['No trilho de fases: vetores iniciais, 1ª troca e as rodadas até estabilizar.','Na aba Vetores / LSDB: o vetor que cada roteador anuncia a cada vizinho.','Na aba Tabela de roteamento: a métrica em saltos e o próximo salto.'],
+      msgs:[['Response','vetor de distância (UDP 520, 224.0.0.9)','cada roteador, a cada rodada']],
+      why:'É simples e leve, mas lento para convergir e limitado a 15 saltos. Ainda aparece em redes pequenas e em equipamentos antigos.'},
+    ripcost:{short:'O RIP ignora o custo dos enlaces: só conta saltos.',
+      concept:'A métrica do RIP é apenas o <b>número de saltos</b>. Um enlace lento e um rápido valem o mesmo: 1 salto. Por isso mudar o custo de um enlace não altera nenhuma rota.',
+      observe:['No log: o RIP ignora a mudança de custo.','A tabela de roteamento continua igual.','Compare com o cenário Custo e melhor caminho, no OSPF.'],
+      cols:['Protocolo','Métrica','Efeito do custo 50 em R2 / R3'],
+      msgs:[['OSPF','soma dos custos','desvia por R5 (custo 45)'],['RIPv2','número de saltos','nada muda (3 saltos)']],
+      why:'Contar saltos pode levar o tráfego por enlaces lentos. É uma das razões para o RIP ter dado lugar ao OSPF em redes maiores.'},
+    infinity:{short:'A rota perdida é reanunciada em laço até a métrica 16.',
+      concept:'Sem <b>split horizon</b>, um roteador anuncia de volta ao vizinho a rota que aprendeu dele. Quando um destino fica inalcançável, os vizinhos passam a acreditar um no outro e aumentam a métrica de 1 em 1, rodada após rodada, até chegar a 16 (infinito): é a <b>contagem ao infinito</b>. O split horizon evita esse laço entre dois vizinhos, mas não em ciclos de três ou mais roteadores.',
+      observe:['No log: o número de rodadas até reconvergir depois de isolar o PC-B.','Na aba Vetores / LSDB: vizinhos anunciando de volta a rota perdida.','Repita no cenário Convergência RIPv2, com split horizon: o número de rodadas é o mesmo, porque os laços desta rede têm três ou mais roteadores.'],
+      msgs:[['Response','reanuncia a rota perdida com métrica + 1','vizinhos, rodada após rodada'],['Métrica 16','destino inalcançável','ao fim da contagem']],
+      why:'Enquanto a contagem não termina, os pacotes ficam em laço e se perdem. Split horizon, poison reverse e triggered updates reduzem o problema, mas não o eliminam em topologias com ciclos; o limite de 16 garante que ele termina. Essa é uma das razões para protocolos de estado de enlace, como o OSPF, que não têm contagem ao infinito.'}
+  };
+  const SC={list:()=>SCENARIOS,group:x=>x.group,active:()=>activeScenario,apply:x=>applyScenario(x),
+    setup:x=>'Configuração do cenário: <code>'+(x.cfg.proto==='ospf'?'OSPF, '+(x.cfg.area==='multi'?'multi-área':'área única'):'RIPv2, split horizon '+(x.cfg.sh?'ligado':'desligado'))+'</code>',
+    busy:()=>busy};
+
+  // ---------- Aba Cenário (padrão do simulador de ICMP) ----------
+  // Adaptador por simulador: SC.list(), SC.group(x), SC.active(), SC.apply(x), SC.setup(x), SC.busy()
+  function scEsc(t){ return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function renderScenarioTab(){
+    const body=document.getElementById('scenBody');
+    if(!body) return;
+    const list=SC.list(), s=list.find(x=>x.id===SC.active());
+    let left;
+    if(!s){
+      left='<h3>Nenhum cenário selecionado</h3><p>A configuração foi alterada manualmente. Escolha um cenário à direita ou no topo para carregar a configuração pronta, ou continue explorando: a aba <b>Experimento</b> descreve cada execução.</p>';
+    } else {
+      const d=SCEN_DOC[s.id];
+      left='<div class="sc-kicker">'+scEsc(SC.group(s))+'</div><h3 class="sc-title">'+scEsc(s.label)+'</h3>'+
+        '<p class="sc-cmd">'+SC.setup(s)+'</p>'+
+        '<h4>O que é</h4><p>'+d.concept+'</p>'+
+        '<h4>Neste cenário</h4>'+s.what+
+        '<h4>O que observar</h4><ul>'+d.observe.map(x=>'<li>'+x+'</li>').join('')+'</ul>'+
+        '<h4>'+(d.msgsTitle||'Mensagens envolvidas')+'</h4><table class="sc-msgs"><thead><tr><th>'+(d.cols?d.cols[0]:'Mensagem')+'</th><th>'+(d.cols?d.cols[1]:'Função')+'</th><th>'+(d.cols?d.cols[2]:'Quem envia')+'</th></tr></thead><tbody>'+
+          d.msgs.map(m=>'<tr><td>'+m[0]+'</td><td>'+m[1]+'</td><td class="meaning">'+m[2]+'</td></tr>').join('')+'</tbody></table>'+
+        '<h4>Por que importa</h4><p>'+d.why+'</p>';
+    }
+    let right='<h3>Tipos de cenário</h3>', group=null;
+    list.forEach(x=>{
+      const g=SC.group(x);
+      if(g!==group){
+        if(group!==null) right+='</ul>';
+        group=g;
+        right+='<h4>'+scEsc(g)+'</h4><p class="sc-gdoc">'+GROUP_DOC[g]+'</p><ul class="sc-list">';
+      }
+      right+='<li><button type="button" class="sc-link'+(s&&s.id===x.id?' active':'')+'" data-scen="'+x.id+'"'+(SC.busy()?' disabled':'')+'>'+scEsc(x.label)+'</button> '+SCEN_DOC[x.id].short+'</li>';
+    });
+    right+='</ul>';
+    body.innerHTML='<div class="sc-main">'+left+'</div><aside class="sc-side">'+right+'</aside>';
+    body.querySelectorAll('.sc-link').forEach(b=>b.addEventListener('click',()=>SC.apply(list.find(x=>x.id===b.dataset.scen))));
+  }
+
+  // ---------- Explicação de cada campo de configuração (ⓘ) ----------
+  const helpBox=document.createElement('div');
+  helpBox.className='field-help'; helpBox.id='fieldHelp'; helpBox.setAttribute('role','tooltip');
+  document.body.appendChild(helpBox);
+  let helpId=null;
+  function showHelp(id){
+    const h=HELP[id], ctl=document.getElementById(id), lab=ctl.closest('label');
+    helpId=id;
+    helpBox.innerHTML='<div class="fh-title">'+h.t+'</div>'+h.p.map(x=>'<p>'+x+'</p>').join('');
+    helpBox.style.display='block';
+    const r=(lab||ctl).getBoundingClientRect(), bw=helpBox.offsetWidth, bh=helpBox.offsetHeight;
+    if(r.bottom<0 || r.top>window.innerHeight){ hideHelp(); return; }
+    const left=Math.max(8,Math.min(r.left,window.innerWidth-bw-8));
+    let top=r.bottom+6;
+    if(top+bh>window.innerHeight-8) top=Math.max(8,r.top-bh-6);
+    helpBox.style.left=left+'px'; helpBox.style.top=top+'px';
+  }
+  function hideHelp(){ helpBox.style.display='none'; helpId=null; }
+  function attachHelp(){
+    const side=document.querySelector('.side-col');
+    const follow=()=>{ if(helpId) showHelp(helpId); };
+    if(side) side.addEventListener('scroll',follow,{passive:true});
+    window.addEventListener('scroll',follow,{passive:true});
+    Object.keys(HELP).forEach(id=>{
+      const ctl=document.getElementById(id);
+      if(!ctl) return;
+      const lab=ctl.closest('label');
+      if(lab){
+        const icon=document.createElement('span');
+        icon.className='info'; icon.setAttribute('aria-hidden','true'); icon.textContent=' ⓘ';
+        const head=lab.querySelector('.field-head, b');
+        if(head){
+          const t=head.firstChild && head.firstChild.nodeType===3 ? head.firstChild : null;
+          if(t && head.classList.contains('field-head')){ t.textContent=t.textContent.replace(/\s+$/,''); head.insertBefore(icon,t.nextSibling); }
+          else head.appendChild(icon);
+        } else if(!Array.from(lab.childNodes).some(n=>n.nodeType===3 && n.textContent.trim()) && lab.querySelector(':scope > span')){
+          // Texto dentro de um span: junto da caixa de seleção (span com input) ou ao lado do span, que pode ter o texto trocado pelo código.
+          const sp=lab.querySelector(':scope > span');
+          if(sp.querySelector('input')) sp.appendChild(icon);
+          else { const wrap=document.createElement('span'); wrap.className='lbl'; sp.parentNode.insertBefore(wrap,sp); wrap.appendChild(sp); wrap.appendChild(icon); }
+        } else {
+          const txt=Array.from(lab.childNodes).find(n=>n.nodeType===3 && n.textContent.trim());
+          if(txt){
+            const wrap=document.createElement('span'); wrap.className='lbl';
+            lab.insertBefore(wrap,txt); wrap.appendChild(document.createTextNode(txt.textContent.trim())); wrap.appendChild(icon);
+            lab.removeChild(txt);
+          } else lab.appendChild(icon);
+        }
+        lab.addEventListener('mouseenter',()=>showHelp(id));
+        lab.addEventListener('mouseleave',()=>{ if(document.activeElement!==ctl) hideHelp(); });
+        lab.addEventListener('touchstart',()=>showHelp(id),{passive:true});
+      }
+      ctl.setAttribute('aria-describedby','fieldHelp');
+      ctl.addEventListener('focus',()=>showHelp(id));
+      ctl.addEventListener('blur',hideHelp);
+      ctl.addEventListener('keydown',e=>{ if(e.key==='Escape') hideHelp(); });
+    });
+    document.addEventListener('touchstart',e=>{ if(helpId && !e.target.closest('label')) hideHelp(); },{passive:true});
+  }
+
+  const HELP={
+    protocolSelect:{t:'Protocolo',s:'Protocolo de roteamento dinâmico simulado.',
+      p:['<b>OSPF:</b> estado de enlace. Cada roteador recebe a descrição de todos os enlaces (LSDB) e calcula o caminho de menor custo com Dijkstra.','<b>RIPv2:</b> vetor de distância. Cada roteador só conhece o que os vizinhos anunciam e escolhe o caminho com menos saltos.','Trocar o protocolo reinicia a simulação.']},
+    rootSelect:{t:'Raiz da tabela',s:'Roteador cuja tabela aparece na aba Tabela de roteamento.',
+      p:['No OSPF, define a raiz do cálculo SPF: a árvore e a tabela são vistas a partir deste roteador.','No RIPv2, mostra a tabela e os vetores anunciados por este roteador.','Clicar em um roteador no desenho tem o mesmo efeito.']},
+    areaModeSelect:{t:'Modo de área (OSPF)',s:'Topologia com uma ou com três áreas.',
+      p:['<b>Área única:</b> seis roteadores, todos na área 0.','<b>Multi-área:</b> nove roteadores nas áreas 1, 0 e 2, ligadas ao backbone pelos ABRs R2, R3, R8 e R9.','Trocar o modo reinicia a simulação.']},
+    splitHorizonCheck:{t:'Split horizon com poison reverse',s:'Não anuncia uma rota de volta para quem a ensinou.',
+      p:['Com split horizon, o roteador não devolve ao vizinho a rota que aprendeu dele; com poison reverse, devolve com métrica 16 (inalcançável).','Evita o laço entre dois vizinhos, mas não laços de três ou mais roteadores: nesses, a contagem ao infinito acontece mesmo com ele ligado.','Vale para as próximas rodadas de Response.']},
+    speedSelect:{t:'Velocidade da animação',s:'Ritmo da animação. Não altera os resultados.',
+      p:['Muda só a velocidade de exibição; rotas, custos e rodadas são os mesmos.','Use Avançar fase para acompanhar a convergência passo a passo.']}
+  };
+
   // ---------- Wire up controls ----------
   rootSelect.addEventListener('change',()=>{
     const val=rootSelect.value;
@@ -1436,19 +1678,22 @@
   });
   protocolSelect.addEventListener('change',()=>{
     protocol=protocolSelect.value;
+    activeScenario=null;
     resetSim();
   });
   areaModeSelect.addEventListener('change',()=>{
     areaMode=areaModeSelect.value;
+    activeScenario=null;
     resetSim();
   });
   splitHorizonCheck.addEventListener('change',()=>{
     splitHorizonEnabled=splitHorizonCheck.checked;
+    clearScenario();
     jr('sh',{on:splitHorizonEnabled});
     log('Split horizon com poison reverse '+(splitHorizonEnabled?'ativado':'desativado')+'.','sys');
   });
   btnAdvance.addEventListener('click', advanceStep);
-  btnReset.addEventListener('click', resetSim);
+  btnReset.addEventListener('click', ()=>{ if(busy) return; const sc=SCENARIOS.find(x=>x.id===activeScenario); if(sc) applyScenario(sc); else resetSim(); });
   btnComm.addEventListener('click', ()=>simulateHostCommunication());
   speedSelect.addEventListener('change',()=>{ speedMultiplier=parseFloat(speedSelect.value); });
 
@@ -1462,7 +1707,9 @@
   });
 
   // ---------- Init ----------
+  attachHelp();
   resetSim();
+  applyScenario(SCENARIOS[0]);
 })();
 </script>
 </body>

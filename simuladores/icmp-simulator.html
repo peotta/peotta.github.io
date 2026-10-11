@@ -1339,7 +1339,7 @@
     if(s.setup) s.setup();
     activeScenario=id;
     loadForm(s.cmd);
-    selected={type:'scenario',id:id};
+    selected=null;
     log('Cenário carregado: <b>'+s.label+'</b>. Comando sugerido: '+esc(s.cmd),'sys');
     refreshAll();
     activateTab('scen');
@@ -1704,11 +1704,6 @@
 
   function refreshInspector(){
     if(!selected){ inspector.innerHTML=DEFAULT_INSPECTOR; return; }
-    if(selected.type==='scenario'){
-      const s=SCENARIOS.find(x=>x.id===selected.id);
-      inspector.innerHTML='<div class="insp-kicker">Cenário: '+s.group+'</div><div class="insp-title">'+s.label+'</div><div class="muted-txt"><p>'+SCEN_DOC[s.id].short+'</p><p>A explicação completa (o que é, o que observar e as mensagens envolvidas) está na aba <b>Cenário</b>, abaixo.</p><p>Clique em <b>Executar</b> para rodar o comando.</p></div>';
-      return;
-    }
     if(selected.type==='link'){
       const l=links[selected.id];
       inspector.innerHTML='<div class="insp-title">Enlace '+l.name+'</div>'+
@@ -1954,11 +1949,6 @@
   }
   function explainNext(r){
     const next=[];
-    const scen=SCENARIOS.find(x=>x.id===r.scen);
-    if(scen){
-      const ps=scen.what.match(/<p>(.*?)<\/p>/g)||[];
-      if(ps.length>1) next.push(ps[ps.length-1].replace(/<\/?p>/g,''));
-    }
     const P=r.probes, c=r.c, seen=new Set(P.filter(p=>p.kind==='error').map(p=>p.type+'/'+p.code));
     if(c.tool==='ping' && P.some(p=>p.kind==='reply')) next.push('Rode <b>traceroute -n '+esc(c.dst)+'</b> para ver por quais roteadores a resposta passou.');
     if(c.tool==='traceroute') next.push('Compare com <b>tracert -d '+esc(c.dst)+'</b>: as sondas viram Echo Request e o último salto responde com Echo Reply.');
@@ -2057,7 +2047,6 @@
   function attachHelp(){
     Object.keys(HELP).forEach(id=>{
       const ctl=$(id), lab=ctl.closest('label');
-      ctl.title=HELP[id].s;
       if(lab){
         const icon=document.createElement('span');
         icon.className='info'; icon.setAttribute('aria-hidden','true'); icon.textContent='ⓘ';

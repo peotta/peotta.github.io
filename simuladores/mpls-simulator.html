@@ -247,6 +247,42 @@
     .topbar{padding:12px 14px;}
     .topbar-row h1{font-size:20px;}
   }
+  .inspector .insp-kicker{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--amber);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;}
+
+  /* Chips de cenário (padrão do simulador de ICMP) */
+  .scen-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:0 0 12px;}
+  .scen-group{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:600;margin:0 2px 0 8px;}
+  .scen-group:first-child{margin-left:0;}
+  button.chip{flex:none;font-size:13px;padding:5px 12px;border-radius:20px;font-weight:500;}
+  button.chip.active{border-color:var(--amber);color:var(--amber);background:rgba(242,166,90,0.10);}
+
+  /* Aba Cenário */
+  .scen-body{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:28px;}
+  .scen-body h4{font-size:13px;margin:14px 0 4px;color:var(--amber);text-transform:uppercase;letter-spacing:0.05em;}
+  .scen-body .sc-kicker{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--amber);letter-spacing:0.05em;text-transform:uppercase;}
+  .scen-body .sc-title{margin:2px 0 6px;font-size:17px;}
+  .scen-body .sc-cmd code{color:var(--teal);}
+  .scen-body .sc-msgs{margin:4px 0 8px;}
+  .sc-side{border-left:1px solid var(--border-soft);padding-left:24px;}
+  .sc-side h4:first-of-type{margin-top:6px;}
+  .sc-gdoc{font-size:13.5px;}
+  .sc-list{list-style:none;padding-left:0;margin:0 0 6px;}
+  .sc-list li{font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.45;}
+  button.sc-link{flex:none;font-size:12.5px;padding:2px 10px;border-radius:20px;font-weight:600;margin-right:4px;}
+  button.sc-link.active{border-color:var(--amber);color:var(--amber);background:rgba(242,166,90,0.10);}
+  @media (max-width:960px){
+    .scen-body{grid-template-columns:1fr;}
+    .sc-side{border-left:0;padding-left:0;border-top:1px solid var(--border-soft);padding-top:8px;}
+  }
+
+  /* Ajuda dos campos (ⓘ) */
+  .field-help{position:fixed;z-index:50;display:none;max-width:340px;background:var(--panel-2);border:1px solid var(--teal);border-radius:10px;padding:10px 13px;box-shadow:0 12px 30px -10px rgba(0,0,0,0.6);font-size:13.5px;line-height:1.5;color:var(--muted);pointer-events:none;}
+  .field-help .fh-title{color:var(--ink);font-weight:700;margin-bottom:4px;}
+  .field-help p{margin:0 0 6px;}
+  .field-help p:last-child{margin-bottom:0;}
+  .field-help b{color:var(--ink);font-weight:600;}
+  .info{display:inline-block;color:var(--teal);font-size:12px;cursor:help;font-weight:400;}
+  .lbl{display:inline-flex;align-items:center;gap:5px;}
 </style>
 </head>
 
@@ -273,6 +309,7 @@
         </nav>
       </div>
     </div>
+    <div class="scen-row" id="scenRow" aria-label="Cenários prontos"></div>
     <div class="metro" id="metro"></div>
   </header>
 
@@ -339,7 +376,8 @@
 
   <section class="panel tabs-panel">
     <div class="tab-bar" role="tablist">
-      <button class="tab-btn active" data-tab="tables" type="button" role="tab" aria-selected="true">LIB / LFIB</button>
+      <button class="tab-btn active" data-tab="scen" type="button" role="tab" aria-selected="true">Cenário</button>
+      <button class="tab-btn" data-tab="tables" type="button" role="tab" aria-selected="false">LIB / LFIB</button>
       <button class="tab-btn" data-tab="cap" type="button" role="tab" aria-selected="false">Captura</button>
       <button class="tab-btn" data-tab="msg" type="button" role="tab" aria-selected="false">Pacote</button>
       <button class="tab-btn" data-tab="term" type="button" role="tab" aria-selected="false">Terminal</button>
@@ -347,7 +385,10 @@
       <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência</button>
       <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
     </div>
-    <div class="tab-content active" data-tab-content="tables">
+    <div class="tab-content active" data-tab-content="scen">
+      <div class="tab-scroll"><article class="ref-body scen-body" id="scenBody" aria-live="polite"></article></div>
+    </div>
+    <div class="tab-content" data-tab-content="tables">
       <div class="tab-scroll">
         <table>
           <thead><tr><th colspan="5" id="lfibTitle">LFIB</th></tr>
@@ -1208,7 +1249,10 @@
   }
   function selectLink(id){ selected={type:'link',id:id}; renderInspector(); }
   function renderInspector(){
-    if(!selected){ inspector.innerHTML='<div class="muted-txt">'+DEFAULT_INSPECTOR+'</div>'; return; }
+    if(!selected){
+      inspector.innerHTML='<div class="muted-txt">'+DEFAULT_INSPECTOR+'</div>';
+      return;
+    }
     if(selected.type==='link'){
       const l=links.find(x=>x.id===selected.id);
       inspector.innerHTML='<div class="insp-title">Enlace '+l.a+' / '+l.b+'</div>'+
@@ -1271,7 +1315,7 @@
     refreshAll();
   }
 
-  function refreshAll(){ render(); updateUI(); renderTables(); renderCapture(); renderMessage(); renderInspector(); renderExplain(); }
+  function refreshAll(){ render(); updateUI(); renderTables(); renderCapture(); renderMessage(); renderInspector(); renderExplain(); renderScenarioChips(); renderScenarioTab(); }
 
   // ---------- Aba Experimento: texto gerado a partir da sessão ----------
   function jr(type,data){
@@ -1340,7 +1384,6 @@
   function explainResults(){
     if(!journal.length) return '<p>Nada executado ainda. Clique em <b>Avançar fase</b> para o LDP descobrir vizinhos, abrir sessões e distribuir rótulos; depois use <b>ping</b> e <b>traceroute</b>.</p>';
     let h='<ol>'+journal.map(e=>'<li>'+explainStepItem(e)+'</li>').join('')+'</ol>';
-    h+='<p>Fase atual: <b>'+STOPS[step][0]+'</b> ('+STOPS[step][1]+'). '+(step>=4?'Os LSPs estão instalados.':'Os pacotes ainda seguem roteamento IP comum (ou são descartados, na L3VPN).')+'</p>';
     return h;
   }
   function explainConcepts(){
@@ -1387,14 +1430,220 @@
     body.innerHTML=h;
   }
 
+  // ---------- Cenários prontos ----------
+  const SCENARIOS=[
+    {group:'LDP e LSP',id:'ldp',label:'Montagem do LSP',cfg:{service:'ip',php:'implicit',ttl:true},
+      what:'<p>Clique em <b>Avançar fase</b> quatro vezes: Discovery (Hello em UDP 646), Sessão (TCP 646), Mapping (distribuição de rótulos) e LSP (LFIB instalada).</p><p>Depois escolha um LSR em <b>Ver LIB / LFIB</b> e compare a LIB, com os rótulos de todos os vizinhos, com a LFIB, que guarda só o do próximo salto.</p>'},
+    {group:'LDP e LSP',id:'ping',label:'Push, swap e pop',cfg:{service:'ip',php:'implicit',ttl:true},
+      what:'<p>Avance as quatro fases e clique em <b>ping</b>. Na aba Captura, acompanhe cada operação: o PE1 faz push, os P fazem swap e o penúltimo salto faz pop.</p><p>Troque o sentido para H-B → H-A e repita: a volta usa outro LSP, com outros rótulos.</p>'},
+    {group:'Rótulo do egresso',id:'explicit',label:'explicit-null',cfg:{service:'ip',php:'explicit',ttl:true},
+      what:'<p>O PE de saída anuncia o rótulo 0 (explicit-null) para as próprias FECs. Avance as fases e rode um ping.</p><p>Na Captura, o último enlace leva o rótulo 0 até o PE2, que o remove.</p>'},
+    {group:'Rótulo do egresso',id:'nophp',label:'Sem PHP',cfg:{service:'ip',php:'none',ttl:true},
+      what:'<p>Avance as fases e rode um ping. O PE2 recebe o pacote ainda com o rótulo que ele mesmo anunciou.</p><p>Compare onde o pop acontece nos três modos de rótulo do egresso.</p>'},
+    {group:'TTL',id:'uniform',label:'TTL Uniform',cfg:{service:'ip',php:'implicit',ttl:true},
+      what:'<p>Avance as fases e rode o <b>traceroute</b>. Com a propagação de TTL, o TTL do IP é copiado para o rótulo e cada LSR do núcleo aparece no resultado.</p>'},
+    {group:'TTL',id:'pipe',label:'TTL Pipe',cfg:{service:'ip',php:'implicit',ttl:false},
+      what:'<p>Avance as fases e rode o <b>traceroute</b>: só os PEs aparecem.</p><p>Rode também um ping e compare o TTL recebido com o do modelo Uniform.</p>'},
+    {group:'Serviços',id:'vpn',label:'L3VPN',cfg:{service:'vpn',php:'implicit',ttl:true},
+      what:'<p>Avance as fases (o Mapping inclui a troca de rotas por MP-BGP) e rode um ping. Na Captura, veja a pilha de dois rótulos.</p><p>Os P só olham o rótulo de transporte: não conhecem as redes dos clientes.</p>'},
+    {group:'Falhas',id:'failover',label:'Falha de enlace',cfg:{service:'ip',php:'implicit',ttl:true},
+      what:'<p>Avance as fases e rode um ping. Depois clique no enlace <b>P1 / P3</b>, use <b>Derrubar</b> e rode o ping de novo.</p><p>O caminho e os rótulos mudam sem esperar nova sinalização LDP.</p>'}
+  ];
+  let activeScenario=null;
+  function renderScenarioChips(){
+    const row=document.getElementById('scenRow');
+    row.innerHTML=''; let g=null;
+    SCENARIOS.forEach(s=>{
+      if(s.group!==g){ g=s.group; const sp=document.createElement('span'); sp.className='scen-group'; sp.textContent=g; row.appendChild(sp); }
+      const b=document.createElement('button'); b.type='button'; b.className='chip'+(activeScenario===s.id?' active':''); b.textContent=s.label; b.disabled=busy;
+      b.addEventListener('click',()=>applyScenario(s)); row.appendChild(b);
+    });
+  }
+  function applyScenario(s){
+    if(busy) return;
+    service=s.cfg.service; serviceSelect.value=service;
+    php=s.cfg.php; phpSelect.value=php;
+    propagate=s.cfg.ttl; ttlCheck.checked=propagate;
+    activeScenario=s.id;
+    reset();
+    log('Cenário carregado: <b>'+s.label+'</b>.','sys');
+    selected=null;
+    refreshAll();
+    activateTab('scen');
+  }
+  function clearScenario(){ if(activeScenario){ activeScenario=null; refreshAll(); } }
+
+  const GROUP_DOC={
+    'LDP e LSP':'Como o plano de controle (LDP sobre o IGP) monta os caminhos rotulados e como o plano de dados os percorre.',
+    'Rótulo do egresso':'O rótulo que o PE de saída anuncia para as próprias FECs define onde o último rótulo é removido.',
+    'TTL':'Se o TTL do IP é copiado para o rótulo, o núcleo aparece ou some no traceroute do cliente.',
+    'Serviços':'O MPLS usado para separar clientes sobre o mesmo núcleo: a VPN de camada 3.',
+    'Falhas':'Como os LSPs reagem a mudanças de topologia.'
+  };
+  const SCEN_DOC={
+    ldp:{short:'O LDP descobre vizinhos, abre sessões e distribui rótulos.',
+      concept:'O MPLS encaminha pacotes por <b>rótulos</b> curtos em vez de consultar o endereço IP em cada salto. O <b>LDP</b> (RFC 5036) distribui esses rótulos: cada LSR descobre os vizinhos, abre uma sessão TCP com cada um e anuncia um rótulo local para cada destino (<b>FEC</b>) que conhece pelo IGP. O caminho rotulado resultante é o <b>LSP</b>.',
+      observe:['No trilho de fases: Discovery, Sessão, Mapping e LSP.','Na aba LIB / LFIB: a LIB guarda o rótulo de cada vizinho; a LFIB usa só o do próximo salto do IGP.','No log: em cada par, o LSR com a maior loopback abre a sessão TCP.'],
+      msgs:[['LDP Hello','descobre vizinhos (UDP 646, 224.0.0.2)','todos os LSRs'],['Initialization e KeepAlive','abrem e mantêm a sessão (TCP 646)','cada par de vizinhos'],['Label Mapping','anuncia a FEC e o rótulo local','todos os LSRs']],
+      why:'Sem LDP não há rótulos, e o tráfego segue por roteamento IP comum (ou é descartado, na L3VPN). O LDP depende do IGP: só existem rótulos para destinos que o OSPF conhece.'},
+    ping:{short:'O pacote atravessa o núcleo trocando de rótulo a cada salto.',
+      concept:'No plano de dados, o PE de entrada classifica o pacote em uma FEC e empilha o rótulo (<b>push</b>). Cada P olha só o rótulo do topo e o troca pelo rótulo que o próximo salto anunciou (<b>swap</b>), sem consultar o IP. No fim do LSP, o rótulo é removido (<b>pop</b>) e o pacote volta a ser IP.',
+      observe:['Na aba Captura: a coluna Pilha de rótulos muda a cada enlace.','Na aba Pacote: o cabeçalho de rótulo (Label, TC, S e TTL, RFC 3032).','Na aba Experimento: as operações da ida e da volta, roteador por roteador.'],
+      cols:['Operação','O que faz','Onde'],
+      msgs:[['push','empilha o rótulo da FEC','PE de entrada'],['swap','troca o rótulo do topo','cada P'],['pop','remove o rótulo','penúltimo salto (PHP)']],
+      why:'Comutar por rótulo permite engenharia de tráfego, VPNs e caminhos independentes do destino IP; o núcleo nem precisa conhecer as redes dos clientes.'},
+    explicit:{short:'O rótulo 0 chega ao egresso e preserva a marcação de QoS.',
+      concept:'Com <b>explicit-null</b> (rótulo 0 no IPv4), o penúltimo salto troca o rótulo por 0 em vez de removê-lo. O pacote chega ao egresso ainda rotulado, o que preserva o campo <b>TC</b> (antigo EXP), usado para QoS, até o último salto.',
+      observe:['Na Captura: swap para 0 no último enlace antes do PE2.','O PE2 remove o rótulo 0 e consulta o IP.','Compare com o cenário Push, swap e pop (implicit-null).'],
+      cols:['Operação','O que faz','Onde'],
+      msgs:[['swap para 0','troca pelo explicit-null','penúltimo salto'],['pop 0','remove o rótulo 0','PE de saída']],
+      why:'Provedores usam explicit-null quando a marcação de QoS do núcleo precisa valer até a borda.'},
+    nophp:{short:'O egresso recebe o próprio rótulo e faz duas consultas.',
+      concept:'Sem PHP, o egresso anuncia um rótulo próprio para as suas FECs. O rótulo chega até ele, que faz o pop e depois consulta o IP: são <b>duas consultas</b> no mesmo roteador.',
+      observe:['Na Captura: o último enlace ainda leva um rótulo comum, da faixa do PE2 (601 a 699).','No log: o PE2 faz o pop e a consulta IP.','Na aba LIB / LFIB do PE2: o rótulo local anunciado para as próprias FECs.'],
+      cols:['Operação','O que faz','Onde'],
+      msgs:[['swap','troca para o rótulo do PE2','P3 ou P4'],['pop','remove o próprio rótulo','PE2']],
+      why:'O PHP (penultimate hop popping) existe justamente para evitar essa consulta dupla no egresso.'},
+    uniform:{short:'O TTL do IP vai para o rótulo e os P aparecem no traceroute.',
+      concept:'No modelo <b>Uniform</b> (RFC 3443), o PE copia o TTL do IP para o rótulo na entrada e de volta na saída. Cada P decrementa o TTL do rótulo, então o traceroute enxerga todos os saltos do núcleo. Quando o TTL expira dentro do LSP, o ICMP Time Exceeded leva a pilha de rótulos recebida (RFC 4950).',
+      observe:['No terminal: os P aparecem com a anotação &lt;MPLS:L=...&gt;.','Um ping mostra TTL recebido 60: quatro decrementos.','Na aba Experimento: cada salto com a pilha devolvida no ICMP.'],
+      msgs:[['UDP','sondas com TTL 1, 2, 3...','H-A'],['Time Exceeded','com a pilha de rótulos (RFC 4950)','cada LSR']],
+      why:'Facilita o diagnóstico do núcleo, mas revela a topologia interna do provedor a qualquer cliente.'},
+    pipe:{short:'O rótulo começa com TTL 255 e o núcleo some.',
+      concept:'No modelo <b>Pipe</b> (no mpls ip propagate-ttl), o rótulo começa com TTL 255, independente do TTL do IP. O núcleo inteiro conta como um único salto para o cliente.',
+      observe:['No terminal: o traceroute vai do PE1 direto ao PE2.','Um ping mostra TTL recebido 62: só os PEs decrementaram.','Compare com o cenário TTL Uniform.'],
+      msgs:[['UDP','sondas com TTL 1, 2, 3...','H-A'],['Time Exceeded','só dos PEs','PE1 e PE2']],
+      why:'Esconde a topologia do provedor dos clientes. É uma escolha comum em redes de operadoras.'},
+    vpn:{short:'Dois rótulos: transporte até o PE de saída e VPN até a VRF.',
+      concept:'Na <b>L3VPN</b> (RFC 4364), cada cliente tem uma tabela própria (<b>VRF</b>) nos PEs, e as rotas dos clientes trocam de PE por <b>MP-BGP</b>, cada uma com um rótulo VPN. O pacote atravessa o núcleo com dois rótulos: o externo (transporte, do LDP) leva até o PE de saída; o interno (VPN) indica a VRF.',
+      observe:['Na Captura: a pilha [transporte | VPN], por exemplo [206 | 690].','Com PHP, o penúltimo salto remove só o rótulo de transporte; o rótulo VPN chega ao PE2.','Rode um ping antes do LSP: o PE descarta, porque não há rota VPN sem LDP e MP-BGP.'],
+      msgs:[['MP-BGP','troca rotas VPNv4 e rótulos VPN','PE1 e PE2'],['push','transporte + VPN','PE de entrada'],['pop VPN','consulta a VRF do cliente','PE de saída']],
+      why:'Permite atender vários clientes, até com endereços repetidos, sobre o mesmo núcleo. A separação é lógica, não criptográfica: o PE nunca deve aceitar pacotes rotulados vindos do cliente.'},
+    failover:{short:'O IGP reconverge e a LFIB troca de rótulo na hora.',
+      concept:'Quando um enlace cai, o IGP reconverge e cada LSR passa a usar outro próximo salto. Graças à <b>retenção liberal</b>, os rótulos dos outros vizinhos já estavam na LIB, então a LFIB muda na hora. A sessão LDP do enlace caído termina e leva junto os rótulos aprendidos por ela.',
+      observe:['No log: a queda, a reconvergência e o novo LSP.','Na aba Experimento: o LSP de ida antes e depois da falha.','Na aba LIB / LFIB do PE1: o próximo salto do LSP muda de P1 para P2.'],
+      msgs:[['LDP','sessão P1 / P3 encerrada','P1 e P3'],['Novo LSP','via P2 e P4','PE1 até PE2']],
+      why:'A convergência do MPLS depende do IGP. Em produção, mecanismos como a sincronização LDP-IGP e o Fast Reroute reduzem a perda durante a troca.'}
+  };
+  const SC={list:()=>SCENARIOS,group:x=>x.group,active:()=>activeScenario,apply:x=>applyScenario(x),
+    setup:x=>'Configuração do cenário: <code>'+(x.cfg.service==='vpn'?'L3VPN':'IP sobre MPLS')+'; egresso '+({implicit:'implicit-null',explicit:'explicit-null',none:'sem PHP'})[x.cfg.php]+'; TTL '+(x.cfg.ttl?'Uniform':'Pipe')+'</code>',
+    busy:()=>busy};
+
+  // ---------- Aba Cenário (padrão do simulador de ICMP) ----------
+  // Adaptador por simulador: SC.list(), SC.group(x), SC.active(), SC.apply(x), SC.setup(x), SC.busy()
+  function scEsc(t){ return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function renderScenarioTab(){
+    const body=document.getElementById('scenBody');
+    if(!body) return;
+    const list=SC.list(), s=list.find(x=>x.id===SC.active());
+    let left;
+    if(!s){
+      left='<h3>Nenhum cenário selecionado</h3><p>A configuração foi alterada manualmente. Escolha um cenário à direita ou no topo para carregar a configuração pronta, ou continue explorando: a aba <b>Experimento</b> descreve cada execução.</p>';
+    } else {
+      const d=SCEN_DOC[s.id];
+      left='<div class="sc-kicker">'+scEsc(SC.group(s))+'</div><h3 class="sc-title">'+scEsc(s.label)+'</h3>'+
+        '<p class="sc-cmd">'+SC.setup(s)+'</p>'+
+        '<h4>O que é</h4><p>'+d.concept+'</p>'+
+        '<h4>Neste cenário</h4>'+s.what+
+        '<h4>O que observar</h4><ul>'+d.observe.map(x=>'<li>'+x+'</li>').join('')+'</ul>'+
+        '<h4>'+(d.msgsTitle||'Mensagens envolvidas')+'</h4><table class="sc-msgs"><thead><tr><th>'+(d.cols?d.cols[0]:'Mensagem')+'</th><th>'+(d.cols?d.cols[1]:'Função')+'</th><th>'+(d.cols?d.cols[2]:'Quem envia')+'</th></tr></thead><tbody>'+
+          d.msgs.map(m=>'<tr><td>'+m[0]+'</td><td>'+m[1]+'</td><td class="meaning">'+m[2]+'</td></tr>').join('')+'</tbody></table>'+
+        '<h4>Por que importa</h4><p>'+d.why+'</p>';
+    }
+    let right='<h3>Tipos de cenário</h3>', group=null;
+    list.forEach(x=>{
+      const g=SC.group(x);
+      if(g!==group){
+        if(group!==null) right+='</ul>';
+        group=g;
+        right+='<h4>'+scEsc(g)+'</h4><p class="sc-gdoc">'+GROUP_DOC[g]+'</p><ul class="sc-list">';
+      }
+      right+='<li><button type="button" class="sc-link'+(s&&s.id===x.id?' active':'')+'" data-scen="'+x.id+'"'+(SC.busy()?' disabled':'')+'>'+scEsc(x.label)+'</button> '+SCEN_DOC[x.id].short+'</li>';
+    });
+    right+='</ul>';
+    body.innerHTML='<div class="sc-main">'+left+'</div><aside class="sc-side">'+right+'</aside>';
+    body.querySelectorAll('.sc-link').forEach(b=>b.addEventListener('click',()=>SC.apply(list.find(x=>x.id===b.dataset.scen))));
+  }
+
+  // ---------- Explicação de cada campo de configuração (ⓘ) ----------
+  const helpBox=document.createElement('div');
+  helpBox.className='field-help'; helpBox.id='fieldHelp'; helpBox.setAttribute('role','tooltip');
+  document.body.appendChild(helpBox);
+  let helpId=null;
+  function showHelp(id){
+    const h=HELP[id], ctl=document.getElementById(id), lab=ctl.closest('label');
+    helpId=id;
+    helpBox.innerHTML='<div class="fh-title">'+h.t+'</div>'+h.p.map(x=>'<p>'+x+'</p>').join('');
+    helpBox.style.display='block';
+    const r=(lab||ctl).getBoundingClientRect(), bw=helpBox.offsetWidth, bh=helpBox.offsetHeight;
+    if(r.bottom<0 || r.top>window.innerHeight){ hideHelp(); return; }
+    const left=Math.max(8,Math.min(r.left,window.innerWidth-bw-8));
+    let top=r.bottom+6;
+    if(top+bh>window.innerHeight-8) top=Math.max(8,r.top-bh-6);
+    helpBox.style.left=left+'px'; helpBox.style.top=top+'px';
+  }
+  function hideHelp(){ helpBox.style.display='none'; helpId=null; }
+  function attachHelp(){
+    const side=document.querySelector('.side-col');
+    const follow=()=>{ if(helpId) showHelp(helpId); };
+    if(side) side.addEventListener('scroll',follow,{passive:true});
+    window.addEventListener('scroll',follow,{passive:true});
+    Object.keys(HELP).forEach(id=>{
+      const ctl=document.getElementById(id);
+      if(!ctl) return;
+      const lab=ctl.closest('label');
+      if(lab){
+        const icon=document.createElement('span');
+        icon.className='info'; icon.setAttribute('aria-hidden','true'); icon.textContent=' ⓘ';
+        const head=lab.querySelector('.field-head, b');
+        if(head){
+          const t=head.firstChild && head.firstChild.nodeType===3 ? head.firstChild : null;
+          if(t && head.classList.contains('field-head')){ t.textContent=t.textContent.replace(/\s+$/,''); head.insertBefore(icon,t.nextSibling); }
+          else head.appendChild(icon);
+        } else {
+          const txt=Array.from(lab.childNodes).find(n=>n.nodeType===3 && n.textContent.trim());
+          if(txt){
+            const wrap=document.createElement('span'); wrap.className='lbl';
+            lab.insertBefore(wrap,txt); wrap.appendChild(document.createTextNode(txt.textContent.trim())); wrap.appendChild(icon);
+            lab.removeChild(txt);
+          } else lab.appendChild(icon);
+        }
+        lab.addEventListener('mouseenter',()=>showHelp(id));
+        lab.addEventListener('mouseleave',()=>{ if(document.activeElement!==ctl) hideHelp(); });
+        lab.addEventListener('touchstart',()=>showHelp(id),{passive:true});
+      }
+      ctl.setAttribute('aria-describedby','fieldHelp');
+      ctl.addEventListener('focus',()=>showHelp(id));
+      ctl.addEventListener('blur',hideHelp);
+      ctl.addEventListener('keydown',e=>{ if(e.key==='Escape') hideHelp(); });
+    });
+    document.addEventListener('touchstart',e=>{ if(helpId && !e.target.closest('label')) hideHelp(); },{passive:true});
+  }
+
+  const HELP={
+    serviceSelect:{t:'Serviço',s:'Como o núcleo MPLS é usado.',
+      p:['<b>IP sobre MPLS:</b> todos os LSRs conhecem as redes dos clientes e o pacote leva 1 rótulo.','<b>L3VPN:</b> as redes dos clientes ficam só na VRF dos PEs, trocadas por MP-BGP; o pacote leva 2 rótulos (transporte e VPN).','Mudar o serviço reinicia a simulação.']},
+    dirSelect:{t:'Sentido do tráfego',s:'Quem envia o ping e o traceroute.',
+      p:['Escolhe se o teste sai de H-A para H-B ou de H-B para H-A.','LSPs são unidirecionais: cada sentido usa rótulos diferentes.']},
+    phpSelect:{t:'Rótulo do egresso (PHP)',s:'O que o PE de saída anuncia para as próprias FECs.',
+      p:['<b>implicit-null (3):</b> o penúltimo salto remove o rótulo (PHP) e o PE de saída faz uma só consulta.','<b>explicit-null (0):</b> o rótulo 0 chega ao PE de saída, preservando o campo TC de QoS.','<b>sem PHP:</b> o egresso anuncia um rótulo próprio e faz o pop e a consulta IP.']},
+    ttlCheck:{t:'Propagar TTL',s:'Copia o TTL do IP para o rótulo (modelo Uniform).',
+      p:['<b>Marcado (Uniform):</b> o TTL do IP é copiado para o rótulo, e os P aparecem no traceroute.','<b>Desmarcado (Pipe):</b> o rótulo começa com TTL 255 e o núcleo fica invisível para o cliente.','Equivale ao comando mpls ip propagate-ttl do Cisco IOS.']},
+    rootSelect:{t:'Ver LIB / LFIB do LSR',s:'Escolhe o LSR cujas tabelas aparecem na aba LIB / LFIB.',
+      p:['A <b>LIB</b> guarda os rótulos anunciados por todos os vizinhos (retenção liberal).','A <b>LFIB</b> guarda só o rótulo do próximo salto do IGP, que é o usado de fato no encaminhamento.']},
+    speedSelect:{t:'Velocidade da animação',s:'Ritmo da animação. Não altera os resultados.',
+      p:['Muda só a velocidade de exibição; rótulos, TTL e tempos são os mesmos.','Use Avançar fase para acompanhar o LDP passo a passo.']}
+  };
+
   // ---------- Eventos ----------
   btnAdvance.addEventListener('click',advance);
-  btnReset.addEventListener('click',reset);
+  btnReset.addEventListener('click',()=>{ const sc=SCENARIOS.find(x=>x.id===activeScenario); if(sc) applyScenario(sc); else reset(); });
   btnPing.addEventListener('click',()=>runTool(runPing));
   btnTrace.addEventListener('click',()=>runTool(runTrace));
-  serviceSelect.addEventListener('change',()=>{ service=serviceSelect.value; reset(); });
+  serviceSelect.addEventListener('change',()=>{ service=serviceSelect.value; activeScenario=null; reset(); });
   phpSelect.addEventListener('change',()=>{
     php=phpSelect.value;
+    activeScenario=null;
     jr('php',{php:php});
     log('Egresso passa a anunciar '+(php==='implicit'?'implicit-null (3): o penúltimo salto faz pop':(php==='explicit'?'explicit-null (0): o rótulo chega ao egresso':'um rótulo próprio: sem PHP, o egresso faz o pop'))+'.'+(step>=3?' Os PEs reenviam o Label Mapping das próprias FECs.':''),'label');
     if(step>=4){ describeLsp('H-A'); describeLsp('H-B'); }
@@ -1402,6 +1651,7 @@
   });
   ttlCheck.addEventListener('change',()=>{
     propagate=ttlCheck.checked;
+    clearScenario();
     jr('ttl',{prop:propagate});
     log(propagate?'mpls ip propagate-ttl: modelo Uniform, o TTL do IP é copiado para o rótulo.':'no mpls ip propagate-ttl: modelo Pipe, o rótulo começa com TTL 255 e o núcleo some do traceroute.','sys');
   });
@@ -1412,7 +1662,9 @@
 
   // ---------- Início ----------
   rebuildRootSelect();
+  attachHelp();
   reset();
+  applyScenario(SCENARIOS[0]);
 })();
 </script>
 </body>

@@ -205,6 +205,25 @@
     .topbar{padding:12px 14px;}
     .topbar-row h1{font-size:20px;}
   }
+
+  /* Aba Cenário */
+  .scen-body{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:28px;}
+  .scen-body h4{font-size:13px;margin:14px 0 4px;color:var(--amber);text-transform:uppercase;letter-spacing:0.05em;}
+  .scen-body .sc-kicker{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--amber);letter-spacing:0.05em;text-transform:uppercase;}
+  .scen-body .sc-title{margin:2px 0 6px;font-size:17px;}
+  .scen-body .sc-cmd code{color:var(--teal);}
+  .scen-body .sc-msgs{margin:4px 0 8px;}
+  .sc-side{border-left:1px solid var(--border-soft);padding-left:24px;}
+  .sc-side h4:first-of-type{margin-top:6px;}
+  .sc-gdoc{font-size:13.5px;}
+  .sc-list{list-style:none;padding-left:0;margin:0 0 6px;}
+  .sc-list li{font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.45;}
+  button.sc-link{flex:none;font-size:12.5px;padding:2px 10px;border-radius:20px;font-weight:600;margin-right:4px;}
+  button.sc-link.active{border-color:var(--amber);color:var(--amber);background:rgba(242,166,90,0.10);}
+  @media (max-width:960px){
+    .scen-body{grid-template-columns:1fr;}
+    .sc-side{border-left:0;padding-left:0;border-top:1px solid var(--border-soft);padding-top:8px;}
+  }
 </style>
 </head>
 
@@ -319,7 +338,8 @@
 
   <section class="panel tabs-panel">
     <div class="tab-bar" role="tablist">
-      <button class="tab-btn active" data-tab="cap" type="button" role="tab" aria-selected="true">Captura</button>
+      <button class="tab-btn active" data-tab="scen" type="button" role="tab" aria-selected="true">Cenário</button>
+      <button class="tab-btn" data-tab="cap" type="button" role="tab" aria-selected="false">Captura</button>
       <button class="tab-btn" data-tab="msg" type="button" role="tab" aria-selected="false">Segmento</button>
       <button class="tab-btn" data-tab="cwnd" type="button" role="tab" aria-selected="false">Janela (cwnd)</button>
       <button class="tab-btn" data-tab="res" type="button" role="tab" aria-selected="false">Resultados</button>
@@ -327,7 +347,10 @@
       <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência</button>
       <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
     </div>
-    <div class="tab-content active" data-tab-content="cap">
+    <div class="tab-content active" data-tab-content="scen">
+      <div class="tab-scroll"><article class="ref-body scen-body" id="scenBody" aria-live="polite"></article></div>
+    </div>
+    <div class="tab-content" data-tab-content="cap">
       <div class="tab-scroll">
         <table>
           <thead><tr><th>Nº</th><th>Tempo (s)</th><th>Origem</th><th>Destino</th><th>Protocolo</th><th>Tam.</th><th>Informação</th></tr></thead>
@@ -1151,10 +1174,11 @@
     if(c.iw) fIw.value=c.iw; if(c.rwnd) fRwnd.value=c.rwnd; if(c.ssth) fSsth.value=c.ssth;
     fAckLoss.checked=false;
     activeScen=s.id;
-    setInspector('<div class="insp-kicker">Cenário: '+s.g+'</div><div class="insp-title">'+s.label+'</div><div class="muted-txt">'+s.what+'<p>Clique em <b>Simular</b> ou avance com <b>Passo</b>.</p></div>');
+    setInspector(DEFAULT_INSPECTOR);
     renderScenarios(); updateFields(); build();
+    renderScenarioTab(); activateTab('scen');
   }
-  function changed(){ activeScen=null; renderScenarios(); setInspector(DEFAULT_INSPECTOR); build(); }
+  function changed(){ activeScen=null; renderScenarios(); setInspector(DEFAULT_INSPECTOR); build(); renderScenarioTab(); }
 
   // ---------- Eventos ----------
   btnPlay.addEventListener('click',()=>{ if(playing){ pause(); update(); } else play(); });
@@ -1165,6 +1189,121 @@
   [fN,fRtt,fBw,fLoss,fReorder,fSeed,fDrops,fAckLoss,fIw,fRwnd,fSsth].forEach(e=>e.addEventListener('change',changed));
   speedSelect.addEventListener('change',()=>{ speed=parseFloat(speedSelect.value); });
   document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
+
+  // ---------- Aba Cenário (padrão do simulador de ICMP) ----------
+  // Adaptador por simulador: SC.list(), SC.group(x), SC.active(), SC.apply(x), SC.setup(x), SC.busy()
+  function scEsc(t){ return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function renderScenarioTab(){
+    const body=document.getElementById('scenBody');
+    if(!body) return;
+    const list=SC.list(), s=list.find(x=>x.id===SC.active());
+    let left;
+    if(!s){
+      left='<h3>Nenhum cenário selecionado</h3><p>A configuração foi alterada manualmente. Escolha um cenário à direita ou no topo para carregar a configuração pronta, ou continue explorando: a aba <b>Experimento</b> descreve cada execução.</p>';
+    } else {
+      const d=SCEN_DOC[s.id];
+      left='<div class="sc-kicker">'+scEsc(SC.group(s))+'</div><h3 class="sc-title">'+scEsc(s.label)+'</h3>'+
+        '<p class="sc-cmd">'+SC.setup(s)+'</p>'+
+        '<h4>O que é</h4><p>'+d.concept+'</p>'+
+        '<h4>Neste cenário</h4>'+s.what+
+        '<h4>O que observar</h4><ul>'+d.observe.map(x=>'<li>'+x+'</li>').join('')+'</ul>'+
+        '<h4>'+(d.msgsTitle||'Mensagens envolvidas')+'</h4><table class="sc-msgs"><thead><tr><th>'+(d.cols?d.cols[0]:'Mensagem')+'</th><th>'+(d.cols?d.cols[1]:'Função')+'</th><th>'+(d.cols?d.cols[2]:'Quem envia')+'</th></tr></thead><tbody>'+
+          d.msgs.map(m=>'<tr><td>'+m[0]+'</td><td>'+m[1]+'</td><td class="meaning">'+m[2]+'</td></tr>').join('')+'</tbody></table>'+
+        '<h4>Por que importa</h4><p>'+d.why+'</p>';
+    }
+    let right='<h3>Tipos de cenário</h3>', group=null;
+    list.forEach(x=>{
+      const g=SC.group(x);
+      if(g!==group){
+        if(group!==null) right+='</ul>';
+        group=g;
+        right+='<h4>'+scEsc(g)+'</h4><p class="sc-gdoc">'+GROUP_DOC[g]+'</p><ul class="sc-list">';
+      }
+      right+='<li><button type="button" class="sc-link'+(s&&s.id===x.id?' active':'')+'" data-scen="'+x.id+'"'+(SC.busy()?' disabled':'')+'>'+scEsc(x.label)+'</button> '+SCEN_DOC[x.id].short+'</li>';
+    });
+    right+='</ul>';
+    body.innerHTML='<div class="sc-main">'+left+'</div><aside class="sc-side">'+right+'</aside>';
+    body.querySelectorAll('.sc-link').forEach(b=>b.addEventListener('click',()=>SC.apply(list.find(x=>x.id===b.dataset.scen))));
+  }
+
+  const GROUP_DOC={
+    'TCP':'Conexão confiável: abertura e encerramento, controle de congestionamento, controle de fluxo e recuperação de perdas.',
+    'UDP':'Datagramas sem conexão: o que a aplicação ganha em rapidez e o que precisa fazer por conta própria.',
+    'Comparação':'Os dois protocolos lado a lado, na mesma rede e com as mesmas perdas.'
+  };
+  const SCEN_DOC={
+    hs:{short:'Abertura em três vias, transferência e encerramento.',
+      concept:'O TCP é orientado a conexão. Antes de enviar dados, cliente e servidor trocam <b>SYN</b>, <b>SYN-ACK</b> e <b>ACK</b> (three-way handshake), combinando os números de sequência iniciais (ISN). No fim, cada lado fecha o próprio sentido com <b>FIN</b> e recebe um ACK; o lado que fecha primeiro espera em <b>TIME_WAIT</b> antes de liberar a conexão.',
+      observe:['No diagrama: o primeiro byte de dados só sai depois de 1 RTT, o custo do handshake.','Na aba Segmento: os números de sequência e de confirmação; o SYN e o FIN consomem um número de sequência cada.','No painel lateral: a troca de estados do cliente e do servidor até TIME_WAIT.'],
+      cols:['Segmento','Função','Quem envia'],
+      msgs:[['SYN','pede a abertura e anuncia o ISN do cliente','cliente'],['SYN-ACK','aceita e anuncia o ISN do servidor','servidor'],['ACK','confirma; a conexão fica estabelecida','cliente'],['FIN e ACK','encerram cada sentido da conexão','os dois lados']],
+      why:'O handshake garante que os dois lados estão prontos e sincronizados, mas custa 1 RTT antes do primeiro byte. Também é o alvo do SYN flood, que deixa conexões presas na metade (veja o simulador de Ataques e defesas TCP/UDP).'},
+    ss:{short:'A janela de congestionamento dobra a cada RTT até o ssthresh.',
+      concept:'O <b>slow start</b> é como o TCP descobre quanto a rede aguenta. A janela de congestionamento (<b>cwnd</b>) começa pequena e cresce 1 segmento a cada ACK, o que a dobra a cada RTT. Ao alcançar o limiar <b>ssthresh</b>, o TCP passa para o <b>congestion avoidance</b> e cresce só cerca de 1 segmento por RTT.',
+      observe:['Na aba Janela (cwnd): o crescimento 1, 2, 4, 8 e a mudança de inclinação no ssthresh (8).','No diagrama: rajadas cada vez maiores, cadenciadas pelos ACKs (ACK clocking).','Na aba Resultados: o tempo total da transferência.'],
+      cols:['Segmento','Função','Quem envia'],
+      msgs:[['Dados','segmentos de 1000 bytes','cliente'],['ACK','confirma e libera novos envios','servidor']],
+      why:'Evita que um emissor recém-chegado inunde a rede (RFC 5681). O Linux começa com janela 10 (RFC 6928) para acelerar transferências curtas.'},
+    fr:{short:'Três ACKs duplicados disparam a retransmissão sem esperar o timeout.',
+      concept:'Quando um segmento se perde e os seguintes chegam, o receptor repete o ACK do primeiro byte que falta (<b>ACK duplicado</b>). Três ACKs duplicados indicam uma perda isolada: o emissor faz o <b>fast retransmit</b>, retransmite na hora e entra em <b>fast recovery</b>, cortando a janela à metade em vez de voltar a 1.',
+      observe:['No diagrama: o #8 se perde e os ACKs seguintes repetem o mesmo número.','No terceiro ACK duplicado, a retransmissão do #8 sai sem esperar o RTO.','Na aba Janela (cwnd): a queda à metade, não a 1.'],
+      cols:['Segmento','Função','Quem envia'],
+      msgs:[['Dados #8','perdido na rede','cliente'],['ACK duplicado','pede de novo o #8','servidor'],['Retransmissão','reenvia o #8','cliente']],
+      why:'Recupera perdas isoladas em cerca de 1 RTT e preserva boa parte da vazão. É o caso mais comum de perda em redes congestionadas.'},
+    rto:{short:'Sem ACKs duplicados, só o temporizador percebe a perda.',
+      concept:'O <b>RTO</b> (Retransmission Timeout) é quanto o emissor espera por um ACK antes de concluir que o segmento se perdeu. Ele é calculado a partir do RTT medido (RFC 6298) e dobra a cada timeout seguido. Depois de um timeout, o TCP trata a rede como muito congestionada: a cwnd volta a 1 e o slow start recomeça.',
+      observe:['O #6 é o último segmento: não há segmentos depois dele para gerar ACKs duplicados.','No diagrama: a espera longa até o temporizador estourar.','Na aba Janela (cwnd): a queda para 1. Compare o tempo total com o cenário Fast retransmit.'],
+      cols:['Segmento','Função','Quem envia'],
+      msgs:[['Dados #6','perdido na rede','cliente'],['Retransmissão','sai depois do RTO','cliente'],['ACK','confirma tudo','servidor']],
+      why:'Timeouts custam caro: a conexão fica parada e a janela recomeça do zero. Por isso perdas no fim de transferências curtas pesam tanto no carregamento de páginas web.'},
+    rwnd:{short:'O receptor limita quanto o emissor pode ter em voo.',
+      concept:'O <b>controle de fluxo</b> protege o receptor: em cada ACK, ele anuncia no campo Janela quanto espaço livre tem no buffer (<b>rwnd</b>). O emissor nunca mantém em voo mais que o mínimo entre a cwnd (limite da rede) e a rwnd (limite do receptor).',
+      observe:['A cwnd começa em 10, mas nunca há mais de 4 segmentos em voo.','Na aba Segmento: o campo Janela dos ACKs (4 segmentos = 4000 bytes).','Na aba Janela (cwnd): a cwnd cresce, mas o envio fica preso à rwnd.'],
+      cols:['Segmento','Função','Quem envia'],
+      msgs:[['ACK','anuncia rwnd = 4 segmentos','servidor'],['Dados','no máximo 4 em voo','cliente']],
+      why:'Controle de fluxo (receptor) e controle de congestionamento (rede) são mecanismos diferentes. Uma janela anunciada pequena limita a vazão mesmo em uma rede rápida.'},
+    rand:{short:'Perdas sorteadas: o TCP combina todos os mecanismos de recuperação.',
+      concept:'Com <b>8% de perda aleatória</b>, aparecem ao mesmo tempo perdas isoladas (fast retransmit), várias perdas na mesma janela (ACKs parciais do NewReno, RFC 6582) e, às vezes, timeouts. A <b>semente</b> define o sorteio: a mesma semente repete exatamente as mesmas perdas.',
+      observe:['No diagrama: quais segmentos se perderam e como cada um foi recuperado.','Na aba Janela (cwnd): o formato em dente de serra, típico do TCP sob perda.','Troque a semente e compare o tempo total com a mesma taxa de perda.'],
+      cols:['Segmento','Função','Quem envia'],
+      msgs:[['Dados','8% se perdem','cliente'],['ACK duplicado ou parcial','indica o que falta','servidor'],['Retransmissão','por fast retransmit ou depois do RTO','cliente']],
+      why:'Mostra por que a vazão do TCP cai rápido com a perda: cada perda corta a janela. Em redes sem fio, perdas que não vêm de congestionamento também reduzem a janela.'},
+    ustream:{short:'Datagramas sem conexão: perdas e desordem chegam à aplicação.',
+      concept:'O <b>UDP</b> não tem conexão, confirmação nem retransmissão: cada datagrama é independente. O que se perde não volta, e o que atrasa chega fora de ordem. Para mídia em tempo real (RTP sobre UDP), isso é melhor do que esperar: um áudio atrasado já não serve.',
+      observe:['No diagrama: nenhum handshake e nenhum ACK; o envio segue no ritmo do enlace.','Os datagramas perdidos não são reenviados.','Na aba Resultados: quantos chegaram e quantos chegaram fora de ordem.'],
+      cols:['Datagrama','Função','Quem envia'],
+      msgs:[['UDP','mídia para a porta 5004 (RTP)','cliente']],
+      why:'Como não confirma nada, o UDP também não verifica a origem: é a base da falsificação, da reflexão e da amplificação (veja o simulador de Ataques e defesas TCP/UDP).'},
+    udns:{short:'A aplicação, não o UDP, percebe a perda e repete a consulta.',
+      concept:'O <b>DNS</b> usa UDP na porta 53, com uma consulta e uma resposta. Se a resposta não chega no tempo limite, o UDP não faz nada: é o <b>resolvedor</b> (a aplicação) que repete a consulta.',
+      observe:['No diagrama: a primeira consulta se perde e nada volta.','Depois de 1 s, a aplicação envia a mesma consulta de novo.','O tempo total inclui essa espera.'],
+      cols:['Datagrama','Função','Quem envia'],
+      msgs:[['Consulta DNS','UDP para a porta 53','cliente'],['Resposta DNS','UDP a partir da porta 53','servidor']],
+      why:'Quem usa UDP assume a confiabilidade de que precisa. O DNS sobre UDP também é alvo de amplificação e de respostas forjadas; o identificador da consulta e a porta de origem aleatória dificultam o envenenamento de cache.'},
+    closs:{short:'Mesmas perdas, lado a lado: a rapidez do UDP contra a garantia do TCP.',
+      concept:'No modo <b>Comparação</b>, TCP e UDP enviam o mesmo volume pela mesma rede, com <b>as mesmas perdas</b> (mesma semente). O UDP termina antes e entrega o que chegou; o TCP demora mais, mas entrega tudo, em ordem.',
+      observe:['Na aba Resultados: tempo total e quantidade entregue por cada protocolo.','No diagrama: as retransmissões do TCP e as lacunas do UDP.','Na aba Experimento: a comparação explicada a partir da execução.'],
+      cols:['Unidade','Função','Quem envia'],
+      msgs:[['Segmento TCP','com ACK e retransmissão','cliente'],['Datagrama UDP','sem confirmação','cliente']],
+      why:'Não existe protocolo melhor em geral: transferência de arquivos precisa do TCP; voz e vídeo em tempo real preferem o UDP.'},
+    cord:{short:'Pacotes atrasados: o TCP reordena, o UDP entrega fora de ordem.',
+      concept:'A <b>reordenação</b> acontece quando pacotes seguem caminhos diferentes ou esperam mais em alguma fila. O TCP guarda no buffer o que chega adiantado e entrega à aplicação na ordem certa; o UDP entrega na ordem em que os datagramas chegaram.',
+      observe:['Na aba Resultados: quantos datagramas UDP chegaram fora de ordem.','No TCP: ACKs duplicados causados só pela desordem, sem nenhuma perda.','Se surgirem três ACKs duplicados, o TCP retransmite sem necessidade (retransmissão espúria).'],
+      cols:['Evento','Função','Origem'],
+      msgs:[['Segmento atrasado','chega depois dos seguintes','rede'],['ACK duplicado','causado pela desordem','servidor']],
+      why:'Mostra que ACK duplicado nem sempre significa perda. Pilhas modernas detectam retransmissões espúrias e desfazem a redução da janela.'}
+  };
+  function tcpudpSetup(s){
+    const c=s.set, parts=[];
+    parts.push(c.mode==='tcp'?'TCP':c.mode==='udp'?'UDP ('+(c.app==='dns'?'DNS':'fluxo de mídia')+')':'Comparação TCP x UDP');
+    if(c.N!==undefined) parts.push(c.N+' segmentos de 1000 bytes');
+    parts.push(c.loss?c.loss+'% de perda':'sem perda aleatória');
+    if(c.drops) parts.push('descarte forçado do #'+c.drops.split(',').map(x=>x.trim()).join(', #'));
+    if(c.reorder) parts.push(c.reorder+'% de reordenação');
+    if(c.mode!=='udp' && c.iw) parts.push('janela inicial '+c.iw+', rwnd '+c.rwnd+', ssthresh '+c.ssth);
+    return 'Configuração do cenário: <code>'+scEsc(parts.join('; '))+'</code>';
+  }
+  const SC={list:()=>SCENARIOS,group:x=>x.g,active:()=>activeScen,apply:x=>applyScenario(x),setup:tcpudpSetup,busy:()=>false};
 
   // ---------- Explicação de cada campo de configuração ----------
   const HELP={
@@ -1223,7 +1362,6 @@
   function attachHelp(){
     Object.keys(HELP).forEach(id=>{
       const ctl=$(id), lab=ctl.closest('label');
-      ctl.title=HELP[id].s;
       if(lab){
         const icon=document.createElement('span');
         icon.className='info'; icon.setAttribute('aria-hidden','true'); icon.textContent='ⓘ';

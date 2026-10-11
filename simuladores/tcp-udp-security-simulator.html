@@ -110,6 +110,8 @@
   .measure:last-child{border-right:0;}
   .measure dt{color:var(--muted);font-size:12px;}
   .measure dd{margin:2px 0 0;font:600 17px 'IBM Plex Mono',monospace;color:var(--ink);}
+  .measure dd{display:inline-block;}
+  .measure .m-note{display:inline;margin-left:6px;font-size:11px;color:var(--muted);white-space:nowrap;}
   .v-good{color:var(--teal) !important;}
   .v-warn{color:var(--amber) !important;}
   .v-bad{color:var(--red) !important;}
@@ -227,7 +229,7 @@
   .footer-credit strong{color:var(--ink);font-weight:600;}
 
   /* Resposta a incidente */
-  .ir{margin:12px 0 0;padding:12px 0 0;border-top:1px solid var(--border-soft);list-style:none;}
+  .ir{margin:6px 0 0;padding:0;list-style:none;}
   .ir-title{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--amber);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px;}
   .ir li{display:grid;grid-template-columns:12px 1fr auto;align-items:center;gap:8px;font-size:13.5px;color:var(--muted);padding:3px 0;}
   .ir li .dot{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--muted-line);}
@@ -257,6 +259,34 @@
     .ref-cols{grid-template-columns:1fr;}
   }
   @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+
+  /* Aba Cenário */
+  .scen-body{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:28px;}
+  .scen-body h4{font-size:13px;margin:14px 0 4px;color:var(--amber);text-transform:uppercase;letter-spacing:0.05em;}
+  .scen-body .sc-kicker{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--amber);letter-spacing:0.05em;text-transform:uppercase;}
+  .scen-body .sc-title{margin:2px 0 6px;font-size:17px;}
+  .scen-body .sc-cmd code{color:var(--teal);}
+  .scen-body .sc-msgs{margin:4px 0 8px;}
+  .sc-side{border-left:1px solid var(--border-soft);padding-left:24px;}
+  .sc-side h4:first-of-type{margin-top:6px;}
+  .sc-gdoc{font-size:13.5px;}
+  .sc-list{list-style:none;padding-left:0;margin:0 0 6px;}
+  .sc-list li{font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.45;}
+  button.sc-link{flex:none;font-size:12.5px;padding:2px 10px;border-radius:20px;font-weight:600;margin-right:4px;}
+  button.sc-link.active{border-color:var(--amber);color:var(--amber);background:rgba(242,166,90,0.10);}
+  @media (max-width:960px){
+    .scen-body{grid-template-columns:1fr;}
+    .sc-side{border-left:0;padding-left:0;border-top:1px solid var(--border-soft);padding-top:8px;}
+  }
+
+  /* Ajuda dos campos (ⓘ) */
+  .field-help{position:fixed;z-index:50;display:none;max-width:340px;background:var(--panel-2);border:1px solid var(--teal);border-radius:10px;padding:10px 13px;box-shadow:0 12px 30px -10px rgba(0,0,0,0.6);font-size:13.5px;line-height:1.5;color:var(--muted);pointer-events:none;}
+  .field-help .fh-title{color:var(--ink);font-weight:700;margin-bottom:4px;}
+  .field-help p{margin:0 0 6px;}
+  .field-help p:last-child{margin-bottom:0;}
+  .field-help b{color:var(--ink);font-weight:600;}
+  .info{display:inline-block;color:var(--teal);font-size:12px;cursor:help;font-weight:400;}
+  .lbl{display:inline-flex;align-items:center;gap:5px;}
 </style>
 </head>
 
@@ -297,10 +327,10 @@
         <canvas id="network" role="img" aria-label="Visualização animada do ataque e das respostas defensivas"></canvas>
       </div>
       <dl class="telemetry" aria-label="Telemetria da simulação">
-        <div class="measure"><dt>Pacotes gerados</dt><dd id="generated">0</dd></div>
+        <div class="measure"><dt>Ataque rumo à vítima</dt><dd id="generated">0</dd><small class="m-note" id="genNote"></small></div>
         <div class="measure"><dt>Neutralizados</dt><dd id="blocked" class="v-good">0</dd></div>
-        <div class="measure"><dt>Ataques que chegaram</dt><dd id="delivered" class="v-bad">0</dd></div>
-        <div class="measure"><dt>Carga no servidor</dt><dd id="load">0%</dd></div>
+        <div class="measure"><dt>Chegaram à vítima</dt><dd id="delivered" class="v-bad">0</dd></div>
+        <div class="measure"><dt>Carga no servidor</dt><dd id="load">0%</dd><small class="m-note" id="loadNote"></small></div>
         <div class="measure"><dt>Serviço legítimo</dt><dd id="service">-</dd></div>
         <div class="measure"><dt>Alertas IDS</dt><dd id="alerts">0</dd></div>
       </dl>
@@ -343,9 +373,6 @@
       </div>
 
       <div class="panel inspector">
-        <div class="insp-kicker" id="scenarioKicker">Cenário</div>
-        <div class="insp-title" id="scenarioTitle"></div>
-        <p class="muted-txt" id="scenarioDescription"></p>
         <div class="ir-title">Resposta a incidente (NIST SP 800-61)</div>
         <ol id="irTimeline" class="ir" aria-label="Fases da resposta a incidente"></ol>
         <div id="assessment" class="assessment" aria-live="polite"></div>
@@ -355,9 +382,9 @@
 
   <section class="panel tabs-panel">
     <div class="tab-bar" role="tablist">
-      <button class="tab-btn active" data-tab="controls" type="button" role="tab" aria-selected="true">Efeito dos controles</button>
+      <button class="tab-btn active" data-tab="scen" type="button" role="tab" aria-selected="true">Cenário</button>
+      <button class="tab-btn" data-tab="controls" type="button" role="tab" aria-selected="false">Efeito dos controles</button>
       <button class="tab-btn" data-tab="config" type="button" role="tab" aria-selected="false">Configuração de referência</button>
-      <button class="tab-btn" data-tab="signals" type="button" role="tab" aria-selected="false">Sinais e contramedidas</button>
       <button class="tab-btn" data-tab="exp" type="button" role="tab" aria-selected="false">Experimento</button>
       <button class="tab-btn" data-tab="ref" type="button" role="tab" aria-selected="false">Referência</button>
       <button class="tab-btn" data-tab="log" type="button" role="tab" aria-selected="false">Log de eventos</button>
@@ -367,10 +394,13 @@
         <div class="log-body" id="log" role="log" aria-live="polite" aria-relevant="additions"></div>
       </div>
     </div>
-    <div class="tab-content active" data-tab-content="controls" role="tabpanel">
+    <div class="tab-content active" data-tab-content="scen" role="tabpanel">
+      <div class="tab-scroll"><article class="ref-body scen-body" id="scenBody" aria-live="polite"></article></div>
+    </div>
+    <div class="tab-content" data-tab-content="controls" role="tabpanel">
       <div class="tab-scroll">
         <table>
-          <thead><tr><th>Controle</th><th>Eficácia</th><th>Onde atua</th><th>Neutralizados</th><th>Por que</th></tr></thead>
+          <thead><tr><th>Controle</th><th>Eficácia</th><th>Onde atua</th><th>Por que</th></tr></thead>
           <tbody id="controlBody"></tbody>
         </table>
       </div>
@@ -380,26 +410,13 @@
         <pre id="config" class="config"></pre>
       </div>
     </div>
-    <div class="tab-content" data-tab-content="signals" role="tabpanel">
-      <div class="tab-scroll">
-        <div class="ref-body ref-cols">
-          <div>
-            <h3>Sinais observáveis</h3>
-            <ul id="indicators"></ul>
-          </div>
-          <div>
-            <h3>Contramedidas recomendadas</h3>
-            <ul id="mitigations"></ul>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="tab-content" data-tab-content="ref" role="tabpanel">
       <div class="tab-scroll">
         <article class="ref-body">
           <p>Ambiente didático isolado: todos os hosts, pacotes e resultados existem apenas nesta página e não há tráfego de rede real. Os endereços usam as faixas de documentação da RFC 5737.</p>
           <h3>Como ler a simulação</h3>
           <p>Cada pacote de ataque atravessa os controles ativos em camadas. A <b>eficácia</b> de um controle é a chance de ele neutralizar um pacote sozinho; controles combinados se somam como <b>defesa em profundidade</b>. O <b>serviço legítimo</b> mede quantas requisições do cliente foram atendidas: ele cai quando o servidor satura e também quando um controle gera falsos positivos.</p>
+          <p>Na telemetria, vale sempre: <b>ataque rumo à vítima = neutralizados + chegaram à vítima</b>. Na reflexão, as requisições enviadas aos refletores aparecem à parte, porque não vão para a vítima; cada uma que não é barrada vira várias respostas, e são essas que contam como ataque rumo à vítima. A <b>carga</b> é a fração da capacidade do servidor e por isso para em 100%; quando a demanda passa disso, o quadro mostra também a <b>demanda</b>, e o excedente aparece como requisições legítimas descartadas.</p>
           <h3>TCP e abuso de estado</h3>
           <p>O TCP mantém estado e usa flags, números de sequência e confirmações. Ataques exploram filas de conexão (SYN flood, RFC 4987), validação insuficiente de sequência (RST injection, mitigado pela RFC 5961) ou sessões sem autenticação (sequestro). SYN cookies, firewall stateful e criptografia autenticada (TLS, SSH, TCP-AO da RFC 5925) reduzem a superfície de ataque.</p>
           <h3>UDP e abuso sem conexão</h3>
@@ -746,7 +763,7 @@
         return null;
       }
       function newMetrics() {
-        return { generated: 0, blocked: 0, delivered: 0, load: 0, alerts: 0, legitSent: 0, legitServed: 0, byControl: {}, peakLoad: 0, saturatedCycles: 0, fpDrops: 0, fpBy: {}, satDrops: 0, linkTotal: 0, responses: 0, history: [], startControls: null };
+        return { generated: 0, blocked: 0, delivered: 0, load: 0, alerts: 0, legitSent: 0, legitServed: 0, byControl: {}, peakLoad: 0, saturatedCycles: 0, fpDrops: 0, fpBy: {}, satDrops: 0, linkTotal: 0, responses: 0, history: [], startControls: null, reqs: 0, reqBlocked: 0, demand: 0, peakDemand: 0 };
       }
       function newIr() { return { prepared: false, detect: null, detectBy: '', contain: null, recover: null, post: false }; }
 
@@ -787,12 +804,6 @@
           w.textContent = 'Operadora acionando: ' + (UPSTREAM_DELAY - (tick - upstreamSince)) + ' ciclo(s) para entrar em ação';
           box.append(w);
         }
-        if (ignored.length) {
-          const na = document.createElement('div');
-          na.className = 'na';
-          na.textContent = 'Sem efeito aqui: ' + ignored.map(id => defenseInfo[id].name).join(', ');
-          box.append(na);
-        }
         defenseIds.forEach(id => $(id).closest('label').classList.toggle('na', !(ctl(s, id).w > 0)));
       }
       function renderControls() {
@@ -828,7 +839,7 @@
           const tdWhy = document.createElement('td');
           tdWhy.className = 'meaning';
           tdWhy.textContent = whyOf(s, id) + (fpOf(s, id) >= .1 ? ' Custo neste cenário: ' + fpNoteOf(s, id) + '.' : '');
-          tr.append(tdName, tdW, tdAt, tdCount, tdWhy);
+          tr.append(tdName, tdW, tdAt, tdWhy);
           body.append(tr);
         });
         updateCounts();
@@ -914,7 +925,7 @@
           client: { x: 80, y: h * .74, name: 'Cliente', ip: '198.51.100.77' },
           edge: { x: w * .3, y: h * .2, name: 'ISP', ip: 'borda da origem' },
           firewall: { x: w * .48, y: h * .55, name: 'FW / IDS', ip: 'borda da vítima' },
-          reflector: { x: w * .72, y: h * .2, name: 'Refletor', ip: '192.0.2.53' },
+          reflector: { x: w * .72, y: Math.max(h * .2, 58), name: 'Refletor', ip: '192.0.2.53' },
           server: { x: w - 90, y: h * .6, name: 'Vítima', ip: VICTIM }
         };
         n.upstream = reflect
@@ -1024,6 +1035,8 @@
         $('blocked').textContent = metrics.blocked;
         $('delivered').textContent = metrics.delivered;
         $('load').textContent = Math.round(metrics.load) + '%';
+        $('loadNote').textContent = metrics.demand > 100.5 ? 'demanda ' + Math.round(metrics.demand) + '%' : '';
+        $('genNote').textContent = current().mode === 'reflect' ? '+' + metrics.reqs + ' req., ' + metrics.reqBlocked + ' barradas' : '';
         $('load').className = metrics.load > 70 ? 'v-bad' : metrics.load < 35 ? 'v-good' : 'v-warn';
         if (metrics.legitSent) {
           const pct = Math.round(metrics.legitServed / metrics.legitSent * 100);
@@ -1072,20 +1085,25 @@
           upstreamAnnounced = true;
           if (ctl(s, 'upstream').w > 0) log('Operadora: mitigação ativa para ' + VICTIM + ' (FlowSpec / scrubbing).', 'blocked');
         }
+        const arrive = () => {
+          metrics.delivered++;
+          if (metrics.delivered === 1 || metrics.delivered % 10 === 0) log('Tráfego de ataque alcançou o host vítima (' + metrics.delivered + ').', 'alert');
+        };
+        const blockReq = id => { metrics.reqBlocked++; metrics.byControl[id] = (metrics.byControl[id] || 0) + 1; lastBy = id; };
         const block = id => {
           metrics.blocked++; metrics.byControl[id] = (metrics.byControl[id] || 0) + 1; lastBy = id;
           if (id === 'ids') idsHit = true;
           if (id !== 'upstream' && placeOf(s, id) !== 'edge' && placeOf(s, id) !== 'reflector') linkHits++;
         };
         for (let i = 0; i < count; i++) {
-          metrics.generated++;
+          if (s.mode === 'reflect') metrics.reqs++; else metrics.generated++;
           const spread = s.multi ? 30 : 8;
           const from = { x: n.attacker.x + (Math.random() - .5) * spread * 2, y: n.attacker.y + (Math.random() - .5) * spread * 2 };
           const spd = .7 + Math.random() * .5;
           if (s.mode === 'reflect') {
             const by = filterPacket(s, ORDER.req);
-            if (by && placeOf(s, by) === 'edge') { addParticle([from, n.edge], s.packet, 'attack', true, spd); block(by); }
-            else if (by) { addParticle([from, n.edge, n.reflector], s.packet, 'attack', true, spd); block(by); }
+            if (by && placeOf(s, by) === 'edge') { addParticle([from, n.edge], s.packet, 'attack', true, spd); blockReq(by); }
+            else if (by) { addParticle([from, n.edge, n.reflector], s.packet, 'attack', true, spd); blockReq(by); }
             else { addParticle([from, n.edge, n.reflector], s.packet, 'attack', false, spd); passed++; }
           } else {
             const by = filterPacket(s, ORDER.direct);
@@ -1093,7 +1111,7 @@
             if (place === 'upstream') addParticle([from, n.upstream], s.packet, 'attack', true, spd);
             else if (place === 'server') addParticle([from, n.upstream, n.firewall, n.server], s.packet, 'attack', true, spd);
             else if (by) addParticle([from, n.upstream, n.firewall], s.packet, 'attack', true, spd);
-            else { addParticle([from, n.upstream, n.firewall, n.server], s.packet, 'attack', false, spd, true); passed++; }
+            else { addParticle([from, n.upstream, n.firewall, n.server], s.packet, 'attack', false, spd); passed++; arrive(); }
             if (by) block(by);
           }
         }
@@ -1107,16 +1125,18 @@
             const spd = .65 + Math.min(i, 10) * .04;
             if (by === 'upstream') addParticle([n.reflector, n.upstream], s.response, 'response', true, spd);
             else if (by) addParticle([n.reflector, n.upstream, n.firewall], s.response, 'response', true, spd);
-            else { addParticle([n.reflector, n.upstream, n.firewall, n.server], s.response, 'response', false, spd, true); passedResponses++; }
+            else { addParticle([n.reflector, n.upstream, n.firewall, n.server], s.response, 'response', false, spd); passedResponses++; arrive(); }
             if (by) block(by);
           }
           metrics.responses += responses; metrics.linkTotal += linkHits;
-          metrics.load = Math.min(100, metrics.load + (passedResponses + linkHits * (s.linkLoad || 0)) * (1.5 + intensity * .5));
+          metrics.demand += (passedResponses + linkHits * (s.linkLoad || 0)) * (1.5 + intensity * .5);
+          metrics.load = Math.min(100, metrics.demand);
           passed = passedResponses;
         } else {
           if (s.mode === 'scan' && passed > 0) addParticle([n.server, n.firewall, n.upstream, n.attacker], s.response, 'response', false, .75);
           metrics.linkTotal += linkHits;
-          metrics.load = Math.min(100, metrics.load + (passed + linkHits * (s.linkLoad || 0)) * perPacket);
+          metrics.demand += (passed + linkHits * (s.linkLoad || 0)) * perPacket;
+          metrics.load = Math.min(100, metrics.demand);
           if (s.linkLoad && linkHits && tick % 5 === 0) log('Enlace de entrada: tráfego descartado no firewall ainda consumiu a banda até ele.', 'alert');
         }
         if (tick % Math.max(2, 6 - intensity) === 0) spawnLegit(s, n);
@@ -1129,8 +1149,10 @@
           log(fmt(s.evidence[rnd(0, s.evidence.length - 1)]), 'alert');
         }
         metrics.peakLoad = Math.max(metrics.peakLoad, metrics.load);
+        metrics.peakDemand = Math.max(metrics.peakDemand, metrics.demand);
         if (metrics.load > 70) metrics.saturatedCycles++;
-        metrics.load = Math.max(0, metrics.load * .85 - 1);
+        metrics.demand = Math.max(0, metrics.demand * .85 - 1);
+        metrics.load = Math.min(100, metrics.demand);
         updateIr(s, idsHit);
         updateMetrics();
         if (isOn('upstream') && !upstreamReady()) updateDefenseEffect();
@@ -1143,10 +1165,6 @@
             p.from = p.to;
             p.to = p.rest.shift();
             p.progress = 0;
-          } else if (p.progress >= 1 && p.countsDelivery) {
-            metrics.delivered++;
-            p.countsDelivery = false;
-            if (metrics.delivered === 1 || metrics.delivered % 10 === 0) log('Tráfego de ataque alcançou o host vítima (' + metrics.delivered + ').', 'alert');
           }
         });
         particles = particles.filter(p => p.progress < 1);
@@ -1157,7 +1175,8 @@
         const interval = 850 - Number($('intensity').value) * 115;
         if (accumulator >= interval) { accumulator = 0; spawnCycle(); }
         advanceParticles(dt);
-        metrics.load = Math.max(0, metrics.load - dt * .0015);
+        metrics.demand = Math.max(0, metrics.demand - dt * .0015);
+        metrics.load = Math.min(100, metrics.demand);
         updateMetrics(); draw();
       }
       function loop(time) {
@@ -1188,25 +1207,12 @@
         else if (p >= .5) { verdict = 'Postura parcial'; cls = 'v-warn'; }
         const items = [];
         if (!active.length) items.push(['danger', 'Nenhum controle ativo: todo o tráfego de ataque chega à vítima.']);
-        missing.forEach(id => items.push(['danger', 'Falta controle essencial: ' + defenseInfo[id].name + '. ' + whyOf(s, id)]));
+        missing.forEach(id => items.push(['danger', 'Falta o controle essencial: ' + defenseInfo[id].name + '.']));
         if (active.length && !missing.length) items.push(['', 'Controles essenciais presentes: ' + s.key.map(id => defenseInfo[id].name).join(', ') + '.']);
-        useless.forEach(id => items.push(['warn', defenseInfo[id].name + ' não atua neste ataque. ' + whyOf(s, id)]));
+        if (useless.length) items.push(['warn', 'Sem efeito neste ataque: ' + useless.map(id => defenseInfo[id].name).join(', ') + '. O motivo está na aba Efeito dos controles.']);
         costly.forEach(id => items.push(['warn', 'Custo de ' + defenseInfo[id].name + ': ' + fpNoteOf(s, id) + '. Calibre limiares e monitore falsos positivos.']));
-        items.push(['', 'Risco residual: ' + s.residual]);
-        if (metrics.legitSent) items.push(['', 'Serviço legítimo nesta execução: ' + metrics.legitServed + ' de ' + metrics.legitSent + ' requisições atendidas.']);
-        if (tick > 0) {
-          const lessons = [];
-          if (ir.prepared) lessons.push('O ataque encontrou os controles já ativos: a preparação conteve o incidente desde o primeiro ciclo.');
-          else lessons.push('Os controles essenciais não estavam ativos quando o ataque começou; inclua-os na linha de base (preparação).');
-          if (ir.detect === null) lessons.push('O incidente não foi detectado. Sem IDS/IPS ou monitoramento adequado, ataques de baixo volume passam despercebidos.');
-          else lessons.push('MTTD: ' + Math.max(0, ir.detect - 1) + ' ciclo(s), detecção por ' + ir.detectBy + '.');
-          if (ir.contain !== null && ir.detect !== null) lessons.push('MTTC: ' + Math.max(0, ir.contain - ir.detect) + ' ciclo(s) entre a detecção e a contenção.');
-          else if (ir.contain === null) lessons.push('O incidente não foi contido nesta execução.');
-          if (isOn('upstream') && ctl(s, 'upstream').w > 0 && !upstreamAlwaysOn) lessons.push('A mitigação upstream foi acionada durante o ataque e levou ' + UPSTREAM_DELAY + ' ciclos para agir; um contrato always-on elimina esse atraso.');
-          if (ir.recover === null && ir.contain !== null) lessons.push('Contido, mas a carga ainda não normalizou: continue observando antes de encerrar o incidente.');
-          lessons.forEach(t => items.push(['', 'Lição aprendida: ' + t]));
-          if (ir.recover !== null || ir.prepared) { ir.post = true; renderIr(); }
-        }
+        if (tick > 0 && (ir.recover !== null || ir.prepared)) { ir.post = true; renderIr(); }
+        if (tick > 0) items.push(['', 'O relato da execução (MTTD, MTTC e lições) está na aba Experimento.']);
         const box = $('assessment');
         box.textContent = '';
         const head = document.createElement('p');
@@ -1225,8 +1231,7 @@
       const plural = (n, s, p) => n + ' ' + (n === 1 ? s : p);
       const INT_LABELS = ['muito baixa', 'baixa', 'moderada', 'alta', 'muito alta'];
       function explainObjective(s) {
-        return '<p><b>Objetivo.</b> Observar como o ataque <b>' + esc(s.title) + '</b> afeta a vítima ' + VICTIM + ' e descobrir quais controles defensivos o neutralizam, em que ponto da rede eles atuam e quanto custam ao usuário legítimo.</p>' +
-          '<p>' + esc(s.description) + '</p>';
+        return '<p><b>Objetivo.</b> Observar como o ataque <b>' + esc(s.title) + '</b> afeta a vítima ' + VICTIM + ' e descobrir quais controles defensivos o neutralizam, em que ponto da rede eles atuam e quanto custam ao usuário legítimo.</p>';
       }
       function explainSetup(s) {
         const intensity = Number($('intensity').value);
@@ -1251,18 +1256,18 @@
       }
       function explainResults(s) {
         if (!tick) return '<p>O experimento ainda não começou. Escolha os controles, clique em <b>Iniciar</b> ou em <b>Executar passo</b> e volte a esta aba: o texto é montado a partir do que acontecer.</p>';
-        const attack = metrics.generated - metrics.responses;
-        let h = '<p>Em <b>' + plural(tick, 'ciclo', 'ciclos') + '</b>, o atacante gerou ' + plural(attack, 'pacote', 'pacotes');
-        if (s.mode === 'reflect') h += ', que provocaram mais ' + plural(metrics.responses, 'resposta refletida', 'respostas refletidas');
-        h += '. Os controles neutralizaram <b>' + metrics.blocked + ' (' + pct(metrics.blocked, metrics.generated) + ')</b> e <b>' + plural(metrics.delivered, 'pacote de ataque chegou', 'pacotes de ataque chegaram') + '</b> à vítima.</p>';
+        let h = '<p>Em <b>' + plural(tick, 'ciclo', 'ciclos') + '</b>, ';
+        if (s.mode === 'reflect') h += 'o atacante enviou ' + plural(metrics.reqs, 'requisição', 'requisições') + ' com a origem falsificada aos refletores; ' + metrics.reqBlocked + ' ' + (metrics.reqBlocked === 1 ? 'foi barrada' : 'foram barradas') + ' antes de virar resposta. As demais provocaram <b>' + plural(metrics.generated, 'resposta', 'respostas') + '</b> contra a vítima (fator ' + s.factor + 'x)';
+        else h += 'o atacante enviou <b>' + plural(metrics.generated, 'pacote', 'pacotes') + '</b> contra a vítima';
+        h += '. Desse tráfego rumo à vítima, <b>' + metrics.blocked + ' (' + pct(metrics.blocked, metrics.generated) + ')</b> ' + (metrics.blocked === 1 ? 'foi neutralizado' : 'foram neutralizados') + ' e <b>' + metrics.delivered + '</b> ' + (metrics.delivered === 1 ? 'chegou' : 'chegaram') + ' à vítima.</p>';
         const used = Object.keys(metrics.byControl).sort((a, b) => metrics.byControl[b] - metrics.byControl[a]);
         if (used.length) {
-          h += '<p>Contribuição de cada controle:</p><ul>' + used.map(id => '<li><b>' + esc(defenseInfo[id].name) + '</b>: ' + metrics.byControl[id] + ' (' + pct(metrics.byControl[id], metrics.blocked) + ' do que foi neutralizado); ponto de atuação: ' + PLACE[placeOf(s, id)] + '.</li>').join('') + '</ul>';
+          h += '<p>Contribuição de cada controle:</p><ul>' + used.map(id => '<li><b>' + esc(defenseInfo[id].name) + '</b>: ' + metrics.byControl[id] + ' (' + pct(metrics.byControl[id], metrics.blocked + metrics.reqBlocked) + ' do que foi barrado' + (s.mode === 'reflect' && (id === 'antiSpoof' || id === 'hardening') ? ', ainda como requisição' : '') + ').</li>').join('') + '</ul>';
         } else {
           h += '<p>Nenhum pacote foi neutralizado: ' + (defenseIds.some(isOn) ? 'os controles ativos não atuam sobre este ataque.' : 'não havia controles ativos.') + '</p>';
         }
         const peak = Math.round(metrics.peakLoad);
-        h += '<p>Carga no servidor: pico de <b>' + peak + '%</b>' + (metrics.saturatedCycles ? ', com ' + plural(metrics.saturatedCycles, 'ciclo', 'ciclos') + ' acima de 70% (saturação)' : ', sem chegar à saturação') + '; ao final, ' + Math.round(metrics.load) + '%.';
+        h += '<p>Carga no servidor: pico de <b>' + peak + '%</b>' + (metrics.peakDemand > 100.5 ? ' (a demanda chegou a ' + Math.round(metrics.peakDemand) + '% da capacidade: o excedente não é processado e vira descarte)' : '') + (metrics.saturatedCycles ? ', com ' + plural(metrics.saturatedCycles, 'ciclo', 'ciclos') + ' acima de 70% (saturação)' : ', sem chegar à saturação') + '; ao final, ' + Math.round(metrics.load) + '%.';
         if (metrics.linkTotal && s.linkLoad) h += ' Mesmo os ' + plural(metrics.linkTotal, 'pacote descartado', 'pacotes descartados') + ' no firewall ou no host consumiram banda do enlace até lá; só o que é filtrado na operadora não ocupa o enlace.';
         h += '</p>';
         if (metrics.legitSent) {
@@ -1285,13 +1290,13 @@
       }
       function explainConcepts(s) {
         const items = [];
-        s.key.forEach(id => items.push('<b>' + esc(defenseInfo[id].name) + '</b> é o controle essencial deste cenário' + (isOn(id) ? '' : ' e <b>não foi usado</b>') + ': ' + esc(ctl(s, id).why)));
-        defenseIds.filter(id => isOn(id) && !(ctl(s, id).w > 0)).forEach(id => items.push(esc(defenseInfo[id].name) + ' estava ativo mas não atua aqui: ' + esc(whyOf(s, id))));
+        const unused = s.key.filter(id => !isOn(id));
+        if (unused.length) items.push('O controle essencial deste cenário (' + names(unused) + ') <b>não foi usado</b>: sem ele, os demais controles só reduzem o ataque em parte.');
         if (s.mode === 'reflect') items.push('Na reflexão, a vítima recebe tráfego de IPs legítimos (os refletores). Por isso o anti-spoofing só funciona na <b>borda da rede de origem</b> (BCP 38), e o refletor é desarmado na própria configuração do serviço.');
         if (s.linkLoad && metrics.linkTotal) items.push('Descartar no firewall não devolve a banda: o enlace até ele já foi consumido. Em ataques volumétricos, a filtragem precisa acontecer <b>antes</b> do enlace, na operadora.');
         if (metrics.fpDrops) items.push('Todo controle tem custo. Limiares agressivos e bloqueios por origem geram <b>falsos positivos</b> e descartam usuários reais; calibre e monitore.');
         if (ir.detect === null && tick > 3) items.push('Bloquear não é o mesmo que detectar. Sem IDS/IPS ou monitoramento, o ataque pode ser contido (ou continuar) sem que ninguém saiba.');
-        items.push('Risco residual: ' + esc(s.residual));
+        if (!items.length) items.push('Os controles usados foram os esperados para este ataque; veja na aba Cenário o risco residual.');
         return '<ul>' + items.map(t => '<li>' + t + '</li>').join('') + '</ul>';
       }
       function explainNext(s) {
@@ -1319,22 +1324,173 @@
         $('explainBody').innerHTML = h;
       }
 
-      // ---------- Estado ----------
-      function fillList(id, items) {
-        const ul = $(id);
-        ul.textContent = '';
-        items.forEach(t => { const li = document.createElement('li'); li.textContent = t; ul.append(li); });
+  // ---------- Explicação de cada campo de configuração (ⓘ) ----------
+  const helpBox=document.createElement('div');
+  helpBox.className='field-help'; helpBox.id='fieldHelp'; helpBox.setAttribute('role','tooltip');
+  document.body.appendChild(helpBox);
+  let helpId=null;
+  function showHelp(id){
+    const h=HELP[id], ctl=document.getElementById(id), lab=ctl.closest('label');
+    helpId=id;
+    helpBox.innerHTML='<div class="fh-title">'+h.t+'</div>'+h.p.map(x=>'<p>'+x+'</p>').join('');
+    helpBox.style.display='block';
+    const r=(lab||ctl).getBoundingClientRect(), bw=helpBox.offsetWidth, bh=helpBox.offsetHeight;
+    if(r.bottom<0 || r.top>window.innerHeight){ hideHelp(); return; }
+    const left=Math.max(8,Math.min(r.left,window.innerWidth-bw-8));
+    let top=r.bottom+6;
+    if(top+bh>window.innerHeight-8) top=Math.max(8,r.top-bh-6);
+    helpBox.style.left=left+'px'; helpBox.style.top=top+'px';
+  }
+  function hideHelp(){ helpBox.style.display='none'; helpId=null; }
+  function attachHelp(){
+    const side=document.querySelector('.side-col');
+    const follow=()=>{ if(helpId) showHelp(helpId); };
+    if(side) side.addEventListener('scroll',follow,{passive:true});
+    window.addEventListener('scroll',follow,{passive:true});
+    Object.keys(HELP).forEach(id=>{
+      const ctl=document.getElementById(id);
+      if(!ctl) return;
+      const lab=ctl.closest('label');
+      if(lab){
+        const icon=document.createElement('span');
+        icon.className='info'; icon.setAttribute('aria-hidden','true'); icon.textContent=' ⓘ';
+        const head=lab.querySelector('.field-head, b');
+        if(head){
+          const t=head.firstChild && head.firstChild.nodeType===3 ? head.firstChild : null;
+          if(t && head.classList.contains('field-head')){ t.textContent=t.textContent.replace(/\s+$/,''); head.insertBefore(icon,t.nextSibling); }
+          else head.appendChild(icon);
+        } else {
+          const txt=Array.from(lab.childNodes).find(n=>n.nodeType===3 && n.textContent.trim());
+          if(txt){
+            const wrap=document.createElement('span'); wrap.className='lbl';
+            lab.insertBefore(wrap,txt); wrap.appendChild(document.createTextNode(txt.textContent.trim())); wrap.appendChild(icon);
+            lab.removeChild(txt);
+          } else lab.appendChild(icon);
+        }
+        lab.addEventListener('mouseenter',()=>showHelp(id));
+        lab.addEventListener('mouseleave',()=>{ if(document.activeElement!==ctl) hideHelp(); });
+        lab.addEventListener('touchstart',()=>showHelp(id),{passive:true});
       }
+      ctl.setAttribute('aria-describedby','fieldHelp');
+      ctl.addEventListener('focus',()=>showHelp(id));
+      ctl.addEventListener('blur',hideHelp);
+      ctl.addEventListener('keydown',e=>{ if(e.key==='Escape') hideHelp(); });
+    });
+    document.addEventListener('touchstart',e=>{ if(helpId && !e.target.closest('label')) hideHelp(); },{passive:true});
+  }
+
+  const HELP={
+    intensity:{t:'Intensidade do ataque',s:'Quantidade de pacotes de ataque por ciclo, de 1 a 5.',
+      p:['Define quantos pacotes de ataque saem por ciclo e o ritmo da simulação.','Ataques de baixo volume (Slowloris, varredura lenta) usam poucos pacotes de propósito; ataques volumétricos crescem com a intensidade.','Suba a intensidade para testar se a mesma defesa continua segurando o ataque.']},
+    rateLimit:{t:'Rate limiting',s:'Limita pacotes ou conexões por origem.',
+      p:['Descarta o que passa de um limite por endereço de origem, por exemplo 20 SYN por segundo (meter do nftables, hashlimit do iptables ou limites do próprio serviço).','Funciona contra poucas origens; perde força contra ataques distribuídos e origens falsificadas.','<b>Custo:</b> clientes atrás de NAT ou CGNAT compartilham o mesmo IP e podem ser bloqueados (falso positivo).']},
+    stateful:{t:'Firewall stateful',s:'Valida estado, flags e janela de sequência.',
+      p:['Acompanha cada conexão em uma tabela de estados e só aceita pacotes coerentes com ela: SYN para abrir, ACK de conexão existente, sequência dentro da janela.','Descarta ACK órfão, RST fora da sequência e respostas que ninguém pediu.','<b>Limite:</b> um SYN é sempre um início válido, e a própria tabela de estados pode esgotar em floods.']},
+    antiSpoof:{t:'Anti-spoofing (BCP 38 / uRPF)',s:'Descarta pacotes com origem falsificada.',
+      p:['Descarta pacotes cuja origem não poderia chegar por aquela interface: uRPF no roteador, rp_filter no Linux, BCP 38 na borda do provedor.','Contra reflexão e amplificação, só funciona na rede de <b>origem</b> do atacante: na vítima, as respostas vêm de IPs legítimos, os dos refletores.','Não ajuda contra botnets, que usam os próprios IPs.']},
+    synCookies:{t:'SYN cookies',s:'Protege a fila de conexões TCP no host.',
+      p:['O servidor responde ao SYN sem reservar memória: o estado vai codificado no número de sequência do SYN-ACK e só é reconstruído quando o ACK final chega (RFC 4987).','Neutraliza o SYN flood contra a fila de conexões semiabertas.','Atua só no handshake TCP: não ajuda depois da conexão aberta nem contra UDP.']},
+    ids:{t:'IDS/IPS',s:'Detecta padrões anômalos e bloqueia origens.',
+      p:['O IDS reconhece padrões (assinaturas e limiares) e gera alertas; no modo IPS, também bloqueia. Exemplos: Suricata, Snort, Zeek.','É o principal meio de <b>detecção</b>: sem ele, ataques de baixo volume passam despercebidos (veja a linha do tempo de resposta a incidente).','<b>Custo:</b> limiares mal calibrados geram falsos positivos contra usuários reais.']},
+    tls:{t:'TLS / SSH',s:'Autentica e cifra o conteúdo da sessão.',
+      p:['Cifra e autentica cada registro da sessão (TLS 1.3, SSH): dados injetados falham na verificação de integridade.','Resolve o sequestro de sessão, mas não protege o TCP abaixo dele: um RST forjado derruba a conexão mesmo com TLS.','Não ajuda contra ataques de volume nem contra varreduras.']},
+    hardening:{t:'Hardening de serviços',s:'Fecha portas, restringe serviços e ajusta timeouts.',
+      p:['Reduz a superfície de ataque: fecha portas e serviços desnecessários, desativa recursão DNS aberta, NTP monlist e UDP no memcached, ajusta timeouts da aplicação.','É o controle essencial contra Slowloris, varreduras e o uso dos seus serviços como refletores.','Depende de inventário: só se endurece o que se sabe que existe.']},
+    upstream:{t:'Mitigação upstream',s:'Scrubbing ou FlowSpec na operadora.',
+      p:['A operadora ou um serviço anti-DDoS filtra o tráfego antes de ele chegar ao seu enlace: FlowSpec (RFC 8955), scrubbing center ou RTBH (RFC 7999).','É o único controle que escala com ataques maiores que o seu enlace.','Ativada durante o ataque, leva alguns ciclos para agir (chamado à operadora); marcada antes de iniciar, vale como contrato always-on. O RTBH descarta todo o tráfego para a vítima, inclusive o legítimo.']},
+    speedSelect:{t:'Velocidade da animação',s:'Ritmo da animação. Não altera os resultados.',
+      p:['Muda só a velocidade de exibição; métricas, eficácia e resultados são os mesmos.','Use Executar passo para avançar um ciclo de cada vez.']}
+  };
+
+      // ---------- Estado ----------
+  // ---------- Aba Cenário (padrão do simulador de ICMP) ----------
+  // Adaptador por simulador: SC.list(), SC.group(x), SC.active(), SC.apply(x), SC.setup(x), SC.busy()
+  function scEsc(t){ return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function renderScenarioTab(){
+    const body=document.getElementById('scenBody');
+    if(!body) return;
+    const list=SC.list(), s=list.find(x=>x.id===SC.active());
+    let left;
+    if(!s){
+      left='<h3>Nenhum cenário selecionado</h3><p>A configuração foi alterada manualmente. Escolha um cenário à direita ou no topo para carregar a configuração pronta, ou continue explorando: a aba <b>Experimento</b> descreve cada execução.</p>';
+    } else {
+      const d=SCEN_DOC[s.id];
+      left='<div class="sc-kicker">'+scEsc(SC.group(s))+'</div><h3 class="sc-title">'+scEsc(s.label)+'</h3>'+
+        '<p class="sc-cmd">'+SC.setup(s)+'</p>'+
+        '<h4>O que é</h4><p>'+d.concept+'</p>'+
+        '<h4>Neste cenário</h4>'+s.what+
+        '<h4>O que observar</h4><ul>'+d.observe.map(x=>'<li>'+x+'</li>').join('')+'</ul>'+
+        '<h4>'+(d.msgsTitle||'Mensagens envolvidas')+'</h4><table class="sc-msgs"><thead><tr>'+(d.cols||['Mensagem','Função','Quem envia']).map(c=>'<th>'+c+'</th>').join('')+'</tr></thead><tbody>'+
+          d.msgs.map(m=>'<tr>'+m.map((c,i)=>'<td'+(i===2?' class="meaning"':'')+'>'+c+'</td>').join('')+'</tr>').join('')+'</tbody></table>'+
+        '<h4>Por que importa</h4><p>'+d.why+'</p>';
+    }
+    let right='<h3>Tipos de cenário</h3>', group=null;
+    list.forEach(x=>{
+      const g=SC.group(x);
+      if(g!==group){
+        if(group!==null) right+='</ul>';
+        group=g;
+        right+='<h4>'+scEsc(g)+'</h4><p class="sc-gdoc">'+GROUP_DOC[g]+'</p><ul class="sc-list">';
+      }
+      right+='<li><button type="button" class="sc-link'+(s&&s.id===x.id?' active':'')+'" data-scen="'+x.id+'"'+(SC.busy()?' disabled':'')+'>'+scEsc(x.label)+'</button> '+SCEN_DOC[x.id].short+'</li>';
+    });
+    right+='</ul>';
+    body.innerHTML='<div class="sc-main">'+left+'</div><aside class="sc-side">'+right+'</aside>';
+    body.querySelectorAll('.sc-link').forEach(b=>b.addEventListener('click',()=>SC.apply(list.find(x=>x.id===b.dataset.scen))));
+  }
+
+  const GROUP_DOC={
+    'TCP':'Ataques que abusam do estado da conexão TCP (fila de conexões, números de sequência, sessões abertas) ou das respostas do TCP para mapear a rede.',
+    'UDP':'Ataques que exploram a falta de conexão do UDP: volume, origem falsificada, reflexão, amplificação e varredura.'
+  };
+  const SCEN_SHORT={
+    'syn-flood':'Milhares de SYN sem o ACK final esgotam a fila de conexões do servidor.',
+    'rst-injection':'Um RST forjado tenta derrubar uma sessão TCP ativa.',
+    'session-hijack':'Segmentos forjados tentam entrar em uma sessão já estabelecida.',
+    'ack-scan':'Sondas ACK mapeiam as regras do firewall pelas respostas RST.',
+    'slowloris':'Conexões HTTP lentas ocupam todos os workers com pouquíssimo tráfego.',
+    'slow-scan':'Sondas espaçadas por horas passam abaixo dos limiares do IDS.',
+    'udp-flood':'Datagramas em alta taxa saturam a banda e a CPU da vítima.',
+    'botnet':'Milhares de origens reais somam um volume maior que o enlace da vítima.',
+    'amplification':'Uma requisição pequena com origem falsa vira uma resposta enorme contra a vítima.',
+    'reflection':'Terceiros são induzidos a responder à vítima, que nunca pediu nada.',
+    'udp-scan':'Sondas UDP descobrem portas abertas pelo ICMP Port Unreachable.',
+    'dns-water-torture':'Nomes aleatórios, via resolvedores legítimos, sobrecarregam o DNS autoritativo.'
+  };
+  function secModeText(s){
+    if(s.mode==='reflect') return 'O atacante envia requisições com a origem falsificada (o IP da vítima, '+VICTIM+') a um serviço refletor, que responde à vítima com fator de amplificação '+s.factor+'x. A vítima recebe tráfego de IPs legítimos, os dos refletores.';
+    if(s.mode==='scan') return 'O atacante envia sondas à vítima ('+VICTIM+') e deduz portas e regras de filtragem pelas respostas'+(s.every?'; aqui, uma sonda a cada '+s.every+' ciclos, de propósito abaixo dos limiares de detecção':'')+'.';
+    if(s===scenarios['dns-water-torture']) return 'Os bots não falam direto com a vítima: enviam as consultas a resolvedores recursivos legítimos (de provedores e DNS públicos), que as repassam ao servidor autoritativo da vítima ('+VICTIM+'). Por isso as origens que chegam são resolvedores reais.';
+    if(s.multi) return 'Milhares de bots enviam tráfego ao mesmo tempo, cada um com o seu IP real, contra a vítima ('+VICTIM+'). O volume chega pela operadora antes de alcançar o firewall.';
+    return 'O atacante envia o tráfego direto à vítima ('+VICTIM+'), passando pela operadora e pelo firewall da borda.';
+  }
+  const SCEN_DOC={};
+  const exampleOf=e=>e.replace(/\{src\}/g,'198.51.100.23').replace(/\{refl\}/g,'192.0.2.53').replace(/\{sport\}/g,'40211').replace(/\{dport\}/g,'161').replace(/\{seq\}/g,'381927113').replace(/\{rand\}/g,'x7f3k2').replace(/\{pct\}/g,'92');
+  const SCEN_LIST=Object.keys(scenarios).map(id=>{
+    const s=scenarios[id];
+    SCEN_DOC[id]={
+      short:SCEN_SHORT[id],
+      concept:scEsc(s.description),
+      observe:s.indicators.map(scEsc),
+      msgsTitle:'Evidências típicas no log',
+      cols:['Fonte','Registro'],
+      msgs:s.evidence.map(e=>{ const x=exampleOf(e), k=x.indexOf(': '); return k>0 && k<30 ? [scEsc(x.slice(0,k)),'<code>'+scEsc(x.slice(k+2))+'</code>'] : ['observação',scEsc(x)]; }),
+      why:'Contramedidas recomendadas: '+s.mitigations.map(scEsc).join('; ')+'. Risco residual: '+scEsc(s.residual)
+    };
+    return {id:id,label:s.title,g:s.proto,
+      what:'<p>'+secModeText(s)+'</p><p>Controle essencial: '+s.key.map(c=>'<b>'+scEsc(defenseInfo[c].name)+'</b>').join(' e ')+'. A eficácia, o ponto de atuação e o motivo de cada controle estão na aba Efeito dos controles.</p>'};
+  });
+  const SC={list:()=>SCEN_LIST,group:x=>x.g,active:()=>scenarioId,apply:x=>{ scenarioId=x.id; renderScenario(); },
+    setup:x=>{ const s=scenarios[x.id]; return 'Tipo: <code>'+(x.id==='dns-water-torture'?'via resolvedores legítimos':s.mode==='reflect'?'reflexão, fator '+s.factor+'x':s.mode==='scan'?'varredura':s.multi?'ataque distribuído':'ataque direto')+'</code> | vítima <code>'+VICTIM+'</code> | ative os controles no painel lateral e clique em Iniciar.'; },
+    busy:()=>false};
+
       function renderScenario() {
         const s = current();
         renderScenarioChips();
-        $('scenarioKicker').textContent = 'Cenário ' + s.proto + (s.mode === 'reflect' ? ' | reflexão' : s.mode === 'scan' ? ' | varredura' : s.multi ? ' | distribuído' : '');
-        $('scenarioTitle').textContent = s.title;
-        $('scenarioDescription').textContent = s.description;
-        fillList('indicators', s.indicators);
-        fillList('mitigations', s.mitigations);
         reset();
         refreshDefenses();
+        renderScenarioTab();
+        activateTab('scen');
       }
       function reset() {
         setRunning(false); particles = []; tick = 0; accumulator = 0;
@@ -1389,6 +1545,7 @@
       window.addEventListener('resize', resize);
       metrics = newMetrics();
       ir = newIr();
+      attachHelp();
       renderScenario(); resize();
     })();
 </script>
