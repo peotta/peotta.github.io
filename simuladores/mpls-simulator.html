@@ -283,6 +283,14 @@
   .field-help b{color:var(--ink);font-weight:600;}
   .info{display:inline-block;color:var(--teal);font-size:12px;cursor:help;font-weight:400;}
   .lbl{display:inline-flex;align-items:center;gap:5px;}
+
+  /* Palco com altura mínima: a topologia nunca é espremida. Em telas baixas a página rola. */
+  @media (min-width:961px){
+    html,body{height:auto;min-height:100%;overflow:auto;}
+    .app{height:auto;min-height:100vh;padding:12px 20px 8px;gap:10px;}
+    .workspace{flex:1 0 450px;min-height:450px;}
+    .footer-credit br{display:none;}
+  }
 </style>
 </head>
 

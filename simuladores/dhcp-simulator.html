@@ -272,6 +272,14 @@
   .info{display:inline-block;color:var(--teal);font-size:12px;cursor:help;font-weight:400;}
   .lbl{display:inline-flex;align-items:center;gap:5px;}
   .inspector .insp-kicker{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--amber);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;}
+
+  /* Palco com altura mínima: a topologia nunca é espremida. Em telas baixas a página rola. */
+  @media (min-width:961px){
+    html,body{height:auto;min-height:100%;overflow:auto;}
+    .app{height:auto;min-height:100vh;padding:12px 20px 8px;gap:10px;}
+    .workspace{flex:1 0 560px;min-height:560px;}
+    .footer-credit br{display:none;}
+  }
 </style>
 </head>
 
