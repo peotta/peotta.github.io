@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="1200" height="520" role="img" aria-labelledby="t d">
 <title id="t">CryptoNet Lab: laboratório virtual de criptografia, em andamento</title>
-<desc id="d">Animação do projeto CryptoNet Lab: Alice e Bob trocam valores públicos de Diffie-Hellman enquanto Eve observa sem conseguir o segredo compartilhado, depois o efeito avalanche de uma função hash.</desc>
+<desc id="d">Animação do projeto CryptoNet Lab: Alice e Bob trocam valores públicos de Diffie-Hellman enquanto um observador vê só valores públicos, sem conseguir o segredo compartilhado, depois o efeito avalanche de uma função hash.</desc>
 <style>
 .a{animation-duration:12s;animation-iteration-count:infinite;animation-timing-function:linear}
 .s{transform-box:fill-box;transform-origin:center}
@@ -92,13 +92,13 @@
 <g transform="translate(270,172)"><g class="pkA"><rect width="260" height="52" rx="12" fill="#04160b" stroke="#48ff8b" stroke-width="2.5"/><text x="130" y="36" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="25" font-weight="700" fill="#48ff8b">A = g^a mod p</text></g></g>
 <g transform="translate(670,240)"><g class="pkB"><rect width="260" height="52" rx="12" fill="#04160b" stroke="#00d26a" stroke-width="2.5"/><text x="130" y="36" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="25" font-weight="700" fill="#00d26a">B = g^b mod p</text></g></g>
 
-<!-- Eve -->
+<!-- Observador -->
 <circle class="ring" cx="600" cy="112" r="40" fill="none" stroke="#ff5d5d" stroke-width="2"/>
 <circle class="ring r2" cx="600" cy="112" r="40" fill="none" stroke="#ff5d5d" stroke-width="2"/>
 <g filter="url(#glowR)"><circle cx="600" cy="112" r="40" fill="#1c0707" stroke="#ff5d5d" stroke-width="3"/></g>
 <g transform="translate(600,112)" fill="none" stroke="#ff8a8a" stroke-width="3"><path d="M-20 0C-12 -12 12 -12 20 0C12 12 -12 12 -20 0Z"/><circle class="pupil" r="6" fill="#ff8a8a"/></g>
 <path class="beam" d="M574 144L535 176M628 144L690 244" stroke="#ff5d5d" stroke-width="2.5" stroke-dasharray="5 5" fill="none"/>
-<g class="evtxt"><text x="700" y="104" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="21" fill="#ff8a8a">Eve observa: vê só valores públicos</text></g>
+<g class="evtxt"><text x="700" y="104" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="21" fill="#ff8a8a">Observador: vê só valores públicos</text></g>
 
 <!-- Cálculo do segredo -->
 <path class="draw" d="M232 284C300 335 340 365 400 380" stroke="#48ff8b" stroke-width="2.5" fill="none"/>
