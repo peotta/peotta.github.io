@@ -4,6 +4,7 @@ import { readStorage, writeStorage, useActiveSection, useScrollProgress } from '
 import MatrixRain from './components/MatrixRain.jsx';
 import Nav, { SPY_IDS } from './components/Nav.jsx';
 import Hero from './components/Hero.jsx';
+import Featured from './components/Featured.jsx';
 import Catalog from './components/Catalog.jsx';
 import CommandPalette from './components/CommandPalette.jsx';
 import Ravens from './components/Ravens.jsx';
@@ -95,6 +96,7 @@ export default function App() {
       <Nav t={t} lang={lang} onLang={setLang} active={active} filter={filter} progress={progress} onSearch={openPalette} />
       <main id="conteudo-principal">
         <Hero t={t} />
+        <Featured t={t} />
         <About t={t} />
         <Work t={t} />
         <Catalog t={t} lang={lang} filter={filter} onFilter={setFilter} query={query} onQuery={setQuery} />

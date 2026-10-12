@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-labelledby="t d">
+<title id="t">CryptoNet Lab: laboratório virtual de criptografia, em andamento</title>
+<desc id="d">Ilustração do projeto CryptoNet Lab: Alice e Bob trocam valores públicos de Diffie-Hellman enquanto Eve observa sem conseguir o segredo compartilhado, com o efeito avalanche de uma função hash e a lista de laboratórios prontos e em preparação.</desc>
+<defs>
+  <radialGradient id="bg" cx="50%" cy="48%" r="70%"><stop offset="0" stop-color="#06301a"/><stop offset="0.55" stop-color="#031008"/><stop offset="1" stop-color="#010301"/></radialGradient>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#48ff8b" stroke-opacity="0.07" stroke-width="1"/></pattern>
+  <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="glowR" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="1200" height="675" fill="url(#bg)"/>
+<rect width="1200" height="675" fill="url(#grid)"/>
+<rect x="14" y="14" width="1172" height="647" rx="26" fill="none" stroke="#48ff8b" stroke-opacity="0.28"/>
+
+<text x="60" y="82" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="20" letter-spacing="4" fill="#48ff8b">$ ./cryptonet --lab</text>
+<text x="60" y="146" font-family="Inter,'Segoe UI',system-ui,sans-serif" font-size="58" font-weight="800" fill="#effff4">CryptoNet <tspan fill="#48ff8b">Lab</tspan></text>
+<text x="60" y="184" font-family="Inter,'Segoe UI',system-ui,sans-serif" font-size="22" fill="#91caa4">Criptografia animada passo a passo, no navegador</text>
+
+<g transform="translate(900,52)">
+  <rect width="250" height="48" rx="24" fill="#2a1d05" stroke="#ffb84d" stroke-width="1.5"/>
+  <circle cx="30" cy="24" r="6" fill="#ffb84d"><animate attributeName="r" values="5;8;5" dur="1.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0.45;1" dur="1.8s" repeatCount="indefinite"/></circle>
+  <text x="50" y="30" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="17" font-weight="700" letter-spacing="2" fill="#ffb84d">EM ANDAMENTO</text>
+</g>
+
+<path d="M262 372H938" stroke="#48ff8b" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="3 9"/>
+
+<g filter="url(#glow)"><circle cx="200" cy="372" r="64" fill="#04160b" stroke="#48ff8b" stroke-width="3"/></g>
+<text x="200" y="394" text-anchor="middle" font-family="Inter,'Segoe UI',system-ui,sans-serif" font-size="62" font-weight="800" fill="#effff4">A</text>
+<text x="200" y="468" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="26" fill="#d8ffe7">Alice</text>
+<g transform="translate(125,496)"><rect width="150" height="34" rx="17" fill="#2a0a0a" stroke="#ff5d5d"/><text x="75" y="24" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="18" fill="#ff8a8a">a  (privada)</text></g>
+
+<g filter="url(#glow)"><circle cx="1000" cy="372" r="64" fill="#04160b" stroke="#48ff8b" stroke-width="3"/></g>
+<text x="1000" y="394" text-anchor="middle" font-family="Inter,'Segoe UI',system-ui,sans-serif" font-size="62" font-weight="800" fill="#effff4">B</text>
+<text x="1000" y="468" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="26" fill="#d8ffe7">Bob</text>
+<g transform="translate(925,496)"><rect width="150" height="34" rx="17" fill="#2a0a0a" stroke="#ff5d5d"/><text x="75" y="24" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="18" fill="#ff8a8a">b  (privada)</text></g>
+
+<g>
+  <g transform="translate(300,322)"><animateTransform attributeName="transform" type="translate" values="300,322;340,322;300,322" dur="4s" repeatCount="indefinite"/>
+    <rect width="250" height="50" rx="12" fill="#04160b" stroke="#48ff8b" stroke-width="2.5"/><text x="125" y="34" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="24" font-weight="700" fill="#48ff8b">A = g^a mod p</text></g>
+  <g transform="translate(650,392)"><animateTransform attributeName="transform" type="translate" values="650,392;610,392;650,392" dur="4s" repeatCount="indefinite"/>
+    <rect width="250" height="50" rx="12" fill="#04160b" stroke="#00d26a" stroke-width="2.5"/><text x="125" y="34" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="24" font-weight="700" fill="#00d26a">B = g^b mod p</text></g>
+</g>
+
+<g filter="url(#glowR)"><circle cx="600" cy="258" r="40" fill="#1c0707" stroke="#ff5d5d" stroke-width="3"/></g>
+<g transform="translate(600,258)" fill="none" stroke="#ff8a8a" stroke-width="3"><path d="M-20 0C-12 -12 12 -12 20 0C12 12 -12 12 -20 0Z"/><circle r="6" fill="#ff8a8a"/></g>
+<text x="600" y="318" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="20" fill="#ff8a8a">Eve observa o canal</text>
+<path d="M572 290L470 332M628 290L730 392" stroke="#ff5d5d" stroke-opacity="0.8" stroke-width="2" stroke-dasharray="5 5" fill="none"/>
+<text x="620" y="212" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="19" fill="#ff8a8a">vê só valores públicos</text>
+
+<g transform="translate(400,452)">
+  <rect width="400" height="66" rx="16" fill="#04160b" stroke="#48ff8b" stroke-width="2" filter="url(#glow)"/>
+  <g transform="translate(36,31)" fill="none" stroke="#48ff8b" stroke-width="3" stroke-linecap="round"><circle cx="-8" cy="0" r="9"/><path d="M1 0H22M16 0V8M22 0V6"/></g>
+  <text x="238" y="30" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="22" font-weight="700" fill="#effff4">K = (g^a)^b = (g^b)^a</text>
+  <text x="238" y="53" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="16" fill="#91caa4">segredo igual, nunca trafega</text>
+</g>
+
+<g transform="translate(50,566)">
+  <text x="0" y="0" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="17" fill="#91caa4">SHA-256: trocar 1 letra muda 31 de 32 caracteres</text>
+  <text x="0" y="30" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="20" fill="#d8ffe7">"CryptoNet"  <tspan fill="#ffb84d">1</tspan><tspan fill="#ffb84d">2</tspan><tspan fill="#ffb84d">2</tspan><tspan fill="#ffb84d">2</tspan><tspan fill="#ffb84d">b</tspan><tspan fill="#ffb84d">9</tspan>5<tspan fill="#ffb84d">9</tspan><tspan fill="#ffb84d">e</tspan><tspan fill="#ffb84d">b</tspan><tspan fill="#ffb84d">8</tspan><tspan fill="#ffb84d">1</tspan><tspan fill="#ffb84d">0</tspan><tspan fill="#ffb84d">f</tspan><tspan fill="#ffb84d">0</tspan><tspan fill="#ffb84d">3</tspan><tspan fill="#ffb84d">e</tspan><tspan fill="#ffb84d">0</tspan><tspan fill="#ffb84d">7</tspan><tspan fill="#ffb84d">e</tspan><tspan fill="#ffb84d">1</tspan><tspan fill="#ffb84d">d</tspan><tspan fill="#ffb84d">f</tspan><tspan fill="#ffb84d">8</tspan><tspan fill="#ffb84d">4</tspan><tspan fill="#ffb84d">6</tspan><tspan fill="#ffb84d">2</tspan><tspan fill="#ffb84d">2</tspan><tspan fill="#ffb84d">4</tspan><tspan fill="#ffb84d">5</tspan><tspan fill="#ffb84d">e</tspan><tspan fill="#ffb84d">4</tspan>…</text>
+  <text x="0" y="58" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="20" fill="#d8ffe7">"Cryptonet"  <tspan fill="#ffb84d">5</tspan><tspan fill="#ffb84d">0</tspan><tspan fill="#ffb84d">e</tspan><tspan fill="#ffb84d">0</tspan><tspan fill="#ffb84d">6</tspan><tspan fill="#ffb84d">e</tspan>5<tspan fill="#ffb84d">4</tspan><tspan fill="#ffb84d">8</tspan><tspan fill="#ffb84d">f</tspan><tspan fill="#ffb84d">5</tspan><tspan fill="#ffb84d">b</tspan><tspan fill="#ffb84d">4</tspan><tspan fill="#ffb84d">4</tspan><tspan fill="#ffb84d">6</tspan><tspan fill="#ffb84d">6</tspan><tspan fill="#ffb84d">6</tspan><tspan fill="#ffb84d">f</tspan><tspan fill="#ffb84d">e</tspan><tspan fill="#ffb84d">3</tspan><tspan fill="#ffb84d">c</tspan><tspan fill="#ffb84d">4</tspan><tspan fill="#ffb84d">2</tspan><tspan fill="#ffb84d">4</tspan><tspan fill="#ffb84d">f</tspan><tspan fill="#ffb84d">a</tspan><tspan fill="#ffb84d">1</tspan><tspan fill="#ffb84d">b</tspan><tspan fill="#ffb84d">a</tspan><tspan fill="#ffb84d">b</tspan><tspan fill="#ffb84d">4</tspan><tspan fill="#ffb84d">8</tspan>…</text>
+</g>
+
+<g font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="18" transform="translate(690,546)">
+  <text x="0" y="0" fill="#91caa4">laboratórios</text>
+  <g transform="translate(0,14)"><rect width="100" height="34" rx="17" fill="#06301a" stroke="#48ff8b"/><text x="50" y="24" text-anchor="middle" fill="#48ff8b">✔ RSA</text></g>
+  <g transform="translate(110,14)"><rect width="200" height="34" rx="17" fill="#06301a" stroke="#48ff8b"/><text x="100" y="24" text-anchor="middle" fill="#48ff8b">✔ Diffie-Hellman</text></g>
+  <g transform="translate(320,14)"><rect width="170" height="34" rx="17" fill="#06301a" stroke="#48ff8b"/><text x="85" y="24" text-anchor="middle" fill="#48ff8b">✔ Hash e HMAC</text></g>
+  <g transform="translate(0,58)" fill="none" stroke="#ffb84d" stroke-dasharray="4 4"><rect width="100" height="34" rx="17"/><rect x="110" width="136" height="34" rx="17"/><rect x="256" width="234" height="34" rx="17"/></g>
+  <g fill="#ffb84d" text-anchor="middle"><text x="50" y="82">AES</text><text x="178" y="82">ChaCha20</text><text x="373" y="82">modos de operação</text></g>
+</g>
+<text x="1140" y="652" text-anchor="end" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="14" fill="#91caa4" opacity="0.8">uso didático · UnB</text>
+</svg>
