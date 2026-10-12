@@ -443,6 +443,19 @@ const allItems = [
     },
     tags: ['TCP', 'UDP', 'Defesa de redes'],
   },
+  {
+    id: 'sim-secure-protocols',
+    categories: ['simulators'],
+    href: '/simuladores/protocolos-seguros-simulator.html',
+    cta: cta.sim,
+    title: { pt: 'Protocolos de rede seguros (SSH e HTTPS)', en: 'Secure Network Protocols (SSH and HTTPS)', es: 'Protocolos de red seguros (SSH y HTTPS)' },
+    text: {
+      pt: 'Protocolos seguros por dentro. SSH: negociação, troca de chaves, known_hosts, autenticação, canais, SFTP e túneis. HTTPS: handshake TLS 1.3 e 1.2, validação de certificados, retomada, 0-RTT e HSTS, com nota de hardening.',
+      en: 'Secure protocols from the inside. SSH: negotiation, key exchange, known_hosts, authentication, channels, SFTP, and tunnels. HTTPS: TLS 1.3 and 1.2 handshakes, certificate validation, resumption, 0-RTT, and HSTS, with a hardening grade.',
+      es: 'Protocolos seguros por dentro. SSH: negociación, intercambio de claves, known_hosts, autenticación, canales, SFTP y túneles. HTTPS: handshake TLS 1.3 y 1.2, validación de certificados, reanudación, 0-RTT y HSTS, con nota de hardening.',
+    },
+    tags: ['SSH', 'HTTPS', 'TLS', 'Hardening'],
+  },
 ];
 
 // O catalogo mostra laboratorios, cursos e disciplinas; os simuladores ficam em secao propria.
