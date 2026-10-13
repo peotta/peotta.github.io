@@ -47,7 +47,6 @@ export default function Featured({ t }) {
             </ul>
 
             <div className="featured-bottom">
-              <p className="featured-note">{f.note}</p>
               <div className="featured-actions">
                 <a className="button button-primary" href={CRYPTONET.url}>{f.cta}</a>
                 <a className="button button-ghost" href={CRYPTONET.repo} target="_blank" rel="noreferrer">

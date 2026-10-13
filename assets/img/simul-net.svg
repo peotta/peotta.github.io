@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="1200" height="520" role="img" aria-labelledby="t d">
+<title id="t">Simul-Net: simuladores de redes e protocolos, em andamento</title>
+<desc id="d">Animação do projeto Simul-Net: um diagrama de sequência do handshake TCP (SYN, SYN-ACK, ACK) ao lado de uma topologia com a troca DHCP (DISCOVER, OFFER, REQUEST, ACK), e a lista dos simuladores: roteamento, DHCP, ICMP, BGP, MPLS, TCP e UDP, SSH e HTTPS.</desc>
+<style>@keyframes p1{0%,5.800%{opacity:0;transform:translate(0,0)}6.000%{opacity:1;transform:translate(0,0)}17.000%{opacity:1;transform:translate(380px,30px)}18.600%,100%{opacity:0;transform:translate(380px,30px)}}
+.p1{animation:p1 12s linear infinite}
+@keyframes d1{0%,17.200%{opacity:0}17.500%,92.000%{opacity:1}95.000%,100%{opacity:0}}
+.d1{animation:d1 12s linear infinite}
+@keyframes p2{0%,21.800%{opacity:0;transform:translate(0,0)}22.000%{opacity:1;transform:translate(0,0)}33.000%{opacity:1;transform:translate(-380px,30px)}34.600%,100%{opacity:0;transform:translate(-380px,30px)}}
+.p2{animation:p2 12s linear infinite}
+@keyframes d2{0%,33.200%{opacity:0}33.500%,92.000%{opacity:1}95.000%,100%{opacity:0}}
+.d2{animation:d2 12s linear infinite}
+@keyframes p3{0%,37.800%{opacity:0;transform:translate(0,0)}38.000%{opacity:1;transform:translate(0,0)}49.000%{opacity:1;transform:translate(380px,30px)}50.600%,100%{opacity:0;transform:translate(380px,30px)}}
+.p3{animation:p3 12s linear infinite}
+@keyframes d3{0%,49.200%{opacity:0}49.500%,92.000%{opacity:1}95.000%,100%{opacity:0}}
+.d3{animation:d3 12s linear infinite}
+@keyframes est{0%,52.700%{opacity:0}53.000%,92.000%{opacity:1}95.000%,100%{opacity:0}}
+.est{animation:est 12s linear infinite}
+@keyframes q1a{0%,5.800%{opacity:0;transform:translate(0,0)}6.000%{opacity:1;transform:translate(0,0)}14.000%{opacity:1;transform:translate(92px,0px)}15.600%,100%{opacity:0;transform:translate(92px,0px)}}
+.q1a{animation:q1a 12s linear infinite}
+@keyframes q1b{0%,13.800%{opacity:0;transform:translate(0,0)}14.000%{opacity:1;transform:translate(0,0)}22.000%{opacity:1;transform:translate(109px,-50px)}23.600%,100%{opacity:0;transform:translate(109px,-50px)}}
+.q1b{animation:q1b 12s linear infinite}
+@keyframes q2a{0%,23.800%{opacity:0;transform:translate(0,0)}24.000%{opacity:1;transform:translate(0,0)}32.000%{opacity:1;transform:translate(-109px,50px)}33.600%,100%{opacity:0;transform:translate(-109px,50px)}}
+.q2a{animation:q2a 12s linear infinite}
+@keyframes q2b{0%,31.800%{opacity:0;transform:translate(0,0)}32.000%{opacity:1;transform:translate(0,0)}40.000%{opacity:1;transform:translate(-92px,0px)}41.600%,100%{opacity:0;transform:translate(-92px,0px)}}
+.q2b{animation:q2b 12s linear infinite}
+@keyframes q3a{0%,41.800%{opacity:0;transform:translate(0,0)}42.000%{opacity:1;transform:translate(0,0)}50.000%{opacity:1;transform:translate(92px,0px)}51.600%,100%{opacity:0;transform:translate(92px,0px)}}
+.q3a{animation:q3a 12s linear infinite}
+@keyframes q3b{0%,49.800%{opacity:0;transform:translate(0,0)}50.000%{opacity:1;transform:translate(0,0)}58.000%{opacity:1;transform:translate(109px,-50px)}59.600%,100%{opacity:0;transform:translate(109px,-50px)}}
+.q3b{animation:q3b 12s linear infinite}
+@keyframes q4a{0%,59.800%{opacity:0;transform:translate(0,0)}60.000%{opacity:1;transform:translate(0,0)}68.000%{opacity:1;transform:translate(-109px,50px)}69.600%,100%{opacity:0;transform:translate(-109px,50px)}}
+.q4a{animation:q4a 12s linear infinite}
+@keyframes q4b{0%,67.800%{opacity:0;transform:translate(0,0)}68.000%{opacity:1;transform:translate(0,0)}76.000%{opacity:1;transform:translate(-92px,0px)}77.600%,100%{opacity:0;transform:translate(-92px,0px)}}
+.q4b{animation:q4b 12s linear infinite}
+@keyframes bound{0%,77.700%{opacity:0}78.000%,92.000%{opacity:1}95.000%,100%{opacity:0}}
+.bound{animation:bound 12s linear infinite}
+@keyframes tw{0%{transform:scaleX(0)}8.333%,100%{transform:scaleX(1)}}
+.twr{transform-box:fill-box;transform-origin:left center;animation:tw 12s steps(22,end) infinite}
+.cursor{animation:blink 1s steps(1) infinite}@keyframes blink{50%{opacity:0}}
+.gridmove{animation:gm 6s linear infinite}@keyframes gm{from{transform:translateY(0)}to{transform:translateY(40px)}}
+.halo{transform-box:fill-box;transform-origin:center;animation:halo 3s ease-out infinite}.halo.b{animation-delay:1.5s}@keyframes halo{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.35);opacity:0}}
+.glow{animation:glowp 3s ease-in-out infinite}@keyframes glowp{0%,100%{filter:drop-shadow(0 0 3px rgba(72,255,139,.35))}50%{filter:drop-shadow(0 0 12px rgba(72,255,139,.95))}}
+.dot{animation:dotp 1.8s ease-in-out infinite}@keyframes dotp{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes chip{0%,10.4%{stroke-opacity:1;fill-opacity:.35}12.5%,100%{stroke-opacity:.35;fill-opacity:0}}
+.chip{animation:chip 12s linear infinite}
+@keyframes chipt{0%,10.4%{fill:#effff4}12.5%,100%{fill:#91caa4}}
+.chipt{animation:chipt 12s linear infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none !important}.twr{transform:none}.p1,.p2,.p3,.q1a,.q1b,.q2a,.q2b,.q3a,.q3b,.q4a,.q4b{opacity:0}.d1,.d2,.d3,.est,.bound{opacity:1}}</style>
+<defs>
+  <radialGradient id="bg" cx="50%" cy="45%" r="75%"><stop offset="0" stop-color="#06301a"/><stop offset="0.55" stop-color="#031008"/><stop offset="1" stop-color="#010301"/></radialGradient>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#48ff8b" stroke-opacity="0.08" stroke-width="1"/></pattern>
+  <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <clipPath id="twc"><rect class="twr" x="36" y="16" width="420" height="36"/></clipPath>
+</defs>
+<rect width="1200" height="520" fill="url(#bg)"/>
+<rect class="gridmove" x="0" y="-40" width="1200" height="600" fill="url(#grid)"/>
+<g clip-path="url(#twc)"><text x="40" y="44" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="22" letter-spacing="4" fill="#48ff8b">$ ./simul-net --protocolos</text></g>
+<rect class="cursor" x="470" y="25" width="13" height="24" fill="#48ff8b"/>
+<text x="1160" y="44" text-anchor="end" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="16" fill="#91caa4" opacity="0.85">uso didático · UnB</text>
+<path d="M600 80V400" stroke="#48ff8b" stroke-opacity="0.18" stroke-width="2" stroke-dasharray="3 9"/>
+<text x="40" y="92" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="17" letter-spacing="3" fill="#91caa4" opacity="0.9">DIAGRAMA DE SEQUÊNCIA · TCP</text>
+<g filter="url(#glow)"><rect x="85" y="112" width="130" height="40" rx="12" fill="#04160b" stroke="#48ff8b" stroke-width="2.5"/></g>
+<text x="150" y="139" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="22" fill="#d8ffe7">Cliente</text>
+<path d="M150 152V396" stroke="#48ff8b" stroke-opacity="0.55" stroke-width="2.5"/>
+<g filter="url(#glow)"><rect x="465" y="112" width="130" height="40" rx="12" fill="#04160b" stroke="#48ff8b" stroke-width="2.5"/></g>
+<text x="530" y="139" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="22" fill="#d8ffe7">Servidor</text>
+<path d="M530 152V396" stroke="#48ff8b" stroke-opacity="0.55" stroke-width="2.5"/>
+<path d="M150 190L530 220" stroke="#f2a65a" stroke-opacity="0.22" stroke-width="2.5" stroke-dasharray="4 8"/>
+<g class="d1"><path d="M150 190L530 220" stroke="#f2a65a" stroke-width="3.5"/><text x="340" y="193" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="22" font-weight="700" fill="#f2a65a">SYN</text></g>
+<g transform="translate(150,190)"><g class="p1"><rect x="-30" y="-15" width="60" height="30" rx="9" fill="#04160b" stroke="#f2a65a" stroke-width="2.5"/><circle r="5" fill="#f2a65a"/></g></g>
+<path d="M530 250L150 280" stroke="#6fb8e8" stroke-opacity="0.22" stroke-width="2.5" stroke-dasharray="4 8"/>
+<g class="d2"><path d="M530 250L150 280" stroke="#6fb8e8" stroke-width="3.5"/><text x="340" y="253" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="22" font-weight="700" fill="#6fb8e8">SYN-ACK</text></g>
+<g transform="translate(530,250)"><g class="p2"><rect x="-30" y="-15" width="60" height="30" rx="9" fill="#04160b" stroke="#6fb8e8" stroke-width="2.5"/><circle r="5" fill="#6fb8e8"/></g></g>
+<path d="M150 310L530 340" stroke="#48ff8b" stroke-opacity="0.22" stroke-width="2.5" stroke-dasharray="4 8"/>
+<g class="d3"><path d="M150 310L530 340" stroke="#48ff8b" stroke-width="3.5"/><text x="340" y="313" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="22" font-weight="700" fill="#48ff8b">ACK</text></g>
+<g transform="translate(150,310)"><g class="p3"><rect x="-30" y="-15" width="60" height="30" rx="9" fill="#04160b" stroke="#48ff8b" stroke-width="2.5"/><circle r="5" fill="#48ff8b"/></g></g>
+<g class="est"><g filter="url(#glow)"><rect x="228" y="356" width="224" height="36" rx="18" fill="#04160b" stroke="#48ff8b" stroke-width="2.5"/></g><text x="340" y="381" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="19" font-weight="700" fill="#48ff8b">ESTABLISHED</text></g>
+<text x="650" y="92" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="17" letter-spacing="3" fill="#91caa4" opacity="0.9">TOPOLOGIA · DHCP (DORA)</text>
+<path d="M764 270L856 270" stroke="#48ff8b" stroke-opacity="0.55" stroke-width="3"/>
+<path d="M936 256L1045 206" stroke="#48ff8b" stroke-opacity="0.55" stroke-width="3"/>
+<path d="M900 294L900 324" stroke="#48ff8b" stroke-opacity="0.55" stroke-width="3"/>
+<g filter="url(#glow)">
+<rect x="698" y="234" width="64" height="44" rx="6" fill="#04160b" stroke="#48ff8b" stroke-width="2.5"/><path d="M710 288H750" stroke="#48ff8b" stroke-width="3"/>
+</g>
+<text x="730" y="226" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="20" font-weight="700" fill="#d8ffe7">PC-A</text>
+<text x="730" y="326" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="15" fill="#91caa4">0.0.0.0</text>
+<g filter="url(#glow)">
+<rect x="858" y="247" width="84" height="46" rx="12" fill="#04160b" stroke="#48ff8b" stroke-width="2.5"/>
+<rect x="869" y="274" width="10" height="8" rx="2" fill="#00d26a"/>
+<rect x="886" y="274" width="10" height="8" rx="2" fill="#00d26a"/>
+<rect x="903" y="274" width="10" height="8" rx="2" fill="#00d26a"/>
+<rect x="920" y="274" width="10" height="8" rx="2" fill="#00d26a"/>
+</g>
+<text x="900" y="236" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="20" font-weight="700" fill="#d8ffe7">SW1</text>
+<g filter="url(#glow)">
+<rect x="1047" y="162" width="86" height="56" rx="12" fill="#04160b" stroke="#48ff8b" stroke-width="2.5"/><path d="M1062 182H1118 M1062 200H1118" stroke="#00d26a" stroke-width="3"/>
+</g>
+<text x="1090" y="146" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="20" font-weight="700" fill="#d8ffe7">DHCP-1</text>
+<text x="1090" y="246" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="15" fill="#91caa4">192.168.10.1</text>
+<g filter="url(#glow)">
+<rect x="868" y="324" width="64" height="44" rx="6" fill="#04160b" stroke="#48ff8b" stroke-width="2.5"/><path d="M880 378H920" stroke="#48ff8b" stroke-width="3"/>
+</g>
+<text x="900" y="316" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="20" font-weight="700" fill="#d8ffe7">PC-B</text>
+<g class="bound"><rect x="655" y="340" width="150" height="30" rx="15" fill="#04160b" stroke="#48ff8b" stroke-width="2"/><text x="730" y="361" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="16" font-weight="700" fill="#48ff8b">192.168.10.100</text></g>
+<g transform="translate(764,270)"><g class="q1a"><circle r="10" fill="#f2a65a" filter="url(#glow)"/></g></g>
+<g transform="translate(936,256)"><g class="q1b"><circle r="10" fill="#f2a65a" filter="url(#glow)"/></g></g>
+<g transform="translate(1045,206)"><g class="q2a"><circle r="10" fill="#6fb8e8" filter="url(#glow)"/></g></g>
+<g transform="translate(856,270)"><g class="q2b"><circle r="10" fill="#6fb8e8" filter="url(#glow)"/></g></g>
+<g transform="translate(764,270)"><g class="q3a"><circle r="10" fill="#b48ef0" filter="url(#glow)"/></g></g>
+<g transform="translate(936,256)"><g class="q3b"><circle r="10" fill="#b48ef0" filter="url(#glow)"/></g></g>
+<g transform="translate(1045,206)"><g class="q4a"><circle r="10" fill="#48ff8b" filter="url(#glow)"/></g></g>
+<g transform="translate(856,270)"><g class="q4b"><circle r="10" fill="#48ff8b" filter="url(#glow)"/></g></g>
+<circle cx="650" cy="414" r="6" fill="#f2a65a"/><text x="664" y="420" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="15" fill="#91caa4">DISCOVER</text>
+<circle cx="758" cy="414" r="6" fill="#6fb8e8"/><text x="772" y="420" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="15" fill="#91caa4">OFFER</text>
+<circle cx="836" cy="414" r="6" fill="#b48ef0"/><text x="850" y="420" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="15" fill="#91caa4">REQUEST</text>
+<circle cx="934" cy="414" r="6" fill="#48ff8b"/><text x="948" y="420" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="15" fill="#91caa4">ACK</text>
+<text x="600" y="446" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="14" letter-spacing="3" fill="#91caa4" opacity="0.8">SIMULADORES DISPONÍVEIS</text>
+<g><rect class="chip" style="animation-delay:0s" x="179" y="458" width="150" height="36" rx="18" fill="#48ff8b" fill-opacity="0" stroke="#48ff8b" stroke-opacity="0.35" stroke-width="2"/><text class="chipt" style="animation-delay:0s" x="254" y="482" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="18" fill="#91caa4">Roteamento</text></g>
+<g><rect class="chip" style="animation-delay:-10.5s" x="343" y="458" width="78" height="36" rx="18" fill="#48ff8b" fill-opacity="0" stroke="#48ff8b" stroke-opacity="0.35" stroke-width="2"/><text class="chipt" style="animation-delay:-10.5s" x="382" y="482" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="18" fill="#91caa4">DHCP</text></g>
+<g><rect class="chip" style="animation-delay:-9.0s" x="435" y="458" width="78" height="36" rx="18" fill="#48ff8b" fill-opacity="0" stroke="#48ff8b" stroke-opacity="0.35" stroke-width="2"/><text class="chipt" style="animation-delay:-9.0s" x="474" y="482" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="18" fill="#91caa4">ICMP</text></g>
+<g><rect class="chip" style="animation-delay:-7.5s" x="527" y="458" width="66" height="36" rx="18" fill="#48ff8b" fill-opacity="0" stroke="#48ff8b" stroke-opacity="0.35" stroke-width="2"/><text class="chipt" style="animation-delay:-7.5s" x="560" y="482" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="18" fill="#91caa4">BGP</text></g>
+<g><rect class="chip" style="animation-delay:-6.0s" x="607" y="458" width="78" height="36" rx="18" fill="#48ff8b" fill-opacity="0" stroke="#48ff8b" stroke-opacity="0.35" stroke-width="2"/><text class="chipt" style="animation-delay:-6.0s" x="646" y="482" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="18" fill="#91caa4">MPLS</text></g>
+<g><rect class="chip" style="animation-delay:-4.5s" x="699" y="458" width="138" height="36" rx="18" fill="#48ff8b" fill-opacity="0" stroke="#48ff8b" stroke-opacity="0.35" stroke-width="2"/><text class="chipt" style="animation-delay:-4.5s" x="768" y="482" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="18" fill="#91caa4">TCP e UDP</text></g>
+<g><rect class="chip" style="animation-delay:-3.0s" x="851" y="458" width="66" height="36" rx="18" fill="#48ff8b" fill-opacity="0" stroke="#48ff8b" stroke-opacity="0.35" stroke-width="2"/><text class="chipt" style="animation-delay:-3.0s" x="884" y="482" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="18" fill="#91caa4">SSH</text></g>
+<g><rect class="chip" style="animation-delay:-1.5s" x="931" y="458" width="90" height="36" rx="18" fill="#48ff8b" fill-opacity="0" stroke="#48ff8b" stroke-opacity="0.35" stroke-width="2"/><text class="chipt" style="animation-delay:-1.5s" x="976" y="482" text-anchor="middle" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="18" fill="#91caa4">HTTPS</text></g>
+<circle class="dot" cx="40" cy="486" r="6" fill="#48ff8b"/><text x="56" y="492" font-family="'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Consolas,monospace" font-size="15" fill="#48ff8b">em andamento</text>
+</svg>

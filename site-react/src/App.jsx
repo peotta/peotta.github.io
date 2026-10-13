@@ -8,7 +8,7 @@ import Featured from './components/Featured.jsx';
 import Catalog from './components/Catalog.jsx';
 import CommandPalette from './components/CommandPalette.jsx';
 import Ravens from './components/Ravens.jsx';
-import Simulators from './components/Simulators.jsx';
+import SimulNet from './components/SimulNet.jsx';
 import { About, Contact, Footer, Podcast, Work } from './components/Sections.jsx';
 
 // Ancoras do site classico redirecionadas para o catalogo ja filtrado.
@@ -99,7 +99,7 @@ export default function App() {
         <About t={t} />
         <Work t={t} />
         <Catalog t={t} lang={lang} filter={filter} onFilter={setFilter} query={query} onQuery={setQuery} />
-        <Simulators t={t} lang={lang} />
+        <SimulNet t={t} />
         <Featured t={t} />
         <Ravens t={t} lang={lang} />
         <Podcast t={t} />
