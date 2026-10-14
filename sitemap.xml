@@ -12,44 +12,59 @@
     <changefreq>weekly</changefreq>
   </url>
 
-  <!-- Simuladores Interativos de Redes -->
+  <!-- Simul-Net: simuladores de redes e protocolos seguros -->
   <url>
-    <loc>https://peotta.github.io/simuladores/router_simulator.html</loc>
+    <loc>https://peotta.github.io/Simul-Net/</loc>
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://peotta.github.io/simuladores/dhcp-simulator.html</loc>
+    <loc>https://peotta.github.io/Simul-Net/sims/router-simulator.html</loc>
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://peotta.github.io/simuladores/icmp-simulator.html</loc>
+    <loc>https://peotta.github.io/Simul-Net/sims/dhcp-simulator.html</loc>
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://peotta.github.io/simuladores/bgp-simulator.html</loc>
+    <loc>https://peotta.github.io/Simul-Net/sims/icmp-simulator.html</loc>
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://peotta.github.io/simuladores/mpls-simulator.html</loc>
+    <loc>https://peotta.github.io/Simul-Net/sims/bgp-simulator.html</loc>
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://peotta.github.io/simuladores/tcp-udp-simulator.html</loc>
+    <loc>https://peotta.github.io/Simul-Net/sims/mpls-simulator.html</loc>
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://peotta.github.io/simuladores/tcp-udp-security-simulator.html</loc>
+    <loc>https://peotta.github.io/Simul-Net/sims/tcp-udp-simulator.html</loc>
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://peotta.github.io/simuladores/protocolos-seguros-simulator.html</loc>
+    <loc>https://peotta.github.io/Simul-Net/sims/tcp-udp-security-simulator.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/Simul-Net/sims/ssh-simulator.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/Simul-Net/sims/https-simulator.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/Simul-Net/sims/ftp-simulator.html</loc>
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
   </url>

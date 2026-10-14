@@ -355,7 +355,7 @@ const allItems = [
     id: 'sim-router',
     featured: true,
     categories: ['simulators'],
-    href: '/simuladores/router_simulator.html',
+    href: '/Simul-Net/#/sim/roteamento',
     cta: cta.sim,
     title: { pt: 'Simulador de Roteamento (OSPF e RIPv2)', en: 'Routing Simulator (OSPF and RIPv2)', es: 'Simulador de Enrutamiento (OSPF y RIPv2)' },
     text: {
@@ -368,7 +368,7 @@ const allItems = [
   {
     id: 'sim-dhcp',
     categories: ['simulators'],
-    href: '/simuladores/dhcp-simulator.html',
+    href: '/Simul-Net/#/sim/dhcp',
     cta: cta.sim,
     title: { pt: 'Simulador de DHCP (DORA)', en: 'DHCP Simulator (DORA)', es: 'Simulador de DHCP (DORA)' },
     text: {
@@ -381,7 +381,7 @@ const allItems = [
   {
     id: 'sim-icmp',
     categories: ['simulators'],
-    href: '/simuladores/icmp-simulator.html',
+    href: '/Simul-Net/#/sim/icmp',
     cta: cta.sim,
     title: { pt: 'Simulador de ICMP (ping e traceroute)', en: 'ICMP Simulator (ping and traceroute)', es: 'Simulador de ICMP (ping y traceroute)' },
     text: {
@@ -394,7 +394,7 @@ const allItems = [
   {
     id: 'sim-mpls',
     categories: ['simulators'],
-    href: '/simuladores/mpls-simulator.html',
+    href: '/Simul-Net/#/sim/mpls',
     cta: cta.sim,
     title: { pt: 'Simulador de MPLS (LDP e L3VPN)', en: 'MPLS Simulator (LDP and L3VPN)', es: 'Simulador de MPLS (LDP y L3VPN)' },
     text: {
@@ -407,7 +407,7 @@ const allItems = [
   {
     id: 'sim-bgp',
     categories: ['simulators'],
-    href: '/simuladores/bgp-simulator.html',
+    href: '/Simul-Net/#/sim/bgp',
     cta: cta.sim,
     title: { pt: 'Simulador de BGP (sessões e seleção de caminho)', en: 'BGP Simulator (sessions and path selection)', es: 'Simulador de BGP (sesiones y selección de ruta)' },
     text: {
@@ -420,7 +420,7 @@ const allItems = [
   {
     id: 'sim-tcp-udp',
     categories: ['simulators'],
-    href: '/simuladores/tcp-udp-simulator.html',
+    href: '/Simul-Net/#/sim/tcp-udp',
     cta: cta.sim,
     title: { pt: 'Simulador de TCP e UDP', en: 'TCP and UDP Simulator', es: 'Simulador de TCP y UDP' },
     text: {
@@ -433,7 +433,7 @@ const allItems = [
   {
     id: 'sim-tcp-udp-security',
     categories: ['simulators'],
-    href: '/simuladores/tcp-udp-security-simulator.html',
+    href: '/Simul-Net/#/sim/ataques-tcp-udp',
     cta: cta.sim,
     title: { pt: 'Ataques e defesas TCP/UDP', en: 'TCP/UDP Attacks and Defenses', es: 'Ataques y defensas TCP/UDP' },
     text: {
@@ -444,17 +444,43 @@ const allItems = [
     tags: ['TCP', 'UDP', 'Defesa de redes'],
   },
   {
-    id: 'sim-secure-protocols',
+    id: 'sim-ssh',
     categories: ['simulators'],
-    href: '/simuladores/protocolos-seguros-simulator.html',
+    href: '/Simul-Net/#/sim/ssh',
     cta: cta.sim,
-    title: { pt: 'Protocolos de rede seguros (SSH e HTTPS)', en: 'Secure Network Protocols (SSH and HTTPS)', es: 'Protocolos de red seguros (SSH y HTTPS)' },
+    title: { pt: 'Simulador de SSH', en: 'SSH Simulator', es: 'Simulador de SSH' },
     text: {
-      pt: 'Protocolos seguros por dentro. SSH: negociação, troca de chaves, known_hosts, autenticação, canais, SFTP e túneis. HTTPS: handshake TLS 1.3 e 1.2, validação de certificados, HSTS e comparação HTTP x HTTPS, com nota de hardening.',
-      en: 'Secure protocols from the inside. SSH: negotiation, key exchange, known_hosts, authentication, channels, SFTP, and tunnels. HTTPS: TLS 1.3 and 1.2 handshakes, certificate validation, HSTS, and an HTTP vs HTTPS comparison, with a hardening grade.',
-      es: 'Protocolos seguros por dentro. SSH: negociación, intercambio de claves, known_hosts, autenticación, canales, SFTP y túneles. HTTPS: handshake TLS 1.3 y 1.2, validación de certificados, HSTS y comparación HTTP x HTTPS, con nota de hardening.',
+      pt: 'SSH-2 por dentro: negociação de versão e algoritmos, troca de chaves, known_hosts, autenticação (senha, chave pública e TOTP), canais, SFTP e túneis (-L, -R, -D e ProxyJump), com nota de hardening.',
+      en: 'SSH-2 from the inside: version and algorithm negotiation, key exchange, known_hosts, authentication (password, public key, and TOTP), channels, SFTP, and tunnels (-L, -R, -D, and ProxyJump), with a hardening note.',
+      es: 'SSH-2 por dentro: negociación de versión y algoritmos, intercambio de claves, known_hosts, autenticación (contraseña, clave pública y TOTP), canales, SFTP y túneles (-L, -R, -D y ProxyJump), con nota de hardening.'
     },
-    tags: ['SSH', 'HTTPS', 'TLS', 'Hardening'],
+    tags: ['SSH', 'Túneis', 'Hardening'],
+  },
+  {
+    id: 'sim-https',
+    categories: ['simulators'],
+    href: '/Simul-Net/#/sim/https',
+    cta: cta.sim,
+    title: { pt: 'Simulador de HTTPS e TLS', en: 'HTTPS and TLS Simulator', es: 'Simulador de HTTPS y TLS' },
+    text: {
+      pt: 'Handshake TLS 1.3 e 1.2, validação de certificados X.509, retomada e 0-RTT, HSTS e a comparação entre HTTP e HTTPS, com nota de hardening.',
+      en: 'TLS 1.3 and 1.2 handshakes, X.509 certificate validation, resumption and 0-RTT, HSTS, and the comparison between HTTP and HTTPS, with a hardening note.',
+      es: 'Handshake TLS 1.3 y 1.2, validación de certificados X.509, reanudación y 0-RTT, HSTS y la comparación entre HTTP y HTTPS, con nota de hardening.'
+    },
+    tags: ['HTTPS', 'TLS', 'HSTS'],
+  },
+  {
+    id: 'sim-ftp',
+    categories: ['simulators'],
+    href: '/Simul-Net/#/sim/ftp',
+    cta: cta.sim,
+    title: { pt: 'Simulador de FTP, FTPS e SFTP', en: 'FTP, FTPS and SFTP Simulator', es: 'Simulador de FTP, FTPS y SFTP' },
+    text: {
+      pt: 'Transferência de arquivos por dentro: FTP com canais de controle e de dados (modos ativo e passivo, NAT e firewall), FTPS explícito e implícito, SFTP sobre SSH e a comparação do que um observador na rede enxerga em cada um.',
+      en: 'File transfer from the inside: FTP with control and data channels (active and passive modes, NAT, and firewall), explicit and implicit FTPS, SFTP over SSH, and a comparison of what a network observer sees in each one.',
+      es: 'Transferencia de archivos por dentro: FTP con canales de control y de datos (modos activo y pasivo, NAT y firewall), FTPS explícito e implícito, SFTP sobre SSH y la comparación de lo que ve un observador en la red en cada uno.'
+    },
+    tags: ['FTP', 'FTPS', 'SFTP'],
   },
 ];
 

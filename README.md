@@ -13,14 +13,17 @@ Este site reúne materiais acadêmicos, tutoriais práticos, guias para certific
 ### Principais Seções e Conteúdos
 
 - **⚡ Simuladores Interativos de Redes:**
-  - [Simulador de Roteamento (OSPF e RIPv2)](simuladores/router_simulator.html)
-  - [Simulador de DHCP (DORA)](simuladores/dhcp-simulator.html)
-  - [Simulador de ICMP (ping, traceroute e PMTUD)](simuladores/icmp-simulator.html)
-  - [Simulador de BGP (sessões, seleção de caminho e defesas)](simuladores/bgp-simulator.html)
-  - [Simulador de MPLS (LDP e L3VPN)](simuladores/mpls-simulator.html)
-  - [Simulador de TCP e UDP](simuladores/tcp-udp-simulator.html)
-  - [Simulador de Ataques e Defesas TCP/UDP](simuladores/tcp-udp-security-simulator.html)
-  - [Simulador de Protocolos de Rede Seguros (SSH e HTTPS)](simuladores/protocolos-seguros-simulator.html)
+  - [Simul-Net](https://peotta.github.io/Simul-Net/): projeto com os simuladores visuais de redes e protocolos seguros
+  - [Roteamento (OSPF e RIPv2)](https://peotta.github.io/Simul-Net/#/sim/roteamento)
+  - [DHCP (DORA)](https://peotta.github.io/Simul-Net/#/sim/dhcp)
+  - [ICMP (ping, traceroute e PMTUD)](https://peotta.github.io/Simul-Net/#/sim/icmp)
+  - [BGP (sessões, seleção de caminho e defesas)](https://peotta.github.io/Simul-Net/#/sim/bgp)
+  - [MPLS (LDP e L3VPN)](https://peotta.github.io/Simul-Net/#/sim/mpls)
+  - [TCP e UDP](https://peotta.github.io/Simul-Net/#/sim/tcp-udp)
+  - [Ataques e Defesas TCP/UDP](https://peotta.github.io/Simul-Net/#/sim/ataques-tcp-udp)
+  - [SSH](https://peotta.github.io/Simul-Net/#/sim/ssh)
+  - [HTTPS e TLS](https://peotta.github.io/Simul-Net/#/sim/https)
+  - [FTP, FTPS e SFTP](https://peotta.github.io/Simul-Net/#/sim/ftp)
 - **🧪 Laboratórios Práticos de Cibersegurança:**
   - [Índice Geral de Laboratórios](labs/index.html)
   - `Lab 01` - [Reconhecimento Passivo com Kismet](labs/lab01-reconhecimento.html)
@@ -56,15 +59,8 @@ peotta.github.io/
 │   ├── lab03-protocolos.html
 │   ├── lab04-ataques.html
 │   └── lab05-ferramentas.html
-├── simuladores/                   # ⚡ Simuladores Interativos (Roteamento, DHCP, ICMP, BGP, MPLS, TCP e UDP, protocolos seguros)
-│   ├── router_simulator.html
-│   ├── dhcp-simulator.html
-│   ├── icmp-simulator.html
-│   ├── bgp-simulator.html
-│   ├── mpls-simulator.html
-│   ├── tcp-udp-simulator.html
-│   ├── tcp-udp-security-simulator.html
-│   └── protocolos-seguros-simulator.html
+├── simuladores/                   # ⚡ Redirecionamentos das páginas antigas dos simuladores para o Simul-Net
+│   └── (router, dhcp, icmp, bgp, mpls, tcp-udp, tcp-udp-security e protocolos-seguros)
 ├── certificacoes/                 # 🎓 Planos de Estudo e Certificações
 │   ├── ccna.html
 │   ├── ccna-cybersecurity.html
