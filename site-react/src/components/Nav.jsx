@@ -7,6 +7,7 @@ export const NAV_ITEMS = [
   { id: 'disciplinas', key: 'classes', filter: 'disciplines' },
   { id: 'simuladores', key: 'simulators' },
   { id: 'podcast', key: 'podcast' },
+  { id: 'midia', key: 'media' },
   { id: 'contato', key: 'contact' },
 ];
 

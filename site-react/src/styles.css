@@ -1370,6 +1370,136 @@ kbd {
   }
 }
 
+/* Entrevistas e midia */
+.media-channel {
+  margin-top: 1rem;
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.media-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1rem;
+}
+
+.media-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  border: 1px solid var(--card-border-soft);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--terminal);
+}
+
+.media-frame img,
+.media-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+
+.media-play {
+  cursor: pointer;
+}
+
+.media-play-icon {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  display: grid;
+  place-items: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  border-radius: 50%;
+  background: rgba(1, 3, 1, 0.78);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  font-size: 1.1rem;
+  padding-left: 0.2rem;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.media-play:hover .media-play-icon,
+.media-play:focus-visible .media-play-icon {
+  box-shadow: var(--glow);
+  transform: scale(1.06);
+}
+
+.media-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.media-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.6rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.media-kind {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.media-year {
+  margin-left: auto;
+  font-family: var(--mono);
+}
+
+.media-title {
+  margin: 0.35rem 0 0;
+  font-size: 1.02rem;
+  line-height: 1.4;
+  color: var(--text-strong);
+}
+
+.media-with,
+.media-note {
+  margin-top: 0.3rem;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.media-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.media-topics li {
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--card-border-soft);
+  font-size: 0.74rem;
+  color: var(--accent);
+}
+
+.media-body .pub-links {
+  margin-top: auto;
+  padding-top: 0.8rem;
+}
+
 @media (max-width: 860px) {
   :root {
     --photo: 240px;
