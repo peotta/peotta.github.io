@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
-import { CHANNEL_URL, interviews } from '../entrevistas.js';
+import { CHANNEL_URL, interviews, OUTLET_ICONS } from '../entrevistas.js';
 import { normalize } from './Catalog.jsx';
 
-const KINDS = ['all', 'video', 'audio', 'news', 'panel'];
+const KINDS = ['video', 'audio', 'news', 'all'];
 
 // Miniatura do YouTube; o player so e carregado (youtube-nocookie) quando a pessoa clica.
 function VideoThumb({ item, t }) {
@@ -28,35 +28,56 @@ function VideoThumb({ item, t }) {
   );
 }
 
+// Capa das materias e dos podcasts: imagem do veiculo escurecida (se carregar) com o icone e o nome do veiculo por cima.
+function NewsCover({ item }) {
+  const [failed, setFailed] = useState(false);
+  const icon = OUTLET_ICONS[item.outlet];
+  return (
+    <a className={`media-frame media-cover${item.image && !failed ? '' : ' no-photo'}`} href={item.url} target="_blank" rel="noreferrer" tabIndex={-1} aria-hidden="true">
+      {item.image && !failed && item.kind === 'audio' && (
+        <>
+          <img className="media-cover-blur" src={item.image} alt="" loading="lazy" referrerPolicy="no-referrer" onError={() => setFailed(true)} />
+          <img className="media-cover-art" src={item.image} alt="" loading="lazy" referrerPolicy="no-referrer" />
+        </>
+      )}
+      {item.image && !failed && item.kind !== 'audio' && (
+        <img src={item.image} alt="" loading="lazy" referrerPolicy="no-referrer" onError={() => setFailed(true)} />
+      )}
+      {!(item.kind === 'audio' && item.image && !failed) && (
+        <span className="media-cover-outlet">
+          {icon && <img src={icon} alt="" width="28" height="28" />}
+          <span>{item.outlet}</span>
+        </span>
+      )}
+    </a>
+  );
+}
+
 function Card({ item, t }) {
   const link = item.kind === 'video' ? `https://www.youtube.com/watch?v=${item.youtube}` : item.url;
   const action = { video: t.media.watch, audio: t.media.listen, news: t.media.read }[item.kind];
   return (
     <li className="media-card card">
       {item.kind === 'video' && <VideoThumb item={item} t={t} />}
+      {(item.kind === 'news' || item.kind === 'audio') && <NewsCover item={item} />}
       <div className="media-body">
         <p className="media-meta">
           <span className="media-kind">{t.media.kindLabel[item.kind]}</span>
           {item.outlet && <span>{item.outlet}</span>}
-          <span className="media-year">{item.year}</span>
+          <span className="media-year">{item.month ? `${t.media.months[item.month - 1]} ${item.year}` : item.year}</span>
         </p>
         <h3 className="media-title">{item.title}</h3>
-        {item.role && <p className="media-with">{item.role}</p>}
         <ul className="media-topics" aria-label={t.media.topicsLabel}>
           {item.topics.map((k) => (
             <li key={k}>{t.media.topics[k]}</li>
           ))}
         </ul>
-        {link ? (
-          <p className="pub-links">
-            <a className="pub-action" href={link} target="_blank" rel="noreferrer">
-              {action} <span aria-hidden="true">↗</span>
-              <span className="sr-only"> ({t.media.external})</span>
-            </a>
-          </p>
-        ) : (
-          <p className="media-note">{t.media.noLink}</p>
-        )}
+        <p className="pub-links">
+          <a className="pub-action" href={link} target="_blank" rel="noreferrer">
+            {action} <span aria-hidden="true">↗</span>
+            <span className="sr-only"> ({t.media.external})</span>
+          </a>
+        </p>
       </div>
     </li>
   );
@@ -68,7 +89,7 @@ export default function Interviews({ t }) {
 
   const counts = useMemo(() => {
     const c = { all: interviews.length };
-    KINDS.slice(1).forEach((k) => (c[k] = interviews.filter((i) => i.kind === k).length));
+    KINDS.filter((k) => k !== 'all').forEach((k) => (c[k] = interviews.filter((i) => i.kind === k).length));
     return c;
   }, [t]);
 
@@ -80,7 +101,7 @@ export default function Interviews({ t }) {
         const hay = normalize([i.title, i.outlet, String(i.year), ...i.topics.map((k) => t.media.topics[k])].join(' '));
         return terms.every((term) => hay.includes(term));
       })
-      .sort((a, b) => b.year - a.year);
+      .sort((a, b) => b.year - a.year || (b.month ?? 0) - (a.month ?? 0));
   }, [kind, query, t]);
 
   return (

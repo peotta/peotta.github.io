@@ -68,7 +68,8 @@ export default function Catalog({ t, lang, filter, onFilter, query, onQuery }) {
     return filter === 'all' ? matched : matched.filter((r) => r.categories.includes(filter));
   }, [filter, query, lang]);
 
-  const chips = ['all', ...CATEGORY_ORDER];
+  // Disciplinas primeiro e "Tudo" por ultimo.
+  const chips = ['disciplines', ...CATEGORY_ORDER.filter((c) => c !== 'disciplines'), 'all'];
 
   return (
     <section id="conteudos" className="section" aria-labelledby="conteudos-title">

@@ -1440,6 +1440,101 @@ kbd {
   transform: scale(1.06);
 }
 
+.media-cover {
+  background: linear-gradient(135deg, #0b2a17, #031008);
+}
+
+.media-cover > img {
+  filter: brightness(0.55) saturate(0.9);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.media-cover:hover > img {
+  filter: brightness(0.75) saturate(1);
+  transform: scale(1.03);
+}
+
+.media-cover > img.media-cover-blur {
+  filter: blur(18px) brightness(0.45) saturate(1.1);
+  transform: scale(1.3);
+}
+
+.media-cover:hover > img.media-cover-blur {
+  filter: blur(18px) brightness(0.55) saturate(1.1);
+  transform: scale(1.3);
+}
+
+.media-cover > img.media-cover-art {
+  inset: 0.9rem auto 0.9rem 50%;
+  width: auto;
+  height: calc(100% - 1.8rem);
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  filter: none;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+  object-fit: cover;
+  z-index: 0;
+}
+
+.media-cover:hover > img.media-cover-art {
+  filter: none;
+  transform: translateX(-50%);
+}
+
+.media-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(1, 3, 1, 0.85), rgba(1, 3, 1, 0) 60%);
+}
+
+.media-cover-outlet {
+  position: absolute;
+  left: 0.8rem;
+  bottom: 0.7rem;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text-strong);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+
+.media-cover-outlet img {
+  position: static;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: #fff;
+  object-fit: contain;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+.media-cover.no-photo {
+  background:
+    radial-gradient(circle at 20% 15%, rgba(72, 255, 139, 0.22), transparent 55%),
+    linear-gradient(rgba(72, 255, 139, 0.07) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(72, 255, 139, 0.07) 1px, transparent 1px) 0 0 / 22px 100%,
+    linear-gradient(135deg, #0d3a1e, #031008);
+}
+
+.media-cover.no-photo .media-cover-outlet {
+  inset: 0;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+  color: var(--primary);
+}
+
+.media-cover.no-photo .media-cover-outlet img {
+  width: 40px;
+  height: 40px;
+}
+
 .media-body {
   display: flex;
   flex: 1;
@@ -1469,13 +1564,6 @@ kbd {
   font-size: 1.02rem;
   line-height: 1.4;
   color: var(--text-strong);
-}
-
-.media-with,
-.media-note {
-  margin-top: 0.3rem;
-  font-size: 0.86rem;
-  color: var(--muted);
 }
 
 .media-topics {

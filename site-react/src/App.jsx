@@ -32,7 +32,7 @@ function initialLang() {
 export default function App() {
   const [lang, setLang] = useState(initialLang);
   const [motion, setMotion] = useState(() => readStorage('site-motion', 'on') === 'on');
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState('disciplines');
   const [query, setQuery] = useState('');
   const [paletteOpen, setPaletteOpen] = useState(false);
   const t = strings[lang];
