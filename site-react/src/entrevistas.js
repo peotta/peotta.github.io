@@ -10,6 +10,8 @@
 export const CHANNEL_URL = 'https://www.youtube.com/@peotta';
 
 export const interviews = [
+  { id: 'cb-poder-meta', year: 2026, month: 10, kind: 'video', youtube: '_tMcLyOolys', title: 'CB.Poder: Algoritmo e o poder do voto', outlet: 'Correio Braziliense', topics: ['algorithms', 'culture'] },
+  { id: 'correio-meta-transparencia', year: 2026, month: 10, kind: 'news', url: 'https://www.correiobraziliense.com.br/politica/2026/10/7522223-especialista-defende-mais-transparencia-para-analisar-erro-tecnico-da-meta.html', image: 'https://midias.correiobraziliense.com.br/_midias/jpg/2026/10/16/675x450/1_ed16102026--034-67985045.jpg', title: 'Especialista defende mais transparência para analisar erro técnico da Meta', outlet: 'Correio Braziliense', topics: ['algorithms', 'culture'] },
   { id: 'deepfakes-rnp', year: 2026, month: 10, kind: 'video', youtube: 'w8RBb0IYr2U', title: 'Como os deepfakes estão roubando identidades e dinheiro?', outlet: 'RNP em Rede', topics: ['ai', 'fraud'] },
   { id: 'algoritmo-do-odio', year: 2026, month: 6, kind: 'video', youtube: 'fyfPJ7NZqJs', title: 'Documentário O Algoritmo do Ódio', outlet: 'Metrópoles', topics: ['algorithms', 'ai'] },
   { id: 'cnn-autenticacao', year: 2026, month: 8, kind: 'news', url: 'https://www.cnnbrasil.com.br/economia/negocios/como-funciona-a-autenticacao-em-duas-etapas-nas-instituicoes-financeiras/', image: 'https://admin.cnnbrasil.com.br/wp-content/uploads/sites/12/2026/07/como-funciona-autenticacao-duas-etapas-pressfoto.jpg?w=1200&h=630&crop=1', title: 'Como funciona a autenticação em duas etapas nas instituições financeiras?', outlet: 'CNN Brasil', topics: ['fraud', 'auth'] },
