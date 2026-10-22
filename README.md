@@ -24,6 +24,7 @@ Este site reúne materiais acadêmicos, tutoriais práticos, guias para certific
   - [SSH](https://peotta.github.io/Simul-Net/#/sim/ssh)
   - [HTTPS e TLS](https://peotta.github.io/Simul-Net/#/sim/https)
   - [FTP, FTPS e SFTP](https://peotta.github.io/Simul-Net/#/sim/ftp)
+  - [DNS e DNSSEC (resolução, cadeia de confiança, ataques, DoT e DoH)](https://peotta.github.io/Simul-Net/#/sim/dns)
 - **🧪 Laboratórios Práticos de Cibersegurança:**
   - [Índice Geral de Laboratórios](labs/index.html)
   - `Lab 01` - [Reconhecimento Passivo com Kismet](labs/lab01-reconhecimento.html)

@@ -482,6 +482,19 @@ const allItems = [
     },
     tags: ['FTP', 'FTPS', 'SFTP'],
   },
+  {
+    id: 'sim-dns',
+    categories: ['simulators'],
+    href: '/Simul-Net/#/sim/dns',
+    cta: cta.sim,
+    title: { pt: 'Simulador de DNS e DNSSEC', en: 'DNS and DNSSEC Simulator', es: 'Simulador de DNS y DNSSEC' },
+    text: {
+      pt: 'Resolução de nomes por dentro (raiz, TLD e autoritativo, cache e TTL), DNSSEC e a cadeia de confiança, envenenamento de cache, amplificação por resolvedor aberto, DoT e DoH.',
+      en: 'Name resolution from the inside (root, TLD and authoritative, cache and TTL), DNSSEC and the chain of trust, cache poisoning, amplification through open resolvers, DoT and DoH.',
+      es: 'Resolución de nombres por dentro (raíz, TLD y autoritativo, caché y TTL), DNSSEC y la cadena de confianza, envenenamiento de caché, amplificación por resolvedor abierto, DoT y DoH.'
+    },
+    tags: ['DNS', 'DNSSEC', 'DoH'],
+  },
 ];
 
 // O catalogo mostra laboratorios, cursos e disciplinas; os simuladores ficam em secao propria.
