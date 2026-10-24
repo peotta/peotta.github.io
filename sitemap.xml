@@ -19,16 +19,6 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://peotta.github.io/Simul-Net/sims/dhcp-simulator.html</loc>
-    <priority>0.9</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://peotta.github.io/Simul-Net/sims/icmp-simulator.html</loc>
-    <priority>0.9</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
     <loc>https://peotta.github.io/Simul-Net/sims/bgp-simulator.html</loc>
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
@@ -48,18 +38,10 @@
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
   </url>
+
+  <!-- CryptoNet Lab: laboratório virtual de criptografia -->
   <url>
-    <loc>https://peotta.github.io/Simul-Net/sims/ssh-simulator.html</loc>
-    <priority>0.9</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://peotta.github.io/Simul-Net/sims/https-simulator.html</loc>
-    <priority>0.9</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://peotta.github.io/Simul-Net/sims/ftp-simulator.html</loc>
+    <loc>https://peotta.github.io/CryptoNet/</loc>
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
   </url>
