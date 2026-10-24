@@ -4,7 +4,6 @@ import { LANGS } from '../i18n.js';
 export const NAV_ITEMS = [
   { id: 'sobre', key: 'about' },
   { id: 'conteudos', key: 'content' },
-  { id: 'disciplinas', key: 'classes', filter: 'disciplines' },
   { id: 'simuladores', key: 'simulators' },
   { id: 'podcast', key: 'podcast' },
   { id: 'midia', key: 'media' },
@@ -45,7 +44,7 @@ function Flag({ code }) {
   );
 }
 
-// Links de filtro (#disciplinas, #simuladores) levam ao catalogo ja filtrado; nao sao secoes da pagina.
+// Links com filtro levam ao catalogo ja filtrado; nao sao secoes da pagina.
 const FILTERED = NAV_ITEMS.filter((n) => n.filter).map((n) => n.filter);
 export const SPY_IDS = NAV_ITEMS.filter((n) => !n.filter).map((n) => n.id);
 
