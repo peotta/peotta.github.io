@@ -22,37 +22,22 @@ export function About({ t }) {
             <p>{t.about.p2}</p>
           </article>
           <aside className="card">
-            <h3>{t.about.highlightsTitle}</h3>
-            <ul className="check-list">
-              {t.about.highlights.map((h) => (
-                <li key={h}>{h}</li>
+            <dl className="focus-list">
+              {t.metrics.map((m) => (
+                <div key={m.title}>
+                  <dt>{m.title}</dt>
+                  <dd>{m.text}</dd>
+                </div>
               ))}
-            </ul>
+            </dl>
           </aside>
         </div>
-      </div>
-    </section>
-  );
-}
-
-export function Work({ t }) {
-  return (
-    <section id="atuacao" className="section" aria-labelledby="atuacao-title">
-      <div className="container">
-        <SectionHead id="atuacao-title" title={t.work.title} />
+        <h3 className="about-areas">{t.work.title}</h3>
         <ul className="tag-cloud">
           {t.work.tags.map((tag) => (
             <li key={tag}>{tag}</li>
           ))}
         </ul>
-        <dl className="focus-list card">
-          {t.metrics.map((m) => (
-            <div key={m.title}>
-              <dt>{m.title}</dt>
-              <dd>{m.text}</dd>
-            </div>
-          ))}
-        </dl>
       </div>
     </section>
   );

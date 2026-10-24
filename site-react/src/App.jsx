@@ -10,7 +10,7 @@ import CommandPalette from './components/CommandPalette.jsx';
 import Ravens from './components/Ravens.jsx';
 import Interviews from './components/Interviews.jsx';
 import SimulNet from './components/SimulNet.jsx';
-import { About, Contact, Footer, Podcast, Work } from './components/Sections.jsx';
+import { About, Contact, Footer, Podcast } from './components/Sections.jsx';
 
 // Ancoras do site classico redirecionadas para o catalogo ja filtrado.
 const LEGACY_HASH = {
@@ -98,7 +98,6 @@ export default function App() {
       <main id="conteudo-principal">
         <Hero t={t} />
         <About t={t} />
-        <Work t={t} />
         <Catalog t={t} lang={lang} filter={filter} onFilter={setFilter} query={query} onQuery={setQuery} />
         <SimulNet t={t} />
         <Featured t={t} />

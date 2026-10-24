@@ -600,9 +600,12 @@ kbd {
 
 .focus-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.25rem 2rem;
-  margin: 1.25rem 0 0;
+  gap: 1rem;
+  margin: 0;
+}
+
+.about-areas {
+  margin: 1.75rem 0 0.75rem;
 }
 
 .focus-list dt {
@@ -1636,10 +1639,6 @@ kbd {
 
   .brand-name {
     font-size: 0.92rem;
-  }
-
-  .focus-list {
-    grid-template-columns: 1fr;
   }
 
   .hero-actions .button {

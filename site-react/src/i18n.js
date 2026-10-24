@@ -40,14 +40,6 @@ export const strings = {
       pathTitle: 'Trajetória',
       p1: 'Desenvolve atividades de formação, pesquisa e elaboração de projetos nas áreas de segurança cibernética, redes de comunicação, investigação de incidentes e tecnologias seguras, integrando fundamentos teóricos e aplicação prática.',
       p2: 'No contexto profissional, possui experiência em iniciativas relacionadas a Red Team, Blue Team, Threat Hunting e inteligência cibernética.',
-      highlightsTitle: 'Destaques',
-      highlights: [
-        'Segurança do Sistema Financeiro e protocolos seguros',
-        'Defesa cibernética e análise de ameaças',
-        'Inteligência cibernética',
-        'Investigação de incidentes e forense digital',
-        'Formação em redes, segurança e computação',
-      ],
     },
     work: {
       title: 'Áreas de atuação',
@@ -180,14 +172,6 @@ export const strings = {
       pathTitle: 'Background',
       p1: 'He develops educational, research, and project activities in cybersecurity, communication networks, incident investigation, and secure technologies, integrating theoretical foundations with practical application.',
       p2: 'In the professional field, he has experience in initiatives related to Red Team, Blue Team, Threat Hunting, and cyber intelligence.',
-      highlightsTitle: 'Highlights',
-      highlights: [
-        'Financial system security and secure protocols',
-        'Cyber defense and threat analysis',
-        'Cyber intelligence',
-        'Incident investigation and digital forensics',
-        'Education in networks, security, and computing',
-      ],
     },
     work: {
       title: 'Areas of expertise',
@@ -320,14 +304,6 @@ export const strings = {
       pathTitle: 'Trayectoria',
       p1: 'Desarrolla actividades de formación, investigación y elaboración de proyectos en las áreas de seguridad cibernética, redes de comunicación, investigación de incidentes y tecnologías seguras, integrando fundamentos teóricos y aplicación práctica.',
       p2: 'En el contexto profesional, cuenta con experiencia en iniciativas relacionadas con Red Team, Blue Team, Threat Hunting e inteligencia cibernética.',
-      highlightsTitle: 'Aspectos destacados',
-      highlights: [
-        'Seguridad del sistema financiero y protocolos seguros',
-        'Defensa cibernética y análisis de amenazas',
-        'Inteligencia cibernética',
-        'Investigación de incidentes y forense digital',
-        'Formación en redes, seguridad y computación',
-      ],
     },
     work: {
       title: 'Áreas de actuación',
