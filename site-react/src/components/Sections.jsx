@@ -16,7 +16,7 @@ const PUB_TYPES = ['journal', 'conference', 'chapter'];
 
 // Ancoras que abrem a lista de producao ja na visao correspondente.
 const HASH_VIEW = {
-  publicacoes: { kind: 'pubs', type: 'all' },
+  publicacoes: { kind: 'pubs', type: 'journal' },
   periodicos: { kind: 'pubs', type: 'journal' },
   congressos: { kind: 'pubs', type: 'conference' },
   capitulos: { kind: 'pubs', type: 'chapter' },
@@ -24,30 +24,27 @@ const HASH_VIEW = {
   registros: { kind: 'regs' },
 };
 
-const showList = () => requestAnimationFrame(() => document.getElementById('producao')?.scrollIntoView({ behavior: 'smooth' }));
-
 export function About({ t, lang }) {
-  const [view, setView] = useState({ kind: 'pubs', type: 'all' });
+  const [view, setView] = useState(null);
 
   useEffect(() => {
     const apply = () => {
       const target = HASH_VIEW[decodeURIComponent(location.hash.slice(1))];
-      if (target) {
-        setView(target);
-        requestAnimationFrame(() => document.getElementById('producao')?.scrollIntoView());
-      }
+      if (target) setView(target);
     };
     apply();
     window.addEventListener('hashchange', apply);
     return () => window.removeEventListener('hashchange', apply);
   }, []);
 
-  const open = (next) => {
-    setView(next);
-    showList();
+  const close = () => {
+    setView(null);
+    // Sai da ancora do popup para que o mesmo link possa abrir de novo.
+    if (HASH_VIEW[decodeURIComponent(location.hash.slice(1))]) history.replaceState(null, '', '#sobre');
   };
-  const current = (kind, type) => view.kind === kind && (kind !== 'pubs' || view.type === type);
+  const current = (kind, type) => view?.kind === kind && (kind !== 'pubs' || view.type === type);
   const count = (type) => publications.filter((p) => p.type === type).length;
+  const viewCount = !view ? 0 : view.kind === 'pubs' ? count(view.type) : view.kind === 'awards' ? awards.length : registrations.length;
 
   return (
     <section id="sobre" className="section" aria-labelledby="sobre-title">
@@ -64,7 +61,7 @@ export function About({ t, lang }) {
                 <ul>
                   {PUB_TYPES.map((k) => (
                     <li key={k}>
-                      <button type="button" aria-current={current('pubs', k) ? 'true' : undefined} onClick={() => open({ kind: 'pubs', type: k })}>
+                      <button type="button" aria-current={current('pubs', k) ? 'true' : undefined} onClick={() => setView({ kind: 'pubs', type: k })}>
                         {t.pubs.types[k]} <span className="chip-count">{count(k)}</span>
                       </button>
                     </li>
@@ -72,10 +69,10 @@ export function About({ t, lang }) {
                 </ul>
               </div>
               <div>
-                <button type="button" className="path-single" aria-current={current('awards') ? 'true' : undefined} onClick={() => open({ kind: 'awards' })}>
+                <button type="button" className="path-single" aria-current={current('awards') ? 'true' : undefined} onClick={() => setView({ kind: 'awards' })}>
                   {t.pubs.tabs.awards} <span className="chip-count">{awards.length}</span>
                 </button>
-                <button type="button" className="path-single" aria-current={current('regs') ? 'true' : undefined} onClick={() => open({ kind: 'regs' })}>
+                <button type="button" className="path-single" aria-current={current('regs') ? 'true' : undefined} onClick={() => setView({ kind: 'regs' })}>
                   {t.pubs.tabs.regs} <span className="chip-count">{registrations.length}</span>
                 </button>
               </div>
@@ -98,7 +95,7 @@ export function About({ t, lang }) {
             <li key={tag}>{tag}</li>
           ))}
         </ul>
-        <Records t={t} lang={lang} view={view} onType={(type) => setView({ kind: 'pubs', type })} />
+        <Records t={t} lang={lang} view={view} count={viewCount} onClose={close} />
       </div>
     </section>
   );

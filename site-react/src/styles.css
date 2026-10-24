@@ -1002,12 +1002,85 @@ kbd {
   color: var(--accent);
 }
 
-.records {
-  margin-top: 2.5rem;
+.records-dialog {
+  width: min(920px, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  padding: 0;
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  color: var(--text);
+  background: rgba(4, 18, 9, 0.96);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(72, 255, 139, 0.08);
 }
 
-.records-title {
-  margin-bottom: 1rem;
+.records-dialog::backdrop {
+  background: rgba(1, 3, 1, 0.72);
+  backdrop-filter: blur(4px);
+}
+
+body:has(.records-dialog[open]) {
+  overflow: hidden;
+}
+
+.records-dialog-inner {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 2rem);
+}
+
+.records-dialog-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid var(--card-border-soft);
+}
+
+.records-dialog-head h3 {
+  margin: 0;
+}
+
+.records-dialog-count {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.records-dialog-close {
+  margin-left: auto;
+  align-self: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.records-dialog-close:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.records-dialog-body {
+  overflow-y: auto;
+  padding: 0.5rem 1.4rem 1.4rem;
+}
+
+@media (max-width: 860px) {
+  .records-dialog {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+
+  .records-dialog-inner {
+    height: 100dvh;
+    max-height: 100dvh;
+  }
 }
 
 .path-links {
@@ -1058,11 +1131,6 @@ kbd {
 
 .path-links .chip-count {
   margin-left: 0.2rem;
-}
-
-.pub-more {
-  margin-top: 1.25rem;
-  text-align: center;
 }
 
 .ravens-copy .lead {
