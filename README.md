@@ -78,13 +78,14 @@ peotta.github.io/
 ├── orientacao/                    # 🎓 Orientação de Pós-Graduação
 │   └── mestrado-ppee.html
 ├── assets/                        # 🎨 Recursos Estáticos Compartilhados
-│   ├── css/                       # Estilos globais
-│   ├── js/                        # Scripts e interações
+│   ├── style.css, app.js, m3m4.js # Estilo e scripts do curso de Linux (guias/index-linux.html)
+│   ├── react/                     # Build de produção do portal (gerado por site-react, não editar)
 │   └── img/                       # Imagens e banners (kebab-case)
-│       ├── foto-perfil-unb.png
+│       ├── foto-perfil-unb.png, foto-perfil-og.jpg
 │       ├── latencia-zero-podcast.png
-│       └── ravens-1.webp
+│       └── ravens-1.webp, ravens-logo.png, ravens-logo-og.png
 ├── arquivos/                      # 📁 Materiais para download (PDFs e anexos)
+├── site-react/                    # ⚛️ Código-fonte do portal (React + Vite), gerador de index.html e páginas de guias
 └── README.md                      # Documentação técnica do repositório
 ```
 
@@ -92,7 +93,15 @@ peotta.github.io/
 
 ## 🚀 Como Executar e Testar Localmente
 
-Por se tratar de um site estático (HTML5, CSS3 e JavaScript puro), não há dependência de servidores pesados.
+Por se tratar de um site estático publicado no GitHub Pages, não há dependência de servidor em produção. As páginas de guias, laboratórios e certificações são HTML puro; o portal (`index.html`, `guias/dicas.html` e `orientacao/mestrado-ppee.html`) é gerado a partir de `site-react/` (React + Vite) e o resultado fica em `assets/react/`.
+
+### Alterar o portal React
+
+```bash
+cd site-react
+npm install
+npm run build   # gera o bundle e atualiza index.html, guias/dicas.html e orientacao/mestrado-ppee.html
+```
 
 ### Opção 1: Live Server (VS Code)
 1. Abra a pasta do projeto no VS Code.

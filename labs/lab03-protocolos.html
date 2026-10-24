@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="Prof. Dr. Laerte Peotta de Melo">
-<title>Lab 03 — Protocolos WPA2/WPA3 | Prof. Dr. Laerte Peotta de Melo</title>
+<title>Lab 03 - Protocolos WPA2/WPA3 | Prof. Dr. Laerte Peotta de Melo</title>
 <style>  :root{
     --bg:#010503;--bg2:#031208;--panel:rgba(3,18,9,.82);--panel2:rgba(5,28,13,.72);
     --line:rgba(62,255,132,.22);--line2:rgba(62,255,132,.10);--text:#dcffe8;
@@ -91,6 +91,13 @@
   footer{width:min(calc(100% - 2rem),var(--max));margin:0 auto 2rem;padding:1.2rem;border:1px solid rgba(57,255,122,.13);border-radius:20px;background:rgba(2,12,6,.72);color:var(--muted);text-align:center;font-size:.84rem;}
   @media(max-width:980px){nav{border-radius:24px;}.nav-brand{width:100%;white-space:normal;}.nav-brand span{display:block;margin:.2rem 0 0;}.stats{grid-template-columns:repeat(2,minmax(0,1fr));}.sumario ol{grid-template-columns:repeat(2,minmax(0,1fr));}.link-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
   @media(max-width:640px){body{font-size:15px;}nav,.hero,.container,footer{width:min(calc(100% - 1rem),var(--max));}.hero,.container{padding:1.25rem;border-radius:22px;}.hero h1{font-size:2rem;}.stats,.sumario ol,.link-grid{grid-template-columns:1fr;}nav a{flex:1 1 auto;text-align:center;}}</style>
+  <meta name="description" content="Lab 03: protocolos e handshakes WPA2 e WPA3, com análise do 4-way handshake e do SAE.">
+  <link rel="canonical" href="https://peotta.github.io/labs/lab03-protocolos.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Lab 03 - Protocolos WPA2/WPA3 | Prof. Dr. Laerte Peotta de Melo">
+  <meta property="og:description" content="Lab 03: protocolos e handshakes WPA2 e WPA3, com análise do 4-way handshake e do SAE.">
+  <meta property="og:url" content="https://peotta.github.io/labs/lab03-protocolos.html">
+  <meta property="og:image" content="https://peotta.github.io/assets/img/foto-perfil-og.jpg">
 </head>
 <body>
 <canvas id="matrix-rain" aria-hidden="true"></canvas>
@@ -132,9 +139,9 @@
     <ol>
       <li><a href="#objetivo">Objetivo do laboratório</a></li>
       <li><a href="#historico">Histórico e evolução</a></li>
-      <li><a href="#wpa2">WPA2 — 4-Way Handshake</a></li>
-      <li><a href="#wpa3">WPA3 — SAE e Dragonfly</a></li>
-      <li><a href="#pmf">PMF — Protected Management Frames</a></li>
+      <li><a href="#wpa2">WPA2 - 4-Way Handshake</a></li>
+      <li><a href="#wpa3">WPA3 - SAE e Dragonfly</a></li>
+      <li><a href="#pmf">PMF - Protected Management Frames</a></li>
       <li><a href="#pmkid">Ataque PMKID (sem cliente)</a></li>
       <li><a href="#atividades">Atividades avaliativas</a></li>
     </ol>
@@ -178,17 +185,17 @@ WPA2 PN: 2^48 → 281 trilhões de combinações → sem colisão prática</span
   </section>
 
   <section id="wpa2">
-    <h2>3. WPA2 — 4-Way Handshake em detalhe</h2>
+    <h2>3. WPA2 - 4-Way Handshake em detalhe</h2>
     <p>O WPA2-PSK deriva a PMK (Pairwise Master Key) a partir da senha e do SSID via PBKDF2-SHA1 (4096 iterações). A PTK (sessão) é derivada via PRF-512 com ANonce, SNonce, MACs do AP e do cliente.</p>
     <h3>Hierarquia de chaves WPA2</h3>
     <div class="table-wrap"><table>
       <tr><th>Chave</th><th>Derivação</th><th>Papel</th></tr>
-      <tr><td>PMK</td><td>PBKDF2(passphrase, SSID, 4096, 32)</td><td>Chave mestre de 256 bits — derivada da senha</td></tr>
-      <tr><td>PTK</td><td>PRF-512(PMK, ANonce, SNonce, MACs)</td><td>Chave de sessão — única por associação</td></tr>
-      <tr><td>KCK</td><td>PTK[0:16]</td><td>Chave de confirmação — usada no MIC do handshake</td></tr>
-      <tr><td>KEK</td><td>PTK[16:32]</td><td>Chave de encriptação — protege GTK no M3</td></tr>
-      <tr><td>TK</td><td>PTK[32:48]</td><td>Chave de tráfego — encripta frames de dados</td></tr>
-      <tr><td>GTK</td><td>Gerada pelo AP</td><td>Chave de grupo — encripta broadcasts/multicasts</td></tr>
+      <tr><td>PMK</td><td>PBKDF2(passphrase, SSID, 4096, 32)</td><td>Chave mestre de 256 bits - derivada da senha</td></tr>
+      <tr><td>PTK</td><td>PRF-512(PMK, ANonce, SNonce, MACs)</td><td>Chave de sessão - única por associação</td></tr>
+      <tr><td>KCK</td><td>PTK[0:16]</td><td>Chave de confirmação - usada no MIC do handshake</td></tr>
+      <tr><td>KEK</td><td>PTK[16:32]</td><td>Chave de encriptação - protege GTK no M3</td></tr>
+      <tr><td>TK</td><td>PTK[32:48]</td><td>Chave de tráfego - encripta frames de dados</td></tr>
+      <tr><td>GTK</td><td>Gerada pelo AP</td><td>Chave de grupo - encripta broadcasts/multicasts</td></tr>
     </table></div>
     <h3>Sequência do 4-Way Handshake</h3>
     <pre><code><span class="cm">AP                                        Cliente
@@ -209,12 +216,12 @@ WPA2 PN: 2^48 → 281 trilhões de combinações → sem colisão prática</span
 │    GTK encriptada com KEK                    │
 │                                              │
 │ ←── M4: EAPOL (ACK + MIC) ──────────────   │
-│    Handshake concluído — tráfego inicia      │</span></code></pre>
+│    Handshake concluído - tráfego inicia      │</span></code></pre>
     <h3>Observar handshake no Wireshark</h3>
     <pre><code><span class="cm"># Filtro para os 4 frames EAPOL</span>
 eapol
 
-<span class="cm"># Inspecionar MIC do M2 — campo crítico para crack offline</span>
+<span class="cm"># Inspecionar MIC do M2 - campo crítico para crack offline</span>
 <span class="cm"># Expandir: EAPOL → Key Information → Key MIC</span>
 
 <span class="cm"># Verificar se handshake completo (4 mensagens)</span>
@@ -223,16 +230,16 @@ tshark -r captura.pcap -Y "eapol" -T fields   -e frame.number -e eapol.keydes.ke
   </section>
 
   <section id="wpa3">
-    <h2>4. WPA3 — SAE e Dragonfly Key Exchange</h2>
+    <h2>4. WPA3 - SAE e Dragonfly Key Exchange</h2>
     <p>O WPA3-Personal substitui o handshake PSK pelo protocolo <strong>SAE (Simultaneous Authentication of Equals)</strong>, baseado no Dragonfly Key Exchange. O SAE provê <strong>Perfect Forward Secrecy</strong>: mesmo com a senha, não é possível decriptar capturas antigas.</p>
     <h3>Diferenças fundamentais WPA2 vs WPA3</h3>
     <div class="table-wrap"><table>
       <tr><th>Aspecto</th><th>WPA2-PSK</th><th>WPA3-SAE</th></tr>
       <tr><td>Autenticação</td><td>Baseada em PMK derivada da senha</td><td>Prova de conhecimento zero (DH + senha)</td></tr>
-      <tr><td>Forward Secrecy</td><td>Não — captura + senha = decriptação total</td><td>Sim — chave de sessão não derivável da senha</td></tr>
-      <tr><td>Offline crack</td><td>Possível com handshake + dicionário</td><td>Inviável — SAE protege contra ataques offline</td></tr>
+      <tr><td>Forward Secrecy</td><td>Não - captura + senha = decriptação total</td><td>Sim - chave de sessão não derivável da senha</td></tr>
+      <tr><td>Offline crack</td><td>Possível com handshake + dicionário</td><td>Inviável - SAE protege contra ataques offline</td></tr>
       <tr><td>PMF</td><td>Opcional (desde 802.11w-2009)</td><td>Obrigatório</td></tr>
-      <tr><td>Transition Mode</td><td>—</td><td>WPA3-SAE/WPA2 simultâneo para compatibilidade</td></tr>
+      <tr><td>Transition Mode</td><td>-</td><td>WPA3-SAE/WPA2 simultâneo para compatibilidade</td></tr>
     </table></div>
     <h3>Verificar WPA3 em captura</h3>
     <pre><code><span class="cm"># Identificar APs com WPA3 (AKM Suite = SAE)</span>
@@ -251,8 +258,8 @@ tshark -r captura.pcap -Y "wlan.fc.type_subtype==8"   -T fields -e wlan.ssid -e 
   </section>
 
   <section id="pmf">
-    <h2>5. PMF — Protected Management Frames (802.11w)</h2>
-    <p>O PMF protege frames de gerenciamento (Deauthentication, Disassociation) contra falsificação. Sem PMF, qualquer um pode enviar frames de desautenticação forjados — base dos ataques DeAuth.</p>
+    <h2>5. PMF - Protected Management Frames (802.11w)</h2>
+    <p>O PMF protege frames de gerenciamento (Deauthentication, Disassociation) contra falsificação. Sem PMF, qualquer um pode enviar frames de desautenticação forjados - base dos ataques DeAuth.</p>
     <pre><code><span class="cm"># Verificar suporte a PMF no adaptador</span>
 iw list | grep -A5 "Device supports"
 <span class="cs">Device supports: AP, station, IBSS, monitor, P2P-GO, P2P-client
@@ -265,16 +272,16 @@ iw list | grep -A5 "Device supports"
 <span class="cm"># Efeito do PMF sobre o ataque DeAuth</span>
 <span class="cm"># Sem PMF: aireplay-ng -0 5 ... → cliente desconecta imediatamente</span>
 <span class="cm"># Com PMF: aireplay-ng -0 5 ... → cliente ignora o frame falsificado</span>
-<span class="cw">send_deauth: error: No response from AP — PMF ativo, ataque bloqueado</span></code></pre>
+<span class="cw">send_deauth: error: No response from AP - PMF ativo, ataque bloqueado</span></code></pre>
   </section>
 
   <section id="pmkid">
-    <h2>6. Ataque PMKID — captura sem cliente associado</h2>
+    <h2>6. Ataque PMKID - captura sem cliente associado</h2>
     <p>O PMKID é um identificador derivado da PMK presente no frame EAPOL M1. Diferente do 4-Way Handshake, ele pode ser capturado <strong>sem aguardar nenhum cliente se conectar</strong>, enviando apenas um Request de associação ao AP.</p>
     <pre><code><span class="cm"># Instalação do hcxdumptool e hcxtools</span>
 apt install -y hcxdumptool hcxtools hashcat
 
-<span class="cm"># Capturar PMKID — solicita associação ao AP (ativo, envia 1 frame)</span>
+<span class="cm"># Capturar PMKID - solicita associação ao AP (ativo, envia 1 frame)</span>
 hcxdumptool -i wlan0mon -o pmkid.pcapng   --enable_status=1 --filterlist_ap=bssid.txt
 
 <span class="cm"># Converter para formato hashcat</span>
@@ -293,8 +300,8 @@ hashcat -m 22000 hash.hc22000 /usr/share/wordlists/rockyou.txt
 
     <h3>Mitigação do ataque PMKID</h3>
     <ul class="check">
-      <li><span class="ok">✓</span><span>Usar senha com <strong>16+ caracteres</strong> gerados aleatoriamente — torna o dicionário inviável</span></li>
-      <li><span class="ok">✓</span><span>Migrar para <strong>WPA3-SAE</strong> — o SAE não usa PMK derivada da senha diretamente</span></li>
+      <li><span class="ok">✓</span><span>Usar senha com <strong>16+ caracteres</strong> gerados aleatoriamente - torna o dicionário inviável</span></li>
+      <li><span class="ok">✓</span><span>Migrar para <strong>WPA3-SAE</strong> - o SAE não usa PMK derivada da senha diretamente</span></li>
       <li><span class="ok">✓</span><span>Habilitar <strong>PMF obrigatório</strong> (ieee80211w=2) para proteção adicional</span></li>
     </ul>
   </section>
@@ -311,13 +318,13 @@ hashcat -m 22000 hash.hc22000 /usr/share/wordlists/rockyou.txt
     <div class="link-grid">
       <div class="link-card">
         <div class="lc-label">Lab Anterior</div>
-        <div class="lc-title">Lab 02 — Captura Wireshark</div>
+        <div class="lc-title">Lab 02 - Captura Wireshark</div>
         <div class="lc-desc">Captura e análise de frames 802.11 e EAPOL.</div>
         <a class="lc-link" href="lab02-captura.html">← Voltar</a>
       </div>
       <div class="link-card">
         <div class="lc-label">Próximo Lab</div>
-        <div class="lc-title">Lab 04 — Ataques e Defesa</div>
+        <div class="lc-title">Lab 04 - Ataques e Defesa</div>
         <div class="lc-desc">DeAuth, Evil Twin, WPS e contramedidas práticas.</div>
         <a class="lc-link" href="lab04-ataques.html">Avançar →</a>
       </div>

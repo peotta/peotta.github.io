@@ -6,11 +6,6 @@
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
-  <url>
-    <loc>https://peotta.github.io/index.html</loc>
-    <priority>1.0</priority>
-    <changefreq>weekly</changefreq>
-  </url>
 
   <!-- Simul-Net: simuladores de redes e protocolos seguros -->
   <url>

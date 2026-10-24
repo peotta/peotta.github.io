@@ -7,7 +7,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.
 const jobs = [
   { src: 'assets/img/foto-perfil-unb.png', out: 'assets/img/foto-perfil-unb.webp', width: 840 },
   { src: 'assets/img/latencia-zero-podcast.png', out: 'assets/img/latencia-zero-podcast.webp', width: 1200 },
-  { src: 'arquivos/Ravens-logo.png', out: 'assets/img/ravens-logo.webp', width: 800 },
+  { src: 'assets/img/ravens-logo.png', out: 'assets/img/ravens-logo.webp', width: 800 },
 ];
 
 for (const job of jobs) {

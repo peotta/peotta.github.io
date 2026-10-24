@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="Prof. Dr. Laerte Peotta de Melo">
-<title>Lab 02 — Captura com Wireshark | Prof. Dr. Laerte Peotta de Melo</title>
+<title>Lab 02 - Captura com Wireshark | Prof. Dr. Laerte Peotta de Melo</title>
 <style>  :root{
     --bg:#010503;--bg2:#031208;--panel:rgba(3,18,9,.82);--panel2:rgba(5,28,13,.72);
     --line:rgba(62,255,132,.22);--line2:rgba(62,255,132,.10);--text:#dcffe8;
@@ -91,6 +91,13 @@
   footer{width:min(calc(100% - 2rem),var(--max));margin:0 auto 2rem;padding:1.2rem;border:1px solid rgba(57,255,122,.13);border-radius:20px;background:rgba(2,12,6,.72);color:var(--muted);text-align:center;font-size:.84rem;}
   @media(max-width:980px){nav{border-radius:24px;}.nav-brand{width:100%;white-space:normal;}.nav-brand span{display:block;margin:.2rem 0 0;}.stats{grid-template-columns:repeat(2,minmax(0,1fr));}.sumario ol{grid-template-columns:repeat(2,minmax(0,1fr));}.link-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
   @media(max-width:640px){body{font-size:15px;}nav,.hero,.container,footer{width:min(calc(100% - 1rem),var(--max));}.hero,.container{padding:1.25rem;border-radius:22px;}.hero h1{font-size:2rem;}.stats,.sumario ol,.link-grid{grid-template-columns:1fr;}nav a{flex:1 1 auto;text-align:center;}}</style>
+  <meta name="description" content="Lab 02: captura e análise de tráfego Wi-Fi com Wireshark, filtros e interpretação de quadros 802.11.">
+  <link rel="canonical" href="https://peotta.github.io/labs/lab02-captura.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Lab 02 - Captura com Wireshark | Prof. Dr. Laerte Peotta de Melo">
+  <meta property="og:description" content="Lab 02: captura e análise de tráfego Wi-Fi com Wireshark, filtros e interpretação de quadros 802.11.">
+  <meta property="og:url" content="https://peotta.github.io/labs/lab02-captura.html">
+  <meta property="og:image" content="https://peotta.github.io/assets/img/foto-perfil-og.jpg">
 </head>
 <body>
 <canvas id="matrix-rain" aria-hidden="true"></canvas>
@@ -151,7 +158,7 @@
       <tr><td>Management (0)</td><td>Probe Response (5)</td><td>AP responde ao probe request do cliente</td></tr>
       <tr><td>Management (0)</td><td>Authentication (11)</td><td>Troca de frames de autenticação 802.11</td></tr>
       <tr><td>Management (0)</td><td>Association Request (0)</td><td>Cliente solicita associação ao AP</td></tr>
-      <tr><td>Management (0)</td><td>Deauthentication (12)</td><td>Encerra autenticação — usado em ataques DeAuth</td></tr>
+      <tr><td>Management (0)</td><td>Deauthentication (12)</td><td>Encerra autenticação - usado em ataques DeAuth</td></tr>
       <tr><td>Data (2)</td><td>Data (0)</td><td>Frames de dados encriptados (CCMP/TKIP)</td></tr>
     </table></div>
   </section>
@@ -179,7 +186,7 @@ iwconfig wlan0mon channel 6</code></pre>
 
   <section id="airodump">
     <h2>3. Captura com airodump-ng</h2>
-    <pre><code><span class="cm"># Captura geral em todos os canais — salva PCAP</span>
+    <pre><code><span class="cm"># Captura geral em todos os canais - salva PCAP</span>
 airodump-ng wlan0mon --band abg -w captura --output-format pcap
 
 <span class="cm"># Captura focada: canal 6, BSSID específico</span>
@@ -225,7 +232,7 @@ wireshark captura-01.cap &
 
   <section id="tshark">
     <h2>5. Análise via tshark (CLI)</h2>
-    <p>O <code>tshark</code> é a versão de linha de comando do Wireshark — ideal para automação e scripts.</p>
+    <p>O <code>tshark</code> é a versão de linha de comando do Wireshark - ideal para automação e scripts.</p>
     <pre><code><span class="cm"># Capturar direto com tshark em modo monitor</span>
 tshark -i wlan0mon -w captura.pcap
 
@@ -252,7 +259,7 @@ tshark -r captura.pcap -q -z wlan,stat,wlan0mon</code></pre>
       <tr><td>EAPOL M1</td><td>AP → Cliente</td><td>ANonce (nonce do AP)</td></tr>
       <tr><td>EAPOL M2</td><td>Cliente → AP</td><td>SNonce + MIC (prova que o cliente conhece a PSK)</td></tr>
       <tr><td>EAPOL M3</td><td>AP → Cliente</td><td>GTK encriptada + MIC de confirmação</td></tr>
-      <tr><td>EAPOL M4</td><td>Cliente → AP</td><td>ACK — handshake completo</td></tr>
+      <tr><td>EAPOL M4</td><td>Cliente → AP</td><td>ACK - handshake completo</td></tr>
     </table></div>
     <pre><code><span class="cm"># Filtrar EAPOL e verificar se handshake está completo</span>
 tshark -r captura.pcap -Y "eapol"   -T fields -e frame.number -e wlan.sa -e wlan.da -e eapol.keydes.key_info
@@ -282,13 +289,13 @@ aircrack-ng captura-01.cap
     <div class="link-grid">
       <div class="link-card">
         <div class="lc-label">Lab Anterior</div>
-        <div class="lc-title">Lab 01 — Reconhecimento</div>
+        <div class="lc-title">Lab 01 - Reconhecimento</div>
         <div class="lc-desc">Mapeamento passivo com Kismet sem transmitir pacotes.</div>
         <a class="lc-link" href="lab01-reconhecimento.html">← Voltar</a>
       </div>
       <div class="link-card">
         <div class="lc-label">Próximo Lab</div>
-        <div class="lc-title">Lab 03 — Protocolos WPA2/3</div>
+        <div class="lc-title">Lab 03 - Protocolos WPA2/3</div>
         <div class="lc-desc">Análise do 4-Way Handshake, SAE e PMKID em profundidade.</div>
         <a class="lc-link" href="lab03-protocolos.html">Avançar →</a>
       </div>

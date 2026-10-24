@@ -72,7 +72,7 @@ pre.output code{color:#7ac49a;background:transparent;border:0;padding:0;font-fam
 .lab-text{flex:1;color:var(--muted);font-size:.85rem;}
 .lab-text strong{color:#eafff0;display:block;margin-bottom:.15rem;}
 
-/* ── SVG diagram text — legibilidade ──
+/* ── SVG diagram text - legibilidade ──
    Atributos de apresentação SVG têm especificidade 0 (abaixo de qualquer
    seletor CSS), portanto estas regras sobrescrevem font-size="7/8/9/10"
    em todos os diagramas sem alterar coordenadas ou layouts.           */

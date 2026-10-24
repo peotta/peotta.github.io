@@ -3,17 +3,17 @@ var html = `
 <!-- ══════════ MÓDULO 3 ══════════ -->
 <section class="module module-block" id="m3">
 <div class="module-title"><span class="num">Módulo 3</span><h2>Linux para Redes</h2></div>
-<p class="lead">Interfaces, TCP/IP, portas, DNS, rotas, diagnóstico e captura de tráfego — tudo com método e evidência técnica.</p>
+<p class="lead">Interfaces, TCP/IP, portas, DNS, rotas, diagnóstico e captura de tráfego - tudo com método e evidência técnica.</p>
 <div class="module-map">
-  <a class="mini-card" href="#m3-a1"><strong>Aula 3.1 — Interfaces, endereços e modelo TCP/IP</strong><span>Relacionar comandos Linux com camadas e estado real das interfaces.</span></a>
-  <a class="mini-card" href="#m3-a2"><strong>Aula 3.2 — Portas, sockets e serviços de rede</strong><span>Identificar processos ouvindo portas e a superfície de ataque exposta.</span></a>
-  <a class="mini-card" href="#m3-a3"><strong>Aula 3.3 — DNS e resolução de nomes</strong><span>Diagnosticar falhas separando IP, DNS e aplicação.</span></a>
-  <a class="mini-card" href="#m3-a4"><strong>Aula 3.4 — Rotas, troubleshooting e captura</strong><span>Método completo: interface → IP → rota → DNS → porta → aplicação.</span></a>
+  <a class="mini-card" href="#m3-a1"><strong>Aula 3.1 - Interfaces, endereços e modelo TCP/IP</strong><span>Relacionar comandos Linux com camadas e estado real das interfaces.</span></a>
+  <a class="mini-card" href="#m3-a2"><strong>Aula 3.2 - Portas, sockets e serviços de rede</strong><span>Identificar processos ouvindo portas e a superfície de ataque exposta.</span></a>
+  <a class="mini-card" href="#m3-a3"><strong>Aula 3.3 - DNS e resolução de nomes</strong><span>Diagnosticar falhas separando IP, DNS e aplicação.</span></a>
+  <a class="mini-card" href="#m3-a4"><strong>Aula 3.4 - Rotas, troubleshooting e captura</strong><span>Método completo: interface → IP → rota → DNS → porta → aplicação.</span></a>
 </div>
 
 <!-- M3-A1 -->
 <article class="lesson" id="m3-a1">
-<div class="lesson-head"><span class="lesson-code">M3-A1</span><h3>Aula 3.1 — Interfaces, endereços e modelo TCP/IP</h3></div>
+<div class="lesson-head"><span class="lesson-code">M3-A1</span><h3>Aula 3.1 - Interfaces, endereços e modelo TCP/IP</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Relacionar comandos Linux com camadas do modelo TCP/IP e verificar o estado real das interfaces de rede.</p>
 <div class="theory"><h4>Teoria essencial</h4><ul>
 <li><strong>Interface de rede:</strong> ponto de conexão lógica ou física com a rede. Cada interface tem nome, endereço MAC (L2), endereço IP (L3) e estado (UP/DOWN).</li>
@@ -26,7 +26,7 @@ var html = `
 <div class="svg-wrap">
 <svg viewBox="0 0 720 370" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
   <rect width="720" height="370" fill="#010403" rx="10"/>
-  <text x="360" y="22" text-anchor="middle" font-family="Courier New" font-size="10" font-weight="900" fill="#d4f7e0" letter-spacing="1">MODELO TCP/IP — CAMADAS E COMANDOS LINUX</text>
+  <text x="360" y="22" text-anchor="middle" font-family="Courier New" font-size="10" font-weight="900" fill="#d4f7e0" letter-spacing="1">MODELO TCP/IP - CAMADAS E COMANDOS LINUX</text>
   <!-- Layer boxes (left) and command boxes (right) -->
   <!-- L4 Application -->
   <rect x="8"   y="32"  width="200" height="80" fill="rgba(199,146,234,.08)" rx="7" stroke="rgba(199,146,234,.4)" stroke-width="1.5"/>
@@ -86,7 +86,7 @@ var html = `
   <!-- Legend -->
   <text x="8" y="355" text-anchor="start" font-family="Courier New" font-size="7" fill="#5a8f6e">Esquerda: camada e protocolos. Direita: comandos Linux por camada.</text>
 </svg>
-<figcaption>Fig. 4 — Modelo TCP/IP de 4 camadas com ferramentas Linux correspondentes. Diagnóstico eficiente começa na camada mais baixa (L1) e sobe até a aplicação.</figcaption>
+<figcaption>Fig. 4 - Modelo TCP/IP de 4 camadas com ferramentas Linux correspondentes. Diagnóstico eficiente começa na camada mais baixa (L1) e sobe até a aplicação.</figcaption>
 </div>
 
 <h4>Comandos explicados</h4>
@@ -105,7 +105,7 @@ lo               UNKNOWN 127.0.0.1/8 ::1/128
     inet6 fe80::a00:27ff:fe12:3456/64 scope link</code></pre>
 <div class="callout callout-info">
 <strong>Conceito-chave: LOWER_UP vs UP</strong>
-<code>UP</code> indica que a interface está habilitada por software. <code>LOWER_UP</code> indica que o link físico está detectado (cabo conectado, sinal de rádio presente). Um servidor pode estar UP sem LOWER_UP — cabo desconectado ou porta do switch desligada.
+<code>UP</code> indica que a interface está habilitada por software. <code>LOWER_UP</code> indica que o link físico está detectado (cabo conectado, sinal de rádio presente). Um servidor pode estar UP sem LOWER_UP - cabo desconectado ou porta do switch desligada.
 </div>
 <div class="activity"><h4>Atividade prática exigida</h4><ol>
 <li>Identifique interface principal, IP, máscara CIDR, MAC e estado UP/DOWN/LOWER_UP.</li>
@@ -117,12 +117,12 @@ lo               UNKNOWN 127.0.0.1/8 ::1/128
 
 <!-- M3-A2 -->
 <article class="lesson" id="m3-a2">
-<div class="lesson-head"><span class="lesson-code">M3-A2</span><h3>Aula 3.2 — Portas, sockets e serviços de rede</h3></div>
+<div class="lesson-head"><span class="lesson-code">M3-A2</span><h3>Aula 3.2 - Portas, sockets e serviços de rede</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Identificar processos que escutam portas, entender a superfície de ataque exposta e correlacionar socket com serviço.</p>
 <div class="theory"><h4>Teoria essencial</h4><ul>
 <li><strong>Socket:</strong> endpoint de comunicação identificado pela quíntupla: <em>protocolo + IP local + porta local + IP remoto + porta remota</em>. Um socket em estado LISTEN tem IP/porta remota indefinidos.</li>
-<li><strong>Porta bem conhecida (well-known, 0–1023):</strong> reservada para serviços padrão, requer privilégios de root para binding.</li>
-<li><strong>Porta registrada (1024–49151):</strong> aplicações de usuário. <strong>Porta efêmera (49152–65535):</strong> atribuída automaticamente pelo kernel para o lado cliente da conexão.</li>
+<li><strong>Porta bem conhecida (well-known, 0-1023):</strong> reservada para serviços padrão, requer privilégios de root para binding.</li>
+<li><strong>Porta registrada (1024-49151):</strong> aplicações de usuário. <strong>Porta efêmera (49152-65535):</strong> atribuída automaticamente pelo kernel para o lado cliente da conexão.</li>
 <li><strong>ss substituiu netstat:</strong> <code>ss</code> do pacote iproute2 acessa <code>/proc/net/tcp</code> diretamente, é mais rápido e mostra mais informações. <code>netstat</code> é legado e pode não estar instalado.</li>
 </ul></div>
 
@@ -130,17 +130,17 @@ lo               UNKNOWN 127.0.0.1/8 ::1/128
 <table class="table">
 <thead><tr><th>Porta</th><th>Protocolo</th><th>Serviço</th><th>Relevância para redes</th></tr></thead>
 <tbody>
-<tr><td><span class="port-badge">22</span></td><td>TCP</td><td>SSH</td><td>Administração remota segura — sempre monitorar tentativas de acesso</td></tr>
-<tr><td><span class="port-badge">23</span></td><td>TCP</td><td>Telnet</td><td>Legado e inseguro — jamais usar em produção</td></tr>
+<tr><td><span class="port-badge">22</span></td><td>TCP</td><td>SSH</td><td>Administração remota segura - sempre monitorar tentativas de acesso</td></tr>
+<tr><td><span class="port-badge">23</span></td><td>TCP</td><td>Telnet</td><td>Legado e inseguro - jamais usar em produção</td></tr>
 <tr><td><span class="port-badge">25</span></td><td>TCP</td><td>SMTP</td><td>Transferência de e-mail entre servidores</td></tr>
-<tr><td><span class="port-badge">53</span></td><td>TCP/UDP</td><td>DNS</td><td>Resolução de nomes — crítico para toda comunicação</td></tr>
+<tr><td><span class="port-badge">53</span></td><td>TCP/UDP</td><td>DNS</td><td>Resolução de nomes - crítico para toda comunicação</td></tr>
 <tr><td><span class="port-badge">67/68</span></td><td>UDP</td><td>DHCP</td><td>Atribuição dinâmica de endereços IP</td></tr>
-<tr><td><span class="port-badge">80</span></td><td>TCP</td><td>HTTP</td><td>Web sem criptografia — evitar para dados sensíveis</td></tr>
-<tr><td><span class="port-badge">123</span></td><td>UDP</td><td>NTP</td><td>Sincronização de tempo — crítico para logs e certificados</td></tr>
+<tr><td><span class="port-badge">80</span></td><td>TCP</td><td>HTTP</td><td>Web sem criptografia - evitar para dados sensíveis</td></tr>
+<tr><td><span class="port-badge">123</span></td><td>UDP</td><td>NTP</td><td>Sincronização de tempo - crítico para logs e certificados</td></tr>
 <tr><td><span class="port-badge">161/162</span></td><td>UDP</td><td>SNMP</td><td>Monitoramento de dispositivos de rede</td></tr>
-<tr><td><span class="port-badge">443</span></td><td>TCP</td><td>HTTPS</td><td>Web com TLS — padrão para produção</td></tr>
+<tr><td><span class="port-badge">443</span></td><td>TCP</td><td>HTTPS</td><td>Web com TLS - padrão para produção</td></tr>
 <tr><td><span class="port-badge">514</span></td><td>UDP/TCP</td><td>Syslog</td><td>Log centralizado de dispositivos de rede</td></tr>
-<tr><td><span class="port-badge">3306</span></td><td>TCP</td><td>MySQL</td><td>Banco de dados — nunca expor à internet</td></tr>
+<tr><td><span class="port-badge">3306</span></td><td>TCP</td><td>MySQL</td><td>Banco de dados - nunca expor à internet</td></tr>
 <tr><td><span class="port-badge">179</span></td><td>TCP</td><td>BGP</td><td>Roteamento entre sistemas autônomos (ASN)</td></tr>
 </tbody>
 </table>
@@ -157,8 +157,8 @@ tcp    LISTEN  0       128     0.0.0.0:22            0.0.0.0:*         users:(("
 tcp    LISTEN  0       511     0.0.0.0:80            0.0.0.0:*         users:(("nginx",pid=1024,fd=6))
 udp    UNCONN  0       0       127.0.0.53:53         0.0.0.0:*         users:(("systemd-r",pid=512,fd=12))</code></pre>
 <div class="callout callout-warn">
-<strong>Atenção — superfície de ataque</strong>
-Cada porta em LISTEN é um ponto de entrada potencial. Servidores mínimos devem expor apenas as portas necessárias. Verifique periodicamente com <code>ss -tulpen</code> se há novos serviços que não deveriam estar ouvindo — isso pode indicar comprometimento.
+<strong>Atenção - superfície de ataque</strong>
+Cada porta em LISTEN é um ponto de entrada potencial. Servidores mínimos devem expor apenas as portas necessárias. Verifique periodicamente com <code>ss -tulpen</code> se há novos serviços que não deveriam estar ouvindo - isso pode indicar comprometimento.
 </div>
 <div class="activity"><h4>Atividade prática exigida</h4><ol>
 <li>Identifique todas as portas em escuta e associe cada uma a um serviço/processo.</li>
@@ -170,13 +170,13 @@ Cada porta em LISTEN é um ponto de entrada potencial. Servidores mínimos devem
 
 <!-- M3-A3 -->
 <article class="lesson" id="m3-a3">
-<div class="lesson-head"><span class="lesson-code">M3-A3</span><h3>Aula 3.3 — DNS e resolução de nomes</h3></div>
+<div class="lesson-head"><span class="lesson-code">M3-A3</span><h3>Aula 3.3 - DNS e resolução de nomes</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Diagnosticar problemas de resolução separando conectividade IP, DNS e aplicação. Entender o fluxo completo da resolução recursiva.</p>
 <div class="theory"><h4>Teoria essencial</h4><ul>
 <li><strong>DNS (Domain Name System):</strong> sistema hierárquico distribuído que traduz nomes legíveis (www.unb.br) em endereços IP e outros registros.</li>
 <li><strong>Fluxo de resolução:</strong> cache local → <code>/etc/hosts</code> → stub resolver (127.0.0.53) → resolver recursivo (ISP/8.8.8.8) → servidores autoritativos (root → TLD → domínio).</li>
-<li><strong>/etc/nsswitch.conf:</strong> define a ordem de consulta para resolução de nomes. Linha típica: <code>hosts: files dns</code> — verifica <code>/etc/hosts</code> antes do DNS.</li>
-<li><strong>Falha de DNS ≠ falha de rede:</strong> <code>ping 8.8.8.8</code> pode funcionar (IP ok) enquanto <code>ping google.com</code> falha (DNS com problema) — diagnóstico deve separar as duas camadas.</li>
+<li><strong>/etc/nsswitch.conf:</strong> define a ordem de consulta para resolução de nomes. Linha típica: <code>hosts: files dns</code> - verifica <code>/etc/hosts</code> antes do DNS.</li>
+<li><strong>Falha de DNS ≠ falha de rede:</strong> <code>ping 8.8.8.8</code> pode funcionar (IP ok) enquanto <code>ping google.com</code> falha (DNS com problema) - diagnóstico deve separar as duas camadas.</li>
 </ul></div>
 
 <h4>Diagrama: Fluxo de resolução DNS recursiva</h4>
@@ -238,7 +238,7 @@ Cada porta em LISTEN é um ponto de entrada potencial. Servidores mínimos devem
   <!-- Bottom note -->
   <text x="360" y="225" text-anchor="middle" font-family="Courier New" font-size="7" fill="#5a8f6e">Cada resposta é cacheada pelo TTL. Após o TTL expirar o processo recomeça. dig +trace mostra cada salto.</text>
 </svg>
-<figcaption>Fig. 5 — Fluxo de resolução DNS recursiva. O cliente nunca consulta os servidores autoritativos diretamente — o resolver recursivo faz o trabalho e entrega a resposta com cache.</figcaption>
+<figcaption>Fig. 5 - Fluxo de resolução DNS recursiva. O cliente nunca consulta os servidores autoritativos diretamente - o resolver recursivo faz o trabalho e entrega a resposta com cache.</figcaption>
 </div>
 
 <h4>Tipos de registros DNS</h4>
@@ -275,7 +275,7 @@ Cada porta em LISTEN é um ponto de entrada potencial. Servidores mínimos devem
 
 <!-- M3-A4 -->
 <article class="lesson" id="m3-a4">
-<div class="lesson-head"><span class="lesson-code">M3-A4</span><h3>Aula 3.4 — Rotas, troubleshooting e captura de pacotes</h3></div>
+<div class="lesson-head"><span class="lesson-code">M3-A4</span><h3>Aula 3.4 - Rotas, troubleshooting e captura de pacotes</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Aplicar método sistemático de diagnóstico: interface → IP → rota → DNS → porta → aplicação, com evidências reprodutíveis.</p>
 <div class="theory"><h4>Teoria essencial</h4><ul>
 <li><strong>Tabela de roteamento:</strong> lista de regras que o kernel consulta para decidir por qual interface e gateway enviar cada pacote. Rota mais específica tem prioridade (longest prefix match).</li>
@@ -286,29 +286,29 @@ Cada porta em LISTEN é um ponto de entrada potencial. Servidores mínimos devem
 
 <h4>Método sistemático de troubleshooting de rede</h4>
 <div class="diagram">
-Passo 1 — Interface física (L1)
+Passo 1 - Interface física (L1)
   ip link show → estado UP? LOWER_UP? MTU correto?
 
-Passo 2 — Endereçamento IP (L2/L3)
+Passo 2 - Endereçamento IP (L2/L3)
   ip addr show → IP atribuído? Máscara correta? Conflito?
 
-Passo 3 — Roteamento (L3)
+Passo 3 - Roteamento (L3)
   ip route show → gateway padrão existe?
   ip route get DEST → qual rota seria usada para o destino?
 
-Passo 4 — Conectividade IP básica (L3)
+Passo 4 - Conectividade IP básica (L3)
   ping -c4 GATEWAY → alcança o gateway local?
   ping -c4 8.8.8.8   → alcança a internet por IP?
 
-Passo 5 — Resolução de nomes (L7 auxiliar)
+Passo 5 - Resolução de nomes (L7 auxiliar)
   dig www.destino.com → DNS responde? TTL razoável?
   ping -c4 www.destino.com → o nome resolve?
 
-Passo 6 — Porta e serviço (L4)
+Passo 6 - Porta e serviço (L4)
   nc -zv HOST PORTA → a porta está alcançável?
   curl -I https://HOST → a aplicação responde?
 
-Passo 7 — Evidência (captura)
+Passo 7 - Evidência (captura)
   tcpdump -i eth0 host DEST → o tráfego está saindo?
   tcpdump -i eth0 port 443  → há resposta?</div>
 
@@ -335,7 +335,7 @@ tcpdump captura TODO o tráfego da interface, incluindo dados de outros usuário
 </article>
 
 <div class="quiz" id="quiz-m3">
-<h3>Avaliação do módulo — Linux para Redes</h3>
+<h3>Avaliação do módulo - Linux para Redes</h3>
 <p>10 questões objetivas. Aprovação: 70 % (7/10).</p>
 <div class="quiz-body" data-module="m3"></div>
 <button onclick="gradeQuiz('m3')">Corrigir avaliação</button>
@@ -346,24 +346,24 @@ tcpdump captura TODO o tráfego da interface, incluindo dados de outros usuário
 <!-- ══════════ MÓDULO 4 ══════════ -->
 <section class="module module-block" id="m4">
 <div class="module-title"><span class="num">Módulo 4</span><h2>Segurança Linux</h2></div>
-<p class="lead">Hardening, autenticação, logs, firewall, SSH seguro, fail2ban e auditoria defensiva — base para operar servidores em ambientes adversariais.</p>
+<p class="lead">Hardening, autenticação, logs, firewall, SSH seguro, fail2ban e auditoria defensiva - base para operar servidores em ambientes adversariais.</p>
 <div class="module-map">
-  <a class="mini-card" href="#m4-a1"><strong>Aula 4.1 — Princípios de hardening</strong><span>Reduzir superfície de ataque com menor privilégio e configuração segura.</span></a>
-  <a class="mini-card" href="#m4-a2"><strong>Aula 4.2 — Logs e investigação de autenticação</strong><span>Correlacionar eventos de login, sudo e SSH para análise defensiva.</span></a>
-  <a class="mini-card" href="#m4-a3"><strong>Aula 4.3 — Firewall de host</strong><span>Netfilter, chains INPUT/OUTPUT/FORWARD e ferramentas de administração.</span></a>
-  <a class="mini-card" href="#m4-a4"><strong>Aula 4.4 — SSH seguro e auditoria defensiva</strong><span>Chaves, configuração sshd, fail2ban e checklist de acesso remoto.</span></a>
+  <a class="mini-card" href="#m4-a1"><strong>Aula 4.1 - Princípios de hardening</strong><span>Reduzir superfície de ataque com menor privilégio e configuração segura.</span></a>
+  <a class="mini-card" href="#m4-a2"><strong>Aula 4.2 - Logs e investigação de autenticação</strong><span>Correlacionar eventos de login, sudo e SSH para análise defensiva.</span></a>
+  <a class="mini-card" href="#m4-a3"><strong>Aula 4.3 - Firewall de host</strong><span>Netfilter, chains INPUT/OUTPUT/FORWARD e ferramentas de administração.</span></a>
+  <a class="mini-card" href="#m4-a4"><strong>Aula 4.4 - SSH seguro e auditoria defensiva</strong><span>Chaves, configuração sshd, fail2ban e checklist de acesso remoto.</span></a>
 </div>
 
 <!-- M4-A1 -->
 <article class="lesson" id="m4-a1">
-<div class="lesson-head"><span class="lesson-code">M4-A1</span><h3>Aula 4.1 — Princípios de hardening</h3></div>
-<p class="objective"><strong>Objetivo:</strong> Reduzir superfície de ataque por configuração segura, remoção do desnecessário e menor privilégio — sem comprometer funcionalidade.</p>
+<div class="lesson-head"><span class="lesson-code">M4-A1</span><h3>Aula 4.1 - Princípios de hardening</h3></div>
+<p class="objective"><strong>Objetivo:</strong> Reduzir superfície de ataque por configuração segura, remoção do desnecessário e menor privilégio - sem comprometer funcionalidade.</p>
 <div class="theory"><h4>Teoria essencial</h4><ul>
 <li><strong>Superfície de ataque:</strong> conjunto de todos os pontos onde um adversário pode tentar comprometer o sistema: portas abertas, serviços em execução, contas ativas, binários SUID, pacotes instalados.</li>
 <li><strong>Princípio do menor privilégio:</strong> cada conta, processo e serviço opera com o mínimo de permissões necessário. Limitação do impacto de comprometimento.</li>
 <li><strong>Instalação mínima:</strong> remover pacotes, serviços e usuários desnecessários. O que não existe não pode ser explorado.</li>
-<li><strong>CIS Benchmarks:</strong> guias de configuração segura do Center for Internet Security — referência para hardening de Linux, disponíveis gratuitamente em cisecurity.org.</li>
-<li><strong>Defesa em profundidade:</strong> múltiplas camadas de controle; nenhuma camada é suficiente sozinha — firewall + autenticação + permissões + logs + atualizações.</li>
+<li><strong>CIS Benchmarks:</strong> guias de configuração segura do Center for Internet Security - referência para hardening de Linux, disponíveis gratuitamente em cisecurity.org.</li>
+<li><strong>Defesa em profundidade:</strong> múltiplas camadas de controle; nenhuma camada é suficiente sozinha - firewall + autenticação + permissões + logs + atualizações.</li>
 </ul></div>
 
 <h4>Categorias de superfície de ataque</h4>
@@ -384,11 +384,11 @@ tcpdump captura TODO o tráfego da interface, incluindo dados de outros usuário
 <span class="tok-prompt">$</span> <span class="tok-cmd">systemctl</span> <span class="tok-opt">--type=service</span> <span class="tok-opt">--state=running</span> <span class="tok-comment"># Serviços ativos</span>
 <span class="tok-prompt">$</span> <span class="tok-cmd">find</span> <span class="tok-path">/</span> <span class="tok-opt">-perm</span> <span class="tok-opt">-4000</span> <span class="tok-opt">-type</span> f 2<span class="tok-op">&gt;</span><span class="tok-path">/dev/null</span> <span class="tok-comment"># Binários SUID</span>
 <span class="tok-prompt">$</span> <span class="tok-cmd">find</span> <span class="tok-path">/</span> <span class="tok-opt">-perm</span> <span class="tok-opt">-2000</span> <span class="tok-opt">-type</span> f 2<span class="tok-op">&gt;</span><span class="tok-path">/dev/null</span> <span class="tok-comment"># Binários SGID</span>
-<span class="tok-prompt">$</span> <span class="tok-cmd">awk</span> <span class="tok-opt">-F:</span> '($3==0){print}' <span class="tok-path">/etc/passwd</span>  <span class="tok-comment"># Contas com UID 0 (root) — deve ser só root</span>
+<span class="tok-prompt">$</span> <span class="tok-cmd">awk</span> <span class="tok-opt">-F:</span> '($3==0){print}' <span class="tok-path">/etc/passwd</span>  <span class="tok-comment"># Contas com UID 0 (root) - deve ser só root</span>
 <span class="tok-prompt">$</span> <span class="tok-cmd">grep</span> <span class="tok-opt">-v</span> "nologin\|false" <span class="tok-path">/etc/passwd</span>   <span class="tok-comment"># Contas com shell interativo</span>
 <span class="tok-prompt">$</span> <span class="tok-cmd">dpkg</span> <span class="tok-opt">-l</span> <span class="tok-op">|</span> <span class="tok-cmd">grep</span> <span class="tok-opt">-E</span> "telnet|ftp|rsh"    <span class="tok-comment"># Protocolos legados inseguros</span></code></pre>
 <div class="callout callout-tip">
-<strong>Dica — hardening pós-instalação</strong>
+<strong>Dica - hardening pós-instalação</strong>
 Execute os seguintes passos em qualquer servidor novo: (1) <code>apt update &amp;&amp; apt upgrade</code>, (2) revisar <code>ss -tulpen</code> e desabilitar o desnecessário, (3) verificar contas em <code>/etc/passwd</code>, (4) checar binários SUID, (5) configurar firewall básico, (6) desabilitar autenticação de root via SSH.
 </div>
 <div class="activity"><h4>Atividade prática exigida</h4><ol>
@@ -401,7 +401,7 @@ Execute os seguintes passos em qualquer servidor novo: (1) <code>apt update &amp
 
 <!-- M4-A2 -->
 <article class="lesson" id="m4-a2">
-<div class="lesson-head"><span class="lesson-code">M4-A2</span><h3>Aula 4.2 — Logs e investigação de autenticação</h3></div>
+<div class="lesson-head"><span class="lesson-code">M4-A2</span><h3>Aula 4.2 - Logs e investigação de autenticação</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Correlacionar eventos de login, sudo e SSH para reconstruir hipóteses defensivas e identificar padrões de ataque.</p>
 <div class="theory"><h4>Teoria essencial</h4><ul>
 <li><strong>Logs como evidência:</strong> logs são a memória do sistema. Preservá-los íntegros é requisito legal (LGPD, frameworks de segurança) e técnico.</li>
@@ -449,13 +449,13 @@ Top IPs com falha:
 
 <!-- M4-A3 -->
 <article class="lesson" id="m4-a3">
-<div class="lesson-head"><span class="lesson-code">M4-A3</span><h3>Aula 4.3 — Firewall de host</h3></div>
+<div class="lesson-head"><span class="lesson-code">M4-A3</span><h3>Aula 4.3 - Firewall de host</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Compreender as chains Netfilter INPUT/OUTPUT/FORWARD antes de criar qualquer regra, e aplicar configuração mínima e segura.</p>
 <div class="theory"><h4>Teoria essencial</h4><ul>
 <li><strong>Netfilter:</strong> framework no kernel Linux que intercepta pacotes em pontos específicos da pilha de rede. <code>iptables</code>, <code>nftables</code> e <code>ufw</code> são interfaces de configuração do Netfilter.</li>
 <li><strong>Chains principais:</strong> PREROUTING (antes do roteamento), INPUT (para processos locais), FORWARD (roteado entre interfaces), OUTPUT (gerado localmente), POSTROUTING (após roteamento).</li>
 <li><strong>Stateful filtering:</strong> rastrear estado de conexão (NEW, ESTABLISHED, RELATED, INVALID) permite aceitar respostas a conexões iniciadas localmente sem abrir portas adicionais.</li>
-<li><strong>Política padrão:</strong> ACCEPT é permissivo (libera tudo que não tem regra); DROP é restritivo (bloqueia tudo que não tem regra — recomendado para INPUT).</li>
+<li><strong>Política padrão:</strong> ACCEPT é permissivo (libera tudo que não tem regra); DROP é restritivo (bloqueia tudo que não tem regra - recomendado para INPUT).</li>
 </ul></div>
 
 <h4>Diagrama: Chains Netfilter e fluxo de pacotes</h4>
@@ -526,7 +526,7 @@ Top IPs com falha:
   <text x="360" y="260" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#ffd166">Fluxo roteado (firewall/gateway)</text>
   <line x1="250" y1="265" x2="360" y2="265" stroke="#ffd166" stroke-width="1" stroke-dasharray="3,2"/>
 </svg>
-<figcaption>Fig. 6 — Chains Netfilter. Tráfego destinado ao próprio host passa por INPUT. Tráfego roteado entre interfaces passa por FORWARD. Todo tráfego de saída passa por OUTPUT.</figcaption>
+<figcaption>Fig. 6 - Chains Netfilter. Tráfego destinado ao próprio host passa por INPUT. Tráfego roteado entre interfaces passa por FORWARD. Todo tráfego de saída passa por OUTPUT.</figcaption>
 </div>
 
 <h4>Comandos explicados</h4>
@@ -539,8 +539,8 @@ Top IPs com falha:
 <span class="tok-prompt">$</span> <span class="tok-cmd">sudo</span> <span class="tok-cmd">ufw</span> allow from 192.168.0.0/24       <span class="tok-comment"># Libera sub-rede interna</span>
 <span class="tok-prompt">$</span> <span class="tok-cmd">sudo</span> <span class="tok-cmd">ufw</span> deny 23/tcp                     <span class="tok-comment"># Bloqueia Telnet explicitamente</span></code></pre>
 <div class="callout callout-warn">
-<strong>Atenção — ordem das regras e política padrão</strong>
-Em iptables/nftables, regras são avaliadas em ordem. A primeira que corresponde é aplicada. Com política padrão DROP no INPUT, você precisa explicitamente liberar o SSH <em>antes</em> de ativar o firewall — caso contrário perde acesso remoto. Sempre teste em console local antes de mudar política padrão de INPUT.
+<strong>Atenção - ordem das regras e política padrão</strong>
+Em iptables/nftables, regras são avaliadas em ordem. A primeira que corresponde é aplicada. Com política padrão DROP no INPUT, você precisa explicitamente liberar o SSH <em>antes</em> de ativar o firewall - caso contrário perde acesso remoto. Sempre teste em console local antes de mudar política padrão de INPUT.
 </div>
 <div class="activity"><h4>Atividade prática exigida</h4><ol>
 <li>Verifique qual ferramenta de firewall existe na VM (ufw, iptables, nftables, firewalld).</li>
@@ -552,12 +552,12 @@ Em iptables/nftables, regras são avaliadas em ordem. A primeira que corresponde
 
 <!-- M4-A4 -->
 <article class="lesson" id="m4-a4">
-<div class="lesson-head"><span class="lesson-code">M4-A4</span><h3>Aula 4.4 — SSH seguro e auditoria defensiva</h3></div>
+<div class="lesson-head"><span class="lesson-code">M4-A4</span><h3>Aula 4.4 - SSH seguro e auditoria defensiva</h3></div>
 <p class="objective"><strong>Objetivo:</strong> Aplicar boas práticas de acesso remoto: chaves criptográficas, configuração sshd, fail2ban e checklist de auditoria.</p>
 <div class="theory"><h4>Teoria essencial</h4><ul>
 <li><strong>SSH (Secure Shell, RFC 4251):</strong> protocolo criptográfico para acesso remoto seguro. Usa criptografia assimétrica para troca de chaves e autenticação, e simétrica para o canal de dados.</li>
 <li><strong>Autenticação por chave pública:</strong> cliente tem par privada/pública. A pública fica no servidor em <code>~/.ssh/authorized_keys</code>. O servidor desafia o cliente a provar posse da privada sem transmiti-la.</li>
-<li><strong>Tipos de chave:</strong> Ed25519 (recomendado — menor, rápido, seguro), ECDSA P-256 (bom), RSA 4096 (legado, ainda seguro se 4096 bits), RSA 1024/2048 (insuficiente hoje).</li>
+<li><strong>Tipos de chave:</strong> Ed25519 (recomendado - menor, rápido, seguro), ECDSA P-256 (bom), RSA 4096 (legado, ainda seguro se 4096 bits), RSA 1024/2048 (insuficiente hoje).</li>
 <li><strong>fail2ban:</strong> daemon que monitora logs, detecta padrões de ataque (ex: &gt;5 falhas em 10 min de mesmo IP) e injeta regras de bloqueio no firewall automaticamente.</li>
 </ul></div>
 
@@ -604,7 +604,7 @@ Em iptables/nftables, regras são avaliadas em ordem. A primeira que corresponde
   <line x1="528" y1="300" x2="152" y2="300" stroke="#64d2ff" stroke-width="1.5" marker-end="url(#sb)"/>
   <text x="340" y="314" text-anchor="middle" font-family="Courier New" font-size="8" font-weight="700" fill="#c792ea">9. Sessão estabelecida ✓ (canal AES-256 cifrado)</text>
 </svg>
-<figcaption>Fig. 7 — Fluxo de autenticação SSH com chave pública. A chave privada nunca sai do cliente — apenas uma prova criptográfica de posse é transmitida.</figcaption>
+<figcaption>Fig. 7 - Fluxo de autenticação SSH com chave pública. A chave privada nunca sai do cliente - apenas uma prova criptográfica de posse é transmitida.</figcaption>
 </div>
 
 <h4>Diretivas críticas do sshd_config</h4>
@@ -618,7 +618,7 @@ Em iptables/nftables, regras são avaliadas em ordem. A primeira que corresponde
 <tr><td><code>MaxAuthTries</code></td><td><code>3</code></td><td>Limita tentativas por conexão</td></tr>
 <tr><td><code>LoginGraceTime</code></td><td><code>30</code></td><td>Fecha conexão não autenticada em 30 segundos</td></tr>
 <tr><td><code>ClientAliveInterval</code></td><td><code>300</code></td><td>Detecta clientes inativos e fecha sessões ociosas</td></tr>
-<tr><td><code>Protocol</code></td><td><code>2</code></td><td>SSH v1 é inseguro — usar apenas v2</td></tr>
+<tr><td><code>Protocol</code></td><td><code>2</code></td><td>SSH v1 é inseguro - usar apenas v2</td></tr>
 </tbody>
 </table>
 
@@ -638,7 +638,7 @@ Em iptables/nftables, regras são avaliadas em ordem. A primeira que corresponde
 </article>
 
 <div class="quiz" id="quiz-m4">
-<h3>Avaliação do módulo — Segurança Linux</h3>
+<h3>Avaliação do módulo - Segurança Linux</h3>
 <p>10 questões objetivas. Aprovação: 70 % (7/10).</p>
 <div class="quiz-body" data-module="m4"></div>
 <button onclick="gradeQuiz('m4')">Corrigir avaliação</button>
@@ -648,7 +648,7 @@ Em iptables/nftables, regras são avaliadas em ordem. A primeira que corresponde
 
 <!-- ══════════ REF: DIRETÓRIOS ══════════ -->
 <section class="reference" id="diretorios">
-<div class="module-title"><span class="num">Referência</span><h2>Diretórios Linux — função e conteúdo</h2></div>
+<div class="module-title"><span class="num">Referência</span><h2>Diretórios Linux - função e conteúdo</h2></div>
 <p class="lead">Esta referência apoia as aulas 1.3, 2.4, 3.1 e 4.2. Distinga arquivos reais, pontos de montagem e sistemas de arquivos virtuais.</p>
 <div class="diagram">/
 ├── bin    → comandos essenciais (ls, cp, cat)
@@ -723,18 +723,18 @@ Bits especiais (prefixo):
 Gratuito, amplamente documentado, suporte até 2029. Permite criar múltiplas VMs para simular redes completas (cliente + servidor + roteador).
 </div>
 
-<h4>Opção 1 — VirtualBox com Ubuntu Server (recomendado)</h4>
-<div class="lab-step"><div class="lab-num">1</div><div class="lab-text"><strong>Instalar VirtualBox</strong> — virtualbox.org (gratuito, Windows/macOS/Linux)</div></div>
-<div class="lab-step"><div class="lab-num">2</div><div class="lab-text"><strong>Baixar ISO Ubuntu Server 24.04 LTS</strong> — ubuntu.com/download/server</div></div>
+<h4>Opção 1 - VirtualBox com Ubuntu Server (recomendado)</h4>
+<div class="lab-step"><div class="lab-num">1</div><div class="lab-text"><strong>Instalar VirtualBox</strong> - virtualbox.org (gratuito, Windows/macOS/Linux)</div></div>
+<div class="lab-step"><div class="lab-num">2</div><div class="lab-text"><strong>Baixar ISO Ubuntu Server 24.04 LTS</strong> - ubuntu.com/download/server</div></div>
 <div class="lab-step"><div class="lab-num">3</div><div class="lab-text"><strong>Criar VM</strong>: 2 vCPU, 2 GB RAM, 20 GB disco, 2 adaptadores de rede: Adaptador 1 = NAT (internet), Adaptador 2 = Rede Interna "labnet"</div></div>
-<div class="lab-step"><div class="lab-num">4</div><div class="lab-text"><strong>Criar 2ª VM idêntica</strong> como cliente — simula par cliente/servidor na mesma rede interna</div></div>
+<div class="lab-step"><div class="lab-num">4</div><div class="lab-text"><strong>Criar 2ª VM idêntica</strong> como cliente - simula par cliente/servidor na mesma rede interna</div></div>
 <div class="lab-step"><div class="lab-num">5</div><div class="lab-text"><strong>Instalar ferramentas</strong>: <code>sudo apt install -y net-tools iproute2 tcpdump nmap curl wget vim openssh-server fail2ban ufw</code></div></div>
 
-<h4>Opção 2 — Docker (acesso rápido, sem isolamento de rede completo)</h4>
+<h4>Opção 2 - Docker (acesso rápido, sem isolamento de rede completo)</h4>
 <pre class="cmd"><code><span class="tok-prompt">$</span> <span class="tok-cmd">docker</span> run <span class="tok-opt">-it</span> <span class="tok-opt">--name</span> lab-linux ubuntu:24.04 /bin/bash
 <span class="tok-prompt">$</span> <span class="tok-cmd">docker</span> run <span class="tok-opt">-it</span> <span class="tok-opt">--cap-add</span> NET_ADMIN <span class="tok-opt">--name</span> lab-net ubuntu:24.04 /bin/bash  <span class="tok-comment"># com privilégios de rede</span></code></pre>
 
-<h4>Opção 3 — WSL2 (Windows Subsystem for Linux)</h4>
+<h4>Opção 3 - WSL2 (Windows Subsystem for Linux)</h4>
 <pre class="cmd"><code><span class="tok-prompt">PS&gt;</span> <span class="tok-cmd">wsl</span> <span class="tok-opt">--install</span> <span class="tok-opt">-d</span> Ubuntu-24.04    <span class="tok-comment"># Instala Ubuntu no WSL2</span>
 <span class="tok-prompt">PS&gt;</span> <span class="tok-cmd">wsl</span> <span class="tok-opt">--set-default-version</span> 2         <span class="tok-comment"># Garante WSL2 (melhor isolamento)</span></code></pre>
 <div class="callout callout-warn">
@@ -758,16 +758,16 @@ WSL2 usa NAT e não expõe a interface de rede diretamente. Comandos como tcpdum
 
   <!-- NAT connector line -->
   <line x1="220" y1="58" x2="220" y2="100" stroke="#5a8f6e" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#tna)"/>
-  <text x="228" y="74" text-anchor="start" font-family="Courier New" font-size="10" fill="#5a8f6e">NAT — Adaptador 1</text>
+  <text x="228" y="74" text-anchor="start" font-family="Courier New" font-size="10" fill="#5a8f6e">NAT - Adaptador 1</text>
   <text x="228" y="88" text-anchor="start" font-family="Courier New" font-size="10" fill="#5a8f6e">enp0s3 · 10.0.2.x/24</text>
 
   <!-- ── HOST OS container ── -->
   <rect x="10" y="100" width="720" height="285" fill="rgba(57,255,122,.015)" rx="8" stroke="rgba(57,255,122,.18)" stroke-width="1.5"/>
-  <text x="22" y="118" text-anchor="start" font-family="Courier New" font-size="10" font-weight="700" fill="rgba(57,255,122,.5)">HOST OS — VirtualBox instalado (Windows / macOS / Linux)</text>
+  <text x="22" y="118" text-anchor="start" font-family="Courier New" font-size="10" font-weight="700" fill="rgba(57,255,122,.5)">HOST OS - VirtualBox instalado (Windows / macOS / Linux)</text>
 
   <!-- ── LABNET internal network ── -->
   <rect x="28" y="128" width="684" height="240" fill="rgba(100,210,255,.025)" rx="7" stroke="rgba(100,210,255,.28)" stroke-width="1" stroke-dasharray="6,3"/>
-  <text x="370" y="147" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="900" fill="#64d2ff">REDE INTERNA: labnet — 192.168.100.0/24 — Adaptador 2 (enp0s8)</text>
+  <text x="370" y="147" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="900" fill="#64d2ff">REDE INTERNA: labnet - 192.168.100.0/24 - Adaptador 2 (enp0s8)</text>
 
   <!-- ── VM-SERVIDOR ── -->
   <rect x="48" y="160" width="278" height="188" fill="rgba(57,255,122,.06)" rx="7" stroke="rgba(57,255,122,.45)" stroke-width="1.5"/>
@@ -816,7 +816,7 @@ WSL2 usa NAT e não expõe a interface de rede diretamente. Comandos como tcpdum
   <!-- Figcaption-style note -->
   <text x="370" y="392" text-anchor="middle" font-family="Courier New" font-size="10" fill="#5a8f6e">VM-SERVIDOR tem 2 adaptadores: enp0s3 (NAT→internet) + enp0s8 (rede interna labnet)</text>
 </svg>
-<figcaption>Fig. Lab — Topologia VirtualBox recomendada. Dois adaptadores por VM: NAT para acesso à internet e Rede Interna para comunicação entre VMs.</figcaption>
+<figcaption>Fig. Lab - Topologia VirtualBox recomendada. Dois adaptadores por VM: NAT para acesso à internet e Rede Interna para comunicação entre VMs.</figcaption>
 </div>
 </section>
 
@@ -827,40 +827,40 @@ WSL2 usa NAT e não expõe a interface de rede diretamente. Comandos como tcpdum
 <div class="terms-grid">
 <dl class="term"><dt>Kernel</dt><dd>Núcleo do SO. Gerencia CPU, memória, dispositivos, rede e filesystem. Roda em Ring 0 (modo privilegiado).</dd></dl>
 <dl class="term"><dt>Shell</dt><dd>Interpretador de comandos entre usuário e kernel. Faz expansão de variáveis, globs e cria processos (fork/exec).</dd></dl>
-<dl class="term"><dt>Syscall</dt><dd>Chamada de sistema — solicitação controlada de user space ao kernel para acessar recursos (I/O, rede, processo).</dd></dl>
+<dl class="term"><dt>Syscall</dt><dd>Chamada de sistema - solicitação controlada de user space ao kernel para acessar recursos (I/O, rede, processo).</dd></dl>
 <dl class="term"><dt>Daemon</dt><dd>Processo de serviço em background, sem terminal associado. Exemplos: sshd, nginx, systemd-networkd, cron.</dd></dl>
 <dl class="term"><dt>Inode</dt><dd>Estrutura interna que armazena metadados de arquivo: permissões, dono, timestamps, tamanho e ponteiros de blocos. O nome do arquivo é separado do inode.</dd></dl>
-<dl class="term"><dt>FHS</dt><dd>Filesystem Hierarchy Standard — padrão que define onde cada tipo de arquivo deve estar no Linux (/etc, /var, /usr, etc.).</dd></dl>
+<dl class="term"><dt>FHS</dt><dd>Filesystem Hierarchy Standard - padrão que define onde cada tipo de arquivo deve estar no Linux (/etc, /var, /usr, etc.).</dd></dl>
 <dl class="term"><dt>PID / PPID</dt><dd>Process ID / Parent Process ID. Números inteiros únicos que identificam cada processo e seu processo pai.</dd></dl>
 <dl class="term"><dt>UID / GID</dt><dd>User ID / Group ID. Inteiros usados pelo kernel para controle de acesso. UID 0 = root (superusuário).</dd></dl>
 <dl class="term"><dt>Namespace</dt><dd>Mecanismo de isolamento do kernel para processos: rede, PID, mount, UTS, IPC, user. Base para containers (Docker/LXC).</dd></dl>
-<dl class="term"><dt>cgroup</dt><dd>Control Group — agrupa processos para limitar uso de CPU, memória e I/O. systemd usa cgroups para cada unidade.</dd></dl>
-<dl class="term"><dt>POSIX</dt><dd>Portable Operating System Interface — conjunto de padrões IEEE para compatibilidade entre sistemas Unix-like.</dd></dl>
+<dl class="term"><dt>cgroup</dt><dd>Control Group - agrupa processos para limitar uso de CPU, memória e I/O. systemd usa cgroups para cada unidade.</dd></dl>
+<dl class="term"><dt>POSIX</dt><dd>Portable Operating System Interface - conjunto de padrões IEEE para compatibilidade entre sistemas Unix-like.</dd></dl>
 <dl class="term"><dt>systemd</dt><dd>Init system moderno (PID 1 no Linux). Gerencia unidades (.service, .socket, .timer), paraleliza boot e integra journald.</dd></dl>
 <dl class="term"><dt>journald</dt><dd>Daemon do systemd para coleta estruturada de logs. Acessado via journalctl com filtros poderosos por serviço, prioridade e tempo.</dd></dl>
 <dl class="term"><dt>Mount point</dt><dd>Diretório onde um sistema de arquivos (disco, rede, virtual) é anexado à árvore única do Linux. Ex: /mnt/dados.</dd></dl>
-<dl class="term"><dt>SUID / SGID</dt><dd>Set User ID / Set Group ID — bits especiais que fazem um executável rodar com privilégios do dono/grupo, não do usuário chamador.</dd></dl>
-<dl class="term"><dt>PAM</dt><dd>Pluggable Authentication Modules — framework que permite configurar políticas de autenticação (senhas, limites, 2FA) de forma modular em /etc/pam.d/.</dd></dl>
+<dl class="term"><dt>SUID / SGID</dt><dd>Set User ID / Set Group ID - bits especiais que fazem um executável rodar com privilégios do dono/grupo, não do usuário chamador.</dd></dl>
+<dl class="term"><dt>PAM</dt><dd>Pluggable Authentication Modules - framework que permite configurar políticas de autenticação (senhas, limites, 2FA) de forma modular em /etc/pam.d/.</dd></dl>
 <dl class="term"><dt>Socket</dt><dd>Endpoint de comunicação identificado por protocolo + IP + porta. Tipos: STREAM (TCP), DGRAM (UDP), UNIX (IPC local).</dd></dl>
 <dl class="term"><dt>Netfilter</dt><dd>Framework do kernel Linux para filtrar e modificar pacotes de rede. iptables, nftables e ufw são interfaces de configuração.</dd></dl>
-<dl class="term"><dt>ARP</dt><dd>Address Resolution Protocol — resolve endereço IP em MAC na mesma sub-rede. Comando: ip neigh show.</dd></dl>
-<dl class="term"><dt>CIDR</dt><dd>Classless Inter-Domain Routing — notação de sub-rede com prefixo. Ex: 192.168.1.0/24 indica 256 endereços.</dd></dl>
-<dl class="term"><dt>TTL (DNS)</dt><dd>Time To Live — tempo em segundos que um registro DNS pode ser cacheado. TTL baixo = propagação rápida mas mais consultas.</dd></dl>
+<dl class="term"><dt>ARP</dt><dd>Address Resolution Protocol - resolve endereço IP em MAC na mesma sub-rede. Comando: ip neigh show.</dd></dl>
+<dl class="term"><dt>CIDR</dt><dd>Classless Inter-Domain Routing - notação de sub-rede com prefixo. Ex: 192.168.1.0/24 indica 256 endereços.</dd></dl>
+<dl class="term"><dt>TTL (DNS)</dt><dd>Time To Live - tempo em segundos que um registro DNS pode ser cacheado. TTL baixo = propagação rápida mas mais consultas.</dd></dl>
 <dl class="term"><dt>Hardening</dt><dd>Processo de reduzir a superfície de ataque de um sistema por configuração segura, remoção do desnecessário e menor privilégio.</dd></dl>
 <dl class="term"><dt>fail2ban</dt><dd>Daemon que monitora logs, detecta padrões de ataque (força bruta) e injeta regras de bloqueio no firewall automaticamente.</dd></dl>
-<dl class="term"><dt>TLS/SSL</dt><dd>Transport Layer Security — protocolo criptográfico para canal seguro. Usado em HTTPS, SMTPS, IMAPS. SSL está obsoleto; use TLS 1.2+.</dd></dl>
+<dl class="term"><dt>TLS/SSL</dt><dd>Transport Layer Security - protocolo criptográfico para canal seguro. Usado em HTTPS, SMTPS, IMAPS. SSL está obsoleto; use TLS 1.2+.</dd></dl>
 <dl class="term"><dt>Ed25519</dt><dd>Algoritmo de assinatura digital baseado em curva elíptica Edwards-25519. Recomendado para chaves SSH: rápido, pequeno e seguro.</dd></dl>
-<dl class="term"><dt>BGP</dt><dd>Border Gateway Protocol (porta 179/TCP) — protocolo de roteamento entre sistemas autônomos (ASN) na internet. Roda no Linux com FRRouting.</dd></dl>
+<dl class="term"><dt>BGP</dt><dd>Border Gateway Protocol (porta 179/TCP) - protocolo de roteamento entre sistemas autônomos (ASN) na internet. Roda no Linux com FRRouting.</dd></dl>
 <dl class="term"><dt>tcpdump</dt><dd>Analisador de pacotes de linha de comando. Usa filtros BPF e salva capturas em formato pcap para análise no Wireshark.</dd></dl>
-<dl class="term"><dt>SELinux / AppArmor</dt><dd>Módulos de segurança do kernel (LSM) que implementam Mandatory Access Control (MAC) — políticas além das permissões DAC tradicionais.</dd></dl>
+<dl class="term"><dt>SELinux / AppArmor</dt><dd>Módulos de segurança do kernel (LSM) que implementam Mandatory Access Control (MAC) - políticas além das permissões DAC tradicionais.</dd></dl>
 <dl class="term"><dt>rsyslog</dt><dd>Daemon de logging avançado compatível com syslog. Permite filtros, templates e encaminhamento de logs a servidores remotos (SIEM).</dd></dl>
-<dl class="term"><dt>MTU</dt><dd>Maximum Transmission Unit — tamanho máximo de frame/pacote em uma interface. Padrão Ethernet: 1500 bytes. MTU mismatch causa problemas silenciosos.</dd></dl>
+<dl class="term"><dt>MTU</dt><dd>Maximum Transmission Unit - tamanho máximo de frame/pacote em uma interface. Padrão Ethernet: 1500 bytes. MTU mismatch causa problemas silenciosos.</dd></dl>
 </div>
 </section>
 
 <!-- ══════════ CHEATSHEET ══════════ -->
 <section class="reference" id="cheatsheet">
-<div class="module-title"><span class="num">Referência Rápida</span><h2>Comandos essenciais — cheatsheet</h2></div>
+<div class="module-title"><span class="num">Referência Rápida</span><h2>Comandos essenciais - cheatsheet</h2></div>
 <p class="lead">Referência rápida organizada por tema. Use junto com <code>man COMANDO</code> para detalhes de opções.</p>
 <div class="cheat-group"><h4>Navegação e arquivos</h4>
 <div class="cheat-row"><span class="cheat-cmd">ls -lah</span><span class="cheat-desc">Lista detalhada com ocultos e tamanhos legíveis</span></div>
@@ -912,7 +912,7 @@ WSL2 usa NAT e não expõe a interface de rede diretamente. Comandos como tcpdum
 <tr><td>Organização e reprodutibilidade</td><td>15%</td><td>Relatório claro, com evidências reais e passos reprodutíveis.</td><td>Relatório completo mas pouco estruturado.</td><td>Entrega sem estrutura ou evidências.</td></tr>
 </tbody>
 </table>
-<p class="footer-note">Curso Linux Essentials &amp; Security — Prof. Dr. Laerte Peotta de Melo — v3.0</p>
+<p class="footer-note">Curso Linux Essentials &amp; Security - Prof. Dr. Laerte Peotta de Melo - v3.0</p>
 </section>
 `;
 document.querySelector('main').insertAdjacentHTML('beforeend', html);
