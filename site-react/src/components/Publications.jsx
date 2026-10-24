@@ -38,8 +38,7 @@ function CiteButton({ pub, t }) {
   );
 }
 
-export function PublicationList({ t }) {
-  const [type, setType] = useState('all');
+export function PublicationList({ t, type, onType }) {
   const [query, setQuery] = useState('');
   const [expanded, setExpanded] = useState(false);
 
@@ -91,7 +90,7 @@ export function PublicationList({ t }) {
               type="button"
               className={type === k ? 'is-active' : undefined}
               aria-pressed={type === k}
-              onClick={() => setType(k)}
+              onClick={() => onType(k)}
             >
               {t.pubs.types[k]}
               <span className="chip-count">{counts[k]}</span>
@@ -125,7 +124,7 @@ export function PublicationList({ t }) {
             className="button button-ghost"
             onClick={() => {
               setQuery('');
-              setType('all');
+              onType('all');
             }}
           >
             {t.catalog.clear}

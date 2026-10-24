@@ -1006,9 +1006,58 @@ kbd {
   margin-top: 2.5rem;
 }
 
-.records-tabs {
-  position: static;
-  margin-bottom: 1.5rem;
+.records-title {
+  margin-bottom: 1rem;
+}
+
+.path-links {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--card-border-soft);
+}
+
+.path-links ul,
+.path-links > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.1rem;
+  align-items: baseline;
+}
+
+.path-label {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.path-links button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--primary);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.25em;
+  transition: text-decoration-color 0.15s;
+}
+
+.path-links button:hover,
+.path-links button[aria-current='true'] {
+  text-decoration-color: currentColor;
+}
+
+.path-links button[aria-current='true'] {
+  color: var(--text-strong);
+}
+
+.path-links .chip-count {
+  margin-left: 0.2rem;
 }
 
 .pub-more {

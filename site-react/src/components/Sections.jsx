@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { profiles, SPOTIFY_URL } from '../data.js';
+import { awards, publications, registrations } from '../publicacoes.js';
 import Records from './Records.jsx';
 
 function SectionHead({ id, title, lead }) {
@@ -11,7 +12,43 @@ function SectionHead({ id, title, lead }) {
   );
 }
 
+const PUB_TYPES = ['journal', 'conference', 'chapter'];
+
+// Ancoras que abrem a lista de producao ja na visao correspondente.
+const HASH_VIEW = {
+  publicacoes: { kind: 'pubs', type: 'all' },
+  periodicos: { kind: 'pubs', type: 'journal' },
+  congressos: { kind: 'pubs', type: 'conference' },
+  capitulos: { kind: 'pubs', type: 'chapter' },
+  premios: { kind: 'awards' },
+  registros: { kind: 'regs' },
+};
+
+const showList = () => requestAnimationFrame(() => document.getElementById('producao')?.scrollIntoView({ behavior: 'smooth' }));
+
 export function About({ t, lang }) {
+  const [view, setView] = useState({ kind: 'pubs', type: 'all' });
+
+  useEffect(() => {
+    const apply = () => {
+      const target = HASH_VIEW[decodeURIComponent(location.hash.slice(1))];
+      if (target) {
+        setView(target);
+        requestAnimationFrame(() => document.getElementById('producao')?.scrollIntoView());
+      }
+    };
+    apply();
+    window.addEventListener('hashchange', apply);
+    return () => window.removeEventListener('hashchange', apply);
+  }, []);
+
+  const open = (next) => {
+    setView(next);
+    showList();
+  };
+  const current = (kind, type) => view.kind === kind && (kind !== 'pubs' || view.type === type);
+  const count = (type) => publications.filter((p) => p.type === type).length;
+
   return (
     <section id="sobre" className="section" aria-labelledby="sobre-title">
       <div className="container">
@@ -21,6 +58,28 @@ export function About({ t, lang }) {
             <h3>{t.about.pathTitle}</h3>
             <p>{t.about.p1}</p>
             <p>{t.about.p2}</p>
+            <nav className="path-links" aria-label={t.pubs.label}>
+              <div>
+                <span className="path-label">{t.pubs.tabs.pubs}</span>
+                <ul>
+                  {PUB_TYPES.map((k) => (
+                    <li key={k}>
+                      <button type="button" aria-current={current('pubs', k) ? 'true' : undefined} onClick={() => open({ kind: 'pubs', type: k })}>
+                        {t.pubs.types[k]} <span className="chip-count">{count(k)}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <button type="button" className="path-single" aria-current={current('awards') ? 'true' : undefined} onClick={() => open({ kind: 'awards' })}>
+                  {t.pubs.tabs.awards} <span className="chip-count">{awards.length}</span>
+                </button>
+                <button type="button" className="path-single" aria-current={current('regs') ? 'true' : undefined} onClick={() => open({ kind: 'regs' })}>
+                  {t.pubs.tabs.regs} <span className="chip-count">{registrations.length}</span>
+                </button>
+              </div>
+            </nav>
           </article>
           <aside className="card">
             <dl className="focus-list">
@@ -39,7 +98,7 @@ export function About({ t, lang }) {
             <li key={tag}>{tag}</li>
           ))}
         </ul>
-        <Records t={t} lang={lang} />
+        <Records t={t} lang={lang} view={view} onType={(type) => setView({ kind: 'pubs', type })} />
       </div>
     </section>
   );
