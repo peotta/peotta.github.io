@@ -7,8 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/publish.mjs",
-    "preview": "vite preview",
-    "optimize-images": "node scripts/optimize-images.mjs"
+    "preview": "vite preview"
   },
   "dependencies": {
     "react": "^19.3.0",

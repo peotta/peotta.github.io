@@ -81,9 +81,9 @@ peotta.github.io/
 │   ├── style.css, app.js, m3m4.js # Estilo e scripts do curso de Linux (guias/index-linux.html)
 │   ├── react/                     # Build de produção do portal (gerado por site-react, não editar)
 │   └── img/                       # Imagens e banners (kebab-case)
-│       ├── foto-perfil-unb.png, foto-perfil-og.jpg
-│       ├── latencia-zero-podcast.png
-│       └── ravens-1.webp, ravens-logo.png, ravens-logo-og.png
+│       ├── foto-perfil-unb.webp, foto-perfil-og.jpg
+│       ├── latencia-zero-podcast.webp
+│       └── ravens-1.webp, ravens-logo.webp, ravens-logo-og.png
 ├── arquivos/                      # 📁 Materiais para download (PDFs e anexos)
 ├── site-react/                    # ⚛️ Código-fonte do portal (React + Vite), gerador de index.html e páginas de guias
 └── README.md                      # Documentação técnica do repositório
