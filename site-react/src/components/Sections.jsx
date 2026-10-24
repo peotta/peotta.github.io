@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { profiles, SPOTIFY_URL } from '../data.js';
+import Records from './Records.jsx';
 
 function SectionHead({ id, title, lead }) {
   return (
@@ -10,7 +11,7 @@ function SectionHead({ id, title, lead }) {
   );
 }
 
-export function About({ t }) {
+export function About({ t, lang }) {
   return (
     <section id="sobre" className="section" aria-labelledby="sobre-title">
       <div className="container">
@@ -38,6 +39,7 @@ export function About({ t }) {
             <li key={tag}>{tag}</li>
           ))}
         </ul>
+        <Records t={t} lang={lang} />
       </div>
     </section>
   );

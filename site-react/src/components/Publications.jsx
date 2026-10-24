@@ -3,6 +3,7 @@ import { awards, publications, registrations, toBibtex } from '../publicacoes.js
 import { normalize } from './Catalog.jsx';
 
 const TYPES = ['all', 'journal', 'conference', 'chapter'];
+const COLLAPSED = 5;
 
 // Destaca o nome do professor na lista de autores.
 function Authors({ list }) {
@@ -40,6 +41,7 @@ function CiteButton({ pub, t }) {
 export function PublicationList({ t }) {
   const [type, setType] = useState('all');
   const [query, setQuery] = useState('');
+  const [expanded, setExpanded] = useState(false);
 
   const counts = useMemo(
     () => ({
@@ -64,6 +66,20 @@ export function PublicationList({ t }) {
   }, [type, query]);
 
   const total = byYear.reduce((n, [, items]) => n + items.length, 0);
+
+  // Sem busca nem filtro, a lista abre com as publicacoes mais recentes.
+  const collapsible = type === 'all' && !query.trim() && total > COLLAPSED;
+  let left = COLLAPSED;
+  const visible =
+    collapsible && !expanded
+      ? byYear
+          .map(([year, items]) => {
+            const part = items.slice(0, Math.max(left, 0));
+            left -= part.length;
+            return [year, part];
+          })
+          .filter(([, items]) => items.length > 0)
+      : byYear;
 
   return (
     <>
@@ -116,7 +132,7 @@ export function PublicationList({ t }) {
           </button>
         </div>
       ) : (
-        byYear.map(([year, items]) => (
+        visible.map(([year, items]) => (
           <div className="pub-year" key={year}>
             <h3 className="pub-year-label">{year}</h3>
             <ol className="pub-list">
@@ -155,58 +171,62 @@ export function PublicationList({ t }) {
           </div>
         ))
       )}
+
+      {collapsible && (
+        <p className="pub-more">
+          <button type="button" className="button button-ghost" aria-expanded={expanded} onClick={() => setExpanded((v) => !v)}>
+            {expanded ? t.pubs.showLess : t.pubs.showAll(total)}
+          </button>
+        </p>
+      )}
     </>
   );
 }
 
-export function Recognition({ t, lang }) {
+export function Awards({ t, lang }) {
   return (
-    <div className="recognition-grid">
-      <div className="card">
-        <h3>{t.pubs.awardsTitle}</h3>
-        <ul className="recognition-list">
-          {awards.map((a) => (
-            <li key={a.id}>
-              <span className="recognition-year">{a.year}</span>
-              <div>
-                <strong>{a.title[lang]}</strong>
-                <p>{a.event[lang]}</p>
-                <p className="pub-links">
-                  <a className="pub-action" href={a.pdf} target="_blank" rel="noreferrer">
-                    {t.pubs.certificate}
-                  </a>
-                  {a.link && (
-                    <a className="pub-action" href={a.link} target="_blank" rel="noreferrer">
-                      {t.pubs.results} <span aria-hidden="true">↗</span>
-                    </a>
-                  )}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <ul className="recognition-list">
+      {awards.map((a) => (
+        <li key={a.id}>
+          <span className="recognition-year">{a.year}</span>
+          <div>
+            <strong>{a.title[lang]}</strong>
+            <p>{a.event[lang]}</p>
+            <p className="pub-links">
+              <a className="pub-action" href={a.pdf} target="_blank" rel="noreferrer">
+                {t.pubs.certificate}
+              </a>
+              {a.link && (
+                <a className="pub-action" href={a.link} target="_blank" rel="noreferrer">
+                  {t.pubs.results} <span aria-hidden="true">↗</span>
+                </a>
+              )}
+            </p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
-      <div className="card">
-        <h3>{t.pubs.regsTitle}</h3>
-        <ul className="recognition-list">
-          {registrations.map((r) => (
-            <li key={r.id}>
-              <span className="recognition-year">{r.year}</span>
-              <div>
-                <strong>{r.name}</strong>
-                <p>{r.title}</p>
-                <p className="pub-links">
-                  <code>{r.process}</code>
-                  <a className="pub-action" href={r.pdf} target="_blank" rel="noreferrer">
-                    {t.pubs.certificate}
-                  </a>
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+export function Registrations({ t }) {
+  return (
+    <ul className="recognition-list">
+      {registrations.map((r) => (
+        <li key={r.id}>
+          <span className="recognition-year">{r.year}</span>
+          <div>
+            <strong>{r.name}</strong>
+            <p>{r.title}</p>
+            <p className="pub-links">
+              <code>{r.process}</code>
+              <a className="pub-action" href={r.pdf} target="_blank" rel="noreferrer">
+                {t.pubs.certificate}
+              </a>
+            </p>
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }

@@ -46,8 +46,10 @@ export const strings = {
       tags: ['Segurança Cibernética', 'Segurança de Redes', 'Crimes Cibernéticos', 'Forense Computacional', 'Gestão de Vulnerabilidades', 'Criptografia Aplicada', 'Cyber Threat Hunting', 'Segurança do Sistema Financeiro', 'Fraudes e Golpes Digitais', 'Redes de Computadores'],
     },
     pubs: {
-      awardsTitle: 'Prêmios e reconhecimentos',
-      regsTitle: 'Registros de software no INPI',
+      label: 'Produção acadêmica',
+      tabs: { pubs: 'Publicações', awards: 'Prêmios', regs: 'Registros de software' },
+      showAll: (n) => `Ver todas (${n})`,
+      showLess: 'Mostrar menos',
       listTitle: 'Publicações',
       types: { all: 'Todas', journal: 'Periódicos', conference: 'Congressos', chapter: 'Capítulos de livro' },
       typeLabel: { journal: 'Periódico', conference: 'Congresso', chapter: 'Capítulo de livro' },
@@ -98,7 +100,6 @@ export const strings = {
       open: 'Acessar página do RAVENS',
       repo: 'Repositório no GitHub',
       logoAlt: 'Logo do RAVENS',
-      tabs: { group: 'O grupo', pubs: 'Publicações', recognition: 'Prêmios e registros' },
     },
     podcast: {
       title: 'Podcast Latência Zero',
@@ -178,8 +179,10 @@ export const strings = {
       tags: ['Cybersecurity', 'Network Security', 'Cybercrime', 'Digital Forensics', 'Vulnerability Management', 'Applied Cryptography', 'Cyber Threat Hunting', 'Financial System Security', 'Digital Fraud and Scams', 'Computer Networks'],
     },
     pubs: {
-      awardsTitle: 'Awards and recognition',
-      regsTitle: 'Software registrations (INPI, Brazil)',
+      label: 'Academic output',
+      tabs: { pubs: 'Publications', awards: 'Awards', regs: 'Software registrations' },
+      showAll: (n) => `Show all (${n})`,
+      showLess: 'Show less',
       listTitle: 'Publications',
       types: { all: 'All', journal: 'Journals', conference: 'Conferences', chapter: 'Book chapters' },
       typeLabel: { journal: 'Journal', conference: 'Conference', chapter: 'Book chapter' },
@@ -230,7 +233,6 @@ export const strings = {
       open: 'Open the RAVENS page',
       repo: 'GitHub repository',
       logoAlt: 'RAVENS logo',
-      tabs: { group: 'The group', pubs: 'Publications', recognition: 'Awards and registrations' },
     },
     podcast: {
       title: 'Latency Zero Podcast',
@@ -310,8 +312,10 @@ export const strings = {
       tags: ['Ciberseguridad', 'Seguridad de Redes', 'Ciberdelitos', 'Forense Computacional', 'Gestión de Vulnerabilidades', 'Criptografía Aplicada', 'Cyber Threat Hunting', 'Seguridad del Sistema Financiero', 'Fraudes y Estafas Digitales', 'Redes de Computadores'],
     },
     pubs: {
-      awardsTitle: 'Premios y reconocimientos',
-      regsTitle: 'Registros de software en el INPI (Brasil)',
+      label: 'Producción académica',
+      tabs: { pubs: 'Publicaciones', awards: 'Premios', regs: 'Registros de software' },
+      showAll: (n) => `Ver todas (${n})`,
+      showLess: 'Mostrar menos',
       listTitle: 'Publicaciones',
       types: { all: 'Todas', journal: 'Revistas', conference: 'Congresos', chapter: 'Capítulos de libro' },
       typeLabel: { journal: 'Revista', conference: 'Congreso', chapter: 'Capítulo de libro' },
@@ -362,7 +366,6 @@ export const strings = {
       open: 'Acceder a la página de RAVENS',
       repo: 'Repositorio en GitHub',
       logoAlt: 'Logotipo de RAVENS',
-      tabs: { group: 'El grupo', pubs: 'Publicaciones', recognition: 'Premios y registros' },
     },
     podcast: {
       title: 'Podcast Latência Zero',

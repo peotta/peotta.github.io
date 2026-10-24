@@ -97,11 +97,11 @@ export default function App() {
       <Nav t={t} lang={lang} onLang={setLang} active={active} filter={filter} progress={progress} onSearch={openPalette} />
       <main id="conteudo-principal">
         <Hero t={t} />
-        <About t={t} />
+        <About t={t} lang={lang} />
         <Catalog t={t} lang={lang} filter={filter} onFilter={setFilter} query={query} onQuery={setQuery} />
         <SimulNet t={t} />
         <Featured t={t} />
-        <Ravens t={t} lang={lang} />
+        <Ravens t={t} />
         <Podcast t={t} />
         <Interviews t={t} />
         <Contact t={t} />
