@@ -12,7 +12,7 @@ export const strings = {
     nav: { about: 'Sobre', content: 'Disciplinas', simulators: 'Simuladores', podcast: 'Podcast', media: 'Mídia', contact: 'Contato', menu: 'Abrir menu', close: 'Fechar menu', search: 'Buscar' },
     hero: {
       subtitle: 'Professor e pesquisador em segurança cibernética e redes de comunicação na Universidade de Brasília',
-      text: 'Professor, pesquisador e profissional com atuação em <strong>Cibersegurança</strong>, <strong>Engenharia de Redes</strong>, <strong>Ciência da Computação</strong>, <strong>crimes cibernéticos</strong>, <strong>forense digital</strong> e <strong>Segurança do Sistema Financeiro</strong>. Mestre e Doutor em Engenharia Elétrica, articula ensino, pesquisa aplicada e produção de materiais acadêmicos e técnicos voltados à formação e ao desenvolvimento profissional.',
+      text: 'Professor, pesquisador e profissional com atuação em <strong>Cibersegurança</strong>, <strong>Engenharia de Redes</strong>, <strong>Ciência da Computação</strong>, <strong>Crimes Cibernéticos</strong>, <strong>Forense Digital</strong> e <strong>Segurança do Sistema Financeiro</strong>. Mestre e Doutor em Engenharia Elétrica, articula ensino, pesquisa aplicada e produção de materiais acadêmicos e técnicos voltados à formação e ao desenvolvimento profissional.',
       cta: 'Explorar conteúdos',
       photoAlt: 'Foto de perfil do Prof. Dr. Laerte Peotta de Melo',
     },
@@ -39,7 +39,7 @@ export const strings = {
       title: 'Sobre',
       pathTitle: 'Trajetória',
       p1: 'Desenvolve atividades de formação, pesquisa e elaboração de projetos nas áreas de segurança cibernética, redes de comunicação, investigação de incidentes e tecnologias seguras, integrando fundamentos teóricos e aplicação prática.',
-      p2: 'No contexto profissional, possui experiência em iniciativas relacionadas a Red Team, Blue Team, Threat Hunting e inteligência cibernética.',
+      p2: 'No contexto profissional, possui experiência em iniciativas relacionadas a Red Team, Blue Team, Threat Hunting, inteligência cibernética e resposta a incidentes.',
     },
     work: {
       title: 'Áreas de atuação',
@@ -148,7 +148,7 @@ export const strings = {
     nav: { about: 'About', content: 'Classes', simulators: 'Simulators', podcast: 'Podcast', media: 'Media', contact: 'Contact', menu: 'Open menu', close: 'Close menu', search: 'Search' },
     hero: {
       subtitle: 'Professor and researcher in cybersecurity and communication networks at the University of Brasília',
-      text: 'Professor, researcher, and professional working in <strong>Cybersecurity</strong>, <strong>Network Engineering</strong>, <strong>Computer Science</strong>, <strong>cybercrime</strong>, <strong>digital forensics</strong>, and <strong>Financial System Security</strong>. Holding both M.Sc. and Ph.D. degrees in Electrical Engineering, he connects teaching, applied research, and the development of academic and technical materials aimed at education and professional growth.',
+      text: 'Professor, researcher, and professional working in <strong>Cybersecurity</strong>, <strong>Network Engineering</strong>, <strong>Computer Science</strong>, <strong>Cybercrime</strong>, <strong>Digital Forensics</strong>, and <strong>Financial System Security</strong>. Holding both M.Sc. and Ph.D. degrees in Electrical Engineering, he connects teaching, applied research, and the development of academic and technical materials aimed at education and professional growth.',
       cta: 'Explore content',
       photoAlt: 'Profile photo of Prof. Dr. Laerte Peotta de Melo',
     },
@@ -175,7 +175,7 @@ export const strings = {
       title: 'About',
       pathTitle: 'Background',
       p1: 'He develops educational, research, and project activities in cybersecurity, communication networks, incident investigation, and secure technologies, integrating theoretical foundations with practical application.',
-      p2: 'In the professional field, he has experience in initiatives related to Red Team, Blue Team, Threat Hunting, and cyber intelligence.',
+      p2: 'In the professional field, he has experience in initiatives related to Red Team, Blue Team, Threat Hunting, cyber intelligence, and incident response.',
     },
     work: {
       title: 'Areas of expertise',
@@ -284,7 +284,7 @@ export const strings = {
     nav: { about: 'Sobre', content: 'Asignaturas', simulators: 'Simuladores', podcast: 'Podcast', media: 'Medios', contact: 'Contacto', menu: 'Abrir menú', close: 'Cerrar menú', search: 'Buscar' },
     hero: {
       subtitle: 'Profesor e investigador en ciberseguridad y redes de comunicación en la Universidad de Brasilia',
-      text: 'Profesor, investigador y profesional con actuación en <strong>Ciberseguridad</strong>, <strong>Ingeniería de Redes</strong>, <strong>Ciencias de la Computación</strong>, <strong>ciberdelitos</strong>, <strong>forense digital</strong> y <strong>Seguridad del Sistema Financiero</strong>. Magíster y Doctor en Ingeniería Eléctrica, articula docencia, investigación aplicada y producción de materiales académicos y técnicos orientados a la formación y al desarrollo profesional.',
+      text: 'Profesor, investigador y profesional con actuación en <strong>Ciberseguridad</strong>, <strong>Ingeniería de Redes</strong>, <strong>Ciencias de la Computación</strong>, <strong>Ciberdelitos</strong>, <strong>Forense Digital</strong> y <strong>Seguridad del Sistema Financiero</strong>. Magíster y Doctor en Ingeniería Eléctrica, articula docencia, investigación aplicada y producción de materiales académicos y técnicos orientados a la formación y al desarrollo profesional.',
       cta: 'Explorar contenidos',
       photoAlt: 'Foto de perfil del Prof. Dr. Laerte Peotta de Melo',
     },
@@ -311,7 +311,7 @@ export const strings = {
       title: 'Sobre',
       pathTitle: 'Trayectoria',
       p1: 'Desarrolla actividades de formación, investigación y elaboración de proyectos en las áreas de seguridad cibernética, redes de comunicación, investigación de incidentes y tecnologías seguras, integrando fundamentos teóricos y aplicación práctica.',
-      p2: 'En el contexto profesional, cuenta con experiencia en iniciativas relacionadas con Red Team, Blue Team, Threat Hunting e inteligencia cibernética.',
+      p2: 'En el contexto profesional, cuenta con experiencia en iniciativas relacionadas con Red Team, Blue Team, Threat Hunting, inteligencia cibernética y respuesta a incidentes.',
     },
     work: {
       title: 'Áreas de actuación',
