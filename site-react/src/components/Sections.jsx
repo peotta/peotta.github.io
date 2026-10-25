@@ -89,12 +89,14 @@ export function About({ t, lang }) {
             </dl>
           </aside>
         </div>
-        <h3 className="about-areas">{t.work.title}</h3>
-        <ul className="tag-cloud">
-          {t.work.tags.map((tag) => (
-            <li key={tag}>{tag}</li>
-          ))}
-        </ul>
+        <section className="card about-areas" aria-labelledby="areas-title">
+          <h3 id="areas-title">{t.work.title}</h3>
+          <ul className="tag-cloud">
+            {t.work.tags.map((tag) => (
+              <li key={tag}>{tag}</li>
+            ))}
+          </ul>
+        </section>
         <Records t={t} lang={lang} view={view} count={viewCount} onClose={close} />
       </div>
     </section>

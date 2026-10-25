@@ -42,8 +42,8 @@ export const strings = {
       p2: 'No contexto profissional, possui experiência em iniciativas relacionadas a Red Team, Blue Team, Threat Hunting, inteligência cibernética e resposta a incidentes.',
     },
     work: {
-      title: 'Áreas de atuação',
-      tags: ['Segurança Cibernética', 'Segurança de Redes', 'Crimes Cibernéticos', 'Forense Computacional', 'Gestão de Vulnerabilidades', 'Criptografia Aplicada', 'Cyber Threat Hunting', 'Segurança do Sistema Financeiro', 'Fraudes e Golpes Digitais', 'Redes de Computadores'],
+      title: 'Áreas de Atuação',
+      tags: ['Segurança Cibernética', 'Segurança de Redes', 'Crimes Cibernéticos', 'Forense Computacional', 'Resposta a Incidentes', 'Gestão de Vulnerabilidades', 'Criptografia Aplicada', 'Cyber Threat Hunting', 'Segurança do Sistema Financeiro', 'Fraudes e Golpes Digitais', 'Redes de Computadores'],
     },
     pubs: {
       close: 'Fechar',
@@ -179,7 +179,7 @@ export const strings = {
     },
     work: {
       title: 'Areas of expertise',
-      tags: ['Cybersecurity', 'Network Security', 'Cybercrime', 'Digital Forensics', 'Vulnerability Management', 'Applied Cryptography', 'Cyber Threat Hunting', 'Financial System Security', 'Digital Fraud and Scams', 'Computer Networks'],
+      tags: ['Cybersecurity', 'Network Security', 'Cybercrime', 'Digital Forensics', 'Incident Response', 'Vulnerability Management', 'Applied Cryptography', 'Cyber Threat Hunting', 'Financial System Security', 'Digital Fraud and Scams', 'Computer Networks'],
     },
     pubs: {
       close: 'Close',
@@ -315,7 +315,7 @@ export const strings = {
     },
     work: {
       title: 'Áreas de actuación',
-      tags: ['Ciberseguridad', 'Seguridad de Redes', 'Ciberdelitos', 'Forense Computacional', 'Gestión de Vulnerabilidades', 'Criptografía Aplicada', 'Cyber Threat Hunting', 'Seguridad del Sistema Financiero', 'Fraudes y Estafas Digitales', 'Redes de Computadores'],
+      tags: ['Ciberseguridad', 'Seguridad de Redes', 'Ciberdelitos', 'Forense Computacional', 'Respuesta a Incidentes', 'Gestión de Vulnerabilidades', 'Criptografía Aplicada', 'Cyber Threat Hunting', 'Seguridad del Sistema Financiero', 'Fraudes y Estafas Digitales', 'Redes de Computadores'],
     },
     pubs: {
       close: 'Cerrar',

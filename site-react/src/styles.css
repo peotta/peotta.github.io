@@ -598,6 +598,35 @@ kbd {
   background: var(--card);
 }
 
+.about-areas .tag-cloud {
+  justify-content: center;
+}
+
+.about-areas .tag-cloud li {
+  padding: 0.55rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.about-areas .tag-cloud li::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 0.6rem;
+  border-radius: 50%;
+  vertical-align: middle;
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
+}
+
+.about-areas .tag-cloud li:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 14px rgba(72, 255, 139, 0.18);
+}
+
 .focus-list {
   display: grid;
   gap: 1rem;
@@ -605,7 +634,11 @@ kbd {
 }
 
 .about-areas {
-  margin: 1.75rem 0 0.75rem;
+  margin-top: 1rem;
+}
+
+.about-areas h3 {
+  margin-bottom: 1.1rem;
 }
 
 .focus-list dt {
