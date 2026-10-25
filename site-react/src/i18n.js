@@ -48,6 +48,8 @@ export const strings = {
     pubs: {
       close: 'Fechar',
       items: (n) => `${n} ${n === 1 ? 'item' : 'itens'}`,
+      awardsTitle: 'Prêmios e reconhecimentos',
+      regsTitle: 'Registros de software no INPI',
       label: 'Produção acadêmica',
       tabs: { pubs: 'Publicações', awards: 'Prêmios', regs: 'Registros de software' },
       listTitle: 'Publicações',
@@ -100,6 +102,7 @@ export const strings = {
       open: 'Acessar página do RAVENS',
       repo: 'Repositório no GitHub',
       logoAlt: 'Logo do RAVENS',
+      tabs: { group: 'O grupo', pubs: 'Publicações', recognition: 'Prêmios e registros' },
     },
     podcast: {
       title: 'Podcast Latência Zero',
@@ -181,6 +184,8 @@ export const strings = {
     pubs: {
       close: 'Close',
       items: (n) => `${n} ${n === 1 ? 'item' : 'items'}`,
+      awardsTitle: 'Awards and recognition',
+      regsTitle: 'Software registrations (INPI, Brazil)',
       label: 'Academic output',
       tabs: { pubs: 'Publications', awards: 'Awards', regs: 'Software registrations' },
       listTitle: 'Publications',
@@ -233,6 +238,7 @@ export const strings = {
       open: 'Open the RAVENS page',
       repo: 'GitHub repository',
       logoAlt: 'RAVENS logo',
+      tabs: { group: 'The group', pubs: 'Publications', recognition: 'Awards and registrations' },
     },
     podcast: {
       title: 'Latency Zero Podcast',
@@ -314,6 +320,8 @@ export const strings = {
     pubs: {
       close: 'Cerrar',
       items: (n) => `${n} ${n === 1 ? 'elemento' : 'elementos'}`,
+      awardsTitle: 'Premios y reconocimientos',
+      regsTitle: 'Registros de software en el INPI (Brasil)',
       label: 'Producción académica',
       tabs: { pubs: 'Publicaciones', awards: 'Premios', regs: 'Registros de software' },
       listTitle: 'Publicaciones',
@@ -366,6 +374,7 @@ export const strings = {
       open: 'Acceder a la página de RAVENS',
       repo: 'Repositorio en GitHub',
       logoAlt: 'Logotipo de RAVENS',
+      tabs: { group: 'El grupo', pubs: 'Publicaciones', recognition: 'Premios y registros' },
     },
     podcast: {
       title: 'Podcast Latência Zero',

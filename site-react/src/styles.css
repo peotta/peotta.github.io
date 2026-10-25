@@ -848,6 +848,12 @@ kbd {
 }
 
 /* ---------- Publicacoes ---------- */
+.recognition-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
 .recognition-list {
   display: grid;
   gap: 1.1rem;
@@ -1131,6 +1137,15 @@ body:has(.records-dialog[open]) {
 
 .path-links .chip-count {
   margin-left: 0.2rem;
+}
+
+.ravens-tabs {
+  position: static;
+  margin-bottom: 1.75rem;
+}
+
+.pub-toolbar {
+  position: static;
 }
 
 .ravens-copy .lead {
@@ -1733,6 +1748,10 @@ body:has(.records-dialog[open]) {
 
   .catalog-search {
     max-width: none;
+  }
+
+  .recognition-grid {
+    grid-template-columns: 1fr;
   }
 
   .pub-year {

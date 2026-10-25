@@ -101,7 +101,7 @@ export default function App() {
         <Catalog t={t} lang={lang} filter={filter} onFilter={setFilter} query={query} onQuery={setQuery} />
         <SimulNet t={t} />
         <Featured t={t} />
-        <Ravens t={t} />
+        <Ravens t={t} lang={lang} />
         <Podcast t={t} />
         <Interviews t={t} />
         <Contact t={t} />
