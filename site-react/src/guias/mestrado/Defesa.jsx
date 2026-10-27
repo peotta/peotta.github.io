@@ -56,7 +56,7 @@ export function ResultadoDefesa() {
     <GuideSection
       id="resultado"
       title="Resultado da defesa"
-      lead="A banca decide por maioria simples; cabe recurso apenas por vício de forma (Regulamento do PPEE, art. 38; Resolução CEPE 0235/2026, art. 42)."
+      lead="No mestrado, a banca decide por unanimidade; cabe recurso apenas por vício de forma (Resolução CEPE 0235/2026, art. 42)."
     >
       <Card>
         <table className="quadro compact">

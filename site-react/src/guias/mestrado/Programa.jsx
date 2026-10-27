@@ -62,7 +62,7 @@ export function OPrograma() {
 const CEPE_QUADRO = [
   ['Prazo do curso', '12 a 24 meses; prorrogação de até 6 meses, com justificativa e cronograma (art. 26).', 'O guia dizia "menos de 6 meses".'],
   ['Banca', 'Orientador (sem voto), 2 titulares com doutorado e ao menos 1 não vinculado à UnB (art. 36).', 'O externo é à UnB, não só ao PPEE; 1 suplente.'],
-  ['Decisão da banca', 'Aprovação, aprovação com revisão de forma, reformulação ou reprovação, com recurso só por vício de forma (art. 42).', 'A banca decide por maioria simples.'],
+  ['Decisão da banca', 'Aprovação, aprovação com revisão de forma, reformulação ou reprovação, com recurso só por vício de forma (art. 42).', 'No mestrado, a banca decide por unanimidade.'],
   ['Matrícula após os créditos', 'Matrícula em Defesa de Trabalho Final em cada período letivo (art. 30, § 5º).', 'Mesma regra, com o nome da atividade atualizado.'],
   ['Trancamento geral', 'Até 1 período no mestrado; por saúde, até 4 semestres; nunca retroativo (art. 31).', 'Peça durante o semestre vigente.'],
   ['Desligamento', '2 reprovações em disciplinas, reprovação na defesa, prazo máximo vencido ou abandono (art. 34).', 'Reingresso: uma única vez, em até 12 meses (art. 35).'],
@@ -138,7 +138,7 @@ const SEMESTRES = [
   ['2º semestre', 'Disciplinas restantes até 20 créditos. Metodologia definida, primeiros experimentos e escolha do veículo de publicação.'],
   [
     '3º semestre',
-    'Matrícula em Elaboração de Trabalho Final. Desenvolvimento, resultados e submissão do artigo, que precisa estar publicado antes do pedido de banca.',
+    'Matrícula em Defesa de Trabalho Final. Desenvolvimento, resultados e submissão do artigo, que precisa estar publicado antes do pedido de banca.',
   ],
   ['4º semestre', 'Redação final, pedido de banca (até 15 dias antes do prazo final), defesa e entrega da versão definitiva.'],
 ];
@@ -187,18 +187,30 @@ export function Creditos() {
           <DashList
             items={[
               'Matrícula em disciplinas a cada período, nos prazos do calendário da pós-graduação.',
-              'Depois de integralizar os créditos, matricule-se em Elaboração de Trabalho Final em todos os semestres até a defesa.',
+              'Depois de integralizar os créditos, matricule-se em Defesa de Trabalho Final em todos os períodos letivos até a defesa (art. 30, § 5º); sem matrícula, há desligamento por abandono.',
               'Trancamento de disciplina: autorizado pela CPG, ouvido o orientador.',
               'Trancamento geral: só por impedimento involuntário comprovado, por um período letivo, solicitado durante o semestre (nunca retroativo).',
               'Trancamento por saúde do próprio aluno: até 4 semestres, consecutivos ou não.',
             ]}
           />
-          <Callout>
-            Desligamento (Resolução CEPE, art. 34): duas reprovações em disciplinas, reprovação na defesa, falta de matrícula em um período
-            ou prazo máximo ultrapassado. O reingresso só pode ser pedido uma vez, em até 12 meses após o desligamento (art. 35).
-          </Callout>
         </Card>
       </div>
+      <Card title="Desligamento (Resolução CEPE, art. 34)">
+        <DashList
+          items={[
+            'Após 2 reprovações em disciplinas.',
+            'Reprovação na defesa da dissertação.',
+            'Prazo máximo de permanência ultrapassado (art. 26) ou prazos de homologação da defesa descumpridos (art. 42).',
+            'Motivos disciplinares previstos no Regimento Geral, após processo administrativo.',
+            'Abandono do curso: ausência de matrícula durante um período letivo.',
+            'A pedido do próprio aluno.',
+          ]}
+        />
+        <Callout>
+          Matricule-se em todos os períodos letivos, conforme o calendário da pós-graduação. O reingresso só pode ser pedido uma vez, em até
+          12 meses após o desligamento (art. 35).
+        </Callout>
+      </Card>
       <LinkList links={[LINKS.resCepe, LINKS.ofertaDisciplinas, LINKS.calendarioPos, LINKS.formTrancamento]} />
     </GuideSection>
   );
@@ -214,7 +226,8 @@ export function Prazos() {
               'Mínimo de 12 e máximo de 24 meses, incluindo a elaboração e a defesa da dissertação (art. 31).',
               'Excepcionalmente, o prazo pode ser prorrogado por até 6 meses, com justificativa e cronograma viável (Resolução CEPE 0235/2026, art. 26).',
               'A decisão sobre a prorrogação é motivada e comunicada ao aluno.',
-              'O prazo final de cada aluno aparece no histórico escolar.',
+              'O prazo final de cada aluno aparece no histórico escolar do SIGAA: acompanhe-o regularmente.',
+              'Para prorrogação, trancamento geral ou outra situação que ameace a continuidade, procure a Secretaria do PPEE com antecedência.',
             ]}
           />
         </Card>
@@ -249,7 +262,7 @@ export function Orientacao() {
             items={[
               'Todo aluno tem um orientador credenciado no PPEE.',
               'O coorientador é opcional, credenciado e sem parentesco com o orientador ou o aluno; avaliado pela CPG e aprovado pelo Colegiado.',
-              'O orientador acompanha o trabalho e os prazos; o aluno mantém contato regular e apresenta o andamento.',
+              'O orientador acompanha o trabalho, os prazos e a situação acadêmica do orientando para evitar desligamentos; o aluno mantém contato regular e apresenta o andamento.',
               'Troca de orientador ou coorientador: justificativa com a concordância dos envolvidos, enviada à coordenação.',
             ]}
           />
