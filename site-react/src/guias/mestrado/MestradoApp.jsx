@@ -1,7 +1,7 @@
 import { useTypewriter } from '../../hooks.js';
 import GuideLayout from '../shared/GuideLayout.jsx';
 import { PhaseBanner } from '../shared/ui.jsx';
-import { Creditos, LinhaDoTempo, OndePublicar, OPrograma, Orientacao, Prazos, Producao } from './Programa.jsx';
+import { Creditos, LinhaDoTempo, OndePublicar, OPrograma, Orientacao, Prazos, Producao, ResolucaoCepe } from './Programa.jsx';
 import { Metodo, Problema, ResultadosConclusoes, ResumoPpee, Revisao } from './Dissertacao.jsx';
 import { EstruturaPpee, IlustracoesPpee, Modelo, Numeracao, ReferenciasPpee } from './Normas.jsx';
 import { Banca, Documentos, PosDefesa, ResultadoDefesa } from './Defesa.jsx';
@@ -20,6 +20,7 @@ const TOC = [
     secoes: [
       { id: 'programa', label: 'O programa' },
       { id: 'linha-tempo', label: 'Linha do tempo' },
+      { id: 'res-cepe', label: 'Resolução CEPE 0235/2026' },
     ],
   },
   {
@@ -138,6 +139,7 @@ export default function MestradoApp() {
     >
       <OPrograma />
       <LinhaDoTempo />
+      <ResolucaoCepe />
 
       <Bloco id="regras" />
       <Creditos />

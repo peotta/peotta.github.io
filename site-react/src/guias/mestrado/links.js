@@ -3,6 +3,7 @@ const PPEE = 'https://ppee.unb.br';
 const UP = `${PPEE}/wp-content/uploads`;
 
 export const LINKS = {
+  resCepe: { href: 'resolucao-cepe-0235-2026.pdf', label: 'Resolução CEPE/UnB 0235/2026 (regras gerais da pós-graduação)' },
   regulamento: { href: `${UP}/2024/10/2o-Regulamento-do-PPEE-vigencia-2021.1-atual-1.pdf`, label: 'Regulamento do PPEE (2021)' },
   res006: { href: `${UP}/2026/05/SEI_14087722_Resolucao_006-2.pdf`, label: 'Resolução 006/2026 (produção para a defesa)' },
   res007: { href: `${UP}/2026/04/SEI_14087994_Resolucao_007-2.pdf`, label: 'Resolução 007/2026 (normas de redação)' },

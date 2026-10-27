@@ -51,9 +51,81 @@ export function OPrograma() {
         </Card>
       </div>
       <p className="note">
-        Este material reúne, para os orientandos do Prof. Laerte Peotta, as regras do 2º Regulamento do PPEE (vigente desde 2021.1) e das
-        resoluções internas de 2026. Em caso de dúvida, prevalecem os documentos oficiais, com links ao longo da página.
+        Este material reúne, para os orientandos do Prof. Laerte Peotta, as regras da Resolução CEPE/UnB 0235/2026, do 2º Regulamento do PPEE
+        (vigente desde 2021.1) e das resoluções internas de 2026. Em caso de dúvida, prevalecem os documentos oficiais, com links ao longo
+        da página.
       </p>
+    </GuideSection>
+  );
+}
+
+const CEPE_QUADRO = [
+  ['Prazo do curso', '12 a 24 meses; prorrogação de até 6 meses, com justificativa e cronograma (art. 26).', 'O guia dizia "menos de 6 meses".'],
+  ['Banca', 'Orientador (sem voto), 2 titulares com doutorado e ao menos 1 não vinculado à UnB (art. 36).', 'O externo é à UnB, não só ao PPEE; 1 suplente.'],
+  ['Decisão da banca', 'Aprovação, aprovação com revisão de forma, reformulação ou reprovação, com recurso só por vício de forma (art. 42).', 'A banca decide por maioria simples.'],
+  ['Matrícula após os créditos', 'Matrícula em Defesa de Trabalho Final em cada período letivo (art. 30, § 5º).', 'Mesma regra, com o nome da atividade atualizado.'],
+  ['Trancamento geral', 'Até 1 período no mestrado; por saúde, até 4 semestres; nunca retroativo (art. 31).', 'Peça durante o semestre vigente.'],
+  ['Desligamento', '2 reprovações em disciplinas, reprovação na defesa, prazo máximo vencido ou abandono (art. 34).', 'Reingresso: uma única vez, em até 12 meses (art. 35).'],
+  ['Documentos finais', 'Declaração de originalidade e autoria (art. 36, § 9º); ata ao DPG em até 45 dias, com termo de autorização (art. 43).', 'Novo item para a entrega final.'],
+  ['Defesa fechada', 'Só se houver propriedade intelectual, a pedido do orientador e do aluno, com termos de sigilo (art. 36, § 3º).', 'A CPG aprova; o orientador colhe as assinaturas.'],
+  ['Coorientação', 'Docente credenciado, sem parentesco com orientador ou aluno, que divide a concepção e a execução (art. 25).', 'Não substitui o orientador automaticamente.'],
+];
+
+export function ResolucaoCepe() {
+  return (
+    <GuideSection
+      id="res-cepe"
+      title="Resolução CEPE 0235/2026"
+      lead="Nova norma geral da pós-graduação stricto sensu da UnB, publicada em 06/10/2026. Revoga as Resoluções CEPE 0080/2021 e 0124/2023."
+    >
+      <Callout>
+        Os regulamentos dos programas têm até 180 dias da publicação (cerca de abril de 2027) para se adaptar. Até lá, vale o Regulamento do
+        PPEE no que não conflitar com a Resolução; onde houver diferença, a Resolução CEPE prevalece e a secretaria confirma o procedimento.
+      </Callout>
+      <Card>
+        <table className="quadro compact">
+          <caption>Pontos da Resolução que afetam o orientando de mestrado</caption>
+          <thead>
+            <tr>
+              <th>Tema</th>
+              <th>O que diz a Resolução</th>
+              <th>Para o orientando</th>
+            </tr>
+          </thead>
+          <tbody>
+            {CEPE_QUADRO.map(([tema, regra, nota]) => (
+              <tr key={tema}>
+                <td>{tema}</td>
+                <td>{regra}</td>
+                <td>{nota}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Card>
+      <div className="g2">
+        <Card title="Admissão e matrícula">
+          <DashList
+            items={[
+              'Vedado o registro em mais de um curso de pós-graduação stricto sensu ao mesmo tempo (art. 22, § 2º).',
+              'O orientador é vinculado depois da matrícula; o edital não pode exigir orientador prévio (art. 20, § 6º).',
+              'Aproveitamento de disciplinas de até 10 anos, no limite de 70% da carga horária (art. 27); o PPEE fixa seu próprio teto.',
+              'Mestrado com 240 a 480 horas em disciplinas; a dissertação não gera créditos (art. 30).',
+            ]}
+          />
+        </Card>
+        <Card title="Trabalho final">
+          <DashList
+            items={[
+              'No mestrado profissional, o trabalho final pode ter outro formato, se previsto no regulamento e aprovado pela Capes (art. 36, § 2º).',
+              'Escrito em outra língua, exige título e resumo expandido em português (art. 40).',
+              'Todas as exigências curriculares devem estar cumpridas na data da defesa (art. 36, § 4º).',
+              'Videoconferência para a banca depende de previsão no regulamento do programa (art. 39).',
+            ]}
+          />
+        </Card>
+      </div>
+      <LinkList links={[LINKS.resCepe]} />
     </GuideSection>
   );
 }
@@ -117,16 +189,17 @@ export function Creditos() {
               'Matrícula em disciplinas a cada período, nos prazos do calendário da pós-graduação.',
               'Depois de integralizar os créditos, matricule-se em Elaboração de Trabalho Final em todos os semestres até a defesa.',
               'Trancamento de disciplina: autorizado pela CPG, ouvido o orientador.',
-              'Trancamento geral: só por impedimento involuntário comprovado, por um período letivo.',
+              'Trancamento geral: só por impedimento involuntário comprovado, por um período letivo, solicitado durante o semestre (nunca retroativo).',
+              'Trancamento por saúde do próprio aluno: até 4 semestres, consecutivos ou não.',
             ]}
           />
           <Callout>
-            Desligamento (art. 32): duas reprovações em disciplinas, reprovação na defesa, falta de matrícula em um período ou prazo máximo
-            ultrapassado.
+            Desligamento (Resolução CEPE, art. 34): duas reprovações em disciplinas, reprovação na defesa, falta de matrícula em um período
+            ou prazo máximo ultrapassado. O reingresso só pode ser pedido uma vez, em até 12 meses após o desligamento (art. 35).
           </Callout>
         </Card>
       </div>
-      <LinkList links={[LINKS.ofertaDisciplinas, LINKS.calendarioPos, LINKS.formTrancamento]} />
+      <LinkList links={[LINKS.resCepe, LINKS.ofertaDisciplinas, LINKS.calendarioPos, LINKS.formTrancamento]} />
     </GuideSection>
   );
 }
@@ -139,7 +212,8 @@ export function Prazos() {
           <DashList
             items={[
               'Mínimo de 12 e máximo de 24 meses, incluindo a elaboração e a defesa da dissertação (art. 31).',
-              'Excepcionalmente, a CCPG/FT pode estender o prazo por menos de 6 meses, com justificativa e cronograma viável.',
+              'Excepcionalmente, o prazo pode ser prorrogado por até 6 meses, com justificativa e cronograma viável (Resolução CEPE 0235/2026, art. 26).',
+              'A decisão sobre a prorrogação é motivada e comunicada ao aluno.',
               'O prazo final de cada aluno aparece no histórico escolar.',
             ]}
           />
@@ -174,7 +248,7 @@ export function Orientacao() {
           <DashList
             items={[
               'Todo aluno tem um orientador credenciado no PPEE.',
-              'O coorientador é opcional, avaliado pela CPG e aprovado pelo Colegiado.',
+              'O coorientador é opcional, credenciado e sem parentesco com o orientador ou o aluno; avaliado pela CPG e aprovado pelo Colegiado.',
               'O orientador acompanha o trabalho e os prazos; o aluno mantém contato regular e apresenta o andamento.',
               'Troca de orientador ou coorientador: justificativa com a concordância dos envolvidos, enviada à coordenação.',
             ]}

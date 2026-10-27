@@ -22,7 +22,10 @@ export function Banca() {
             items={[
               'Pedido pelo menos 15 dias antes do prazo final do histórico escolar.',
               'A CPG se reúne às quintas-feiras: envie até a quarta-feira para entrar na pauta.',
-              'Banca: orientador (preside, sem direito a julgamento), dois membros titulares, sendo ao menos um não vinculado ao PPEE, e um suplente.',
+              'Banca: orientador (preside, sem direito a julgamento) e dois membros titulares, todos com doutorado.',
+              'Ao menos um titular não pode ser vinculado à UnB (Resolução CEPE 0235/2026, art. 36); o Regulamento do PPEE exige apenas não vinculado ao PPEE, então mire no critério mais restrito.',
+              'Um suplente.',
+              'Nenhum membro pode ter parentesco, vínculo societário ou comercial com o orientador ou o aluno.',
               'Até dois membros podem participar por videoconferência.',
               'Só é homologada com a produção exigida já publicada.',
             ]}
@@ -53,7 +56,7 @@ export function ResultadoDefesa() {
     <GuideSection
       id="resultado"
       title="Resultado da defesa"
-      lead="A banca decide por maioria simples; cabe recurso apenas por vício de forma (Regulamento, art. 38)."
+      lead="A banca decide por maioria simples; cabe recurso apenas por vício de forma (Regulamento do PPEE, art. 38; Resolução CEPE 0235/2026, art. 42)."
     >
       <Card>
         <table className="quadro compact">
@@ -75,7 +78,10 @@ export function ResultadoDefesa() {
             ))}
           </tbody>
         </table>
-        <Callout>Perder esses prazos, ou não ser aprovado na reformulação, implica desligamento do programa.</Callout>
+        <Callout>
+          Perder esses prazos, ou não ser aprovado na reformulação, implica desligamento do programa. A homologação da aprovação depende da
+          ata assinada por toda a banca (Resolução CEPE, art. 43).
+        </Callout>
       </Card>
     </GuideSection>
   );
@@ -99,7 +105,10 @@ export function PosDefesa() {
           </li>
           <li>
             <strong>Assine pelo SEI</strong>
-            <span>Termo de autorização e ata de defesa, como usuário externo do SEI/UnB.</span>
+            <span>
+              Declaração de originalidade e autoria, termo de autorização para o repositório institucional e ata de defesa, como usuário
+              externo do SEI/UnB. A coordenação envia a ata ao DPG em até 45 dias após a defesa.
+            </span>
           </li>
           <li>
             <strong>Acompanhe no SIGAA</strong>
@@ -117,7 +126,7 @@ export function Documentos() {
     <GuideSection id="documentos" title="Documentos e contato">
       <div className="g2">
         <Card title="Regras">
-          <LinkList links={[LINKS.regulamento, LINKS.res006, LINKS.res007, LINKS.res008, LINKS.resolucoes]} />
+          <LinkList links={[LINKS.resCepe, LINKS.regulamento, LINKS.res006, LINKS.res007, LINKS.res008, LINKS.resolucoes]} />
         </Card>
         <Card title="Formulários e páginas">
           <LinkList
