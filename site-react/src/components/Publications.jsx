@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { awards, publications, registrations, toBibtex } from '../publicacoes.js';
+import { awards, pubGroup, publications, registrations, toBibtex } from '../publicacoes.js';
 import { normalize } from './Catalog.jsx';
 
 // Destaca o nome do professor na lista de autores.
@@ -40,7 +40,7 @@ export function PublicationList({ t, type }) {
   const byYear = useMemo(() => {
     const groups = new Map();
     publications
-      .filter((p) => p.type === type)
+      .filter((p) => pubGroup(p) === type)
       .forEach((p) => groups.set(p.year, [...(groups.get(p.year) ?? []), p]));
     return [...groups.entries()].sort((a, b) => b[0] - a[0]);
   }, [type]);
@@ -147,7 +147,7 @@ export function Registrations({ t }) {
 }
 
 // Versao da aba Publicacoes do Ravens: filtro por tipo, busca e lista completa.
-const TYPES = ['all', 'journal', 'conference', 'chapter', 'book'];
+const TYPES = ['all', 'journal', 'conference', 'book'];
 
 export function PublicationBrowser({ t }) {
   const [type, setType] = useState('all');
@@ -156,10 +156,9 @@ export function PublicationBrowser({ t }) {
   const counts = useMemo(
     () => ({
       all: publications.length,
-      journal: publications.filter((p) => p.type === 'journal').length,
-      conference: publications.filter((p) => p.type === 'conference').length,
-      chapter: publications.filter((p) => p.type === 'chapter').length,
-      book: publications.filter((p) => p.type === 'book').length,
+      journal: publications.filter((p) => pubGroup(p) === 'journal').length,
+      conference: publications.filter((p) => pubGroup(p) === 'conference').length,
+      book: publications.filter((p) => pubGroup(p) === 'book').length,
     }),
     [],
   );
@@ -167,7 +166,7 @@ export function PublicationBrowser({ t }) {
   const byYear = useMemo(() => {
     const terms = normalize(query.trim()).split(/\s+/).filter(Boolean);
     const list = publications.filter((p) => {
-      if (type !== 'all' && p.type !== type) return false;
+      if (type !== 'all' && pubGroup(p) !== type) return false;
       const hay = normalize([p.title, p.venue, p.details ?? '', p.publisher ?? '', ...p.authors, String(p.year)].join(' '));
       return terms.every((term) => hay.includes(term));
     });

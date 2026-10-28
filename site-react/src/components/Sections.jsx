@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { profiles, SPOTIFY_URL } from '../data.js';
-import { awards, publications, registrations } from '../publicacoes.js';
+import { awards, pubGroup, publications, registrations } from '../publicacoes.js';
 import Records from './Records.jsx';
 
 function SectionHead({ id, title, lead }) {
@@ -12,14 +12,14 @@ function SectionHead({ id, title, lead }) {
   );
 }
 
-const PUB_TYPES = ['journal', 'conference', 'chapter', 'book'];
+const PUB_TYPES = ['journal', 'conference', 'book'];
 
 // Ancoras que abrem a lista de producao ja na visao correspondente.
 const HASH_VIEW = {
   publicacoes: { kind: 'pubs', type: 'journal' },
   periodicos: { kind: 'pubs', type: 'journal' },
   congressos: { kind: 'pubs', type: 'conference' },
-  capitulos: { kind: 'pubs', type: 'chapter' },
+  capitulos: { kind: 'pubs', type: 'book' },
   livros: { kind: 'pubs', type: 'book' },
   premios: { kind: 'awards' },
   registros: { kind: 'regs' },
@@ -44,7 +44,7 @@ export function About({ t, lang }) {
     if (HASH_VIEW[decodeURIComponent(location.hash.slice(1))]) history.replaceState(null, '', '#sobre');
   };
   const current = (kind, type) => view?.kind === kind && (kind !== 'pubs' || view.type === type);
-  const count = (type) => publications.filter((p) => p.type === type).length;
+  const count = (type) => publications.filter((p) => pubGroup(p) === type).length;
   const viewCount = !view ? 0 : view.kind === 'pubs' ? count(view.type) : view.kind === 'awards' ? awards.length : registrations.length;
 
   return (

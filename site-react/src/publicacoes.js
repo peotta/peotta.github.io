@@ -259,6 +259,9 @@ export const registrations = [
   },
 ];
 
+// Grupo de filtro da interface: capitulos e livros organizados aparecem juntos em 'book' (Livros).
+export const pubGroup = (p) => (p.type === 'chapter' ? 'book' : p.type);
+
 // Gera uma referencia BibTeX simples para o botao "Citar".
 export function toBibtex(p) {
   const key = `${(p.authors[0] || 'peotta').split(' ').pop().normalize('NFD').replace(/[^A-Za-z]/g, '').toLowerCase()}${p.year}${p.id.split('-').pop()}`;
