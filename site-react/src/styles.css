@@ -2108,6 +2108,23 @@ body:has(.records-dialog[open]) {
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid var(--card-border);
+  position: relative;
+  transform-origin: top left;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+@media (hover: hover) {
+  .pub-cover:hover {
+    transform: scale(2);
+    z-index: 5;
+    box-shadow: var(--glow), 0 12px 32px rgba(0, 0, 0, 0.55);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pub-cover {
+    transition: none;
+  }
 }
 
 @media (max-width: 520px) {
