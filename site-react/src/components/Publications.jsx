@@ -3,7 +3,7 @@ import { awards, publications, registrations, toBibtex } from '../publicacoes.js
 import { normalize } from './Catalog.jsx';
 
 // Destaca o nome do professor na lista de autores.
-function Authors({ list }) {
+function Authors({ list, orgs }) {
   if (list.length === 0) return null;
   return (
     <p className="pub-authors">
@@ -13,6 +13,7 @@ function Authors({ list }) {
           {i < list.length - 1 ? ', ' : ''}
         </span>
       ))}
+      {orgs ? ` (${orgs})` : ''}
     </p>
   );
 }
@@ -51,9 +52,13 @@ export function PublicationList({ t, type }) {
           <h3 className="pub-year-label">{year}</h3>
           <ol className="pub-list">
             {items.map((p) => (
-              <li key={p.id} className="pub-item">
+              <li key={p.id} className={p.cover ? 'pub-item has-cover' : 'pub-item'}>
+                {p.cover && (
+                  <img className="pub-cover" src={p.cover} alt={`${t.pubs.coverAlt}: ${p.venue.split(':')[0]}`} width="96" height="136" loading="lazy" />
+                )}
+                <div className="pub-body">
                 <p className="pub-title">{p.title}</p>
-                <Authors list={p.authors} />
+                <Authors list={p.authors} orgs={p.organizers ? t.pubs.eds : undefined} />
                 <p className="pub-venue">
                   {p.editors && `In: ${p.editors.join('; ')} (${t.pubs.eds}). `}
                   <em>{p.venue}</em>
@@ -64,6 +69,11 @@ export function PublicationList({ t, type }) {
                   {p.pdf && (
                     <a className="pub-action" href={p.pdf} target="_blank" rel="noreferrer">
                       PDF
+                    </a>
+                  )}
+                  {p.link && (
+                    <a className="pub-action" href={p.link} target="_blank" rel="noreferrer">
+                      {t.pubs.bdex} <span aria-hidden="true">↗</span>
                     </a>
                   )}
                   {p.amazon && (
@@ -78,6 +88,7 @@ export function PublicationList({ t, type }) {
                   )}
                   {p.authors.length > 0 && <CiteButton pub={p} t={t} />}
                 </p>
+                </div>
               </li>
             ))}
           </ol>
@@ -136,7 +147,7 @@ export function Registrations({ t }) {
 }
 
 // Versao da aba Publicacoes do Ravens: filtro por tipo, busca e lista completa.
-const TYPES = ['all', 'journal', 'conference', 'chapter'];
+const TYPES = ['all', 'journal', 'conference', 'chapter', 'book'];
 
 export function PublicationBrowser({ t }) {
   const [type, setType] = useState('all');
@@ -148,6 +159,7 @@ export function PublicationBrowser({ t }) {
       journal: publications.filter((p) => p.type === 'journal').length,
       conference: publications.filter((p) => p.type === 'conference').length,
       chapter: publications.filter((p) => p.type === 'chapter').length,
+      book: publications.filter((p) => p.type === 'book').length,
     }),
     [],
   );
@@ -222,10 +234,14 @@ export function PublicationBrowser({ t }) {
             <h3 className="pub-year-label">{year}</h3>
             <ol className="pub-list">
               {items.map((p) => (
-                <li key={p.id} className="pub-item">
+                <li key={p.id} className={p.cover ? 'pub-item has-cover' : 'pub-item'}>
+                {p.cover && (
+                  <img className="pub-cover" src={p.cover} alt={`${t.pubs.coverAlt}: ${p.venue.split(':')[0]}`} width="96" height="136" loading="lazy" />
+                )}
+                <div className="pub-body">
                   <span className="pub-type">{t.pubs.typeLabel[p.type]}</span>
                   <p className="pub-title">{p.title}</p>
-                  <Authors list={p.authors} />
+                  <Authors list={p.authors} orgs={p.organizers ? t.pubs.eds : undefined} />
                   <p className="pub-venue">
                     {p.editors && `In: ${p.editors.join('; ')} (${t.pubs.eds}). `}
                     <em>{p.venue}</em>
@@ -238,7 +254,12 @@ export function PublicationBrowser({ t }) {
                         PDF
                       </a>
                     )}
-                    {p.amazon && (
+                    {p.link && (
+                    <a className="pub-action" href={p.link} target="_blank" rel="noreferrer">
+                      {t.pubs.bdex} <span aria-hidden="true">↗</span>
+                    </a>
+                  )}
+                  {p.amazon && (
                       <a className="pub-action" href={p.amazon} target="_blank" rel="noreferrer">
                         {t.pubs.amazon} <span aria-hidden="true">↗</span>
                       </a>
@@ -250,6 +271,7 @@ export function PublicationBrowser({ t }) {
                     )}
                     {p.authors.length > 0 && <CiteButton pub={p} t={t} />}
                   </p>
+                  </div>
                 </li>
               ))}
             </ol>

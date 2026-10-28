@@ -1,11 +1,24 @@
 // Producao cientifica. Dados extraidos dos proprios PDFs (autores, veiculo, ano, DOI).
 // Para incluir um trabalho novo, acrescente uma entrada e coloque o PDF em /arquivos/publicacoes/.
 // type: 'journal' (periodico), 'conference' (congresso) ou 'chapter' (capitulo de livro;
-// sem PDF, com link para o livro na Amazon).
+// sem PDF, com link para o livro na Amazon) ou 'book' (livro organizado). 'cover' e a capa do livro.
 
 const PDF = '/arquivos/publicacoes/';
 
 export const publications = [
+  {
+    id: 'ipea-2015-amazonia-atlantico-sul',
+    type: 'book',
+    year: 2015,
+    title: 'Amazônia e Atlântico Sul: desafios e perspectivas para a defesa no Brasil',
+    authors: ['Gilberto Fernando Gheller', 'Selma Lúcia de Moura Gonzales', 'Laerte Peotta de Melo'],
+    organizers: true,
+    venue: 'Núcleo de Estudos Prospectivos (NEP) / Ipea',
+    details: 'Brasília, 645 p.',
+    isbn: '9788578112509',
+    link: 'https://www.bdex.eb.mil.br/jspui/handle/1/481',
+    cover: '/assets/img/livros/amazonia-atlantico-sul.jpg',
+  },
   {
     id: 'cose-2026-devsecops',
     type: 'journal',
@@ -175,6 +188,7 @@ export const publications = [
     details: 'cap. 6, p. 131',
     isbn: '9788577899258',
     amazon: 'https://www.amazon.com.br/dp/857789925X',
+    cover: '/assets/img/livros/malware-360.jpg',
   },
   {
     id: 'ransomware360-2024-cap2',
@@ -188,6 +202,7 @@ export const publications = [
     details: 'cap. 2, p. 43',
     isbn: '9786555269642',
     amazon: 'https://www.amazon.com.br/dp/6555269642',
+    cover: '/assets/img/livros/ransomware-360.jpg',
   },
 ];
 
@@ -247,11 +262,11 @@ export const registrations = [
 // Gera uma referencia BibTeX simples para o botao "Citar".
 export function toBibtex(p) {
   const key = `${(p.authors[0] || 'peotta').split(' ').pop().normalize('NFD').replace(/[^A-Za-z]/g, '').toLowerCase()}${p.year}${p.id.split('-').pop()}`;
-  const entry = { journal: 'article', conference: 'inproceedings', chapter: 'incollection' }[p.type];
+  const entry = { journal: 'article', conference: 'inproceedings', chapter: 'incollection', book: 'book' }[p.type];
   const fields = [
     ['title', p.title],
-    ['author', p.authors.join(' and ')],
-    [p.type === 'journal' ? 'journal' : 'booktitle', p.venue],
+    [p.organizers ? 'editor' : 'author', p.authors.join(' and ')],
+    p.type === 'book' ? ['publisher', p.venue] : [p.type === 'journal' ? 'journal' : 'booktitle', p.venue],
     p.editors && ['editor', p.editors.join(' and ')],
     p.publisher && ['publisher', p.publisher],
     ['year', String(p.year)],

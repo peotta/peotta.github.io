@@ -2088,3 +2088,30 @@ body:has(.records-dialog[open]) {
   0%, 100% { border-color: rgba(255, 184, 77, 0.3); }
   50% { border-color: rgba(255, 184, 77, 1); }
 }
+
+.pub-item.has-cover {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.pub-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.pub-cover {
+  flex: none;
+  width: 96px;
+  height: auto;
+  aspect-ratio: 96 / 136;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+}
+
+@media (max-width: 520px) {
+  .pub-cover {
+    width: 72px;
+  }
+}
