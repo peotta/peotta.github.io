@@ -12,7 +12,7 @@ function SectionHead({ id, title, lead }) {
   );
 }
 
-const PUB_TYPES = ['journal', 'conference', 'chapter'];
+const PUB_TYPES = ['journal', 'conference', 'chapter', 'book'];
 
 // Ancoras que abrem a lista de producao ja na visao correspondente.
 const HASH_VIEW = {
@@ -20,6 +20,7 @@ const HASH_VIEW = {
   periodicos: { kind: 'pubs', type: 'journal' },
   congressos: { kind: 'pubs', type: 'conference' },
   capitulos: { kind: 'pubs', type: 'chapter' },
+  livros: { kind: 'pubs', type: 'book' },
   premios: { kind: 'awards' },
   registros: { kind: 'regs' },
 };
