@@ -2121,6 +2121,11 @@ body:has(.records-dialog[open]) {
   }
 }
 
+/* O ultimo item da lista amplia para cima, para nao gerar barra de rolagem embaixo. */
+.pub-year:last-child .pub-item:last-child .pub-cover {
+  transform-origin: bottom left;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pub-cover {
     transition: none;
