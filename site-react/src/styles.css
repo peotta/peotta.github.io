@@ -1988,6 +1988,25 @@ body:has(.records-dialog[open]) {
   font-size: 0.85rem;
 }
 
+.featured-labs li:has(> a) {
+  padding: 0;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.featured-labs li > a {
+  display: block;
+  padding: 0.25rem 0.8rem;
+  border-radius: 999px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.featured-labs li:has(> a):hover,
+.featured-labs li:has(> a:focus-visible) {
+  border-color: var(--primary);
+  box-shadow: var(--glow);
+}
+
 .featured-labs .is-ready {
   background: rgba(72, 255, 139, 0.1);
   color: var(--primary);

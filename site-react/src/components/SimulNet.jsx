@@ -9,7 +9,7 @@ export const SIMULNET = {
 export default function SimulNet({ t }) {
   const f = t.simulnet;
   const ready = f.ready.length;
-  const total = ready + f.planned.length;
+  const total = ready + f.planned;
   return (
     <section className="section featured-section" id="simuladores" aria-labelledby="simulnet-title">
       <div className="container">
@@ -38,11 +38,10 @@ export default function SimulNet({ t }) {
             </div>
 
             <ul className="featured-labs" aria-label={f.labsLabel}>
-              {f.ready.map((x, i) => (
-                <li key={x} className="is-ready" style={{ '--i': i }}><span aria-hidden="true">✔</span> {x}</li>
-              ))}
-              {f.planned.map((x, i) => (
-                <li key={x} className="is-planned" style={{ '--i': ready + i }}>{x}</li>
+              {f.ready.map(([name, id], i) => (
+                <li key={id} className="is-ready" style={{ '--i': i }}>
+                  <a href={`${SIMULNET.url}#/sim/${id}`}><span aria-hidden="true">✔</span> {name}</a>
+                </li>
               ))}
             </ul>
 
