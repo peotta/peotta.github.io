@@ -141,4 +141,112 @@
     <priority>0.75</priority>
     <changefreq>monthly</changefreq>
   </url>
+
+  <!-- Publicações (PDF) -->
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2021-preventing-apt-zero-trust-iot.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2021-study-apt-iot-networks.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2024-secure-out-of-band-e-bank-visual-two-factor.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2025-classificacao-textos-juridicos-ia-pgfn.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2025-internal-audit-cybersecurity-controls-financial-institutions.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2025-international-perspectives-critical-infrastructure.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2025-ml-phishing-urls-parked-domains.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2025-review-privacy-requirements.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2026-agentes-llm-injecao-indireta-prompt.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2026-cybersecurity-risks-devsecops-brazilian-organizations.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2026-legacy-designs-vulnerability-fixes-sast.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2026-phishing-llm-atributos-estilometricos.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2026-phishing-urls-pu-learning.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2026-signal-aware-fraud-detection.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/publicacoes/2026-systematic-review-prompt-injection-llm.pdf</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <!-- Prêmios (PDF) -->
+  <url>
+    <loc>https://peotta.github.io/arquivos/premios/2025-sbseg-melhor-revisor.pdf</loc>
+    <priority>0.5</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/premios/2026-sbseg-melhor-revisor-artefatos.pdf</loc>
+    <priority>0.5</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <!-- Registros INPI (PDF) -->
+  <url>
+    <loc>https://peotta.github.io/arquivos/registros/inpi-bbcode.pdf</loc>
+    <priority>0.5</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://peotta.github.io/arquivos/registros/inpi-ml-phishing.pdf</loc>
+    <priority>0.5</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <!-- Documentos de orientação (PDF) -->
+  <url>
+    <loc>https://peotta.github.io/orientacao/resolucao-cepe-0235-2026.pdf</loc>
+    <priority>0.5</priority>
+    <changefreq>yearly</changefreq>
+  </url>
 </urlset>
