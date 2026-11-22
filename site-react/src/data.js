@@ -7,6 +7,7 @@ const cta = {
   repo: { pt: 'Abrir repositório', en: 'Open repository', es: 'Abrir repositorio' },
   course: { pt: 'Acessar curso', en: 'Open course', es: 'Acceder al curso' },
   plan: { pt: 'Acessar plano', en: 'Access plan', es: 'Acceder al plan' },
+  discipline: { pt: 'Acessar disciplina', en: 'Open course page', es: 'Acceder a la disciplina' },
   guide: { pt: 'Acessar guia', en: 'Access guide', es: 'Acceder a la guía' },
   read: { pt: 'Ler material', en: 'Read material', es: 'Leer material' },
   sim: { pt: 'Abrir simulador', en: 'Open simulator', es: 'Abrir simulador' },
@@ -155,7 +156,7 @@ const allItems = [
     categories: ['disciplines'],
     href: 'https://professorlaerte.github.io/labredes/',
     external: true,
-    cta: cta.plan,
+    cta: cta.discipline,
     meta: unbGrad,
     title: { pt: 'Laboratório de Redes', en: 'Network Laboratory', es: 'Laboratorio de Redes' },
     text: {
@@ -172,7 +173,7 @@ const allItems = [
     categories: ['disciplines'],
     href: 'https://peotta.github.io/PTR/',
     external: true,
-    cta: cta.plan,
+    cta: cta.discipline,
     meta: unbGrad,
     title: { pt: 'Protocolos de Transporte e Roteamento', en: 'Transport and Routing Protocols', es: 'Protocolos de Transporte y Enrutamiento' },
     text: {
@@ -309,7 +310,7 @@ const allItems = [
     categories: ['disciplines'],
     href: 'https://peotta.github.io/PPCA0049/',
     external: true,
-    cta: cta.plan,
+    cta: cta.discipline,
     meta: {
       pt: 'Doutorado Profissional em Computação Aplicada (PPCA/UnB)',
       en: 'Professional Doctorate in Applied Computing (PPCA/UnB)',
