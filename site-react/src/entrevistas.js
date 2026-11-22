@@ -10,6 +10,7 @@
 export const CHANNEL_URL = 'https://www.youtube.com/@peotta';
 
 export const interviews = [
+  { id: 'nuvem-hospitais-bancos', year: 2026, month: 11, kind: 'news', url: 'https://www.metropoles.com/ciencia/queda-de-servicos-de-nuvem-pode-afetar-hospitais-bancos-e-orgaos-publicos', image: 'https://i.metroimg.com/l0n51PovllkSD1IXLoQDb37lsXF-JNRprQm6sH3pDw8/w:600/q:85/f:webp/plain/https://images.metroimg.com/2026/11/tela-de-projecao-holografica-com-tecnologia-de-sistema-em-nuvem.jpg', title: 'Queda de serviços de nuvem pode afetar hospitais, bancos e órgãos públicos', outlet: 'Metrópoles', topics: ['networks', 'culture'] },
   { id: 'sbt-falhas-php', year: 2026, month: 10, kind: 'video', youtube: '_WQfR0EvUhs', title: 'Falhas no PHP afetam sistemas no Brasil; órgãos públicos suspendem serviços digitais', outlet: 'SBT News', topics: ['cybercrime', 'culture'] },
   { id: 'cb-poder-meta', year: 2026, month: 10, kind: 'video', youtube: '_tMcLyOolys', title: 'CB.Poder: Algoritmo e o poder do voto', outlet: 'Correio Braziliense', topics: ['algorithms', 'culture'] },
   { id: 'correio-meta-transparencia', year: 2026, month: 10, kind: 'news', url: 'https://www.correiobraziliense.com.br/politica/2026/10/7522223-especialista-defende-mais-transparencia-para-analisar-erro-tecnico-da-meta.html', image: 'https://midias.correiobraziliense.com.br/_midias/jpg/2026/10/16/675x450/1_ed16102026--034-67985045.jpg', title: 'Especialista defende mais transparência para analisar erro técnico da Meta', outlet: 'Correio Braziliense', topics: ['algorithms', 'culture'] },
