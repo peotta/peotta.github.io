@@ -41,15 +41,24 @@ export function ResourceCard({ r, lang, t }) {
           ))}
         </ul>
       )}
-      <a
-        className="resource-link"
-        href={r.href}
-        {...(r.external ? { target: '_blank', rel: 'noreferrer' } : {})}
-      >
-        {r.cta[lang]}
-        <span aria-hidden="true">{r.external ? '↗' : '→'}</span>
-        {r.external && <span className="sr-only"> ({t.catalog.external})</span>}
-      </a>
+      <div className="resource-actions">
+        <a
+          className="resource-link"
+          href={r.href}
+          {...(r.external ? { target: '_blank', rel: 'noreferrer' } : {})}
+        >
+          {r.cta[lang]}
+          <span aria-hidden="true">{r.external ? '↗' : '→'}</span>
+          {r.external && <span className="sr-only"> ({t.catalog.external})</span>}
+        </a>
+        {r.extra && (
+          <a className="resource-link resource-link-extra" href={r.extra.href} target="_blank" rel="noreferrer">
+            {r.extra.cta[lang]}
+            <span aria-hidden="true">↗</span>
+            <span className="sr-only"> ({t.catalog.external})</span>
+          </a>
+        )}
+      </div>
     </article>
   );
 }

@@ -851,11 +851,23 @@ kbd {
   background: rgba(72, 255, 139, 0.06);
 }
 
+.resource-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.2rem;
+  margin-top: auto;
+}
+
+.resource-link-extra {
+  position: relative;
+  z-index: 1;
+}
+
 .resource-link {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  margin-top: auto;
   padding-top: 0.6rem;
   font-weight: 700;
   font-size: 0.92rem;

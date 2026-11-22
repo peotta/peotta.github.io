@@ -7,6 +7,7 @@ const cta = {
   repo: { pt: 'Abrir repositório', en: 'Open repository', es: 'Abrir repositorio' },
   course: { pt: 'Acessar curso', en: 'Open course', es: 'Acceder al curso' },
   plan: { pt: 'Acessar plano', en: 'Access plan', es: 'Acceder al plan' },
+  labsPage: { pt: 'Laboratórios', en: 'Labs', es: 'Laboratorios' },
   discipline: { pt: 'Acessar disciplina', en: 'Open course page', es: 'Acceder a la disciplina' },
   guide: { pt: 'Acessar guia', en: 'Access guide', es: 'Acceder a la guía' },
   read: { pt: 'Ler material', en: 'Read material', es: 'Leer material' },
@@ -157,6 +158,7 @@ const allItems = [
     href: 'https://professorlaerte.github.io/labredes/',
     external: true,
     cta: cta.discipline,
+    extra: { href: 'https://professorlaerte.github.io/labredes/labs/', cta: cta.labsPage },
     meta: unbGrad,
     title: { pt: 'Laboratório de Redes', en: 'Network Laboratory', es: 'Laboratorio de Redes' },
     text: {
@@ -174,6 +176,7 @@ const allItems = [
     href: 'https://peotta.github.io/PTR/',
     external: true,
     cta: cta.discipline,
+    extra: { href: 'https://peotta.github.io/PTR/labs/', cta: cta.labsPage },
     meta: unbGrad,
     title: { pt: 'Protocolos de Transporte e Roteamento', en: 'Transport and Routing Protocols', es: 'Protocolos de Transporte y Enrutamiento' },
     text: {
