@@ -60,13 +60,13 @@ export function OPrograma() {
 }
 
 const CEPE_QUADRO = [
-  ['Prazo do curso', '12 a 24 meses; prorrogação de até 6 meses, com justificativa e cronograma (art. 26).', 'O guia dizia "menos de 6 meses".'],
-  ['Banca', 'Orientador (sem voto), 2 titulares com doutorado e ao menos 1 não vinculado à UnB (art. 36).', 'O externo é à UnB, não só ao PPEE; 1 suplente.'],
+  ['Prazo do curso', '12 a 24 meses; prorrogação de até 6 meses, com justificativa e cronograma (art. 26).', 'Peça a prorrogação com justificativa e cronograma.'],
+  ['Banca', 'Orientador (sem voto), 2 titulares com doutorado, ao menos 1 não vinculado à UnB, e 2 suplentes (art. 36, § 5º).', 'O titular externo precisa de suplente também externo à UnB; o critério é a UnB, não só o PPEE.'],
   ['Decisão da banca', 'Aprovação, aprovação com revisão de forma, reformulação ou reprovação, com recurso só por vício de forma (art. 42).', 'No mestrado, a banca decide por unanimidade.'],
-  ['Matrícula após os créditos', 'Matrícula em Defesa de Trabalho Final em cada período letivo (art. 30, § 5º).', 'Mesma regra, com o nome da atividade atualizado.'],
+  ['Matrícula após os créditos', 'Matrícula em Defesa de Trabalho Final em cada período letivo (art. 30, § 5º).', 'Matricule-se em todos os períodos até a defesa.'],
   ['Trancamento geral', 'Até 1 período no mestrado; por saúde, até 4 semestres; nunca retroativo (art. 31).', 'Peça durante o semestre vigente.'],
   ['Desligamento', '2 reprovações em disciplinas, reprovação na defesa, prazo máximo vencido ou abandono (art. 34).', 'Reingresso: uma única vez, em até 12 meses (art. 35).'],
-  ['Documentos finais', 'Declaração de originalidade e autoria (art. 36, § 9º); ata ao DPG em até 45 dias, com termo de autorização (art. 43).', 'Novo item para a entrega final.'],
+  ['Documentos finais', 'Declaração de originalidade e autoria (art. 36, § 9º); ata ao DPG em até 45 dias, com termo de autorização (art. 43).', 'Entregue a declaração junto com os documentos finais.'],
   ['Defesa fechada', 'Só se houver propriedade intelectual, a pedido do orientador e do aluno, com termos de sigilo (art. 36, § 3º).', 'A CPG aprova; o orientador colhe as assinaturas.'],
   ['Coorientação', 'Docente credenciado, sem parentesco com orientador ou aluno, que divide a concepção e a execução (art. 25).', 'Não substitui o orientador automaticamente.'],
 ];
@@ -120,6 +120,7 @@ export function ResolucaoCepe() {
               'No mestrado profissional, o trabalho final pode ter outro formato, se previsto no regulamento e aprovado pela Capes (art. 36, § 2º).',
               'Escrito em outra língua, exige título e resumo expandido em português (art. 40).',
               'Todas as exigências curriculares devem estar cumpridas na data da defesa (art. 36, § 4º).',
+              'Os membros da banca não podem ter participado da orientação do projeto, salvo o orientador (art. 36, § 6º).',
               'Videoconferência para a banca depende de previsão no regulamento do programa (art. 39).',
             ]}
           />
@@ -211,7 +212,12 @@ export function Creditos() {
           12 meses após o desligamento (art. 35).
         </Callout>
       </Card>
-      <LinkList links={[LINKS.resCepe, LINKS.ofertaDisciplinas, LINKS.calendarioPos, LINKS.formTrancamento]} />
+      <Callout>
+        Turma Específica UnB/PPEE: a Resolução 005/2025 define as disciplinas recomendadas para o primeiro semestre (Metodologia de Pesquisa
+        Científica 1 e 2, Segurança Cibernética e Tópicos em Segurança Cibernética 1 a 5, cada qual com seu professor). Confirme a oferta com
+        a secretaria.
+      </Callout>
+      <LinkList links={[LINKS.resCepe, LINKS.res005, LINKS.ofertaDisciplinas, LINKS.calendarioPos, LINKS.formTrancamento]} />
     </GuideSection>
   );
 }
@@ -264,6 +270,7 @@ export function Orientacao() {
               'O coorientador é opcional, credenciado e sem parentesco com o orientador ou o aluno; avaliado pela CPG e aprovado pelo Colegiado.',
               'O orientador acompanha o trabalho, os prazos e a situação acadêmica do orientando para evitar desligamentos; o aluno mantém contato regular e apresenta o andamento.',
               'Troca de orientador ou coorientador: justificativa com a concordância dos envolvidos, enviada à coordenação.',
+              'Credenciamento de orientadores (Resolução 009/2026): docentes da UnB e membros externos com doutorado em Engenharia Elétrica ou áreas afins podem ser credenciados.',
             ]}
           />
         </Card>
@@ -277,6 +284,7 @@ export function Orientacao() {
           />
         </Card>
       </div>
+      <LinkList links={[LINKS.res009]} />
     </GuideSection>
   );
 }
@@ -317,6 +325,7 @@ export function Producao() {
           items={[
             'Submetido e processado pelo NUPITEC da UnB, no formulário e com as orientações do NUPITEC.',
             'Titularidade em nome de docente da UnB, com o orientador entre os titulares.',
+            'Se nenhum autor ou titular for docente efetivo da UnB, indica-se o Coordenador do PPEE no campo próprio do registro (art. 4º, § 4º).',
             'O aluno aparece entre os autores ou inventores com vínculo acadêmico com a UnB.',
           ]}
         />

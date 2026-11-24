@@ -5,8 +5,10 @@ const UP = `${PPEE}/wp-content/uploads`;
 export const LINKS = {
   resCepe: { href: 'resolucao-cepe-0235-2026.pdf', label: 'Resolução CEPE/UnB 0235/2026 (regras gerais da pós-graduação)' },
   regulamento: { href: `${UP}/2024/10/2o-Regulamento-do-PPEE-vigencia-2021.1-atual-1.pdf`, label: 'Regulamento do PPEE (2021)' },
+  res005: { href: `${UP}/2025/07/SEI_12942791_Resolucao_005.pdf`, label: 'Resolução 005/2025 (disciplinas da Turma Específica UnB/PPEE)' },
   res006: { href: `${UP}/2026/05/SEI_14087722_Resolucao_006-2.pdf`, label: 'Resolução 006/2026 (produção para a defesa)' },
   res007: { href: `${UP}/2026/04/SEI_14087994_Resolucao_007-2.pdf`, label: 'Resolução 007/2026 (normas de redação)' },
+  res009: { href: `${UP}/2026/05/SEI_14093816_Resolucao_009-3.pdf`, label: 'Resolução 009/2026 (credenciamento de orientadores)' },
   res008: { href: `${UP}/2026/04/Resolucao-008-14088147.pdf`, label: 'Resolução 008/2026 (registro de software)' },
   resolucoes: { href: `${PPEE}/?page_id=8202`, label: 'Todas as resoluções' },
   paginaBanca: { href: `${PPEE}/?page_id=4907`, label: 'Página de banca de dissertação' },

@@ -44,11 +44,11 @@ export function Modelo() {
         <div className="g2 g2-tight">
           <DashList
             items={[
-              'Papel A4, fonte Times New Roman 12.',
+              'Papel A4 (branco, acima de 75 g/m², se impresso), fonte Times New Roman 12.',
               'Margens de 25 mm.',
-              'Espaçamento 1,5 no texto e 1,0 nas referências.',
+              'Espaçamento 1,5 no texto e 1,0 nas referências; preliminares e complementares aceitam 1,0 ou 1,5.',
               'Parágrafos sem recuo, justificados, com uma linha em branco entre eles.',
-              'Extensão recomendada de 50 a 100 páginas, sem capas e anexos.',
+              'Extensão recomendada de 50 a 100 páginas, sem capas e anexos; fora desse intervalo, só com justificativa aprovada pela CPG (art. 5º).',
             ]}
           />
           <DashList
@@ -56,7 +56,8 @@ export function Modelo() {
               'Preliminares numerados em romanos minúsculos (i, ii, iii); o "i" não aparece na folha de título.',
               'Texto numerado em arábicos a partir do Capítulo 1, na margem inferior, à direita.',
               'Unidades no Sistema Internacional (SI).',
-              'Palavras estrangeiras em itálico; destaques entre aspas duplas.',
+              'Palavras estrangeiras em itálico; destaques entre aspas duplas ou com iniciais maiúsculas.',
+              'Versão final em PDF, com o consentimento do orientador quanto à formatação (art. 13). Se houver lombada impressa: SOBRENOME, NOME - MESTRE - ano e número da dissertação, de baixo para cima.',
             ]}
           />
         </div>
